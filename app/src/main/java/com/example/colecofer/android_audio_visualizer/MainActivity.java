@@ -146,8 +146,6 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                     }
                 });
 
-                //TODO: Update View and CoverArt ?
-
             }
         });
 
