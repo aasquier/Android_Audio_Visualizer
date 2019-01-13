@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -22,7 +23,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
     private static final int REQUEST_PERMISSION = 101;
 
-//    private MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer;
     private Visualizer visualizer;
     private VisualizerSurfaceView surfaceView;
     private VisualizerRenderer visualizerRenderer;
@@ -117,11 +118,10 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         }
 
 
-//        mediaPlayer = MediaPlayer.create(this, R.raw.ritual);
 //        mediaPlayer.setLooping(true);
 //        mediaPlayer.start();
 
-        visualizer = new Visualizer(0);
+        visualizer = new Visualizer(mediaPlayer.getAudioSessionId()); //TODO: This might need to be zero
         visualizer.setCaptureSize(audioSampleSize);
         visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);
         visualizer.setEnabled(true);
