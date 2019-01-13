@@ -93,20 +93,15 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
 
                 //Make sure the user has successfully logged into the player before starting the song
                 if (isLoggedIn()) {
-                    player.playUri(operationCallback, trackURI, 0, 0);
+                    log("User has loggen in and will not segue to the visualizer activity");
+                    //Prepare player and transition to visualizer activity
+                    player.playUri(MainActivity.operationCallback, VisualizerModel.getInstance().getTrackURI(), 0, 0);
+                    VisualizerModel.getInstance().setPlayer(player);
+                    Intent visualizerActivityIntent = new Intent(MainActivity.this, VisualizerActivity.class);
+                    startActivity(visualizerActivityIntent);
                 } else {
                     log("Error: User was not successfully logged into Spotify.");
                 }
-
-
-                //TODO: This needs to be initiated once we've transitioned into the visualizer activity
-                //TODO: Might want to check if the user is logged into the Spotify player before transitioning to the visualizer
-
-                //Prepare player and transition to visualizer activity
-                VisualizerModel.getInstance().setPlayer(player);
-                Intent visualizerActivityIntent = new Intent(MainActivity.this, VisualizerActivity.class);
-                startActivity(visualizerActivityIntent);
-
             }
         });
 
@@ -121,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                 EditText trackEditText = findViewById(R.id.trackEditText);
                 final String trackString = trackEditText.getText().toString();
 
-                //TODO: Check here if the trackID is valid or not. (I think by simply getting a 200 on response should suffice)
+                //TODO: Check if the trackID is valid or not. (I think by simply getting a 200 response should suffice)
 
                 SpotifyClient client = new SpotifyClient();
 
@@ -303,7 +298,6 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
     public void onPlaybackEvent(PlayerEvent playerEvent) {
         currentPlaybackState = player.getPlaybackState();
         metadata = player.getMetadata();
-        //updateView();
     }
 
     /**

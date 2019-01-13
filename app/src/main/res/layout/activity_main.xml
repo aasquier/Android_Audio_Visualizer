@@ -76,7 +76,7 @@
         android:layout_marginBottom="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="7KwZNVEaqikRSBSpyhXK2j"
+        android:text="5me0Irg2ANcsgc93uaYrpb"
         app:layout_constraintBottom_toTopOf="@+id/albumArtImageView"
         app:layout_constraintEnd_toStartOf="@+id/searchButton"
         app:layout_constraintStart_toStartOf="parent"
