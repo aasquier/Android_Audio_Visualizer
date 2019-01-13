@@ -14,6 +14,8 @@ public class VisualizerModel {
     private PlaybackState currentPlaybackState;
     private BroadcastReceiver networkStateReceiver;
 
+    private String trackURI;
+
     private String trackName;
     private String artistName;
     private String albumName;
@@ -25,12 +27,13 @@ public class VisualizerModel {
      * Default Constructor
      */
     public VisualizerModel() {
-    trackName = "Not defined";
-    artistName = "Not defined";
-    albumName = "Not defined";
-    primary = Color.rgb(53, 86, 81);
-    secondary = Color.rgb(0, 0 ,0);
-    tertiary = Color.rgb(0, 0, 0);
+        trackURI = "Not defined";
+        trackName = "Not defined";
+        artistName = "Not defined";
+        albumName = "Not defined";
+        primary = Color.rgb(53, 86, 81);
+        secondary = Color.rgb(0, 0 ,0);
+        tertiary = Color.rgb(0, 0, 0);
     }
 
 
@@ -40,6 +43,21 @@ public class VisualizerModel {
      */
     public static VisualizerModel getInstance() { return visualizerModel; }
 
+    public void setPlayer(SpotifyPlayer newPlayer) {
+        this.player = newPlayer;
+    }
+
+    public SpotifyPlayer getPlayer() {
+        return this.player;
+    }
+
+    public String getTrackURI() {
+        return this.trackURI;
+    }
+
+    public void setTrackURI(String trackURI) {
+        this.trackURI = trackURI;
+    }
 
     /**
      * Removes the need to specify the TAG each time you log.

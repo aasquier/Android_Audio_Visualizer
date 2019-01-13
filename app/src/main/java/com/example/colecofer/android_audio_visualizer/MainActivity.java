@@ -28,6 +28,8 @@ import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
+import static com.loopj.android.http.AsyncHttpClient.log;
+
 public class MainActivity extends AppCompatActivity implements Player.NotificationCallback, ConnectionStateCallback {
 
     private final String MAIN_TAG = "MAIN_ACTIVITY";
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                 //Get the trackID from the EditText UI element
                 EditText trackEditText = findViewById(R.id.trackEditText);
                 String trackURI = TRACK_BASE_URI + trackEditText.getText().toString();
-
+                VisualizerModel.getInstance().setTrackURI(trackURI);
 
                 //Make sure the user has successfully logged into the player before starting the song
                 if (isLoggedIn()) {
@@ -96,12 +98,15 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                     log("Error: User was not successfully logged into Spotify.");
                 }
 
-                log("URI: " + trackURI);
 
                 //TODO: This needs to be initiated once we've transitioned into the visualizer activity
-                //Start playing the track
-                player.playUri(operationCallback, trackURI, 0, 0);
-                currentPlaybackState = player.getPlaybackState();
+                //TODO: Might want to check if the user is logged into the Spotify player before transitioning to the visualizer
+
+                //Prepare player and transition to visualizer activity
+                VisualizerModel.getInstance().setPlayer(player);
+                Intent visualizerActivityIntent = new Intent(MainActivity.this, VisualizerActivity.class);
+                startActivity(visualizerActivityIntent);
+
             }
         });
 
@@ -118,16 +123,15 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
 
                 //TODO: Check here if the trackID is valid or not. (I think by simply getting a 200 on response should suffice)
 
-
-                SpotifyRequest request = new SpotifyRequest();
+                SpotifyClient client = new SpotifyClient();
 
                 //Get the Artist Name
-                request.getArtistName(trackString, authToken, new SpotifyRequestCallBack() {
+                client.getArtistName(trackString, authToken, new SpotifyRequestCallBack() {
                     @Override
                     public void spotifyResponse(boolean success, String response) {
                         log("Get Artist Name status: " + success);
                         if (success == true) {
-                            String artistName = SpotifyRequest.parseFieldFromJSON(response, "name");
+                            String artistName = SpotifyClient.parseFieldFromJSON(response, "name");
                             log("Parsed Artist Name: " + artistName);
                             TextView artistNameText = findViewById(R.id.artistNameTextView);
                             artistNameText.setText("Artist: " + artistName);
@@ -136,13 +140,13 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                 });
 
                 //Get the Album Name
-                request.getAlbumName(trackString, authToken, new SpotifyRequestCallBack() {
+                client.getAlbumName(trackString, authToken, new SpotifyRequestCallBack() {
                     @Override
                     public void spotifyResponse(boolean success, String response) {
                         log("Get Album Name status: " + success);
                         log(response);
                         if (success == true) {
-                            String albumName = SpotifyRequest.parseFieldFromJSON(response, "name");
+                            String albumName = SpotifyClient.parseFieldFromJSON(response, "name");
                             log("Parsed Album Name: " + albumName);
                             TextView albumText = findViewById(R.id.albumNameTextView);
                             albumText.setText("Album: " + albumName);
@@ -150,8 +154,7 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                     }
                 });
 
-//                updateView();
-//                setCoverArt();
+                //TODO: Update View and CoverArt ?
 
             }
         });
@@ -248,15 +251,15 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
 
 
     //Callback functions for playback events
-    private final Player.OperationCallback operationCallback = new Player.OperationCallback() {
+    public static final Player.OperationCallback operationCallback = new Player.OperationCallback() {
         @Override
         public void onSuccess() {
-            log("Callback: Success!");
+            log.d("MAIN_ACTIVITY", "Callback: Success!");
         }
 
         @Override
         public void onError(Error error) {
-            log("Callback ERROR:" + error);
+            log.d("MAIN_ACTIVITY", "Callback ERROR:" + error);
         }
     };
 
