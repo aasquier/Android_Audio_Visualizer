@@ -1,5 +1,6 @@
 package com.example.colecofer.android_audio_visualizer;
 
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -11,6 +12,9 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
+import android.support.v7.graphics.Palette;
+import android.graphics.Bitmap;
+
 public class SpotifyClient {
 
     private final String BASE_URL = "https://api.spotify.com/v1";
@@ -20,7 +24,7 @@ public class SpotifyClient {
     private final String TRACK_URL = "/tracks/";
     private final String ARTIST_URL = "/artists/";
     private final String ALBUM_URL = "";
-    private final String COVER_ART_URL = "";
+    private final String COVER_ART_URL = "https://i.scdn.co/image/6a79792a433af1786048c1dac022f5ab33f093f0";
     private final String AUTH_URL = "https://accounts.spotify.com/api/token";
 
     //TODO: Change these to our personal information (this is a public repo...)
@@ -146,7 +150,32 @@ public class SpotifyClient {
 
         });
     }
+    public void getAlbumArt(String albumID, String authToken, final SpotifyRequestCallBack callback) {
+        String fullArtistURL = BASE_URL + ALBUM_URL + albumID;
+        Bitmap AlbumArt = BitmapFactory.decodeFile("/LifeAfterDeath.bmp");
+        Palette AlbumPallet = createPaletteSync(AlbumArt);
+        int primary = AlbumPallet.getLightVibrantColor(0);
+        int secondary = AlbumPallet.getDarkVibrantColor(0);
 
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Accept", "application/json");
+        client.addHeader("Content-Type", "application/json");
+        client.addHeader("Authorization", authToken);
+
+        client.get(fullArtistURL, new TextHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                callback.spotifyResponse(true, responseString);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                callback.spotifyResponse(false, responseString);
+            }
+
+        });
+    }
 
     /**
      * Calls the Spotify features API end-point for the passed in trackID.
@@ -266,7 +295,21 @@ public class SpotifyClient {
         }
         return value;
     }
+    // Generate palette synchronously and return it
+    public Palette createPaletteSync(Bitmap bitmap) {
+        Palette p = Palette.from(bitmap).generate();
+        return p;
+    }
 
+    // Generate palette asynchronously and use it on a different
+// thread using onGenerated()
+//    public void createPaletteAsync(Bitmap bitmap) {
+//        Palette.from(bitmap).generate(new PaletteAsyncListener() {
+//            public void onGenerated(Palette p) {
+//                // Use generated instance
+//            }
+//        });
+//    }
 
 
 }

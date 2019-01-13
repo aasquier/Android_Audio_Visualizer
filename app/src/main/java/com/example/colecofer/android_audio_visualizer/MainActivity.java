@@ -153,7 +153,19 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                         }
                     }
                 });
-
+                client.getAlbumArt(trackString, authToken, new SpotifyRequestCallBack() {
+                    @Override
+                    public void spotifyResponse(boolean success, String response) {
+                        log("Get Album Art status: " + success);
+                        log(response);
+                        if (success == true) {
+                            String albumName = SpotifyClient.parseFieldFromJSON(response, "name");
+                            log("Parsed Album Name: " + albumName);
+                            TextView albumText = findViewById(R.id.albumNameTextView);
+                            albumText.setText("Album: " + albumName);
+                        }
+                    }
+                });
                 //TODO: Update View and CoverArt ?
 
             }
