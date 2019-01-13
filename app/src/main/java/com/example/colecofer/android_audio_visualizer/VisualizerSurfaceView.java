@@ -8,7 +8,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-public class SurfaceView extends GLSurfaceView {
+public class VisualizerSurfaceView extends GLSurfaceView {
     private static float amp = 0.0001f;
 
     private static int captureSize;
@@ -16,11 +16,11 @@ public class SurfaceView extends GLSurfaceView {
 
     private VisualizerRenderer renderer;
 
-    public SurfaceView(Context context) {
+    public VisualizerSurfaceView(Context context) {
         super(context);
     }
 
-    public SurfaceView(Context context, AttributeSet attrs) {
+    public VisualizerSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
