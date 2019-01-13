@@ -5,7 +5,6 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageManager;
-import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -23,10 +22,10 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
     private static final int REQUEST_PERMISSION = 101;
 
-    private MediaPlayer mediaPlayer;
+//    private MediaPlayer mediaPlayer;
     private Visualizer visualizer;
-    private SurfaceView whimSurfaceView;
-    private VisualizerRenderer whimRenderer;
+    private VisualizerSurfaceView surfaceView;
+    private VisualizerRenderer visualizerRenderer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +34,6 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
         startTrackPlayback();
         setupVisualizer();
-
     }
 
     /**
@@ -83,6 +81,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     }
 
     private void initVisualizer() {
+        log.d("opengl", "In initVisualizer");
         int audioSampleSize = Visualizer.getCaptureSizeRange()[1];
 
         if(audioSampleSize > 512){
@@ -92,7 +91,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         final DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-        whimSurfaceView = new SurfaceView(this);
+        surfaceView = new VisualizerSurfaceView(this);
 
         // Check if the system supports OpenGL ES 2.0.
         final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -101,43 +100,45 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
         if (supportsEs2)
         {
+            log.d("opengl", "Supports ES2");
             // Request an OpenGL ES 2.0 compatible context.
-            whimSurfaceView.setEGLContextClientVersion(2);
+            surfaceView.setEGLContextClientVersion(2);
 
-            whimRenderer = new VisualizerRenderer(audioSampleSize);
+            visualizerRenderer = new VisualizerRenderer(audioSampleSize);
             // Set the renderer to our demo renderer, defined below.
-            whimSurfaceView.setRenderer(whimRenderer, displayMetrics.density, audioSampleSize);
+            surfaceView.setRenderer(visualizerRenderer, displayMetrics.density, audioSampleSize);
         }
         else
         {
+            log.d("opengl", "Does not support ES2");
             // This is where you could create an OpenGL ES 1.x compatible
             // renderer if you wanted to support both ES 1 and ES 2.
             return;
         }
 
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.ritual);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+//        mediaPlayer = MediaPlayer.create(this, R.raw.ritual);
+//        mediaPlayer.setLooping(true);
+//        mediaPlayer.start();
 
-        visualizer = new Visualizer(mediaPlayer.getAudioSessionId());
+        visualizer = new Visualizer(0);
         visualizer.setCaptureSize(audioSampleSize);
         visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);
         visualizer.setEnabled(true);
 
-        setContentView(whimSurfaceView);
+        setContentView(surfaceView);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        whimSurfaceView.onResume();
+        surfaceView.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        whimSurfaceView.onPause();
+        surfaceView.onPause();
     }
 
     @Override
@@ -147,7 +148,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
     @Override
     public void onFftDataCapture(Visualizer visualizer, byte[] fft, int samplingRate) {
-        whimSurfaceView.updateFft(fft);
+        surfaceView.updateFft(fft);
     }
 
 }
