@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
 import android.support.annotation.NonNull;
@@ -32,7 +33,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visualizer);
-
+        log.d("opengl", "Oncreate was called");
         startTrackPlayback();
         setupVisualizer();
     }
@@ -117,11 +118,14 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
             return;
         }
 
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
-//        mediaPlayer.setLooping(true);
-//        mediaPlayer.start();
+        int audioSessionId = mediaPlayer.getAudioSessionId();
+        if (audioSessionId != AudioManager.ERROR) {
+            visualizer = new Visualizer(audioSessionId);
+        }
 
-        visualizer = new Visualizer(mediaPlayer.getAudioSessionId()); //TODO: This might need to be zero
         visualizer.setCaptureSize(audioSampleSize);
         visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);
         visualizer.setEnabled(true);
