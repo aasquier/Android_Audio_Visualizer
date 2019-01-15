@@ -44,6 +44,11 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     private void startTrackPlayback() {
         SpotifyPlayer player = VisualizerModel.getInstance().getPlayer();
         player.playUri(MainActivity.operationCallback, VisualizerModel.getInstance().getTrackURI(), 0, 0);
+
+        MediaPlayer spotPlayer = new MediaPlayer();
+//        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+        int audioSessionId = mediaPlayer.getAudioSessionId();
         log.d("test", "TrackID: " + VisualizerModel.getInstance().getTrackURI());
     }
 
@@ -86,7 +91,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         log.d("opengl", "In initVisualizer");
         int audioSampleSize = Visualizer.getCaptureSizeRange()[1];
 
-        if(audioSampleSize > 512){
+        if (audioSampleSize > 512) {
             audioSampleSize = 512;
         }
 
@@ -100,8 +105,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         final ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
         final boolean supportsEs2 = configurationInfo.reqGlEsVersion >= 0x20000;
 
-        if (supportsEs2)
-        {
+        if (supportsEs2) {
             log.d("opengl", "Supports ES2");
             // Request an OpenGL ES 2.0 compatible context.
             surfaceView.setEGLContextClientVersion(2);
@@ -109,19 +113,41 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
             visualizerRenderer = new VisualizerRenderer(audioSampleSize);
             // Set the renderer to our demo renderer, defined below.
             surfaceView.setRenderer(visualizerRenderer, displayMetrics.density, audioSampleSize);
-        }
-        else
-        {
+        } else {
             log.d("opengl", "Does not support ES2");
             // This is where you could create an OpenGL ES 1.x compatible
             // renderer if you wanted to support both ES 1 and ES 2.
             return;
         }
 
+//        mediaPlayer = new MediaPlayer();
+//        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//
+//        //This never gets invoked...
+//        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//            @Override
+//            public void onPrepared(MediaPlayer mp) {
+//                startTrackPlayback();
+//            }
+//        });
+//
+//        int audioSessionId = mediaPlayer.getAudioSessionId();
+//        if (audioSessionId != AudioManager.ERROR) {
+//            visualizer = new Visualizer(audioSessionId);
+//        }
+//
+//        visualizer.setCaptureSize(audioSampleSize);
+//        visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);
+//        visualizer.setEnabled(true);
+//
+//        setContentView(surfaceView);
+
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
         int audioSessionId = mediaPlayer.getAudioSessionId();
+        log.d("opengl", "Audio session: " + audioSessionId);
+
         if (audioSessionId != AudioManager.ERROR) {
             visualizer = new Visualizer(audioSessionId);
         }
@@ -131,6 +157,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         visualizer.setEnabled(true);
 
         setContentView(surfaceView);
+
     }
 
     @Override
