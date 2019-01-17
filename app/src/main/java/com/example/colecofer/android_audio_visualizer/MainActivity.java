@@ -3,10 +3,15 @@ package com.example.colecofer.android_audio_visualizer;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.graphics.Palette;
+import android.support.v7.graphics.Palette.PaletteAsyncListener;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +32,11 @@ import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import static com.loopj.android.http.AsyncHttpClient.log;
 
@@ -163,6 +173,31 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                             log("Parsed Album Name: " + albumName);
                             TextView albumText = findViewById(R.id.albumNameTextView);
                             albumText.setText("Album: " + albumName);
+
+
+                        }
+                        try {
+                            int SDK_INT = android.os.Build.VERSION.SDK_INT;
+                            if (SDK_INT > 8) {
+                                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                                        .permitAll().build();
+                                StrictMode.setThreadPolicy(policy);
+                                URL url = new URL("https://images-na.ssl-images-amazon.com/images/I/51N2ObOduuL.jpg");
+                                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                                connection.setDoInput(true);
+                                connection.connect();
+                                InputStream input = connection.getInputStream();
+                                Bitmap AlbumArt = BitmapFactory.decodeStream(input);
+                                Palette AlbumPallet = createPaletteSync(AlbumArt);
+
+                                log("Colors From Palette: "
+                                        + "\n1: " + AlbumPallet.getDominantColor(0)
+                                        + "\n2: " + AlbumPallet.getLightVibrantColor(0)
+                                        + "\n3: " + AlbumPallet.getDarkVibrantColor(0)
+                                );
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
                     }
                 });
@@ -324,4 +359,19 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
      */
     public void log(String message) { Log.d(MAIN_TAG, message);}
 
+    // Generate palette synchronously and return it
+    public Palette createPaletteSync(Bitmap bitmap) {
+        Palette p = Palette.from(bitmap).generate();
+        return p;
+    }
+
+    // Generate palette asynchronously and use it on a different
+    //thread using onGenerated()
+    public void createPaletteAsync(Bitmap bitmap) {
+        Palette.from(bitmap).generate(new PaletteAsyncListener() {
+            public void onGenerated(Palette p) {
+                // Use generated instance
+            }
+        });
+    }
 }
