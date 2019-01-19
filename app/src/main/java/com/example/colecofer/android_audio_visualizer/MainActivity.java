@@ -11,6 +11,7 @@ import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
+import android.support.v7.graphics.Palette.Swatch;
 import android.support.v7.graphics.Palette.PaletteAsyncListener;
 import android.util.Log;
 import android.view.View;
@@ -189,12 +190,33 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                                 InputStream input = connection.getInputStream();
                                 Bitmap AlbumArt = BitmapFactory.decodeStream(input);
                                 Palette AlbumPallet = createPaletteSync(AlbumArt);
+                                AlbumPallet.getSwatches();
+                                Palette.Swatch primarySwatch = AlbumPallet.getVibrantSwatch();
+                                Palette.Swatch secondarySwatch = AlbumPallet.getDominantSwatch();
+                                Palette.Swatch tertiarySwatch = AlbumPallet.getMutedSwatch();
 
-                                log("Colors From Palette: "
-                                        + "\n1: " + AlbumPallet.getDominantColor(0)
-                                        + "\n2: " + AlbumPallet.getLightVibrantColor(0)
-                                        + "\n3: " + AlbumPallet.getDarkVibrantColor(0)
-                                );
+                                float Primary[] = new float[]{0,0,0};
+                                float Secondary[] = new float[]{0,0,0};
+                                float Tertiary[] = new float[]{0,0,0};
+
+                                for(int i = 0; i < 3; ++i) {
+                                    Primary[i] = primarySwatch.getHsl()[i];
+                                    if(Primary[i] > 1)
+                                        Primary[i] = 1;
+                                    Secondary[i] = secondarySwatch.getHsl()[i];
+                                    if(Secondary[i] > 1)
+                                        Secondary[i] = 1;
+                                    Tertiary[i] = tertiarySwatch.getHsl()[i];
+                                    if(Tertiary[i] > 1)
+                                        Tertiary[i] = 1;
+
+                                    log("\n\nPrimary: " + Primary[i] +
+                                            "\nSecondary: " + Secondary[i] +
+                                            "\nTertiary: " + Tertiary[i] +
+                                            "\n----------");
+                                }
+
+
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
