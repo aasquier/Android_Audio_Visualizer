@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
     private static final int REQUEST_CODE = 1337;
 
     //Permission scopes for authentication
-    private static final String[] SCOPES = new String[] {"user-read-private", "playlist-read", "playlist-read-private", "streaming"};
+     private static final String[] SCOPES = new String[] {"user-read-private", "playlist-read", "playlist-read-private", "streaming"};
 
     private SpotifyPlayer player;
     private PlaybackState currentPlaybackState;
