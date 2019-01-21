@@ -33,7 +33,7 @@ import static com.loopj.android.http.AsyncHttpClient.log;
 
 public class MainActivity extends AppCompatActivity implements Player.NotificationCallback, ConnectionStateCallback {
 
-    private final String MAIN_TAG = "MAIN_ACTIVITY";
+    private final String TAG = MainActivity.class.getSimpleName();
 
     //TODO: This is Spotify's test account because I don't want to hard code ours into a public repository...
     private static final String CLIENT_ID = "089d841ccc194c10a77afad9e1c11d54";
@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
     private BroadcastReceiver networkStateReceiver;
     private Metadata metadata;
     private String authToken;
+    private String webApiAuthToken;
+    private SpotifyClient client;
 
 
     @Override
@@ -61,6 +63,15 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
 
         initUI();
         redirectToBrowserForLogin();
+        client = new SpotifyClient();
+        client.getAuthToken(new SpotifyRequestCallBack() {
+            @Override
+            public void spotifyResponse(boolean success, String response) {
+                log("Response: " + response);
+                webApiAuthToken = response;
+
+            }
+        });
 
     }
 
@@ -116,36 +127,43 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
 
                 //TODO: Check here if the trackID is valid or not. (I think by simply getting a 200 on response should suffice)
 
-                SpotifyClient client = new SpotifyClient();
-
-                //Get the Artist Name
-                client.getArtistName(trackString, authToken, new SpotifyRequestCallBack() {
+                // Get track info
+                client.getTrackInfo(trackString, webApiAuthToken, new SpotifyRequestCallBack() {
                     @Override
                     public void spotifyResponse(boolean success, String response) {
-                        log("Get Artist Name status: " + success);
-                        if (success == true) {
-                            String artistName = SpotifyClient.parseFieldFromJSON(response, "name");
-                            log("Parsed Artist Name: " + artistName);
-                            TextView artistNameText = findViewById(R.id.artistNameTextView);
-                            artistNameText.setText("Artist: " + artistName);
-                        }
-                    }
-                });
-
-                //Get the Album Name
-                client.getAlbumName(trackString, authToken, new SpotifyRequestCallBack() {
-                    @Override
-                    public void spotifyResponse(boolean success, String response) {
-                        log("Get Album Name status: " + success);
+                        log("Track info:");
                         log(response);
-                        if (success == true) {
-                            String albumName = SpotifyClient.parseFieldFromJSON(response, "name");
-                            log("Parsed Album Name: " + albumName);
-                            TextView albumText = findViewById(R.id.albumNameTextView);
-                            albumText.setText("Album: " + albumName);
-                        }
                     }
                 });
+
+//                //Get the Artist Name
+//                client.getArtistName(trackString, authToken, new SpotifyRequestCallBack() {
+//                    @Override
+//                    public void spotifyResponse(boolean success, String response) {
+//                        log("Get Artist Name status: " + success);
+//                        if (success == true) {
+//                            String artistName = SpotifyClient.parseFieldFromJSON(response, "name");
+//                            log("Parsed Artist Name: " + artistName);
+//                            TextView artistNameText = findViewById(R.id.artistNameTextView);
+//                            artistNameText.setText("Artist: " + artistName);
+//                        }
+//                    }
+//                });
+//
+//                //Get the Album Name
+//                client.getAlbumName(trackString, authToken, new SpotifyRequestCallBack() {
+//                    @Override
+//                    public void spotifyResponse(boolean success, String response) {
+//                        log("Get Album Name status: " + success);
+//                        log(response);
+//                        if (success == true) {
+//                            String albumName = SpotifyClient.parseFieldFromJSON(response, "name");
+//                            log("Parsed Album Name: " + albumName);
+//                            TextView albumText = findViewById(R.id.albumNameTextView);
+//                            albumText.setText("Album: " + albumName);
+//                        }
+//                    }
+//                });
 
             }
         });
@@ -306,7 +324,7 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
      * @param message The message to log
      */
     public void log(String message) {
-        Log.d(MAIN_TAG, message);
+        Log.d(TAG, message);
     }
 
 }
