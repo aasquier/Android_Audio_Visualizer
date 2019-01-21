@@ -138,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                     }
                 });
 
+<<<<<<< HEAD
                 //Get the Artist Name
 //                client.getArtistName(trackString, authToken, new SpotifyRequestCallBack() {
 //                    @Override
@@ -183,6 +184,8 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                 //TODO: Update View and CoverArt ?
 
 
+=======
+>>>>>>> b435c65ec8a8aaeff78407ed4901d8f071fb993c
             }
         });
 
@@ -344,6 +347,5 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
     public void log(String message) {
         Log.d(MAIN_TAG, message);
     }
-
 
 }
