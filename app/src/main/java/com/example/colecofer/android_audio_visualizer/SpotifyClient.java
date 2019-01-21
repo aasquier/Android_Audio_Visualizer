@@ -12,7 +12,6 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
-import static com.loopj.android.http.AsyncHttpClient.log;
 import android.support.v7.graphics.Palette;
 import android.graphics.Bitmap;
 
@@ -115,7 +114,6 @@ public class SpotifyClient {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                log.d("HTTP", "States artist: " + statusCode);
                 callback.spotifyResponse(true, responseString);
             }
 
