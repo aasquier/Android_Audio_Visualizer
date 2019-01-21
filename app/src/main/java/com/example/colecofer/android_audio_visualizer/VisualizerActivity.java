@@ -28,13 +28,14 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     private Visualizer visualizer;
     private VisualizerSurfaceView surfaceView;
     private VisualizerRenderer visualizerRenderer;
+    private Visualizer.OnDataCaptureListener captureListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visualizer);
         log.d("opengl", "Oncreate was called");
-        startTrackPlayback();
+//        startTrackPlayback();
         setupVisualizer();
     }
 
@@ -44,11 +45,6 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     private void startTrackPlayback() {
         SpotifyPlayer player = VisualizerModel.getInstance().getPlayer();
         player.playUri(MainActivity.operationCallback, VisualizerModel.getInstance().getTrackURI(), 0, 0);
-
-        MediaPlayer spotPlayer = new MediaPlayer();
-//        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
-        int audioSessionId = mediaPlayer.getAudioSessionId();
         log.d("test", "TrackID: " + VisualizerModel.getInstance().getTrackURI());
     }
 
@@ -120,38 +116,12 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
             return;
         }
 
-//        mediaPlayer = new MediaPlayer();
-//        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//
-//        //This never gets invoked...
-//        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//            @Override
-//            public void onPrepared(MediaPlayer mp) {
-//                startTrackPlayback();
-//            }
-//        });
-//
-//        int audioSessionId = mediaPlayer.getAudioSessionId();
-//        if (audioSessionId != AudioManager.ERROR) {
-//            visualizer = new Visualizer(audioSessionId);
-//        }
-//
-//        visualizer.setCaptureSize(audioSampleSize);
-//        visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);
-//        visualizer.setEnabled(true);
-//
-//        setContentView(surfaceView);
+        //Sets up the visualizer for local files
+        mediaPlayer = MediaPlayer.create(this, R.raw.ritual);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
 
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
-        int audioSessionId = mediaPlayer.getAudioSessionId();
-        log.d("opengl", "Audio session: " + audioSessionId);
-
-        if (audioSessionId != AudioManager.ERROR) {
-            visualizer = new Visualizer(audioSessionId);
-        }
-
+        visualizer = new Visualizer(mediaPlayer.getAudioSessionId());
         visualizer.setCaptureSize(audioSampleSize);
         visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);
         visualizer.setEnabled(true);
