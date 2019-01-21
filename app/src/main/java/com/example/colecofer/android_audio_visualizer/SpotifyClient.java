@@ -16,6 +16,7 @@ import android.support.v7.graphics.Palette;
 import android.graphics.Bitmap;
 import static com.loopj.android.http.AsyncHttpClient.log;
 
+
 public class SpotifyClient {
 
     private final String BASE_URL = "https://api.spotify.com/v1";

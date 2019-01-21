@@ -137,55 +137,6 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                         log(response);
                     }
                 });
-
-<<<<<<< HEAD
-                //Get the Artist Name
-//                client.getArtistName(trackString, authToken, new SpotifyRequestCallBack() {
-//                    @Override
-//                    public void spotifyResponse(boolean success, String response) {
-//                        log("Get Artist Name status: " + success);
-//                        log(response);
-//                        if (success == true) {
-//                            String artistName = SpotifyClient.parseFieldFromJSON(response, "name");
-//                            log("Parsed Artist Name: " + artistName);
-//                            TextView artistNameText = findViewById(R.id.artistNameTextView);
-//                            artistNameText.setText("Artist: " + artistName);
-//                        }
-//                    }
-//                });
-//
-//                //Get the Album Name
-//                client.getAlbumName(trackString, authToken, new SpotifyRequestCallBack() {
-//                    @Override
-//                    public void spotifyResponse(boolean success, String response) {
-//                        log("Get Album Name status: " + success);
-//                        log(response);
-//                        if (success == true) {
-//                            String albumName = SpotifyClient.parseFieldFromJSON(response, "name");
-//                            log("Parsed Album Name: " + albumName);
-//                            TextView albumText = findViewById(R.id.albumNameTextView);
-//                            albumText.setText("Album: " + albumName);
-//                        }
-//                    }
-//                });
-//                client.getAlbumArt(trackString, authToken, new SpotifyRequestCallBack() {
-//                    @Override
-//                    public void spotifyResponse(boolean success, String response) {
-//                        log("Get Album Art status: " + success);
-//                        log(response);
-//                        if (success == true) {
-//                            String albumName = SpotifyClient.parseFieldFromJSON(response, "name");
-//                            log("Parsed Album Name: " + albumName);
-//                            TextView albumText = findViewById(R.id.albumNameTextView);
-//                            albumText.setText("Album: " + albumName);
-//                        }
-//                    }
-//                });
-                //TODO: Update View and CoverArt ?
-
-
-=======
->>>>>>> b435c65ec8a8aaeff78407ed4901d8f071fb993c
             }
         });
 
@@ -345,7 +296,6 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
      * @param message The message to log
      */
     public void log(String message) {
-        Log.d(MAIN_TAG, message);
+        Log.d(TAG, message);
     }
-
 }
