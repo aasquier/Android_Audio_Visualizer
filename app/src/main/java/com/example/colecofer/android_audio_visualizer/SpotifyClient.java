@@ -36,26 +36,23 @@ public class SpotifyClient {
 
     /**
      * Gets the authorization token given the clientid and clientsecret
+     * @param scopes
      * @param callback
      */
-//    public void getAuthToken(String scopes, final SpotifyRequestCallBack callback) {
-    public void getAuthToken(final SpotifyRequestCallBack callback) {
+    public void getAuthToken(String scopes, final SpotifyRequestCallBack callback) {
         AsyncHttpClient client = new AsyncHttpClient();
 
         RequestParams body = new RequestParams();
         body.put("client_id", CLIENT_ID);
         body.put("client_secret", CLIENT_SECRET);
         body.put("grant_type", "client_credentials");
-//        body.put("scope", scopes);
+        body.put("scope", scopes);
 
         client.post(AUTH_URL, body, new TextHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
-                String access_token = parseFieldFromJSON(responseString, "access_token");
-                callback.spotifyResponse(true, access_token);
-//                callback.spotifyResponse(true, responseString);
+                callback.spotifyResponse(true, responseString);
             }
 
             @Override
@@ -155,10 +152,10 @@ public class SpotifyClient {
     }
     public void getAlbumArt(String albumID, String authToken, final SpotifyRequestCallBack callback) {
         String fullArtistURL = BASE_URL + ALBUM_URL + albumID;
-//        Bitmap AlbumArt = BitmapFactory.decodeFile("/LifeAfterDeath.bmp");
-//        Palette AlbumPallet = createPaletteSync(AlbumArt);
-//        int primary = AlbumPallet.getLightVibrantColor(0);
-//        int secondary = AlbumPallet.getDarkVibrantColor(0);
+        Bitmap AlbumArt = BitmapFactory.decodeFile("/LifeAfterDeath.bmp");
+        Palette AlbumPallet = createPaletteSync(AlbumArt);
+        int primary = AlbumPallet.getLightVibrantColor(0);
+        int secondary = AlbumPallet.getDarkVibrantColor(0);
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.addHeader("Accept", "application/json");
