@@ -67,9 +67,8 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        enablePlayButton = false;
-        // TODO disable play button
         playButton = findViewById(R.id.playButton);
+        enablePlayButton = false;
         setPlayButton();
 
         initUI();
