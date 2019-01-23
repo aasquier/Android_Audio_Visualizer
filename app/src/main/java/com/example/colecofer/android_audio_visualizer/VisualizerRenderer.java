@@ -35,6 +35,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
     private int colorHandle;
     private int programHandle;
 
+
     public VisualizerRenderer(int captureSize){
         this.AUDIO_COUNT = captureSize;
         this.VERTEX_COUNT = this.AUDIO_COUNT / 7;
@@ -66,6 +67,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
 
         // Position the eye behind the origin.
         final float eyeX = 0.0f;

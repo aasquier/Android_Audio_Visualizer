@@ -111,6 +111,11 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
             public void onClick(View v) {
                 currentPlaybackState = player.getPlaybackState();
 
+                //Test
+                Intent testOpenGL = new Intent(MainActivity.this, TestVisualizerActivity.class);
+                startActivity(testOpenGL);
+
+
                 EditText trackEditText = findViewById(R.id.trackEditText);
                 final String trackString = trackEditText.getText().toString();
 
