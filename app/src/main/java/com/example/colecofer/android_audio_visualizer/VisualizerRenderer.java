@@ -230,6 +230,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         Matrix.frustumM(projectionMatrix, 0, left, right, bottom, top, near, far);
     }
 
+    //Hello
     public void newFftData(FloatBuffer fftData, int vCount){
         lineVertexBuffer = fftData;
         VERTEX_COUNT = vCount;
