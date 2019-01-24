@@ -35,6 +35,8 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
     private int colorHandle;
     private int programHandle;
 
+    private TriangleGL triangle;
+
 
     public VisualizerRenderer(int captureSize){
         this.AUDIO_COUNT = captureSize;
@@ -67,6 +69,8 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+        triangle = new TriangleGL();
 
 
         // Position the eye behind the origin.
@@ -230,7 +234,6 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         Matrix.frustumM(projectionMatrix, 0, left, right, bottom, top, near, far);
     }
 
-    //Hello
     public void newFftData(FloatBuffer fftData, int vCount){
         lineVertexBuffer = fftData;
         VERTEX_COUNT = vCount;
@@ -239,7 +242,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
-
+        triangle.draw();
         Matrix.setIdentityM(modelMatrix, 0);
         drawLine(lineVertexBuffer);
     }
