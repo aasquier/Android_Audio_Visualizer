@@ -3,7 +3,6 @@ package com.example.colecofer.android_audio_visualizer;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
-import android.support.v7.graphics.Palette;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.BinaryHttpResponseHandler;
@@ -177,39 +176,8 @@ public class SpotifyClient {
 
             }
         });
-
     }
-    public static float[][] getAlbumArtColors(Bitmap albumArt) {
-        Palette AlbumPallet = createPaletteSync(albumArt);
-        AlbumPallet.getSwatches();
-        Palette.Swatch primarySwatch = AlbumPallet.getDominantSwatch();
-        Palette.Swatch secondarySwatch = AlbumPallet.getVibrantSwatch();
-        Palette.Swatch tertiarySwatch = AlbumPallet.getMutedSwatch();
 
-        float colors[][] = new float[][]{{0,0,0},{0,0,0},{0,0,0}};
-
-        for(int i = 0; i < 3; ++i) {
-            if(primarySwatch != null)
-                colors[0][i] = primarySwatch.getHsl()[i];
-            else
-                colors[0][i] = 0;
-            if(secondarySwatch != null)
-                colors[1][i] = secondarySwatch.getHsl()[i];
-            else
-                colors[1][i] = 0;
-            if(tertiarySwatch != null)
-                colors[2][i] = tertiarySwatch.getHsl()[i];
-            else
-                colors[2][i] = 0;
-
-        }
-
-        return colors;
-    }
-    public static Palette createPaletteSync(Bitmap bitmap) {
-        Palette p = Palette.from(bitmap).generate();
-        return p;
-    }
     /**
      * Calls the Spotify features API end-point for the passed in trackID.
      * TODO: Remove hard coded auth token
