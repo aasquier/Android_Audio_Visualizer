@@ -12,6 +12,6 @@ public class LineGL {
     private int positionHandle;
     private int colorHandle;
 
-//    private final int vertexCount =
+    //    private final int vertexCount =
 
 }
