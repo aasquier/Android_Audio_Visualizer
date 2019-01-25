@@ -156,6 +156,8 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                             public void bitmapResponse(boolean success, Bitmap bitmap) {
                                 if (success == true) {
                                     albumArtView.setImageBitmap(bitmap);
+                                    float[][]colors = SpotifyClient.getAlbumArtColors(bitmap);
+                                    log("");
                                     enablePlayButton = true;
                                     setPlayButton();
                                 }
