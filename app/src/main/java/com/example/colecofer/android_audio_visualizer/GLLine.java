@@ -7,14 +7,14 @@ import java.nio.FloatBuffer;
 
 public class GLLine {
 
-    //FloatBuffer's are used for efficiency
-    private FloatBuffer vertexBuffer;
-    private int mProgram;
-
-    //Drawing Variables
+    //Handles
     private int positionHandle;
     private int colorHandle;
+    private int mvpMatrixHandle;
 
+    private float[] verticies;
+    private float[] color;
+    private float yPosition;
 
     static final int VERTEX_COUNT = 5;
     static final int POSITION_DATA_SIZE = 3;
@@ -24,13 +24,22 @@ public class GLLine {
     static final int COLOR_OFFSET = 3;
     static final int COLOR_DATA_SIZE = 4;
 
-    private int mvpMatrixHandle;
 
-    private float[] modelMatrix n= new float[16];
+    private float[] modelMatrix = new float[16];
     private float[] viewMatrix = new float[16];
     private float[] projectionMatrix = new float[16];
     private float[] mvpMatrix = new float[16];
 
+
+    //TODO: Check if yPosition is within screen bounds before settting?
+    public GLLine(float[] color, float yPosition) {
+        this.color = color;
+        this.yPosition = yPosition;
+    }
+
+    private void initIndices() {
+
+    }
 
     /**
      * Modifies the passed in fft which is just an amplification value
