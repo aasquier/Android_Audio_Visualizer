@@ -36,7 +36,12 @@ public class GLLine {
         this.color = color;
         this.xPosition = xPosition;
         verticies = new float[VERTEX_COUNT];
-
+        verticies[0] = xPosition;
+        verticies[1] = 0;
+        verticies[2] = 0;
+        verticies[3] = xPosition;
+        verticies[4] = 0;
+        verticies[4] = 0;
     }
 
 
