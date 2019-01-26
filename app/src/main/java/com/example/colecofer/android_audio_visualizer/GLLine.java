@@ -14,9 +14,9 @@ public class GLLine {
 
     private float[] verticies;
     private float[] color;
-    private float yPosition;
+    private float xPosition;
 
-    static final int VERTEX_COUNT = 5;
+    static final int VERTEX_COUNT = 2;
     static final int POSITION_DATA_SIZE = 3;
     static final int BYTES_PER_FLOAT = 4;
     static final int STRIDE_BYTES = 7 * BYTES_PER_FLOAT;
@@ -32,12 +32,16 @@ public class GLLine {
 
 
     //TODO: Check if yPosition is within screen bounds before settting?
-    public GLLine(float[] color, float yPosition) {
+    public GLLine(float[] color, float xPosition) {
         this.color = color;
-        this.yPosition = yPosition;
+        this.xPosition = xPosition;
+        verticies = new float[VERTEX_COUNT];
+
     }
 
-    private void initIndices() {
+
+    //TODO: I'm not sure if this belongs here
+    private void initVerticies() {
 
     }
 
@@ -83,5 +87,19 @@ public class GLLine {
         GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, VERTEX_COUNT);
     }
 
+    /**
+     * Set the color for the line given individual color values
+     * This function might not be necessary
+     * @param red
+     * @param green
+     * @param blue
+     * @param alpha
+     */
+    public void setColor(float red, float green, float blue, float alpha) {
+        color[0] = red;
+        color[1] = green;
+        color[2] = blue;
+        color[3] = alpha;
+    }
 
     }
