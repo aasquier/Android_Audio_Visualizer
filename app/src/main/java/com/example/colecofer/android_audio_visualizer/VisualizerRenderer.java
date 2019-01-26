@@ -39,6 +39,9 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         this.AUDIO_COUNT = captureSize;
         this.VERTEX_COUNT = this.AUDIO_COUNT / 7;
 
+        //Questions
+        //Color data is in lineVertices?
+        //Why do we need more than two vertices for a line?
         this.lineVertices = new float[]{
                 // X, Y, Z
                 // R, G, B, A
@@ -241,7 +244,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         drawLine(lineVertexBuffer);
     }
 
-    public void drawLine(FloatBuffer lineVertexData){
+    public void drawLine(FloatBuffer lineVertexData) {
         lineVertexData.position(POSITION_OFFSET);
         GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVertexData);
         GLES20.glEnableVertexAttribArray(positionHandle);

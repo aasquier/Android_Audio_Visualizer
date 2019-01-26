@@ -42,7 +42,7 @@ public class VisualizerSurfaceView extends GLSurfaceView {
         float k = -1.0f;
 
         for(int i = 0; i < captureSize-1; i++){
-            int amplify = (fft[i]*fft[i]) + (fft[i+1]*fft[i+1]);
+            int amplify = (fft[i]*fft[i]) + (fft[i+1]*fft[i+1]); 
 
             fftRender[j] = k;
             fftRender[j+1] = (float)amplify*amp;
