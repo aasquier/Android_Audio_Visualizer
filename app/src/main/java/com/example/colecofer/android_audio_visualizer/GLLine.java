@@ -30,25 +30,45 @@ public class GLLine {
     private float[] projectionMatrix = new float[16];
     private float[] mvpMatrix = new float[16];
 
+    final String vertexShader =
+        "uniform mat4 u_MVPMatrix;" +
+        "attribute vec4 a_Position;" +
+        "attribute vec4 a_Color;" +
+        "varying vec4 v_Color;" +
+        "void main()" +
+        "{" +
+        "   v_Color = a_Color;" +
+        "   gl_Position = u_MVPMatrix" +
+        "               * a_Position;" +
+        "}";
+
+    final String fragmentShader =
+        "precision mediump float;" +
+        "varying vec4 v_Color;" +
+        "void main()" +
+        "{" +
+        "   gl_FragColor = v_Color;" +
+        "}";
+
 
     //TODO: Check if yPosition is within screen bounds before settting?
     public GLLine(float[] color, float xPosition) {
         this.color = color;
         this.xPosition = xPosition;
+
         verticies = new float[VERTEX_COUNT];
+
+        //Bottom point of line
         verticies[0] = xPosition;
         verticies[1] = 0;
         verticies[2] = 0;
+
+        //Top point of line
         verticies[3] = xPosition;
         verticies[4] = 0;
         verticies[4] = 0;
     }
 
-
-    //TODO: I'm not sure if this belongs here
-    private void initVerticies() {
-
-    }
 
     /**
      * Modifies the passed in fft which is just an amplification value
@@ -60,6 +80,7 @@ public class GLLine {
     private void updateFft(float[] fft) {
 
     }
+
 
     /**
      * This method should be invoked when Visualizer One catches the pulsating flag.
@@ -73,8 +94,9 @@ public class GLLine {
 
     }
 
+
     /**
-     * Draw the line given a set of verticies
+     * Draw the line given a set of vertices
      */
     private void draw(FloatBuffer lineVertexData) {
         lineVertexData.position(POSITION_OFFSET);

@@ -19,7 +19,7 @@ public class VisualizerSurfaceView extends GLSurfaceView {
     public VisualizerSurfaceView(Context context) {
         super(context);
     }
-
+∏
     public VisualizerSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }

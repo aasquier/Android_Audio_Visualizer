@@ -7,6 +7,7 @@ import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.audiofx.Equalizer;
 import android.media.audiofx.Visualizer;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -14,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.spotify.sdk.android.player.SpotifyPlayer;
@@ -99,7 +101,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         // Check if the system supports OpenGL ES 2.0.
         final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         final ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
-        final boolean supportsEs2 = configurationInfo.reqGlEsVersion >= 0x20000;
+        final boolean supportsEs2 = configurationInfo.reqGlEsVersion >= 0x00020000;
 
         if (supportsEs2) {
             log.d("opengl", "Supports ES2");
@@ -119,9 +121,10 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         //Sets up the visualizer for local files
         mediaPlayer = MediaPlayer.create(this, R.raw.jumparound);
         mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+//        mediaPlayer.start();
 
-        visualizer = new Visualizer(mediaPlayer.getAudioSessionId());
+        //visualizer = new Visualizer(mediaPlayer.getAudioSessionId());
+        visualizer = new Visualizer(0);
         visualizer.setCaptureSize(audioSampleSize);
         visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);
         visualizer.setEnabled(true);

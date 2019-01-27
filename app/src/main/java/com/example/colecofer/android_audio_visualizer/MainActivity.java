@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
+import android.media.audiofx.Visualizer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.cleveroad.audiovisualization.AudioVisualization;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
@@ -60,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
     private Bitmap albumArt;
     private boolean enablePlayButton;
     private Button playButton;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

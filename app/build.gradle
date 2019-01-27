@@ -28,5 +28,6 @@ dependencies {
 
     //Spotify dependencies were all added as .aar modules
     implementation 'com.loopj.android:android-async-http:1.4.9'
+    implementation 'com.cleveroad:audiovisualization:1.0.1'
 
 }
