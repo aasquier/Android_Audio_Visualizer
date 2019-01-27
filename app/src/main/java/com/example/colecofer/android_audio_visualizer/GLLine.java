@@ -59,7 +59,7 @@ public class GLLine extends GLProgram {
      * in the GPU)
      * @param fft
      */
-    private void updateFft(float[] fft) {
+    public void updateFft(float[] fft) {
         int size = fft.length;
         for(int x = 0; x < size; x += 7) {
             fft[x] += xOffset;
@@ -88,7 +88,8 @@ public class GLLine extends GLProgram {
     /**
      * Draw the line given a set of vertices
      */
-    private void draw() {
+    public void draw() {
+        GLES20.glUseProgram(returnProgram());
         lineVertices.position(POSITION_OFFSET);
         GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVertices);
         GLES20.glEnableVertexAttribArray(positionHandle);

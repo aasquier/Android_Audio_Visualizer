@@ -12,6 +12,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 public class VisualizerRenderer implements GLSurfaceView.Renderer {
+    private VisOne visOne;
     static int AUDIO_COUNT;
     static int VERTEX_COUNT = 5;
     static final int POSITION_DATA_SIZE = 3;
@@ -36,6 +37,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
     private int programHandle;
 
     public VisualizerRenderer(int captureSize){
+        this.visOne = new VisOne();
         this.AUDIO_COUNT = captureSize;
         this.VERTEX_COUNT = this.AUDIO_COUNT / 7;
 
@@ -116,96 +118,96 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
                         + "   gl_FragColor = v_Color;     \n"		// Pass the color directly through the pipeline.
                         + "}                              \n";
 
-        // Load in the vertex shader.
-        int vertexShaderHandle = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
-
-        if (vertexShaderHandle != 0)
-        {
-            // Pass in the shader source.
-            GLES20.glShaderSource(vertexShaderHandle, vertexShader);
-
-            // Compile the shader.
-            GLES20.glCompileShader(vertexShaderHandle);
-
-            // Get the compilation status.
-            final int[] compileStatus = new int[1];
-            GLES20.glGetShaderiv(vertexShaderHandle, GLES20.GL_COMPILE_STATUS, compileStatus, 0);
-
-            // If the compilation failed, delete the shader.
-            if (compileStatus[0] == 0)
-            {
-                GLES20.glDeleteShader(vertexShaderHandle);
-                vertexShaderHandle = 0;
-            }
-        }
-
-        if (vertexShaderHandle == 0)
-        {
-            throw new RuntimeException("Error creating vertex shader.");
-        }
-
-        // Load in the fragment shader shader.
-        int fragmentShaderHandle = GLES20.glCreateShader(GLES20.GL_FRAGMENT_SHADER);
-
-        if (fragmentShaderHandle != 0)
-        {
-            // Pass in the shader source.
-            GLES20.glShaderSource(fragmentShaderHandle, fragmentShader);
-
-            // Compile the shader.
-            GLES20.glCompileShader(fragmentShaderHandle);
-
-            // Get the compilation status.
-            final int[] compileStatus = new int[1];
-            GLES20.glGetShaderiv(fragmentShaderHandle, GLES20.GL_COMPILE_STATUS, compileStatus, 0);
-
-            // If the compilation failed, delete the shader.
-            if (compileStatus[0] == 0)
-            {
-                GLES20.glDeleteShader(fragmentShaderHandle);
-                fragmentShaderHandle = 0;
-            }
-        }
-
-        if (fragmentShaderHandle == 0)
-        {
-            throw new RuntimeException("Error creating fragment shader.");
-        }
-
-        // Create a program object and store the handle to it.
-        int programHandle = GLES20.glCreateProgram();
-
-        if (programHandle != 0)
-        {
-            // Bind the vertex shader to the program.
-            GLES20.glAttachShader(programHandle, vertexShaderHandle);
-
-            // Bind the fragment shader to the program.
-            GLES20.glAttachShader(programHandle, fragmentShaderHandle);
-
-            // Bind attributes
-            GLES20.glBindAttribLocation(programHandle, 0, "a_Position");
-            GLES20.glBindAttribLocation(programHandle, 1, "a_Color");
-
-            // Link the two shaders together into a program.
-            GLES20.glLinkProgram(programHandle);
-
-            // Get the link status.
-            final int[] linkStatus = new int[1];
-            GLES20.glGetProgramiv(programHandle, GLES20.GL_LINK_STATUS, linkStatus, 0);
-
-            // If the link failed, delete the program.
-            if (linkStatus[0] == 0)
-            {
-                GLES20.glDeleteProgram(programHandle);
-                programHandle = 0;
-            }
-        }
-
-        if (programHandle == 0)
-        {
-            throw new RuntimeException("Error creating program.");
-        }
+//        // Load in the vertex shader.
+//        int vertexShaderHandle = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
+//
+//        if (vertexShaderHandle != 0)
+//        {
+//            // Pass in the shader source.
+//            GLES20.glShaderSource(vertexShaderHandle, vertexShader);
+//
+//            // Compile the shader.
+//            GLES20.glCompileShader(vertexShaderHandle);
+//
+//            // Get the compilation status.
+//            final int[] compileStatus = new int[1];
+//            GLES20.glGetShaderiv(vertexShaderHandle, GLES20.GL_COMPILE_STATUS, compileStatus, 0);
+//
+//            // If the compilation failed, delete the shader.
+//            if (compileStatus[0] == 0)
+//            {
+//                GLES20.glDeleteShader(vertexShaderHandle);
+//                vertexShaderHandle = 0;
+//            }
+//        }
+//
+//        if (vertexShaderHandle == 0)
+//        {
+//            throw new RuntimeException("Error creating vertex shader.");
+//        }
+//
+//        // Load in the fragment shader shader.
+//        int fragmentShaderHandle = GLES20.glCreateShader(GLES20.GL_FRAGMENT_SHADER);
+//
+//        if (fragmentShaderHandle != 0)
+//        {
+//            // Pass in the shader source.
+//            GLES20.glShaderSource(fragmentShaderHandle, fragmentShader);
+//
+//            // Compile the shader.
+//            GLES20.glCompileShader(fragmentShaderHandle);
+//
+//            // Get the compilation status.
+//            final int[] compileStatus = new int[1];
+//            GLES20.glGetShaderiv(fragmentShaderHandle, GLES20.GL_COMPILE_STATUS, compileStatus, 0);
+//
+//            // If the compilation failed, delete the shader.
+//            if (compileStatus[0] == 0)
+//            {
+//                GLES20.glDeleteShader(fragmentShaderHandle);
+//                fragmentShaderHandle = 0;
+//            }
+//        }
+//
+//        if (fragmentShaderHandle == 0)
+//        {
+//            throw new RuntimeException("Error creating fragment shader.");
+//        }
+//
+//        // Create a program object and store the handle to it.
+//        int programHandle = GLES20.glCreateProgram();
+//
+//        if (programHandle != 0)
+//        {
+//            // Bind the vertex shader to the program.
+//            GLES20.glAttachShader(programHandle, vertexShaderHandle);
+//
+//            // Bind the fragment shader to the program.
+//            GLES20.glAttachShader(programHandle, fragmentShaderHandle);
+//
+//            // Bind attributes
+//            GLES20.glBindAttribLocation(programHandle, 0, "a_Position");
+//            GLES20.glBindAttribLocation(programHandle, 1, "a_Color");
+//
+//            // Link the two shaders together into a program.
+//            GLES20.glLinkProgram(programHandle);
+//
+//            // Get the link status.
+//            final int[] linkStatus = new int[1];
+//            GLES20.glGetProgramiv(programHandle, GLES20.GL_LINK_STATUS, linkStatus, 0);
+//
+//            // If the link failed, delete the program.
+//            if (linkStatus[0] == 0)
+//            {
+//                GLES20.glDeleteProgram(programHandle);
+//                programHandle = 0;
+//            }
+//        }
+//
+//        if (programHandle == 0)
+//        {
+//            throw new RuntimeException("Error creating program.");
+//        }
 
         // Set program handles. These will later be used to pass in values to the program.
         mvpMatrixHandle = GLES20.glGetUniformLocation(programHandle, "u_MVPMatrix");
@@ -213,7 +215,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         colorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
 
         // Tell OpenGL to use this program when rendering.
-        GLES20.glUseProgram(programHandle);
+//        GLES20.glUseProgram(programHandle);
     }
 
     @Override
@@ -231,17 +233,15 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         Matrix.frustumM(projectionMatrix, 0, left, right, bottom, top, near, far);
     }
 
-    public void newFftData(FloatBuffer fftData, int vCount){
-        lineVertexBuffer = fftData;
-        VERTEX_COUNT = vCount;
+    public void updateFft(float[] fft){
+        visOne.updateFft(fft);
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
-
         Matrix.setIdentityM(modelMatrix, 0);
-        drawLine(lineVertexBuffer);
+        visOne.draw();
     }
 
     public void drawLine(FloatBuffer lineVertexData) {
