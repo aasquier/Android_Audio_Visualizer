@@ -19,7 +19,7 @@ public class VisualizerSurfaceView extends GLSurfaceView {
     public VisualizerSurfaceView(Context context) {
         super(context);
     }
-∏
+
     public VisualizerSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -44,8 +44,8 @@ public class VisualizerSurfaceView extends GLSurfaceView {
         for(int i = 0; i < captureSize-1; i++){
             int amplify = (fft[i]*fft[i]) + (fft[i+1]*fft[i+1]); 
 
-            fftRender[j] = k;
-            fftRender[j+1] = (float)amplify*amp;
+            fftRender[j] = (float)amplify*amp;  //Update so that they don't overlap each other
+            fftRender[j+1] = k;                 //Y offset
             fftRender[j+2] = 0.0f;
             fftRender[j+3] = 1.0f;
             fftRender[j+4] = 0.0f;

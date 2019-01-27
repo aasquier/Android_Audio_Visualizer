@@ -121,10 +121,9 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         //Sets up the visualizer for local files
         mediaPlayer = MediaPlayer.create(this, R.raw.jumparound);
         mediaPlayer.setLooping(true);
-//        mediaPlayer.start();
+        mediaPlayer.start();
 
-        //visualizer = new Visualizer(mediaPlayer.getAudioSessionId());
-        visualizer = new Visualizer(0);
+        visualizer = new Visualizer(mediaPlayer.getAudioSessionId());
         visualizer.setCaptureSize(audioSampleSize);
         visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);
         visualizer.setEnabled(true);
