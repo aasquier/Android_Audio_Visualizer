@@ -2,7 +2,6 @@ package com.example.colecofer.android_audio_visualizer;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-import android.opengl.Matrix;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -12,8 +11,20 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 public class VisualizerRenderer implements GLSurfaceView.Renderer {
+
     static int AUDIO_COUNT;
     static int VERTEX_COUNT = 5;
+
+    private int positionHandle;
+    private int colorHandle;
+
+    private float[] lineVertices;
+    private FloatBuffer lineVertexBuffer;
+    private GLLine[] lines;                               //Holds the lines to be displayed
+    private final int LINE_AMT = 20;                     //Number of lines to display on the screen
+    private float lineOffSet = 1.98f/(LINE_AMT -1);       //We want to display lines from -.99 to .99 (.99+.99=1.98)
+
+
     static final int POSITION_DATA_SIZE = 3;
     static final int BYTES_PER_FLOAT = 4;
     static final int STRIDE_BYTES = 7 * BYTES_PER_FLOAT;
@@ -21,29 +32,12 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
     static final int COLOR_OFFSET = 3;
     static final int COLOR_DATA_SIZE = 4;
 
-    private float[] lineVertices;
-    private FloatBuffer lineVertexBuffer;
-
-//    private float[] modelMatrix = new float[16];
-//    private float[] viewMatrix = new float[16];
-//    private float[] projectionMatrix = new float[16];
-    private float[] mvpMatrix = new float[16];
-
-//    private int mvpMatrixHandle;
-//    private int mvMatrixHandle;
-    private int positionHandle;
-    private int colorHandle;
-    private int programHandle;
-
-    private GLLine[] lines;
-    private final int SIZE = 100;
-    private float lineOffSet = 1.98f/(SIZE-1);
-
 
     public VisualizerRenderer(int captureSize){
         this.AUDIO_COUNT = captureSize;
-        this.VERTEX_COUNT = this.AUDIO_COUNT / 7;
+        this.VERTEX_COUNT = this.AUDIO_COUNT / 7;     //It's 7 because we have x, y, z, r, g, b, a
 
+        //This is the default line that is displayed before any fft values have been updated
         this.lineVertices = new float[]{
                 // X, Y, Z
                 // R, G, B, A
@@ -53,24 +47,24 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
                 -0.5f, 0.0f, 0.0f,
                 1.0f, 0.0f, 0.0f, 1.0f,
-
-                0.0f, 0.0f, 0.0f,
-                1.0f, 0.0f, 0.0f, 1.0f,
-
-                0.5f, 0.0f, 0.0f,
-                1.0f, 0.0f, 0.0f, 1.0f,
-
-                1.0f, 0.0f, 0.0f,
-                1.0f, 0.0f, 0.0f, 1.0f
+//
+//                0.0f, 0.0f, 0.0f,
+//                1.0f, 0.0f, 0.0f, 1.0f,
+//
+//                0.5f, 0.0f, 0.0f,
+//                1.0f, 0.0f, 0.0f, 1.0f,
+//
+//                1.0f, 0.0f, 0.0f,
+//                1.0f, 0.0f, 0.0f, 1.0f
         };
 
         lineVertexBuffer = ByteBuffer.allocateDirect(lineVertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         lineVertexBuffer.put(lineVertices).position(0);
 
         //Create 100 lines
-        lines = new GLLine[SIZE];
+        lines = new GLLine[LINE_AMT];
         float k = -0.99f;
-        for(int i = 0; i < SIZE; ++i) {
+        for(int i = 0; i < LINE_AMT; ++i) {
             lines[i] = new GLLine(k);
             k += lineOffSet;
         }
@@ -243,7 +237,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
     }
 
     public void newFftData(float[] fft){
-        for(int i = 0; i < SIZE; ++i) {
+        for(int i = 0; i < LINE_AMT; ++i) {
             float[] fftInput = new float[fft.length];
             System.arraycopy(fft, 0, fftInput, 0, fft.length);
             lines[i].updateFft(fftInput);
@@ -255,7 +249,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 
 //        Matrix.setIdentityM(modelMatrix, 0);
-        for(int i = 0; i < SIZE; ++i) {
+        for(int i = 0; i < LINE_AMT; ++i) {
             drawLine(lines[i].draw());
         }
     }
