@@ -104,13 +104,10 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         final ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
         final boolean supportsEs2 = configurationInfo.reqGlEsVersion >= 0x20000;
 
+        //Check if ES2 is supported on the device
         if (supportsEs2) {
-            log.d("opengl", "Supports ES2");
-            // Request an OpenGL ES 2.0 compatible context.
             surfaceView.setEGLContextClientVersion(2);
-
             visualizerRenderer = new VisualizerRenderer(audioSampleSize);
-            // Set the renderer to our demo renderer, defined below.
             surfaceView.setRenderer(visualizerRenderer, displayMetrics.density, audioSampleSize);
         } else {
             log.d("opengl", "Does not support ES2");
@@ -147,7 +144,6 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
     @Override
     public void onWaveFormDataCapture(Visualizer visualizer, byte[] waveform, int samplingRate) {
-        // What in the fuck do i do with the waveform
     }
 
     @Override

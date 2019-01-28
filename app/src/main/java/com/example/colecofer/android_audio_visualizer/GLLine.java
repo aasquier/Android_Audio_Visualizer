@@ -16,7 +16,7 @@ public class GLLine {
     public GLLine(float xPosition) {
         this.xOffset = xPosition;
 
-        this.vertices = new float[]{
+        this.vertices = new float[] {
                 // X, Y, Z
                 // R, G, B, A
 
@@ -25,15 +25,6 @@ public class GLLine {
 
                 -0.5f, 0.0f, 0.0f,
                 1.0f, 0.0f, 0.0f, 1.0f,
-
-                0.0f, 0.0f, 0.0f,
-                1.0f, 0.0f, 0.0f, 1.0f,
-
-                0.5f, 0.0f, 0.0f,
-                1.0f, 0.0f, 0.0f, 1.0f,
-
-                1.0f, 0.0f, 0.0f,
-                1.0f, 0.0f, 0.0f, 1.0f
         };
 
         lineVerticesBuffer = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
@@ -56,11 +47,6 @@ public class GLLine {
 
         //Puts the fft array into a FloatBuffer (drawable state for the GPU)
         FloatBuffer fftInput = ByteBuffer.allocateDirect(fft.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-
-        //Convert from float array into byte array
-//        float[] fftFinal = new float[fft.length/8];
-//        System.arraycopy(fft, 0, fftFinal, 0, fftFinal.length);
-
         fftInput.put(fft).position(0);
         lineVerticesBuffer = fftInput;
     }
