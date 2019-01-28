@@ -313,7 +313,6 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
     public void onPlaybackEvent(PlayerEvent playerEvent) {
         currentPlaybackState = player.getPlaybackState();
         metadata = player.getMetadata();
-        //updateView();
     }
 
     /**
