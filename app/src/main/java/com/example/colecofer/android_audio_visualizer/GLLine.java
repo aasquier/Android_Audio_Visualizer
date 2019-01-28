@@ -103,7 +103,7 @@ public class GLLine /*extends GLProgram*/ {
      */
     public void draw(int program) {
         positionHandle = GLES20.glGetAttribLocation(program, "a_Position");
-        GLES20.glUseProgram(program);
+//        GLES20.glUseProgram(program);
         lineVerticesBuffer.position(POSITION_OFFSET);
         GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVerticesBuffer);
         GLES20.glEnableVertexAttribArray(positionHandle);

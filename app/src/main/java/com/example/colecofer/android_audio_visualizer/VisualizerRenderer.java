@@ -244,19 +244,19 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         visOne.draw(programHandle);
     }
 
-    public void drawLine(FloatBuffer lineVertexData) {
-        lineVertexData.position(POSITION_OFFSET);
-        GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVertexData);
-        GLES20.glEnableVertexAttribArray(positionHandle);
-
-        lineVertexData.position(COLOR_OFFSET);
-        GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVertexData);
-        GLES20.glEnableVertexAttribArray(colorHandle);
-
-//        Matrix.multiplyMM(mvpMatrix, 0, viewMatrix, 0, modelMatrix, 0);
-//        Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, mvpMatrix, 0);
-
-//        GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, mvpMatrix, 0);
-        GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, VERTEX_COUNT);
-    }
+//    public void drawLine(FloatBuffer lineVertexData) {
+//        lineVertexData.position(POSITION_OFFSET);
+//        GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVertexData);
+//        GLES20.glEnableVertexAttribArray(positionHandle);
+//
+//        lineVertexData.position(COLOR_OFFSET);
+//        GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVertexData);
+//        GLES20.glEnableVertexAttribArray(colorHandle);
+//
+////        Matrix.multiplyMM(mvpMatrix, 0, viewMatrix, 0, modelMatrix, 0);
+////        Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, mvpMatrix, 0);
+//
+////        GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, mvpMatrix, 0);
+//        GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, VERTEX_COUNT);
+//    }
 }
