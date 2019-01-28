@@ -7,15 +7,15 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-public class GLLine extends GLProgram {
+public class GLLine /*extends GLProgram*/ {
 
     //Handles
     private int positionHandle;
     private int colorHandle;
     private int mvpMatrixHandle;
 
-    private FloatBuffer lineVertices;
-    private float[] verticies;
+    private FloatBuffer lineVerticesBuffer;
+    private float[] vertices;
     private float[] color;
     private float xOffset;
 
@@ -28,27 +28,40 @@ public class GLLine extends GLProgram {
     static final int COLOR_DATA_SIZE = 4;
 
 
-    private float[] modelMatrix = new float[16];
-    private float[] viewMatrix = new float[16];
-    private float[] projectionMatrix = new float[16];
-    private float[] mvpMatrix = new float[16];
+//    private float[] modelMatrix = new float[16];
+//    private float[] viewMatrix = new float[16];
+//    private float[] projectionMatrix = new float[16];
+//    private float[] mvpMatrix = new float[16];
 
 
     public GLLine(float[] color, float xPosition) {
+//        super();
         this.color = color;
         this.xOffset = xPosition;
 
-        verticies = new float[VERTEX_COUNT];
+        this.vertices = new float[]{
+                // X, Y, Z
+                // R, G, B, A
 
-        //Bottom point of line
-        verticies[0] = xPosition;
-        verticies[1] = 0;
-        verticies[2] = 0;
+                -1.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f, 1.0f,
 
-        //Top point of line
-        verticies[3] = xPosition;
-        verticies[4] = 0;
-        verticies[4] = 0;
+                -0.5f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f, 1.0f,
+
+                0.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f, 1.0f,
+
+                0.5f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f, 1.0f,
+
+                1.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f, 1.0f
+        };
+
+        lineVerticesBuffer = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        lineVerticesBuffer.put(vertices).position(0);
+
     }
 
 
@@ -68,7 +81,7 @@ public class GLLine extends GLProgram {
         //Puts the fft array into a FloatBuffer (drawable state for the GPU)
         FloatBuffer fftInput = ByteBuffer.allocateDirect(fft.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         fftInput.put(fft).position(0);
-        lineVertices = fftInput;
+        lineVerticesBuffer = fftInput;
     }
 
 
@@ -88,20 +101,22 @@ public class GLLine extends GLProgram {
     /**
      * Draw the line given a set of vertices
      */
-    public void draw() {
-        GLES20.glUseProgram(returnProgram());
-        lineVertices.position(POSITION_OFFSET);
-        GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVertices);
+    public void draw(int program) {
+        positionHandle = GLES20.glGetAttribLocation(program, "a_Position");
+        GLES20.glUseProgram(program);
+        lineVerticesBuffer.position(POSITION_OFFSET);
+        GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVerticesBuffer);
         GLES20.glEnableVertexAttribArray(positionHandle);
 
-        lineVertices.position(COLOR_OFFSET);
-        GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVertices);
+        colorHandle = GLES20.glGetAttribLocation(program, "v_Color");
+        lineVerticesBuffer.position(COLOR_OFFSET);
+        GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVerticesBuffer);
         GLES20.glEnableVertexAttribArray(colorHandle);
 
-        Matrix.multiplyMM(mvpMatrix, 0, viewMatrix, 0, modelMatrix, 0);
-        Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, mvpMatrix, 0);
+//        Matrix.multiplyMM(mvpMatrix, 0, viewMatrix, 0, modelMatrix, 0);
+//        Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, mvpMatrix, 0);
 
-        GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, mvpMatrix, 0);
+//        GLES20.glUniformMatrix4fv(mvpMatrixHandle, 1, false, mvpMatrix, 0);
         GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, VERTEX_COUNT);
     }
 

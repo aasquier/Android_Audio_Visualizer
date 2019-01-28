@@ -60,16 +60,10 @@ public class VisualizerSurfaceView extends GLSurfaceView {
         float[] fftFinal = new float[fftRender.length/8];
         System.arraycopy(fftRender,0,fftFinal,0,fftFinal.length);
 
-//
-//        FloatBuffer fftInput = ByteBuffer.allocateDirect(fftRender.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-//        fftInput.put(fftRender).position(0);
-//
-//        renderer.newFftData(fftInput, captureSize/2);
-
-
-        FloatBuffer fftInput = ByteBuffer.allocateDirect(fftFinal.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        fftInput.put(fftFinal).position(0);
-        renderer.newFftData(fftInput, fftFinal.length/7);
+        //FloatBuffer fftInput = ByteBuffer.allocateDirect(fftRender.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        //fftInput.put(fftRender).position(0);
+        //renderer.newFftData(fftInput, captureSize/2);
+        renderer.updateFft(fftFinal);
     }
 
     public void updateWaveform(byte[] waveform){

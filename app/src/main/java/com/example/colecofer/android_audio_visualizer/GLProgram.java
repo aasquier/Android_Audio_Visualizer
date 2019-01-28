@@ -27,6 +27,7 @@ public class GLProgram {
             "}";
 
 
+
     public GLProgram() {
         int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
         int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
