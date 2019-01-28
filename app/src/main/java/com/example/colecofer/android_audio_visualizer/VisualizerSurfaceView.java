@@ -9,7 +9,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 public class VisualizerSurfaceView extends GLSurfaceView {
-    private static float amp = 0.000005f;
+    private static float amp = 0.0000005f;
 
     private static int captureSize;
     private static float density;
