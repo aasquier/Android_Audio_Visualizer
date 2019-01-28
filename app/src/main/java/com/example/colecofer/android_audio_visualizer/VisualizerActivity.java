@@ -34,8 +34,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visualizer);
-        log.d("opengl", "Oncreate was called");
-//        startTrackPlayback();
+        //startTrackPlayback();  //Uncomment this line to start Spotify track playback
         setupVisualizer();
     }
 
@@ -49,23 +48,22 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     }
 
 
+    /**
+     * This method checks if the RECORD_AUDIO permission has been granted to the app,
+     * and if not then prompts the user for it.
+     * Once it has permission, it then initializes the visualizer.
+     */
     private void setupVisualizer() {
-        // Check Audio Record Permission
-        if (ContextCompat.checkSelfPermission(
-                this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-
+        //Check Audio Record Permission
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
                 Toast.makeText(this, "RECORD_AUDIO permission is required.", Toast.LENGTH_SHORT).show();
-
+            } else {
+                //If no permission then request it to the user
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_PERMISSION);
             }
-
-            // If no permission then request it to the user
-            else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
-                        REQUEST_PERMISSION);
-            }
-
         } else {
+            //If we already have permission, then initialize the visualizer
             initVisualizer();
         }
     }
@@ -75,7 +73,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_PERMISSION: {
-                // If Permission is granted then start the initialization
+                //If Permission is granted then start the initialization
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     initVisualizer();
                 }
@@ -83,8 +81,13 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         }
     }
 
+    /**
+     * Initializes the visualizer.
+     * This function currently uses locally stored files because we are blocked
+     * at getting the visualizer to listen to all audio output which is accomplished
+     * when passing a 0 to the Visualizer constructor. This is necessary to use Spotify.
+     */
     private void initVisualizer() {
-        log.d("opengl", "In initVisualizer");
         int audioSampleSize = Visualizer.getCaptureSizeRange()[1];
 
         if (audioSampleSize > 512) {
