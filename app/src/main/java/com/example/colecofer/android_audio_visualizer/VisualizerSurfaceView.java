@@ -37,7 +37,6 @@ public class VisualizerSurfaceView extends GLSurfaceView {
         float[] fftRender = new float[arraySize*7];
 
         int j = 0;
-        //float plus = (float)1/(arraySize/2);
         float plus = (float)1/(arraySize/16);
         float k = -1.0f;
 
@@ -57,21 +56,10 @@ public class VisualizerSurfaceView extends GLSurfaceView {
             j+=7;
         }
 
-//        float[] fftFinal = new float[fftRender.length/8];
-//        System.arraycopy(fftRender,0,fftFinal,0,fftFinal.length);
-
-//
-//        FloatBuffer fftInput = ByteBuffer.allocateDirect(fftRender.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-//        fftInput.put(fftRender).position(0);
-//
-//        renderer.newFftData(fftInput, captureSize/2);
-
-
-//        FloatBuffer fftInput = ByteBuffer.allocateDirect(fftFinal.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-//        fftInput.put(fftFinal).position(0);
         renderer.newFftData(fftRender);
     }
 
     public void updateWaveform(byte[] waveform){
+
     }
 }
