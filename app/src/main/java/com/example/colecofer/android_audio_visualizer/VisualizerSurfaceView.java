@@ -9,7 +9,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 public class VisualizerSurfaceView extends GLSurfaceView {
-    private static float amp = 0.0001f;
+    private static float amp = 0.000005f;
 
     private static int captureSize;
     private static float density;
@@ -32,7 +32,7 @@ public class VisualizerSurfaceView extends GLSurfaceView {
         super.setRenderer(inputRenderer);
     }
 
-    public void updateFft(byte[] fft){
+    public void updateFft(byte[] fft) {
         int arraySize = captureSize/2;
         float[] fftRender = new float[arraySize*7];
 
@@ -44,8 +44,8 @@ public class VisualizerSurfaceView extends GLSurfaceView {
         for(int i = 0; i < captureSize-1; i++){
             int amplify = (fft[i]*fft[i]) + (fft[i+1]*fft[i+1]);
 
-            fftRender[j] = k;
-            fftRender[j+1] = (float)amplify*amp;
+            fftRender[j] = (float)amplify*amp;
+            fftRender[j+1] = k;
             fftRender[j+2] = 0.0f;
             fftRender[j+3] = 1.0f;
             fftRender[j+4] = 0.0f;
@@ -57,8 +57,8 @@ public class VisualizerSurfaceView extends GLSurfaceView {
             j+=7;
         }
 
-        float[] fftFinal = new float[fftRender.length/8];
-        System.arraycopy(fftRender,0,fftFinal,0,fftFinal.length);
+//        float[] fftFinal = new float[fftRender.length/8];
+//        System.arraycopy(fftRender,0,fftFinal,0,fftFinal.length);
 
 //
 //        FloatBuffer fftInput = ByteBuffer.allocateDirect(fftRender.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
@@ -67,9 +67,9 @@ public class VisualizerSurfaceView extends GLSurfaceView {
 //        renderer.newFftData(fftInput, captureSize/2);
 
 
-        FloatBuffer fftInput = ByteBuffer.allocateDirect(fftFinal.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        fftInput.put(fftFinal).position(0);
-        renderer.newFftData(fftInput, fftFinal.length/7);
+//        FloatBuffer fftInput = ByteBuffer.allocateDirect(fftFinal.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+//        fftInput.put(fftFinal).position(0);
+        renderer.newFftData(fftRender);
     }
 
     public void updateWaveform(byte[] waveform){

@@ -35,6 +35,11 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
     private int colorHandle;
     private int programHandle;
 
+    private GLLine[] lines;
+    private final int SIZE = 30;
+    private float lineOffSet = 1.98f/(SIZE-1);
+
+
     public VisualizerRenderer(int captureSize){
         this.AUDIO_COUNT = captureSize;
         this.VERTEX_COUNT = this.AUDIO_COUNT / 7;
@@ -61,6 +66,15 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
         lineVertexBuffer = ByteBuffer.allocateDirect(lineVertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         lineVertexBuffer.put(lineVertices).position(0);
+
+        //Create 100 lines
+        lines = new GLLine[SIZE];
+        float k = -0.99f;
+        for(int i = 0; i < SIZE; ++i) {
+            lines[i] = new GLLine(k);
+            k += lineOffSet;
+        }
+
     }
 
     @Override
@@ -228,9 +242,12 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         Matrix.frustumM(projectionMatrix, 0, left, right, bottom, top, near, far);
     }
 
-    public void newFftData(FloatBuffer fftData, int vCount){
-        lineVertexBuffer = fftData;
-        VERTEX_COUNT = vCount;
+    public void newFftData(float[] fft){
+        for(int i = 0; i < SIZE; ++i) {
+            float[] fftInput = new float[fft.length];
+            System.arraycopy(fft, 0, fftInput, 0, fft.length);
+            lines[i].updateFft(fftInput);
+        }
     }
 
     @Override
@@ -238,7 +255,9 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 
         Matrix.setIdentityM(modelMatrix, 0);
-        drawLine(lineVertexBuffer);
+        for(int i = 0; i < SIZE; ++i) {
+            drawLine(lines[i].draw());
+        }
     }
 
     public void drawLine(FloatBuffer lineVertexData){
