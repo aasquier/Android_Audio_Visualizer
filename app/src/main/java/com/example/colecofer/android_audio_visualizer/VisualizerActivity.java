@@ -23,12 +23,15 @@ import static com.loopj.android.http.AsyncHttpClient.log;
 public class VisualizerActivity extends AppCompatActivity implements Visualizer.OnDataCaptureListener {
 
     private static final int REQUEST_PERMISSION = 101;
+    private static final int REAL_BUCKET = 3;
+    private static final int IMAGINARY_BUCKET = 4;
 
     private MediaPlayer mediaPlayer;
     private Visualizer visualizer;
     private VisualizerSurfaceView surfaceView;
     private VisualizerRenderer visualizerRenderer;
     private Visualizer.OnDataCaptureListener captureListener;
+    private Utility util;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +93,14 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     private void initVisualizer() {
         int audioSampleSize = Visualizer.getCaptureSizeRange()[1];
 
-        if (audioSampleSize > 512) {
-            audioSampleSize = 512;
+        /** This ends up being the max size we will use, it is actually half of this number that defines
+         *  how many buckets we can have. So we have 512 "Frequency buckets" if this is 1024 to account
+         *  for the real and imaginary parts of each bucket. There is a frequency range of 0-20000 HZ.
+         *  This gives us a frequency granularity of 39.06 Hz, so our target will be the 3rd bucket which
+         *  covers 78.12-117.18 Hz
+         */
+        if (audioSampleSize > 1024) {
+            audioSampleSize = 1024;
         }
 
         final DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -120,7 +129,6 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         mediaPlayer = MediaPlayer.create(this, R.raw.jazz);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
-
         visualizer = new Visualizer(mediaPlayer.getAudioSessionId());
         visualizer.setCaptureSize(audioSampleSize);
         visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);
@@ -147,7 +155,11 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     }
 
     @Override
+    /** TODO look into this as I am not sure we should cast byte array memebrs into floats */
     public void onFftDataCapture(Visualizer visualizer, byte[] fft, int samplingRate) {
+        /** Gives us the decibel level for the fft bucket we care about **/
+        float dbs = util.getDBs(((float) fft[REAL_BUCKET]), ((float) fft[IMAGINARY_BUCKET]));
+        /** TODO this needs to change as the whole fft should not influence the wave */
         surfaceView.updateFft(fft);
     }
 
