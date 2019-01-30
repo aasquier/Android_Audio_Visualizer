@@ -34,7 +34,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visualizer);
-        //startTrackPlayback();  //Uncomment this line to start Spotify track playback
+        startTrackPlayback();  //Uncomment this line to start Spotify track playback
         setupVisualizer();
     }
 
@@ -116,12 +116,13 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
             return;
         }
 
+        //This code works, which runs a local file
         //Sets up the visualizer for local files
-        mediaPlayer = MediaPlayer.create(this, R.raw.jazz);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+        //mediaPlayer = MediaPlayer.create(this, R.raw.jazz);
+        //mediaPlayer.setLooping(true);
+        //mediaPlayer.start();
 
-        visualizer = new Visualizer(mediaPlayer.getAudioSessionId());
+        visualizer = new Visualizer(0);
         visualizer.setCaptureSize(audioSampleSize);
         visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);
         visualizer.setEnabled(true);
