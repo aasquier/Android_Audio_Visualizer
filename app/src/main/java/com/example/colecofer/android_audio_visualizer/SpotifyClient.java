@@ -222,33 +222,83 @@ public class SpotifyClient {
     }
 
 
-    public static float[][] getAlbumArtColors(Bitmap albumArt) {
-        Palette AlbumPallet = createPaletteSync(albumArt);
-        AlbumPallet.getSwatches();
-        Palette.Swatch primarySwatch = AlbumPallet.getDominantSwatch();
-        Palette.Swatch secondarySwatch = AlbumPallet.getVibrantSwatch();
-        Palette.Swatch tertiarySwatch = AlbumPallet.getMutedSwatch();
+//    public static int[] getAlbumArtColors(Bitmap albumArt) {
+//        Palette AlbumPalette = createPaletteSync(albumArt);
+//        AlbumPalette.getSwatches();
+//        Palette.Swatch primarySwatch = AlbumPalette.getDominantSwatch();
+//        Palette.Swatch secondarySwatch = AlbumPalette.getVibrantSwatch();
+//        Palette.Swatch tertiarySwatch = AlbumPalette.getMutedSwatch();
+//
+//
+//        int colors [] = new int[] {0, 0, 0, 0};
+//
+//        if(primarySwatch != null)
+//            colors[0] = primarySwatch.getRgb();
+//        else
+//            colors[0] = 0;
+//        if(secondarySwatch != null)
+//            colors[1] = secondarySwatch.getRgb();
+//        else
+//            colors[1] = 0;
+//        if(tertiarySwatch != null)
+//            colors[2] = tertiarySwatch.getRgb();
+//        else
+//            colors[2] = 0;
+//
+//        return colors;
+//    }
 
-        float colors[][] = new float[][]{{0,0,0},{0,0,0},{0,0,0}};
+    public static int[] getAlbumArtColors(Bitmap albumArt) {
+        Palette AlbumPalette = createPaletteSync(albumArt);
 
-        for(int i = 0; i < 3; ++i) {
-            if(primarySwatch != null)
-                colors[0][i] = primarySwatch.getHsl()[i];
-            else
-                colors[0][i] = 0;
-            if(secondarySwatch != null)
-                colors[1][i] = secondarySwatch.getHsl()[i];
-            else
-                colors[1][i] = 0;
-            if(tertiarySwatch != null)
-                colors[2][i] = tertiarySwatch.getHsl()[i];
-            else
-                colors[2][i] = 0;
+        int colors [] = new int[] {0, 0, 0, 0};
+        int dominantColor = AlbumPalette.getDominantColor(0);
+        int vibrantColor = AlbumPalette.getVibrantColor(0);
+        int mutedColor = AlbumPalette.getMutedColor(0);
+        int darkVibrantColor = AlbumPalette.getDarkVibrantColor(0);
+        int darkMutedColor = AlbumPalette.getDarkMutedColor(0);
+        int lightVibrantColor = AlbumPalette.getLightVibrantColor(0);
+        int lightMutedColor = AlbumPalette.getLightMutedColor(0);
 
+        int index = 0;
+        if(dominantColor != 0) {
+            colors[index] = dominantColor;
+            index++;
+        }
+
+        if(vibrantColor != 0) {
+            colors[index] = vibrantColor;
+            index++;
+        }
+
+        if (mutedColor != 0) {
+            colors[index] = mutedColor;
+            index++;
+        }
+
+        if (darkVibrantColor != 0 && index != 3) {
+            colors[index] = darkVibrantColor;
+            index++;
+        }
+
+        if (darkMutedColor != 0 && index != 3) {
+            colors[index] = darkMutedColor;
+            index++;
+         }
+
+        if (lightVibrantColor != 0 && index != 3) {
+            colors[index] = lightVibrantColor;
+            index++;
+        }
+
+        if (lightMutedColor != 0 && index != 3) {
+            colors[index] = lightMutedColor;
+            index++;
         }
 
         return colors;
     }
+
     public static Palette createPaletteSync(Bitmap bitmap) {
         Palette p = Palette.from(bitmap).generate();
         return p;
