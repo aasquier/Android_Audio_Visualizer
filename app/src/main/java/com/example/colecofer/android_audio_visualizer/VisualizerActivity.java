@@ -117,7 +117,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         //Check if ES2 is supported on the device
         if (supportsEs2) {
             surfaceView.setEGLContextClientVersion(2);
-            visualizerRenderer = new VisualizerRenderer(audioSampleSize);
+            visualizerRenderer = new VisualizerRenderer();
             surfaceView.setRenderer(visualizerRenderer, displayMetrics.density, audioSampleSize);
         } else {
             log.d("opengl", "Does not support ES2");

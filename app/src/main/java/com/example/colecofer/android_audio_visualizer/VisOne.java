@@ -1,9 +1,6 @@
 package com.example.colecofer.android_audio_visualizer;
 
 import android.opengl.GLES20;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 /**
@@ -33,11 +30,9 @@ public class VisOne implements GLVisualizer {
     private int captureSize;
     private int vertexCount = 5;
 
-    private float[] lineVertices;
-    private FloatBuffer lineVertexBuffer;
-    private GLLine[] lines;                //Holds the lines to be displayed
+    private GLLine[] lines;  //Holds the lines to be displayed
 
-    private float lineOffSet = (RIGHT_DRAW_BOUNDARY * 2) / (LINE_AMT -1);       //We want to display lines from -.99 to .99 (.99+.99=1.98)
+    private float lineOffSet = (RIGHT_DRAW_BOUNDARY * 2) / (LINE_AMT - 1); //We want to display lines from -.99 to .99 (.99+.99=1.98)
 
 
     /**
@@ -50,7 +45,7 @@ public class VisOne implements GLVisualizer {
 
         //Create 100 lines
         lines = new GLLine[LINE_AMT];
-        float k = -0.99f;
+        float k = LEFT_DRAW_BOUNDARY;
         for(int i = 0; i < LINE_AMT; ++i) {
             lines[i] = new GLLine(k);
             k += lineOffSet;
@@ -67,7 +62,7 @@ public class VisOne implements GLVisualizer {
         float plus = (float) 1 / (arraySize / 16);
         float k = -1.0f;
 
-        for (int i = 0; i < captureSize-1; i += 2) {
+        for (int i = 0; i < captureSize - 1; i += 2) {
             int amplify = (fft[i]*fft[i]) + (fft[i+1]*fft[i+1]);
 
             fftRender[j] = (float)amplify * AMP_MULT;
@@ -79,7 +74,6 @@ public class VisOne implements GLVisualizer {
             fftRender[j+6] = 1.0f;
 
             k += plus;
-            //i++;
             j+= VERTEX_AMOUNT;
         }
 
@@ -89,7 +83,6 @@ public class VisOne implements GLVisualizer {
 
     @Override
     public void updateFft(float[] fft) {
-
         //Call updateFft() on each line
         for (int i = 0; i < LINE_AMT; ++i) {
             float[] fftInput = new float[fft.length];
@@ -135,8 +128,10 @@ public class VisOne implements GLVisualizer {
         GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, vertexCount);
     }
 
-
+    @Override
     public void setPositionHandle(int positionHandle) { this.positionHandle = positionHandle; }
+
+    @Override
     public void setColorHandle(int colorHandle) { this.colorHandle = colorHandle; }
 
 }
