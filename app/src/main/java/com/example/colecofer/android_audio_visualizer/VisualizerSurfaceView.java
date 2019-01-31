@@ -15,7 +15,7 @@ public class VisualizerSurfaceView extends GLSurfaceView {
     private static float density;
     private VisOne visOne;
 
-    private VisualizerRenderer renderer;
+    public static VisualizerRenderer renderer;
 
     public VisualizerSurfaceView(Context context) {
         super(context);
@@ -35,33 +35,35 @@ public class VisualizerSurfaceView extends GLSurfaceView {
     }
 
     public void updateFft(byte[] fft) {
-        int arraySize = captureSize/2;
-        float[] fftRender = new float[arraySize*7];
+//        int arraySize = captureSize/2;
+//        float[] fftRender = new float[arraySize*7];
+//
+//        int j = 0;
+//        float plus = (float)1/(arraySize/16);
+//        float k = -1.0f;
+//
+//        for(int i = 0; i < captureSize-1; i++) {
+//            int amplify = (fft[i]*fft[i]) + (fft[i+1]*fft[i+1]);
+//
+//            fftRender[j] = (float)amplify*amp;
+//            fftRender[j+1] = k;
+//            fftRender[j+2] = 0.0f;
+//            fftRender[j+3] = 1.0f;
+//            fftRender[j+4] = 0.0f;
+//            fftRender[j+5] = 0.0f;
+//            fftRender[j+6] = 1.0f;
+//
+//            k+=plus;
+//            i++;
+//            j+=7;
+//        }
 
-        int j = 0;
-        float plus = (float)1/(arraySize/16);
-        float k = -1.0f;
+//        renderer.updateFft(fftRender);
 
-        for(int i = 0; i < captureSize-1; i++){
-            int amplify = (fft[i]*fft[i]) + (fft[i+1]*fft[i+1]);
-
-            fftRender[j] = (float)amplify*amp;
-            fftRender[j+1] = k;
-            fftRender[j+2] = 0.0f;
-            fftRender[j+3] = 1.0f;
-            fftRender[j+4] = 0.0f;
-            fftRender[j+5] = 0.0f;
-            fftRender[j+6] = 1.0f;
-
-            k+=plus;
-            i++;
-            j+=7;
-        }
-
-        renderer.updateFft(fftRender);
+        visOne.updateFft(fft);
     }
 
-    public void updateWaveform(byte[] waveform){
+    public void updateWaveform(byte[] waveform) {
 
     }
 }

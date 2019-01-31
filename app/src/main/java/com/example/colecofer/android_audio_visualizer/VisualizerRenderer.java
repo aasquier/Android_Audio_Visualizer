@@ -187,12 +187,13 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         GLES20.glViewport(0, 0, width, height);
     }
 
+    //Was newFftData
     public void updateFft(float[] fft) {
-        for(int i = 0; i < LINE_AMT; ++i) {
-            float[] fftInput = new float[fft.length];
-            System.arraycopy(fft, 0, fftInput, 0, fft.length);
-            lines[i].updateFft(fftInput);
-        }
+//        for(int i = 0; i < LINE_AMT; ++i) {
+//            float[] fftInput = new float[fft.length];
+//            System.arraycopy(fft, 0, fftInput, 0, fft.length);
+//            lines[i].updateFft(fftInput);
+//        }
     }
 
     @Override

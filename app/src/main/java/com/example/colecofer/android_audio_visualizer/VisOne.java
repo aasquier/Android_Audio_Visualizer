@@ -12,9 +12,12 @@ import java.nio.FloatBuffer;
 
 public class VisOne implements GLVisualizer {
 
-    private final float AMP_MULT = 0.000005f;  //Alters the lines horizontal amplitude
-    private final int VERTEX_AMOUNT = 7;       //x, y, z, r, g, b, a
-    private final int BYTES_PER_FLOAT = 4;     //Amount of bytes in a float
+    private final int LINE_AMT = 20;                  //Number of lines to display on the screen
+    private final float AMP_MULT = 0.000005f;         //Alters the lines horizontal amplitude
+    private final int VERTEX_AMOUNT = 7;              //x, y, z, r, g, b, a
+    private final int BYTES_PER_FLOAT = 4;            //Amount of bytes in a float
+    private final float LEFT_DRAW_BOUNDARY = -0.99f;  //Where to start drawing on the left side of the screen
+    private final float RIGHT_DRAW_BOUNDARY = 0.99f;  //Right side of the screen boundary
 
 
     private int captureSize;
@@ -22,9 +25,9 @@ public class VisOne implements GLVisualizer {
 
     private float[] lineVertices;
     private FloatBuffer lineVertexBuffer;
-    private GLLine[] lines;                               //Holds the lines to be displayed
-    private final int LINE_AMT = 20;                      //Number of lines to display on the screen
-    private float lineOffSet = 1.98f/(LINE_AMT -1);       //We want to display lines from -.99 to .99 (.99+.99=1.98)
+    private GLLine[] lines;                //Holds the lines to be displayed
+
+    private float lineOffSet = (RIGHT_DRAW_BOUNDARY * 2) / (LINE_AMT -1);       //We want to display lines from -.99 to .99 (.99+.99=1.98)
 
 
     /**
@@ -32,27 +35,8 @@ public class VisOne implements GLVisualizer {
      * @param captureSize
      */
     public VisOne(int captureSize) {
-        this.captureSize = captureSize;
-        this.vertexCount = this.captureSize / VERTEX_AMOUNT;
-
-//        //These are the default lines that are displayed before any fft values have been updated
-//        //TODO: This needs to generate X number of lines in the correct locations
-//        this.lineVertices = new float[] {
-//            // X, Y, Z
-//            // R, G, B, A
-//
-//            //Bottom point
-//            -1.0f, 0.0f, 0.0f,
-//            1.0f, 0.0f, 0.0f, 1.0f,
-//
-//            //Top point
-//            -0.5f, 0.0f, 0.0f,
-//            1.0f, 0.0f, 0.0f, 1.0f,
-//
-//        };
-
-//        lineVertexBuffer = ByteBuffer.allocateDirect(lineVertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
-//        lineVertexBuffer.put(lineVertices).position(0);
+//        this.captureSize = captureSize;
+//        this.vertexCount = this.captureSize / VERTEX_AMOUNT;
 
         //Create 100 lines
         lines = new GLLine[LINE_AMT];
@@ -62,6 +46,34 @@ public class VisOne implements GLVisualizer {
             k += lineOffSet;
         }
 
+    }
+
+    @Override
+    public void updateFft(byte[] fft) {
+        int arraySize = captureSize / 2;
+        float[] fftRender = new float[arraySize * VERTEX_AMOUNT];
+
+        int j = 0;
+        float plus = (float) 1 / (arraySize / 16);
+        float k = -1.0f;
+
+        for (int i = 0; i < captureSize-1; i += 2) {
+            int amplify = (fft[i]*fft[i]) + (fft[i+1]*fft[i+1]);
+
+            fftRender[j] = (float)amplify * AMP_MULT;
+            fftRender[j+1] = k;
+            fftRender[j+2] = 0.0f;
+            fftRender[j+3] = 1.0f;
+            fftRender[j+4] = 0.0f;
+            fftRender[j+5] = 0.0f;
+            fftRender[j+6] = 1.0f;
+
+            k += plus;
+            //i++;
+            j+= VERTEX_AMOUNT;
+        }
+
+        VisualizerSurfaceView.renderer.updateFft(fftRender);
     }
 
 
@@ -75,28 +87,7 @@ public class VisOne implements GLVisualizer {
             lines[i].updateFft(fftInput);
         }
 
-//        int arraySize = captureSize / 2;
-//        float[] fftRender = new float[arraySize * VERTEX_AMOUNT];
-//
-//        int j = 0;
-//        float plus = (float) 1 / (arraySize / 16);
-//        float k = -1.0f;
-//
-//        for (int i = 0; i < captureSize-1; i += 2) {
-//            int amplify = (fft[i]*fft[i]) + (fft[i+1]*fft[i+1]);
-//
-//            fftRender[j] = (float)amplify * AMP_MULT;
-//            fftRender[j+1] = k;
-//            fftRender[j+2] = 0.0f;
-//            fftRender[j+3] = 1.0f;
-//            fftRender[j+4] = 0.0f;
-//            fftRender[j+5] = 0.0f;
-//            fftRender[j+6] = 1.0f;
-//
-//            k += plus;
-//            //i++;
-//            j+= VERTEX_AMOUNT;
-//        }
+
     }
 
 
