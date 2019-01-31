@@ -18,6 +18,6 @@ public interface GLVisualizer {
      */
     public void updateFft(float[] fft);
 
-    public void draw(int program);
+    public void draw();
 
 }

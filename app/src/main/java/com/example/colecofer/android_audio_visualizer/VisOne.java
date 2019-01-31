@@ -1,5 +1,7 @@
 package com.example.colecofer.android_audio_visualizer;
 
+import android.opengl.GLES20;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -19,6 +21,14 @@ public class VisOne implements GLVisualizer {
     private final float LEFT_DRAW_BOUNDARY = -0.99f;  //Where to start drawing on the left side of the screen
     private final float RIGHT_DRAW_BOUNDARY = 0.99f;  //Right side of the screen boundary
 
+    private  final int POSITION_DATA_SIZE = 3;
+    private  final int STRIDE_BYTES = 7 * BYTES_PER_FLOAT;
+    private  final int POSITION_OFFSET = 0;
+    private  final int COLOR_OFFSET = 3;
+    private  final int COLOR_DATA_SIZE = 4;
+
+    private int positionHandle;
+    private int colorHandle;
 
     private int captureSize;
     private int vertexCount = 5;
@@ -35,8 +45,8 @@ public class VisOne implements GLVisualizer {
      * @param captureSize
      */
     public VisOne(int captureSize) {
-//        this.captureSize = captureSize;
-//        this.vertexCount = this.captureSize / VERTEX_AMOUNT;
+        this.captureSize = captureSize;
+        this.vertexCount = this.captureSize / VERTEX_AMOUNT;
 
         //Create 100 lines
         lines = new GLLine[LINE_AMT];
@@ -87,13 +97,15 @@ public class VisOne implements GLVisualizer {
             lines[i].updateFft(fftInput);
         }
 
-
     }
 
 
     @Override
-    public void draw(int program) {
-
+    public void draw() {
+        //Go through each line and draw them
+        for(int i = 0; i < LINE_AMT; ++i) {
+            drawLine(lines[i].draw());
+        }
     }
 
 
@@ -105,4 +117,26 @@ public class VisOne implements GLVisualizer {
     public void checkPulse() {
 
     }
+
+
+    /**
+     * Draw a line given a set of verticies
+     * @param lineVertexData
+     */
+    private void drawLine(FloatBuffer lineVertexData){
+        lineVertexData.position(POSITION_OFFSET);
+        GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVertexData);
+        GLES20.glEnableVertexAttribArray(positionHandle);
+
+        lineVertexData.position(COLOR_OFFSET);
+        GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVertexData);
+        GLES20.glEnableVertexAttribArray(colorHandle);
+
+        GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, vertexCount);
+    }
+
+
+    public void setPositionHandle(int positionHandle) { this.positionHandle = positionHandle; }
+    public void setColorHandle(int colorHandle) { this.colorHandle = colorHandle; }
+
 }

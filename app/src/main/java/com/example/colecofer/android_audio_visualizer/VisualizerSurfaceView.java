@@ -13,8 +13,8 @@ public class VisualizerSurfaceView extends GLSurfaceView {
 
     private static int captureSize;
     private static float density;
-    private VisOne visOne;
 
+    public static VisOne visOne;
     public static VisualizerRenderer renderer;
 
     public VisualizerSurfaceView(Context context) {

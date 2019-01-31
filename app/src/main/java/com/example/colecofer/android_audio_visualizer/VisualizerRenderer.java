@@ -175,8 +175,11 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         }
 
         //Get the position and color attributes
-        positionHandle = GLES20.glGetAttribLocation(programHandle, "a_Position");
-        colorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
+//        positionHandle = GLES20.glGetAttribLocation(programHandle, "a_Position");
+//        colorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
+
+        VisualizerSurfaceView.visOne.setPositionHandle(positionHandle);
+        VisualizerSurfaceView.visOne.setColorHandle(colorHandle);
 
         // Tell OpenGL to use this program when rendering.
         GLES20.glUseProgram(programHandle);
@@ -189,32 +192,37 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
     //Was newFftData
     public void updateFft(float[] fft) {
+        VisualizerSurfaceView.visOne.updateFft(fft);
+
 //        for(int i = 0; i < LINE_AMT; ++i) {
 //            float[] fftInput = new float[fft.length];
 //            System.arraycopy(fft, 0, fftInput, 0, fft.length);
 //            lines[i].updateFft(fftInput);
 //        }
+
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 
-        //Go through each line and draw them
-        for(int i = 0; i < LINE_AMT; ++i) {
-            drawLine(lines[i].draw());
-        }
+        VisualizerSurfaceView.visOne.draw();
+
+//        //Go through each line and draw them
+//        for(int i = 0; i < LINE_AMT; ++i) {
+//            drawLine(lines[i].draw());
+//        }
     }
 
-    public void drawLine(FloatBuffer lineVertexData){
-        lineVertexData.position(POSITION_OFFSET);
-        GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVertexData);
-        GLES20.glEnableVertexAttribArray(positionHandle);
-
-        lineVertexData.position(COLOR_OFFSET);
-        GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVertexData);
-        GLES20.glEnableVertexAttribArray(colorHandle);
-
-        GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, VERTEX_COUNT);
-    }
+//    public void drawLine(FloatBuffer lineVertexData){
+//        lineVertexData.position(POSITION_OFFSET);
+//        GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVertexData);
+//        GLES20.glEnableVertexAttribArray(positionHandle);
+//
+//        lineVertexData.position(COLOR_OFFSET);
+//        GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVertexData);
+//        GLES20.glEnableVertexAttribArray(colorHandle);
+//
+//        GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, VERTEX_COUNT);
+//    }
 }
