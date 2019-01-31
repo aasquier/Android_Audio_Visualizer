@@ -13,6 +13,7 @@ public class VisualizerSurfaceView extends GLSurfaceView {
 
     private static int captureSize;
     private static float density;
+    private VisOne visOne;
 
     private VisualizerRenderer renderer;
 
@@ -28,6 +29,7 @@ public class VisualizerSurfaceView extends GLSurfaceView {
         this.renderer = inputRenderer;
         this.density = inputDensity;
         this.captureSize = captureSize;
+        this.visOne = new VisOne(captureSize);
 
         super.setRenderer(inputRenderer);
     }
@@ -56,7 +58,7 @@ public class VisualizerSurfaceView extends GLSurfaceView {
             j+=7;
         }
 
-        renderer.newFftData(fftRender);
+        renderer.updateFft(fftRender);
     }
 
     public void updateWaveform(byte[] waveform){

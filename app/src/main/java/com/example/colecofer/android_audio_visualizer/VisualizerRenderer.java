@@ -25,41 +25,46 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
     private float lineOffSet = 1.98f/(LINE_AMT -1);       //We want to display lines from -.99 to .99 (.99+.99=1.98)
 
 
-    static final int POSITION_DATA_SIZE = 3;
-    static final int BYTES_PER_FLOAT = 4;
-    static final int STRIDE_BYTES = 7 * BYTES_PER_FLOAT;
-    static final int POSITION_OFFSET = 0;
-    static final int COLOR_OFFSET = 3;
-    static final int COLOR_DATA_SIZE = 4;
+    private static final int POSITION_DATA_SIZE = 3;
+    private static final int BYTES_PER_FLOAT = 4;
+    private static final int STRIDE_BYTES = 7 * BYTES_PER_FLOAT;
+    private static final int POSITION_OFFSET = 0;
+    private static final int COLOR_OFFSET = 3;
+    private static final int COLOR_DATA_SIZE = 4;
+
+//    private VisOne visOne;
+
+    public VisualizerRenderer(int captureSize) {
+
+//        visOne = new VisOne(captureSize);
 
 
-    public VisualizerRenderer(int captureSize){
-        this.AUDIO_COUNT = captureSize;
-        this.VERTEX_COUNT = this.AUDIO_COUNT / 7;     //It's 7 because we have x, y, z, r, g, b, a
-
-        //These are the default lines that are displayed before any fft values have been updated
-        this.lineVertices = new float[]{
-                // X, Y, Z
-                // R, G, B, A
-
-                -1.0f, 0.0f, 0.0f,
-                1.0f, 0.0f, 0.0f, 1.0f,
-
-                -0.5f, 0.0f, 0.0f,
-                1.0f, 0.0f, 0.0f, 1.0f,
-
-        };
-
-        lineVertexBuffer = ByteBuffer.allocateDirect(lineVertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        lineVertexBuffer.put(lineVertices).position(0);
-
-        //Create 100 lines
-        lines = new GLLine[LINE_AMT];
-        float k = -0.99f;
-        for(int i = 0; i < LINE_AMT; ++i) {
-            lines[i] = new GLLine(k);
-            k += lineOffSet;
-        }
+//        this.AUDIO_COUNT = captureSize;
+//        this.VERTEX_COUNT = this.AUDIO_COUNT / 7;     //It's 7 because we have x, y, z, r, g, b, a
+//
+//        //These are the default lines that are displayed before any fft values have been updated
+//        this.lineVertices = new float[]{
+//                // X, Y, Z
+//                // R, G, B, A
+//
+//                -1.0f, 0.0f, 0.0f,
+//                1.0f, 0.0f, 0.0f, 1.0f,
+//
+//                -0.5f, 0.0f, 0.0f,
+//                1.0f, 0.0f, 0.0f, 1.0f,
+//
+//        };
+//
+//        lineVertexBuffer = ByteBuffer.allocateDirect(lineVertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
+//        lineVertexBuffer.put(lineVertices).position(0);
+//
+//        //Create 100 lines
+//        lines = new GLLine[LINE_AMT];
+//        float k = -0.99f;
+//        for(int i = 0; i < LINE_AMT; ++i) {
+//            lines[i] = new GLLine(k);
+//            k += lineOffSet;
+//        }
 
     }
 
@@ -182,7 +187,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         GLES20.glViewport(0, 0, width, height);
     }
 
-    public void newFftData(float[] fft){
+    public void updateFft(float[] fft) {
         for(int i = 0; i < LINE_AMT; ++i) {
             float[] fftInput = new float[fft.length];
             System.arraycopy(fft, 0, fftInput, 0, fft.length);
