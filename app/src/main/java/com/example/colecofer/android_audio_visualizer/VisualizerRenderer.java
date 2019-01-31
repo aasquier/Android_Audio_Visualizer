@@ -175,8 +175,8 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         }
 
         //Get the position and color attributes
-//        positionHandle = GLES20.glGetAttribLocation(programHandle, "a_Position");
-//        colorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
+        positionHandle = GLES20.glGetAttribLocation(programHandle, "a_Position");
+        colorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
 
         VisualizerSurfaceView.visOne.setPositionHandle(positionHandle);
         VisualizerSurfaceView.visOne.setColorHandle(colorHandle);

@@ -25,7 +25,7 @@ public class VisualizerSurfaceView extends GLSurfaceView {
         super(context, attrs);
     }
 
-    public void setRenderer(VisualizerRenderer inputRenderer, float inputDensity, int captureSize){
+    public void setRenderer(VisualizerRenderer inputRenderer, float inputDensity, int captureSize) {
         this.renderer = inputRenderer;
         this.density = inputDensity;
         this.captureSize = captureSize;
@@ -35,6 +35,7 @@ public class VisualizerSurfaceView extends GLSurfaceView {
     }
 
     public void updateFft(byte[] fft) {
+        visOne.updateFft(fft);
 //        int arraySize = captureSize/2;
 //        float[] fftRender = new float[arraySize*7];
 //
@@ -60,7 +61,6 @@ public class VisualizerSurfaceView extends GLSurfaceView {
 
 //        renderer.updateFft(fftRender);
 
-        visOne.updateFft(fft);
     }
 
     public void updateWaveform(byte[] waveform) {
