@@ -24,18 +24,4 @@ public interface GLVisualizer {
      */
     public void draw();
 
-    /**
-     * Set the position handle
-     * This is necessary so that the renderer can update the position handle
-     * @param positionHandle
-     */
-    public void setPositionHandle(int positionHandle);
-
-    /**
-     * Set the color handle
-     * This is necessary so that the renderer can update the color handle
-     * @param colorHandle
-     */
-    public void setColorHandle(int colorHandle);
-
 }

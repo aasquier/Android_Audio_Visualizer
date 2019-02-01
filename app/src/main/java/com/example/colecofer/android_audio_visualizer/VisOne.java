@@ -9,7 +9,7 @@ import java.nio.FloatBuffer;
  * implement the appropriate openGL and fft methods so that it can be rendered.
  * */
 
-public class VisOne extends VisualizerBase implements GLVisualizer {
+public class VisOne extends VisualizerBase {
 
     private final int LINE_AMT = 20;                  //Number of lines to display on the screen
     private final float AMP_MULT = 0.000005f;         //Alters the lines horizontal amplitude
@@ -24,15 +24,8 @@ public class VisOne extends VisualizerBase implements GLVisualizer {
     private final int COLOR_OFFSET = 3;
     private final int COLOR_DATA_SIZE = 4;
 
-//    private int positionHandle;
-//    private int colorHandle;
-
-//    private int captureSize;
-
     private int vertexCount = 5;
-
     private GLLine[] lines;  //Holds the lines to be displayed
-
     private float lineOffSet = (RIGHT_DRAW_BOUNDARY * 2) / (LINE_AMT - 1); //We want to display lines from -.99 to .99 (.99+.99=1.98)
 
 
@@ -78,7 +71,8 @@ public class VisOne extends VisualizerBase implements GLVisualizer {
             j+= VERTEX_AMOUNT;
         }
 
-        VisualizerSurfaceView.renderer.updateFft(fftRender);
+        VisualizerModel.getInstance().getRenderer().updateFft(fftRender);
+        //        VisualizerSurfaceView.renderer.updateFft(fftRender);
     }
 
 
@@ -128,11 +122,5 @@ public class VisOne extends VisualizerBase implements GLVisualizer {
 
         GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, vertexCount);
     }
-
-    @Override
-    public void setPositionHandle(int positionHandle) { this.positionHandle = positionHandle; }
-
-    @Override
-    public void setColorHandle(int colorHandle) { this.colorHandle = colorHandle; }
 
 }
