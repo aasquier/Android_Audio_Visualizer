@@ -1,7 +1,6 @@
 package com.example.colecofer.android_audio_visualizer;
 
 import android.content.Context;
-import android.media.audiofx.Visualizer;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 

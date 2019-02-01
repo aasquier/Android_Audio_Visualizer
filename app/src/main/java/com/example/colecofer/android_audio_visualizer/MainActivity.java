@@ -61,12 +61,6 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
     private boolean enablePlayButton;
     private Button playButton;
 
-    //Temporary variable locations?
-    int durationInMillis;
-    int visualizerSwitchTimeOne;
-    int visualizerSwitchTimeTwo;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,9 +143,6 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                     @Override
                     public void spotifyResponse(boolean success, String response) {
                         log(response);
-                        durationInMillis = SpotifyClient.getDuration(response);
-                        visualizerSwitchTimeOne = durationInMillis/3;
-                        visualizerSwitchTimeTwo = visualizerSwitchTimeOne * 2;
                         TextView artistNameText = findViewById(R.id.artistNameTextView);
                         artistNameText.setText(SpotifyClient.getArtistName(response));
                         TextView albumNameText = findViewById(R.id.albumNameTextView);
