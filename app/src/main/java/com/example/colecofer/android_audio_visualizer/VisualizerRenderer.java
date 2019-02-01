@@ -2,64 +2,15 @@ package com.example.colecofer.android_audio_visualizer;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
-    static int AUDIO_COUNT;
-    static int VERTEX_COUNT = 5;
-
     private int positionHandle;
     private int colorHandle;
 
-    private float[] lineVertices;
-    private FloatBuffer lineVertexBuffer;
-    private GLLine[] lines;                               //Holds the lines to be displayed
-    private final int LINE_AMT = 20;                      //Number of lines to display on the screen
-    private float lineOffSet = 1.98f/(LINE_AMT -1);       //We want to display lines from -.99 to .99 (.99+.99=1.98)
-
-
-    static final int POSITION_DATA_SIZE = 3;
-    static final int BYTES_PER_FLOAT = 4;
-    static final int STRIDE_BYTES = 7 * BYTES_PER_FLOAT;
-    static final int POSITION_OFFSET = 0;
-    static final int COLOR_OFFSET = 3;
-    static final int COLOR_DATA_SIZE = 4;
-
-
-    public VisualizerRenderer(int captureSize){
-        this.AUDIO_COUNT = captureSize;
-        this.VERTEX_COUNT = this.AUDIO_COUNT / 7;     //It's 7 because we have x, y, z, r, g, b, a
-
-        //These are the default lines that are displayed before any fft values have been updated
-        this.lineVertices = new float[]{
-                // X, Y, Z
-                // R, G, B, A
-
-                -1.0f, 0.0f, 0.0f,
-                1.0f, 0.0f, 0.0f, 1.0f,
-
-                -0.5f, 0.0f, 0.0f,
-                1.0f, 0.0f, 0.0f, 1.0f,
-
-        };
-
-        lineVertexBuffer = ByteBuffer.allocateDirect(lineVertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        lineVertexBuffer.put(lineVertices).position(0);
-
-        //Create 100 lines
-        lines = new GLLine[LINE_AMT];
-        float k = -0.99f;
-        for(int i = 0; i < LINE_AMT; ++i) {
-            lines[i] = new GLLine(k);
-            k += lineOffSet;
-        }
+    public VisualizerRenderer() {
 
     }
 
@@ -173,6 +124,9 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         positionHandle = GLES20.glGetAttribLocation(programHandle, "a_Position");
         colorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
 
+        VisualizerModel.getInstance().currentVisualizer.setPositionHandle(positionHandle);
+        VisualizerModel.getInstance().currentVisualizer.setColorHandle(colorHandle);
+
         // Tell OpenGL to use this program when rendering.
         GLES20.glUseProgram(programHandle);
     }
@@ -182,33 +136,14 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         GLES20.glViewport(0, 0, width, height);
     }
 
-    public void newFftData(float[] fft){
-        for(int i = 0; i < LINE_AMT; ++i) {
-            float[] fftInput = new float[fft.length];
-            System.arraycopy(fft, 0, fftInput, 0, fft.length);
-            lines[i].updateFft(fftInput);
-        }
+    //Was newFftData
+    public void updateFft(float[] fft) {
+        VisualizerModel.getInstance().currentVisualizer.updateFft(fft);
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
-
-        //Go through each line and draw them
-        for(int i = 0; i < LINE_AMT; ++i) {
-            drawLine(lines[i].draw());
-        }
-    }
-
-    public void drawLine(FloatBuffer lineVertexData){
-        lineVertexData.position(POSITION_OFFSET);
-        GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVertexData);
-        GLES20.glEnableVertexAttribArray(positionHandle);
-
-        lineVertexData.position(COLOR_OFFSET);
-        GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVertexData);
-        GLES20.glEnableVertexAttribArray(colorHandle);
-
-        GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, VERTEX_COUNT);
+        VisualizerModel.getInstance().currentVisualizer.draw();
     }
 }

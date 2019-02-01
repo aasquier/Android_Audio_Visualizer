@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
     private boolean enablePlayButton;
     private Button playButton;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

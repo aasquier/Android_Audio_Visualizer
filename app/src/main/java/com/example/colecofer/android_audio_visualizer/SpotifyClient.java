@@ -97,7 +97,6 @@ public class SpotifyClient {
         });
     }
 
-
     /**
      * Parse the artist name from the JSON response
      *

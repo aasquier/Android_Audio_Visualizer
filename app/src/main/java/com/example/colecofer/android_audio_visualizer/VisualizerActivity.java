@@ -5,7 +5,6 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageManager;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
 import android.support.annotation.NonNull;
@@ -117,7 +116,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         //Check if ES2 is supported on the device
         if (supportsEs2) {
             surfaceView.setEGLContextClientVersion(2);
-            visualizerRenderer = new VisualizerRenderer(audioSampleSize);
+            visualizerRenderer = new VisualizerRenderer();
             surfaceView.setRenderer(visualizerRenderer, displayMetrics.density, audioSampleSize);
         } else {
             log.d("opengl", "Does not support ES2");
@@ -127,9 +126,10 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         }
 
         //Sets up the visualizer for local files
-        mediaPlayer = MediaPlayer.create(this, R.raw.jumparound);
+        mediaPlayer = MediaPlayer.create(this, R.raw.jazz);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
+
         visualizer = new Visualizer(mediaPlayer.getAudioSessionId());
         visualizer.setCaptureSize(audioSampleSize);
         visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);

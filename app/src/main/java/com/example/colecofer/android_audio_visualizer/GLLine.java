@@ -14,17 +14,22 @@ public class GLLine {
 
 
     public GLLine(float xPosition) {
+
         this.xOffset = xPosition;
 
+        //These are the default lines that are displayed before any fft values have been updated
+        //TODO: This needs to generate X number of lines in the correct locations
         this.vertices = new float[] {
-                // X, Y, Z
-                // R, G, B, A
+            // X, Y, Z
+            // R, G, B, A
 
-                -1.0f, 0.0f, 0.0f,
-                1.0f, 0.0f, 0.0f, 1.0f,
+            //Bottom point
+            -1.0f, 0.0f, 0.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
 
-                -0.5f, 0.0f, 0.0f,
-                1.0f, 0.0f, 0.0f, 1.0f,
+            //Top point
+            -0.5f, 0.0f, 0.0f,
+            1.0f, 0.0f, 0.0f, 1.0f,
         };
 
         lineVerticesBuffer = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
@@ -66,7 +71,7 @@ public class GLLine {
 
 
     /**
-     * Draw the line given a set of vertices
+     * Returns a floatbuffer of values to be drawn.
      */
     public FloatBuffer draw() {
         return this.lineVerticesBuffer;
