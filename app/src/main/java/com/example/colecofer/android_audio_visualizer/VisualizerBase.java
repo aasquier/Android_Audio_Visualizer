@@ -12,7 +12,7 @@ abstract public class VisualizerBase {
 
     private final int SCREEN_SIZE = 1024;
 
-    protected ArrayDeque<Float> dbHistory;
+    ArrayDeque<Float> dbHistory;
     protected int positionHandle;
     protected int colorHandle;
     protected int captureSize;

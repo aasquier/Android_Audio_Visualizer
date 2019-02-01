@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
+import static com.example.colecofer.android_audio_visualizer.Utility.getDBs;
+import static com.example.colecofer.android_audio_visualizer.Utility.updateDbHistory;
 import static com.loopj.android.http.AsyncHttpClient.log;
 
 public class VisualizerActivity extends AppCompatActivity implements Visualizer.OnDataCaptureListener {
@@ -25,13 +27,13 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     private static final int REAL_BUCKET = 3;
     private static final int IMAGINARY_BUCKET = 4;
     private static int audioSampleSize;
+    private long previousUpdateTime;
 
     private MediaPlayer mediaPlayer;
     private Visualizer visualizer;
     private VisualizerSurfaceView surfaceView;
     private VisualizerRenderer visualizerRenderer;
     private Visualizer.OnDataCaptureListener captureListener;
-    private Utility utils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +137,8 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);
         visualizer.setEnabled(true);
 
+        this.previousUpdateTime = System.currentTimeMillis();
+
         setContentView(surfaceView);
 
     }
@@ -142,13 +146,13 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     @Override
     protected void onResume() {
         super.onResume();
-        surfaceView.onResume();
+//        surfaceView.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        surfaceView.onPause();
+//        surfaceView.onPause();
     }
 
     @Override
@@ -158,7 +162,9 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     @Override
     public void onFftDataCapture(Visualizer visualizer, byte[] fft, int samplingRate) {
         /** Gives us the decibel level for the fft bucket we care about **/
-        double dbs = utils.getDBs(fft[REAL_BUCKET], fft[IMAGINARY_BUCKET], this.audioSampleSize);
+        double dbs = getDBs(fft[REAL_BUCKET], fft[IMAGINARY_BUCKET], this.audioSampleSize);
+
+//        this.previousUpdateTime = updateDbHistory(dbs, VisualizerModel.getInstance().currentVisualizer.dbHistory, this.previousUpdateTime);
 
         /** TODO this needs to change as the whole fft should not influence the wave */
         surfaceView.updateFft(fft);
