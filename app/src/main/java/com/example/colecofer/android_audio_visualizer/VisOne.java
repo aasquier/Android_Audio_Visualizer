@@ -1,6 +1,8 @@
 package com.example.colecofer.android_audio_visualizer;
 
 import android.opengl.GLES20;
+import android.util.Log;
+
 import java.nio.FloatBuffer;
 
 /**
@@ -84,6 +86,7 @@ public class VisOne extends VisualizerBase {
 
     @Override
     public void updateFft(float[] fft) {
+        Log.d("test", "IM HERE BITCHES");
         //Call updateFft() on each line
         for (int i = 0; i < LINE_AMT; ++i) {
             float[] fftInput = new float[fft.length];
