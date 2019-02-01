@@ -19,7 +19,7 @@ public class VisualizerModel {
     private String trackName;
     private String artistName;
     private String albumName;
-    private float colorMatrix[][];
+    public int colorMatrix[];
 
     private static final VisualizerModel visualizerModel = new VisualizerModel(); //VisualizerModel Singleton
 
@@ -31,7 +31,7 @@ public class VisualizerModel {
         trackName = "Not defined";
         artistName = "Not defined";
         albumName = "Not defined";
-        colorMatrix = new float[][]{{0,0,0,0},{0,0,0,0},{0,0,0,0}};
+        colorMatrix = new int[] {0, 0, 0, 0};
     }
 
 
@@ -56,17 +56,15 @@ public class VisualizerModel {
     public void setTrackURI(String trackURI) {
         this.trackURI = trackURI;
     }
-    public void setColors(float[][] colors) {
+    public void setColors(int[] colors) {
+
 
         for(int i = 0; i < 3; ++i) {
-            for(int j = 0; j < 3; ++j) {
 
-                this.colorMatrix[i][j] = colors[i][j];
-            }
+            this.colorMatrix[i] = colors[i];
         }
-        this.colorMatrix[0][3] = 1;
-        this.colorMatrix[1][3] = 1;
-        this.colorMatrix[2][3] = 1;
+
+        this.colorMatrix[3] = 1;
 
     }
     /**
