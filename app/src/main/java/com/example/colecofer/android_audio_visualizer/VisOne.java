@@ -7,8 +7,9 @@ import java.nio.FloatBuffer;
 
 /**
  * Class VisOne
- * This class implements the GLVisualizer interface which forces it to
- * implement the appropriate openGL and fft methods so that it can be rendered.
+ * This class extends VisualizerBase and overrides
+ * updateFft() and draw() methods so that openGL can
+ * render it's contents.
  * */
 
 //public class VisOne extends VisualizerBase {
@@ -26,10 +27,6 @@ public class VisOne extends VisualizerBase {
     private final int POSITION_OFFSET = 0;
     private final int COLOR_OFFSET = 3;
     private final int COLOR_DATA_SIZE = 4;
-
-//    protected int positionHandle;
-//    protected int colorHandle;
-//    protected int captureSize;
 
     private int vertexCount = 5;
     private GLLine[] lines;  //Holds the lines to be displayed
@@ -79,8 +76,6 @@ public class VisOne extends VisualizerBase {
         }
 
         VisualizerModel.getInstance().renderer.updateFft(fftRender);
-//                VisualizerSurfaceView.renderer.updateFft(fftRender);
-//        VisualizerModel.getInstance().renderer.updateFft(fftRender);
     }
 
 
