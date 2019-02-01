@@ -92,6 +92,22 @@ public class SpotifyClient {
         });
     }
 
+    /**
+     * Parse the duration out from the JSON response
+     *
+     * @param responseJSON JSON response from the track info endpoint
+     * @return integer representing total length of song in milliseconds
+     */
+    public static int getDuration(String responseJSON) {
+        JSONObject json = convertStringToJSON(responseJSON);
+        int value = -1;
+        try {
+            value = json.getInt("duration_ms");
+        } catch (JSONException e) {
+            Log.d("Spotify", "Error - Could not extract duration from response" + e.getMessage());
+        }
+        return value;
+    }
 
     /**
      * Parse the artist name from the JSON response
