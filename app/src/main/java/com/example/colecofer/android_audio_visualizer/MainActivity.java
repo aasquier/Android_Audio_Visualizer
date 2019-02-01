@@ -156,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                                 if (success == true) {
                                     albumArtView.setImageBitmap(bitmap);
                                     VisualizerModel.getInstance().setColors(SpotifyClient.getAlbumArtColors(bitmap));
+                                    setColorSwatches();
                                     enablePlayButton = true;
                                     setPlayButton();
                                 }
@@ -168,6 +169,20 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
 
     }
 
+    private void setColorSwatches() {
+        View primaryColorSwatch = findViewById(R.id.primaryColor);
+        View secondaryColorSwatch = findViewById(R.id.secondaryColor);
+        View ternaryColorSwatch = findViewById(R.id.ternaryColor);
+
+        int primaryColor = VisualizerModel.getInstance().colorMatrix[0];
+        int secondaryColor = VisualizerModel.getInstance().colorMatrix[1];
+        int ternaryColor = VisualizerModel.getInstance().colorMatrix[2];
+        log("Secondary Color: " + Integer.toString(secondaryColor));
+        primaryColorSwatch.setBackgroundColor(primaryColor);
+        secondaryColorSwatch.setBackgroundColor(secondaryColor);
+        ternaryColorSwatch.setBackgroundColor(ternaryColor);
+
+    }
 
     private void setPlayButton() {
         playButton.setEnabled(enablePlayButton);

@@ -16,6 +16,8 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
+import static com.loopj.android.http.AsyncHttpClient.log;
+
 public class SpotifyClient {
 
     private final String BASE_URL = "https://api.spotify.com/v1";
@@ -30,6 +32,9 @@ public class SpotifyClient {
 
     private final static String SPOTIFY_TAG = "SPOTIFY";
 
+    private static final int defaultPrimaryColor = 0xFFF16C4E;
+    private static final int defaultSecondaryColor = 0xFF0FADB6;
+    private static final int defaultTertiaryColor = 0xFFDEDD64;
 
     /**
      * Gets the authorization token given the clientid and clientsecret
@@ -221,33 +226,66 @@ public class SpotifyClient {
     }
 
 
-    public static float[][] getAlbumArtColors(Bitmap albumArt) {
-        Palette AlbumPallet = createPaletteSync(albumArt);
-        AlbumPallet.getSwatches();
-        Palette.Swatch primarySwatch = AlbumPallet.getDominantSwatch();
-        Palette.Swatch secondarySwatch = AlbumPallet.getVibrantSwatch();
-        Palette.Swatch tertiarySwatch = AlbumPallet.getMutedSwatch();
+    public static int[] getAlbumArtColors(Bitmap albumArt) {
+        Palette AlbumPalette = createPaletteSync(albumArt);
+        AlbumPalette.getSwatches();
+        Palette.Swatch primarySwatch = AlbumPalette.getDominantSwatch();
+        Palette.Swatch secondarySwatch = AlbumPalette.getVibrantSwatch();
+        Palette.Swatch tertiarySwatch = AlbumPalette.getMutedSwatch();
 
-        float colors[][] = new float[][]{{0,0,0},{0,0,0},{0,0,0}};
 
-        for(int i = 0; i < 3; ++i) {
-            if(primarySwatch != null)
-                colors[0][i] = primarySwatch.getHsl()[i];
-            else
-                colors[0][i] = 0;
-            if(secondarySwatch != null)
-                colors[1][i] = secondarySwatch.getHsl()[i];
-            else
-                colors[1][i] = 0;
-            if(tertiarySwatch != null)
-                colors[2][i] = tertiarySwatch.getHsl()[i];
-            else
-                colors[2][i] = 0;
+        int colors[] = new int[]{0, 0, 0, 0};
+        float[] f = new float[3];
+        boolean shouldUseDefaultColors = false;
+        float defaultColorThreshold = 0.2f;
 
+        // If any of the swatches are null, use the default colors
+        if (primarySwatch == null || secondarySwatch == null || tertiarySwatch == null) {
+            shouldUseDefaultColors = true;
         }
 
+        // Confirmed that swatches are not null. Still need to confirm that all
+        // of the saturation and lightness values are above 0.2
+        // getHsl returns an array {hue, saturation, lightness}
+
+        // check the primary color swatch
+        if (shouldUseDefaultColors == false) {
+            f = primarySwatch.getHsl();
+            if (f[1] < defaultColorThreshold || f[2] < defaultColorThreshold) {
+                shouldUseDefaultColors = true;
+            }
+        }
+
+        // check the secondary color swatch
+        if (shouldUseDefaultColors == false) {
+            f = secondarySwatch.getHsl();
+            if (f[1] < defaultColorThreshold || f[2] < defaultColorThreshold) {
+                shouldUseDefaultColors = true;
+            }
+        }
+
+        // check the tertiary color swatch
+        if (shouldUseDefaultColors == false) {
+            f = tertiarySwatch.getHsl();
+            if (f[1] < defaultColorThreshold || f[2] < defaultColorThreshold) {
+                shouldUseDefaultColors = true;
+            }
+        }
+
+        // set the colors
+        if (shouldUseDefaultColors == false) {
+            colors[0] = primarySwatch.getRgb();
+            colors[1] = secondarySwatch.getRgb();
+            colors[2] = tertiarySwatch.getRgb();
+        } else {
+            // use default colors
+            colors[0] = defaultPrimaryColor;
+            colors[1] = defaultSecondaryColor;
+            colors[2] = defaultTertiaryColor;
+        }
         return colors;
     }
+
     public static Palette createPaletteSync(Bitmap bitmap) {
         Palette p = Palette.from(bitmap).generate();
         return p;
