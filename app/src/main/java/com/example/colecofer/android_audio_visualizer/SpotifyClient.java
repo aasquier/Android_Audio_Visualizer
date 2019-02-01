@@ -16,6 +16,8 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
+import static com.loopj.android.http.AsyncHttpClient.log;
+
 public class SpotifyClient {
 
     private final String BASE_URL = "https://api.spotify.com/v1";
@@ -30,6 +32,9 @@ public class SpotifyClient {
 
     private final static String SPOTIFY_TAG = "SPOTIFY";
 
+    private static final int defaultPrimaryColor = 0xFFF16C4E;
+    private static final int defaultSecondaryColor = 0xFF0FADB6;
+    private static final int defaultTertiaryColor = 0xFFDEDD64;
 
     /**
      * Gets the authorization token given the clientid and clientsecret
@@ -222,80 +227,63 @@ public class SpotifyClient {
     }
 
 
-//    public static int[] getAlbumArtColors(Bitmap albumArt) {
-//        Palette AlbumPalette = createPaletteSync(albumArt);
-//        AlbumPalette.getSwatches();
-//        Palette.Swatch primarySwatch = AlbumPalette.getDominantSwatch();
-//        Palette.Swatch secondarySwatch = AlbumPalette.getVibrantSwatch();
-//        Palette.Swatch tertiarySwatch = AlbumPalette.getMutedSwatch();
-//
-//
-//        int colors [] = new int[] {0, 0, 0, 0};
-//
-//        if(primarySwatch != null)
-//            colors[0] = primarySwatch.getRgb();
-//        else
-//            colors[0] = 0;
-//        if(secondarySwatch != null)
-//            colors[1] = secondarySwatch.getRgb();
-//        else
-//            colors[1] = 0;
-//        if(tertiarySwatch != null)
-//            colors[2] = tertiarySwatch.getRgb();
-//        else
-//            colors[2] = 0;
-//
-//        return colors;
-//    }
-
     public static int[] getAlbumArtColors(Bitmap albumArt) {
         Palette AlbumPalette = createPaletteSync(albumArt);
+        AlbumPalette.getSwatches();
+        Palette.Swatch primarySwatch = AlbumPalette.getDominantSwatch();
+        Palette.Swatch secondarySwatch = AlbumPalette.getVibrantSwatch();
+        Palette.Swatch tertiarySwatch = AlbumPalette.getMutedSwatch();
 
-        int colors [] = new int[] {0, 0, 0, 0};
-        int dominantColor = AlbumPalette.getDominantColor(0);
-        int vibrantColor = AlbumPalette.getVibrantColor(0);
-        int mutedColor = AlbumPalette.getMutedColor(0);
-        int darkVibrantColor = AlbumPalette.getDarkVibrantColor(0);
-        int darkMutedColor = AlbumPalette.getDarkMutedColor(0);
-        int lightVibrantColor = AlbumPalette.getLightVibrantColor(0);
-        int lightMutedColor = AlbumPalette.getLightMutedColor(0);
 
-        int index = 0;
-        if(dominantColor != 0) {
-            colors[index] = dominantColor;
-            index++;
+        int colors[] = new int[]{0, 0, 0, 0};
+        float[] f = new float[3];
+        boolean shouldUseDefaultColors = false;
+        float defaultColorThreshold = 0.2f;
+
+        // If any of the swatches are null, use the default colors
+        if (primarySwatch == null || secondarySwatch == null || tertiarySwatch == null) {
+            shouldUseDefaultColors = true;
         }
 
-        if(vibrantColor != 0) {
-            colors[index] = vibrantColor;
-            index++;
+        // Confirmed that swatches are not null. Still need to confirm that all
+        // of the saturation and lightness values are above 0.2
+        // getHsl returns an array {hue, saturation, lightness}
+
+        // check the primary color swatch
+        if (shouldUseDefaultColors == false) {
+            f = primarySwatch.getHsl();
+            if (f[1] < defaultColorThreshold || f[2] < defaultColorThreshold) {
+                shouldUseDefaultColors = true;
+            }
         }
 
-        if (mutedColor != 0) {
-            colors[index] = mutedColor;
-            index++;
+        // check the secondary color swatch
+        if (shouldUseDefaultColors == false) {
+            f = secondarySwatch.getHsl();
+            if (f[1] < defaultColorThreshold || f[2] < defaultColorThreshold) {
+                shouldUseDefaultColors = true;
+            }
         }
 
-        if (darkVibrantColor != 0 && index != 3) {
-            colors[index] = darkVibrantColor;
-            index++;
+        // check the tertiary color swatch
+        if (shouldUseDefaultColors == false) {
+            f = tertiarySwatch.getHsl();
+            if (f[1] < defaultColorThreshold || f[2] < defaultColorThreshold) {
+                shouldUseDefaultColors = true;
+            }
         }
 
-        if (darkMutedColor != 0 && index != 3) {
-            colors[index] = darkMutedColor;
-            index++;
-         }
-
-        if (lightVibrantColor != 0 && index != 3) {
-            colors[index] = lightVibrantColor;
-            index++;
+        // set the colors
+        if (shouldUseDefaultColors == false) {
+            colors[0] = primarySwatch.getRgb();
+            colors[1] = secondarySwatch.getRgb();
+            colors[2] = tertiarySwatch.getRgb();
+        } else {
+            // use default colors
+            colors[0] = defaultPrimaryColor;
+            colors[1] = defaultSecondaryColor;
+            colors[2] = defaultTertiaryColor;
         }
-
-        if (lightMutedColor != 0 && index != 3) {
-            colors[index] = lightMutedColor;
-            index++;
-        }
-
         return colors;
     }
 
