@@ -15,7 +15,7 @@ import java.nio.FloatBuffer;
 //public class VisOne extends VisualizerBase {
 public class VisOne extends VisualizerBase {
 
-    private final int LINE_AMT = 20;                  //Number of lines to display on the screen
+    private final int LINE_AMT = 100;                  //Number of lines to display on the screen
     private final float AMP_MULT = 0.000005f;         //Alters the lines horizontal amplitude
     private final int VERTEX_AMOUNT = 7;              //x, y, z, r, g, b, a
     private final int BYTES_PER_FLOAT = 4;            //Amount of bytes in a float
