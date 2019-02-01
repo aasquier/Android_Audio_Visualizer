@@ -9,7 +9,7 @@ package com.example.colecofer.android_audio_visualizer;
  * Don't forget to also implement the GLInterface along with extending
  * this class.
  */
-abstract public class VisualizerBase implements GLVisualizer {
+abstract public class VisualizerBase {
 
     protected int positionHandle;
     protected int colorHandle;
@@ -28,5 +28,24 @@ abstract public class VisualizerBase implements GLVisualizer {
      * @param colorHandle
      */
     public void setColorHandle(int colorHandle) { this.colorHandle = colorHandle; }
+
+    /**
+     * Called from the Surface View and should setup the initial fft values.
+     * @param fft
+     */
+    abstract public void updateFft(byte[] fft);
+
+    /**
+     * Called from the Renderer and should be used to update animations
+     * @param fft
+     */
+    abstract public void updateFft(float[] fft);
+
+    /**
+     * This method will be in charge of calling the individual draw() methods
+     * of other items that need to be rendered.
+     */
+    abstract public void draw();
+
 
 }

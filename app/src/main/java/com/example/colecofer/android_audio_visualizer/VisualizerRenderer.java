@@ -126,10 +126,13 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         colorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
 
         VisualizerModel.getInstance().currentVisualizer.setPositionHandle(positionHandle);
-        VisualizerModel.getInstance().currentVisualizer.setColorHandle(positionHandle);
+        VisualizerModel.getInstance().currentVisualizer.setColorHandle(colorHandle);
 
-        //VisualizerSurfaceView.visOne.setPositionHandle(positionHandle);
-        //VisualizerSurfaceView.visOne.setColorHandle(colorHandle);
+//        VisualizerSurfaceView.visOne.setPositionHandle(positionHandle);
+//        VisualizerSurfaceView.visOne.setColorHandle(colorHandle);
+
+//        VisualizerModel.getInstance().visOne.setPositionHandle(positionHandle);
+//        VisualizerModel.getInstance().visOne.setColorHandle(colorHandle);
 
         // Tell OpenGL to use this program when rendering.
         GLES20.glUseProgram(programHandle);
@@ -143,7 +146,8 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
     //Was newFftData
     public void updateFft(float[] fft) {
         VisualizerModel.getInstance().currentVisualizer.updateFft(fft);
-        //VisualizerSurfaceView.visOne.updateFft(fft);
+//        VisualizerSurfaceView.visOne.updateFft(fft);
+//        VisualizerModel.getInstance().visOne.updateFft(fft);
     }
 
     @Override
@@ -151,6 +155,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 
         VisualizerModel.getInstance().currentVisualizer.draw();
-        //VisualizerSurfaceView.visOne.draw();
+//        VisualizerSurfaceView.visOne.draw();
+//        VisualizerModel.getInstance().visOne.draw();
     }
 }

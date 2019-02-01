@@ -9,6 +9,7 @@ import java.nio.FloatBuffer;
  * implement the appropriate openGL and fft methods so that it can be rendered.
  * */
 
+//public class VisOne extends VisualizerBase {
 public class VisOne extends VisualizerBase {
 
     private final int LINE_AMT = 20;                  //Number of lines to display on the screen
@@ -23,6 +24,10 @@ public class VisOne extends VisualizerBase {
     private final int POSITION_OFFSET = 0;
     private final int COLOR_OFFSET = 3;
     private final int COLOR_DATA_SIZE = 4;
+
+//    protected int positionHandle;
+//    protected int colorHandle;
+//    protected int captureSize;
 
     private int vertexCount = 5;
     private GLLine[] lines;  //Holds the lines to be displayed
@@ -71,8 +76,9 @@ public class VisOne extends VisualizerBase {
             j+= VERTEX_AMOUNT;
         }
 
-        VisualizerModel.getInstance().getRenderer().updateFft(fftRender);
-        //        VisualizerSurfaceView.renderer.updateFft(fftRender);
+        VisualizerModel.getInstance().renderer.updateFft(fftRender);
+//                VisualizerSurfaceView.renderer.updateFft(fftRender);
+//        VisualizerModel.getInstance().renderer.updateFft(fftRender);
     }
 
 
@@ -122,5 +128,20 @@ public class VisOne extends VisualizerBase {
 
         GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, vertexCount);
     }
+
+    /**
+     * Set the position handle
+     * This is necessary so that the renderer can update the position handle
+     * @param positionHandle
+     */
+    public void setPositionHandle(int positionHandle) { this.positionHandle = positionHandle; }
+
+    /**
+     * Set the color handle
+     * This is necessary so that the renderer can update the color handle
+     * @param colorHandle
+     */
+    public void setColorHandle(int colorHandle) { this.colorHandle = colorHandle; }
+
 
 }

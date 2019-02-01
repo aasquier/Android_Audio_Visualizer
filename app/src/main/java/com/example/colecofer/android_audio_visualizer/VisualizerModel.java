@@ -24,7 +24,7 @@ public class VisualizerModel {
 
     //Visualizer / OpenGL instances
     private static final VisualizerModel visualizerModel = new VisualizerModel(); //VisualizerModel Singleton
-    private static VisualizerRenderer renderer;
+    public static VisualizerRenderer renderer;
     public static VisualizerBase currentVisualizer;
 
     //Visualizers
