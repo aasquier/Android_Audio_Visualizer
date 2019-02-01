@@ -132,6 +132,17 @@ public class SpotifyClient {
         return value;
     }
 
+    public static int getDuration(String responseJSON) {
+        JSONObject json = convertStringToJSON(responseJSON);
+        int value = -1;
+        try {
+            value = json.getInt("duration_ms");
+        } catch (JSONException e) {
+            Log.d("Spotify", "Error - Could not extract duration from response");
+        }
+        return value;
+    }
+
 
     public static String getArtUrl(String responseJSON) {
         JSONObject json = convertStringToJSON(responseJSON);
