@@ -9,7 +9,7 @@ import java.nio.FloatBuffer;
  * implement the appropriate openGL and fft methods so that it can be rendered.
  * */
 
-public class VisOne implements GLVisualizer {
+public class VisOne extends VisualizerBase implements GLVisualizer {
 
     private final int LINE_AMT = 20;                  //Number of lines to display on the screen
     private final float AMP_MULT = 0.000005f;         //Alters the lines horizontal amplitude
@@ -18,16 +18,17 @@ public class VisOne implements GLVisualizer {
     private final float LEFT_DRAW_BOUNDARY = -0.99f;  //Where to start drawing on the left side of the screen
     private final float RIGHT_DRAW_BOUNDARY = 0.99f;  //Right side of the screen boundary
 
-    private  final int POSITION_DATA_SIZE = 3;
-    private  final int STRIDE_BYTES = 7 * BYTES_PER_FLOAT;
-    private  final int POSITION_OFFSET = 0;
-    private  final int COLOR_OFFSET = 3;
-    private  final int COLOR_DATA_SIZE = 4;
+    private final int POSITION_DATA_SIZE = 3;
+    private final int STRIDE_BYTES = 7 * BYTES_PER_FLOAT;
+    private final int POSITION_OFFSET = 0;
+    private final int COLOR_OFFSET = 3;
+    private final int COLOR_DATA_SIZE = 4;
 
-    private int positionHandle;
-    private int colorHandle;
+//    private int positionHandle;
+//    private int colorHandle;
 
-    private int captureSize;
+//    private int captureSize;
+
     private int vertexCount = 5;
 
     private GLLine[] lines;  //Holds the lines to be displayed
