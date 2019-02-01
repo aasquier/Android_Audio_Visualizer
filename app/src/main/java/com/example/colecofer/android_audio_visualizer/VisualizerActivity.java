@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.spotify.sdk.android.player.SpotifyPlayer;
@@ -146,13 +147,20 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     @Override
     protected void onResume() {
         super.onResume();
-//        surfaceView.onResume();
+        surfaceView.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        surfaceView.onPause();
+        surfaceView.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("test", "IM BEING DESTROYED");
+        this.mediaPlayer.release();
     }
 
     @Override
