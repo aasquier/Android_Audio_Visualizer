@@ -27,6 +27,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
                 "{\n" +
                 "   v_Color = a_Color;\n" +	    	// Pass the color through to the fragment shader.
                 "   gl_Position = a_Position;\n" + 	// gl_Position is a special variable used to store the final position.
+                "   gl_PointSize = 10.0;" +
                 "}\n";                              // normalized screen coordinates.
 
         final String fragmentShader =
