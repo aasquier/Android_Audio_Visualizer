@@ -7,39 +7,31 @@ import java.nio.FloatBuffer;
 public class GLDot {
 
     private FloatBuffer dotVerticesBuffer;
-    private float[] vertices;
-    private float xOffset;
 
-//    private final int WIDTH = 600;
-//    private final int HEIGHT = 600;
+    private int COUNT;
 
-//    private final int COUNT = 600 * 600;
-    int COUNT = 1;
+    public GLDot(int width, int height) {
 
-    public GLDot(float xPosition){
+        this.COUNT = width * height;
 
-        // xOffset is temporary not used
-        this.xOffset = xPosition;
+        float[] vertices = new float[COUNT * 7];
 
-//        this.vertices = new float[COUNT * 7];
-//
-//        for(int i =0; i < COUNT; i++){
-//            this.vertices[(i * 7)+ 0] = 0.0f; // X
-//            this.vertices[(i * 7)+ 1] = 0.0f; // Y
-//            this.vertices[(i * 7)+ 2] = 0.0f; // Z
-//            this.vertices[(i * 7)+ 3] = 1.0f; // R
-//            this.vertices[(i * 7)+ 4] = 0.0f; // G
-//            this.vertices[(i * 7)+ 5] = 0.0f; // B
-//            this.vertices[(i * 7)+ 6] = 1.0f; // A
-//        }
-        this.vertices = new float[] {
-                // X, Y, Z
-                // R, G, B, A
+        int count = 0;
 
-                //Bottom point
-                0.0f, 0.0f, 0.0f,
-                1.0f, 0.0f, 0.0f, 1.0f
-        };
+        for(int i = 0; i < height; i++) {
+
+            for(int j = 0; j < width; j++) {
+                vertices[count*7+0] = (float)(-1.0 + 2.0 /(height + 1)*(1+i));
+                vertices[count*7+1] = (float)(-1.0 + 2.0 /(width + 1)*(1+j));
+                vertices[count*7+2] = 0.0f;
+                vertices[count*7+3] = 1.0f;
+                vertices[count*7+4] = 0.0f;
+                vertices[count*7+5] = 0.0f;
+                vertices[count*7+6] = 1.0f;
+
+                count++;
+            }
+        }
 
         ByteBuffer vertexByteBuffer = ByteBuffer.allocateDirect(vertices.length * 4);
         vertexByteBuffer.order(ByteOrder.nativeOrder());
@@ -47,8 +39,7 @@ public class GLDot {
         dotVerticesBuffer.put(vertices).position(0);
     }
 
-    public int count() { return this.COUNT; }
-
     public FloatBuffer draw() { return this.dotVerticesBuffer; }
 
+    public int count() {return this.COUNT; }
 }

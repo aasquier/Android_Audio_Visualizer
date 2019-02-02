@@ -15,14 +15,13 @@ public class VisTwo extends VisualizerBase {
     private final int BYTES_PER_FLOAT = 4;
     private final int STRIDE_BYTES = (POSITION_DATA_SIZE + COLOR_DATA_SIZE) * BYTES_PER_FLOAT;
 
-
-//    private GLCircle circle;
-    private GLDot GLDot;
+    private GLDot dot;
 
     public VisTwo(int captureSize) {
         this.captureSize = captureSize;
-//        circle = new GLCircle(POSITION_OFFSET);
-        GLDot = new GLDot(POSITION_OFFSET);
+
+        // create a layer with 600 * 600 dot
+        dot = new GLDot(600, 600);
     }
 
     @Override
@@ -37,8 +36,7 @@ public class VisTwo extends VisualizerBase {
 
     @Override
     public void draw() {
-//        drawCircle(circle.draw(), circle.count());
-        drawDot(GLDot.draw(), GLDot.count());
+        drawDot(dot.draw(), dot.count());
     }
 
     private void drawDot(FloatBuffer dotVertexData, int count) {

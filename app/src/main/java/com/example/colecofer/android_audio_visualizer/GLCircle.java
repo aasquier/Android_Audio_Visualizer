@@ -19,9 +19,6 @@ public class GLCircle {
 
         this.vertices = new float[COUNT * 7];
 
-        for(int i=1; i < 2; i++)
-            this.vertices[i] = 0;
-
         for(int i =1; i < COUNT; i++){
             this.vertices[(i * 7)+ 0] = (float) (0.5 * Math.cos((3.14/180) * (float)i )); // X
             this.vertices[(i * 7)+ 1] = (float) (0.5 * Math.sin((3.14/180) * (float)i )); // Y
