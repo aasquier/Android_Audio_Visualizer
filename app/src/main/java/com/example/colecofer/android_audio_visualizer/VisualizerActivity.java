@@ -1,6 +1,5 @@
 package com.example.colecofer.android_audio_visualizer;
 
-import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
@@ -8,18 +7,14 @@ import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import static com.example.colecofer.android_audio_visualizer.Utility.getDBs;
-import static com.example.colecofer.android_audio_visualizer.Utility.updateDbHistory;
 import static com.loopj.android.http.AsyncHttpClient.log;
 
 public class VisualizerActivity extends AppCompatActivity implements Visualizer.OnDataCaptureListener {
@@ -137,7 +132,6 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d("test", "IM BEING DESTROYED");
         this.mediaPlayer.release();
     }
 

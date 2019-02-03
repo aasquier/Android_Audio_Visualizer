@@ -6,10 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -44,13 +42,11 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
 
     private final String TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_RECORD_PERMISSION = 101;
-    private boolean hasRecordPermission = false;
 
     //TODO: This is Spotify's test account because I don't want to hard code ours into a public repository...
     private static final String CLIENT_ID = "089d841ccc194c10a77afad9e1c11d54";
     private static final String REDIRECT_URI = "testschema://callback";
     private static final String TRACK_BASE_URI = "spotify:track:";
-    private static final String HYPNOTIZE_TRACK_URI = "spotify:track:7KwZNVEaqikRSBSpyhXK2j";
 
     //Used to verify that we've been redirected back from Spotify after authenticating in browser
     private static final int REQUEST_CODE = 1337;
@@ -317,17 +313,16 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
     };
 
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_RECORD_PERMISSION: {
-                //If Permission is granted then start the initialization
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    this.hasRecordPermission = true;
-                }
-            }
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        switch (requestCode) {
+//            case REQUEST_RECORD_PERMISSION: {
+//                //If Permission is granted then start the initialization
+//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                }
+//            }
+//        }
+//    }
 
     @Override
     public void onLoggedIn() {
