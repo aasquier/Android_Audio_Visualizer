@@ -144,10 +144,8 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 gl) {
-
-        VisualizerModel.getInstance().checkToSwitchVisualizer();
-
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
+//        VisualizerModel.getInstance().checkToSwitchVisualizer();
         VisualizerModel.getInstance().currentVisualizer.draw();
     }
 }

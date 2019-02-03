@@ -38,8 +38,10 @@ public class VisOne extends VisualizerBase {
      * @param captureSize
      */
     public VisOne(int captureSize) {
+        super();
         this.captureSize = captureSize;
         this.vertexCount = this.captureSize / VERTEX_AMOUNT;
+        this.visNum = 1;
 
         //Create 100 lines
         lines = new GLLine[LINE_AMT];

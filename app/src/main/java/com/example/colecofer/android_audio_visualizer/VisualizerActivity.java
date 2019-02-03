@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Pair;
 
 import com.spotify.sdk.android.player.SpotifyPlayer;
@@ -144,6 +145,16 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     public void onFftDataCapture(Visualizer visualizer, byte[] fft, int samplingRate) {
         /** Gives us the decibel level for the fft bucket we care about **/
         double dbs = getDBs(fft[REAL_BUCKET], fft[IMAGINARY_BUCKET], this.audioSampleSize);
+
+//        VisualizerModel.getInstance().checkToSwitchVisualizer();
+
+//        float currentTimeMillis = VisualizerActivity.mediaPlayer.getCurrentPosition();
+//        if (currentTimeMillis >= 2000 && VisualizerModel.getInstance().currentVisualizer.visNum == 1) {
+//            Log.d("test", "Switch vis");
+//            VisualizerModel.getInstance().currentVisualizer = new VisTwo(1024);
+//        } else if (currentTimeMillis >= 4000 && VisualizerModel.getInstance().currentVisualizer.visNum == 2) {
+////            this.currentVisualizer = new VisThree(this.currentVisualizer.captureSize);
+//        }
 
         Pair<Long, Boolean> updateStatus = updateDbHistory(dbs, VisualizerModel.getInstance().currentVisualizer.dbHistory, this.previousUpdateTime);
         if (updateStatus.second == true) {

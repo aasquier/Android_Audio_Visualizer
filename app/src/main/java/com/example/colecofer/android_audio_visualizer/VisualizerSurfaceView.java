@@ -3,6 +3,7 @@ package com.example.colecofer.android_audio_visualizer;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.util.Log;
 
 
 public class VisualizerSurfaceView extends GLSurfaceView {
@@ -25,6 +26,14 @@ public class VisualizerSurfaceView extends GLSurfaceView {
     }
 
     public void updateFft(byte[] fft) {
+        float currentTimeMillis = VisualizerActivity.mediaPlayer.getCurrentPosition();
+        if (currentTimeMillis >= 2000 && VisualizerModel.getInstance().currentVisualizer.visNum == 1) {
+            Log.d("test", "Switch vis");
+            VisualizerModel.getInstance().currentVisualizer = new VisTwo(1024);
+        } else if (currentTimeMillis >= 4000 && VisualizerModel.getInstance().currentVisualizer.visNum == 2) {
+//            this.currentVisualizer = new VisThree(this.currentVisualizer.captureSize);
+        }
+
         VisualizerModel.getInstance().currentVisualizer.updateFft(fft);
     }
 

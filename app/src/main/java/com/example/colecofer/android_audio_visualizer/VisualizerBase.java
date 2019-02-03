@@ -16,6 +16,7 @@ abstract public class VisualizerBase {
     protected int positionHandle;
     protected int colorHandle;
     protected int captureSize;
+    int visNum;
 
     /**
      * Default Constructor

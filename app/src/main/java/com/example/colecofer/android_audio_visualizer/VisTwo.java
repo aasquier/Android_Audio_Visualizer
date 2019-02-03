@@ -18,7 +18,9 @@ public class VisTwo extends VisualizerBase {
     private GLDot dot;
 
     public VisTwo(int captureSize) {
+        super();
         this.captureSize = captureSize;
+        this.visNum = 2;
 
         // create a layer with 600 * 600 dot
         dot = new GLDot(600, 600);
