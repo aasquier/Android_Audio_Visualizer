@@ -1,6 +1,5 @@
 package com.example.colecofer.android_audio_visualizer;
 
-import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
@@ -8,15 +7,14 @@ import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
+import static com.example.colecofer.android_audio_visualizer.Utility.getDBs;
 import static com.loopj.android.http.AsyncHttpClient.log;
 
 public class VisualizerActivity extends AppCompatActivity implements Visualizer.OnDataCaptureListener {
@@ -25,20 +23,20 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     private static final int REAL_BUCKET = 3;
     private static final int IMAGINARY_BUCKET = 4;
     private static int audioSampleSize;
+    private long previousUpdateTime;
 
     private MediaPlayer mediaPlayer;
     private Visualizer visualizer;
     private VisualizerSurfaceView surfaceView;
     private VisualizerRenderer visualizerRenderer;
     private Visualizer.OnDataCaptureListener captureListener;
-    private Utility utils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visualizer);
         //startTrackPlayback();  //Uncomment this line to start Spotify track playback
-        setupVisualizer();
+        initVisualizer();
     }
 
     /**
@@ -49,28 +47,6 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         player.playUri(MainActivity.operationCallback, VisualizerModel.getInstance().getTrackURI(), 0, 0);
         log.d("test", "TrackID: " + VisualizerModel.getInstance().getTrackURI());
     }
-
-
-    /**
-     * This method checks if the RECORD_AUDIO permission has been granted to the app,
-     * and if not then prompts the user for it.
-     * Once it has permission, it then initializes the visualizer.
-     */
-    private void setupVisualizer() {
-        //Check Audio Record Permission
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
-                Toast.makeText(this, "RECORD_AUDIO permission is required.", Toast.LENGTH_SHORT).show();
-            } else {
-                //If no permission then request it to the user
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_PERMISSION);
-            }
-        } else {
-            //If we already have permission, then initialize the visualizer
-            initVisualizer();
-        }
-    }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -135,6 +111,8 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);
         visualizer.setEnabled(true);
 
+        this.previousUpdateTime = System.currentTimeMillis();
+
         setContentView(surfaceView);
 
     }
@@ -152,13 +130,21 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.mediaPlayer.release();
+    }
+
+    @Override
     public void onWaveFormDataCapture(Visualizer visualizer, byte[] waveform, int samplingRate) {
     }
 
     @Override
     public void onFftDataCapture(Visualizer visualizer, byte[] fft, int samplingRate) {
         /** Gives us the decibel level for the fft bucket we care about **/
-        double dbs = utils.getDBs(fft[REAL_BUCKET], fft[IMAGINARY_BUCKET], this.audioSampleSize);
+        double dbs = getDBs(fft[REAL_BUCKET], fft[IMAGINARY_BUCKET], this.audioSampleSize);
+
+        //this.previousUpdateTime = updateDbHistory(dbs, VisualizerModel.getInstance().currentVisualizer.dbHistory, this.previousUpdateTime);
 
         /** TODO this needs to change as the whole fft should not influence the wave */
         surfaceView.updateFft(fft);
