@@ -21,7 +21,7 @@ public class VisTwo extends VisualizerBase {
         this.captureSize = captureSize;
 
         // create a layer with 600 * 600 dot
-        dot = new GLDot(600, 600);
+        dot = new GLDot(60, 60, this.dbHistory.peekFirst());
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.example.colecofer.android_audio_visualizer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.ArrayDeque;
 
 public class GLDot {
 
@@ -10,7 +11,7 @@ public class GLDot {
 
     private int COUNT;
 
-    public GLDot(int width, int height) {
+    public GLDot(int width, int height, Float currentDbLevel) {
 
         this.COUNT = width * height;
 
@@ -26,7 +27,7 @@ public class GLDot {
                 vertices[count*7+2] = 0.0f;
                 vertices[count*7+3] = 1.0f;
                 vertices[count*7+4] = 0.0f;
-                vertices[count*7+5] = 0.0f;
+                vertices[count*7+5] = currentDbLevel;
                 vertices[count*7+6] = 1.0f;
 
                 count++;

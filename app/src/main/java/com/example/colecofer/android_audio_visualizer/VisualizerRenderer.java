@@ -1,5 +1,6 @@
 package com.example.colecofer.android_audio_visualizer;
 
+import android.media.audiofx.Visualizer;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -17,6 +18,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+//        float currentDbLevel = 3.0f + 30.0f * VisualizerModel.getInstance().currentVisualizer.dbHistory.peekFirst();
 
         final String vertexShader =
                 "uniform mat4 u_MVPMatrix;" +		// A constant representing the combined model/view/projection matrix.
