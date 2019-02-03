@@ -27,7 +27,7 @@ public class GLDot {
                 vertices[count*7+2] = 0.0f;
                 vertices[count*7+3] = 1.0f;
                 vertices[count*7+4] = 0.0f;
-                vertices[count*7+5] = currentDbLevel;
+                vertices[count*7+5] = 0.0f;
                 vertices[count*7+6] = 1.0f;
 
                 count++;

@@ -7,7 +7,7 @@ import java.util.ArrayDeque;
 public class Utility {
 
     private static final float MAX_DB_LEVEL = 170.0f;
-    private static final long REFRESH_DECIBEL_TIME = 9L;
+    private static final long REFRESH_DECIBEL_TIME = 16L;
     private static final float MAX_DECIBEL_RATIO = 1.0f;
 
     /** Takes the real and imaginary parts of an FFT frequency bin and returns the decibels for that bin. */

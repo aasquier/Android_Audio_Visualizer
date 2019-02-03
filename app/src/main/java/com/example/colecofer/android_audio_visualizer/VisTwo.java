@@ -26,7 +26,7 @@ public class VisTwo extends VisualizerBase {
 
     @Override
     public void updateFft(byte[] fft) {
-
+        dot = new GLDot(60, 60, this.dbHistory.peekFirst());
     }
 
     @Override
