@@ -41,7 +41,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visualizer);
         //startTrackPlayback();  //Uncomment this line to start Spotify track playback
-        setupVisualizer();
+        initVisualizer();
     }
 
     /**
@@ -52,28 +52,6 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         player.playUri(MainActivity.operationCallback, VisualizerModel.getInstance().getTrackURI(), 0, 0);
         log.d("test", "TrackID: " + VisualizerModel.getInstance().getTrackURI());
     }
-
-
-    /**
-     * This method checks if the RECORD_AUDIO permission has been granted to the app,
-     * and if not then prompts the user for it.
-     * Once it has permission, it then initializes the visualizer.
-     */
-    private void setupVisualizer() {
-        //Check Audio Record Permission
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
-                Toast.makeText(this, "RECORD_AUDIO permission is required.", Toast.LENGTH_SHORT).show();
-            } else {
-                //If no permission then request it to the user
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_PERMISSION);
-            }
-        } else {
-            //If we already have permission, then initialize the visualizer
-            initVisualizer();
-        }
-    }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -172,7 +150,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         /** Gives us the decibel level for the fft bucket we care about **/
         double dbs = getDBs(fft[REAL_BUCKET], fft[IMAGINARY_BUCKET], this.audioSampleSize);
 
-//        this.previousUpdateTime = updateDbHistory(dbs, VisualizerModel.getInstance().currentVisualizer.dbHistory, this.previousUpdateTime);
+        //this.previousUpdateTime = updateDbHistory(dbs, VisualizerModel.getInstance().currentVisualizer.dbHistory, this.previousUpdateTime);
 
         /** TODO this needs to change as the whole fft should not influence the wave */
         surfaceView.updateFft(fft);
