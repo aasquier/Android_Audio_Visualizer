@@ -30,7 +30,7 @@ public class Utility {
      * @param newDB
      * @param dbHistory
      */
-    static long updateDbHistory(double newDB, ArrayDeque<Float> dbHistory, long previousUpdateTime) {
+    static Pair<Long, Boolean> updateDbHistory(double newDB, ArrayDeque<Float> dbHistory, long previousUpdateTime) {
         Pair<Long, Boolean> isTime = isTimeToUpdate(previousUpdateTime);
 
         if (isTime.second == true) {
@@ -39,7 +39,7 @@ public class Utility {
             dbHistory.addFirst(dbRatio);
             dbHistory.removeLast();
         }
-        return isTime.first;
+        return isTime;
     }
 
     /**

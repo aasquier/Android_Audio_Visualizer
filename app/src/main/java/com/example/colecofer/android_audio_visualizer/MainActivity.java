@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
         enablePlayButton = false;
         setPlayButton();
         setEnableSearchButton(false);
+
         initUI();
         redirectToBrowserForLogin();
         client = new SpotifyClient();

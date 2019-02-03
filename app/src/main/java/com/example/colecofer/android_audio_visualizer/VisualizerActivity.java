@@ -10,11 +10,12 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
+import android.util.Pair;
 
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import static com.example.colecofer.android_audio_visualizer.Utility.getDBs;
+import static com.example.colecofer.android_audio_visualizer.Utility.updateDbHistory;
 import static com.loopj.android.http.AsyncHttpClient.log;
 
 public class VisualizerActivity extends AppCompatActivity implements Visualizer.OnDataCaptureListener {
@@ -106,12 +107,14 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
 
+        this.previousUpdateTime = System.currentTimeMillis();
+
         visualizer = new Visualizer(mediaPlayer.getAudioSessionId());
         visualizer.setCaptureSize(audioSampleSize);
         visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);
         visualizer.setEnabled(true);
 
-        this.previousUpdateTime = System.currentTimeMillis();
+
 
         setContentView(surfaceView);
 
@@ -144,10 +147,9 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         /** Gives us the decibel level for the fft bucket we care about **/
         double dbs = getDBs(fft[REAL_BUCKET], fft[IMAGINARY_BUCKET], this.audioSampleSize);
 
-        //this.previousUpdateTime = updateDbHistory(dbs, VisualizerModel.getInstance().currentVisualizer.dbHistory, this.previousUpdateTime);
-
-        /** TODO this needs to change as the whole fft should not influence the wave */
-        surfaceView.updateFft(fft);
+        Pair<Long, Boolean> updateStatus = updateDbHistory(dbs, VisualizerModel.getInstance().currentVisualizer.dbHistory, this.previousUpdateTime);
+        if (updateStatus.second == true) {
+          surfaceView.updateFft(fft);
+        }
     }
-
 }

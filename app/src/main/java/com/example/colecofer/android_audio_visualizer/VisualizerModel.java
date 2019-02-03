@@ -28,6 +28,8 @@ public class VisualizerModel {
     public static VisualizerRenderer renderer;         //TODO: Consider making these private
     public static VisualizerBase currentVisualizer;
 
+//    private
+
     /**
      * Default Constructor
      */
@@ -37,6 +39,10 @@ public class VisualizerModel {
         artistName = "Not defined";
         albumName = "Not defined";
         colorMatrix = new int[] {0, 0, 0, 0};
+    }
+
+    public void checkToSwitchVisualizer() {
+
     }
 
 
