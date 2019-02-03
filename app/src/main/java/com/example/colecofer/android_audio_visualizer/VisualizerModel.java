@@ -28,8 +28,6 @@ public class VisualizerModel {
     public static VisualizerRenderer renderer;         //TODO: Consider making these private
     public static VisualizerBase currentVisualizer;
 
-//    private
-
     /**
      * Default Constructor
      */
@@ -41,8 +39,18 @@ public class VisualizerModel {
         colorMatrix = new int[] {0, 0, 0, 0};
     }
 
+    /**
+     * Checks if it's time to switch visualizers, and if it's time
+     * then changes currentVisualizer to the new visualizer
+     */
+    //TODO: This will only work with local files since it's based off the media player
     public void checkToSwitchVisualizer() {
-
+        float currentTimeMillis = VisualizerActivity.mediaPlayer.getCurrentPosition();
+        if (currentTimeMillis >= visualizerSwitchTimeOne) {
+            this.currentVisualizer = new VisTwo(this.currentVisualizer.captureSize);
+        } else if (currentTimeMillis >= visualizerSwitchTimeTwo) {
+            this.currentVisualizer = new VisThree(this.currentVisualizer.captureSize);
+        }
     }
 
 
@@ -83,8 +91,10 @@ public class VisualizerModel {
 
     public void setDuration(int duration) {
         durationInMilliseconds = duration;
-        visualizerSwitchTimeOne = duration / 3;
-        visualizerSwitchTimeTwo = visualizerSwitchTimeOne * 2;
+//        visualizerSwitchTimeOne = duration / 3;
+//        visualizerSwitchTimeTwo = visualizerSwitchTimeOne * 2;
+        visualizerSwitchTimeOne = 2000;
+        visualizerSwitchTimeTwo = 4000;
     }
 
     /**

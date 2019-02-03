@@ -26,7 +26,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     private static int audioSampleSize;
     private long previousUpdateTime;
 
-    private MediaPlayer mediaPlayer;
+    static MediaPlayer mediaPlayer;
     private Visualizer visualizer;
     private VisualizerSurfaceView surfaceView;
     private VisualizerRenderer visualizerRenderer;
@@ -113,8 +113,6 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         visualizer.setCaptureSize(audioSampleSize);
         visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);
         visualizer.setEnabled(true);
-
-
 
         setContentView(surfaceView);
 
