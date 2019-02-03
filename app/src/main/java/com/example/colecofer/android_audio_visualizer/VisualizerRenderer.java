@@ -101,7 +101,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
             GLES20.glBindAttribLocation(programHandle, 1, "a_Color");
 
             // Link the two shaders together into a program.
-            GLES20.glLinkProgram(programHandle);
+      3      GLES20.glLinkProgram(programHandle);
 
             // Get the link status.
             final int[] linkStatus = new int[1];
@@ -124,8 +124,11 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         positionHandle = GLES20.glGetAttribLocation(programHandle, "a_Position");
         colorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
 
-        VisualizerModel.getInstance().currentVisualizer.setPositionHandle(positionHandle);
-        VisualizerModel.getInstance().currentVisualizer.setColorHandle(colorHandle);
+//        VisualizerModel.getInstance().currentVisualizer.setPositionHandle(positionHandle);
+//        VisualizerModel.getInstance().currentVisualizer.setColorHandle(colorHandle);
+
+        VisualizerModel.getInstance().visOne.setPositionHandle(positionHandle);
+        VisualizerModel.getInstance().visOne.setColorHandle(colorHandle);
 
         // Tell OpenGL to use this program when rendering.
         GLES20.glUseProgram(programHandle);
@@ -138,12 +141,14 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
     //Was newFftData
     public void updateFft(float[] fft) {
-        VisualizerModel.getInstance().currentVisualizer.updateFft(fft);
+//        VisualizerModel.getInstance().currentVisualizer.updateFft(fft);
+        VisualizerModel.getInstance().visOne.updateFft(fft);
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
-        VisualizerModel.getInstance().currentVisualizer.draw();
+//        VisualizerModel.getInstance().currentVisualizer.draw();
+        VisualizerModel.getInstance().visOne.draw();
     }
 }
