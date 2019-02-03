@@ -18,6 +18,9 @@ public class VisualizerModel {
     private String trackName;
     private String artistName;
     private String albumName;
+    private int durationInMilliseconds;
+    private int visualizerSwitchTimeOne;
+    private int visualizerSwitchTimeTwo;
     public int colorMatrix[];
 
     //Visualizer / OpenGL instances
@@ -70,6 +73,12 @@ public class VisualizerModel {
 
         this.colorMatrix[3] = 1;
 
+    }
+
+    public void setDuration(int duration) {
+        durationInMilliseconds = duration;
+        visualizerSwitchTimeOne = duration / 3;
+        visualizerSwitchTimeTwo = visualizerSwitchTimeOne * 2;
     }
 
     /**
