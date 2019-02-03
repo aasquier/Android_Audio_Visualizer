@@ -50,7 +50,7 @@ public class Utility {
     static Pair<Long, Boolean> isTimeToUpdate(long previousUpdateTime) {
         Boolean success;
         Long currentTime = System.currentTimeMillis();
-        if(previousUpdateTime + REFRESH_DECIBEL_TIME >= currentTime) {
+        if(previousUpdateTime + REFRESH_DECIBEL_TIME <= currentTime) {
             previousUpdateTime = currentTime;
             success = true;
         } else {
