@@ -23,13 +23,7 @@ public class VisualizerModel {
     //Visualizer / OpenGL instances
     private static final VisualizerModel visualizerModel = new VisualizerModel(); //VisualizerModel Singleton
     public static VisualizerRenderer renderer;         //TODO: Consider making these private
-//    public static VisualizerBase currentVisualizer;
-
-    //Visualizers
-    public static VisOne visOne;
-    public static VisTwo visTwo;
-    public static VisThree visThree;
-
+    public static VisualizerBase currentVisualizer;
 
     /**
      * Default Constructor

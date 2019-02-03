@@ -19,17 +19,14 @@ public class VisualizerSurfaceView extends GLSurfaceView {
 
     public void setRenderer(VisualizerRenderer inputRenderer, float inputDensity, int captureSize) {
         this.density = inputDensity;
-
-        VisualizerModel.getInstance().visOne = new VisOne(captureSize);
         VisualizerModel.getInstance().renderer = inputRenderer;
-//        VisualizerModel.getInstance().currentVisualizer = VisualizerModel.getInstance().visOne;
+        VisualizerModel.getInstance().currentVisualizer = new VisOne(captureSize);
 
         super.setRenderer(VisualizerModel.getInstance().renderer);
     }
 
     public void updateFft(byte[] fft) {
-//        VisualizerModel.getInstance().currentVisualizer.updateFft(fft);
-        VisualizerModel.getInstance().visOne.updateFft(fft);
+        VisualizerModel.getInstance().currentVisualizer.updateFft(fft);
     }
 
 }
