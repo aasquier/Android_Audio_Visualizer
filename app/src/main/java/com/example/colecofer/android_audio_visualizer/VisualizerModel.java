@@ -25,12 +25,6 @@ public class VisualizerModel {
     public static VisualizerRenderer renderer;         //TODO: Consider making these private
     public static VisualizerBase currentVisualizer;
 
-    //Visualizers
-    public static VisOne visOne;
-    public static VisTwo visTwo;
-    public static VisThree visThree;
-
-
     /**
      * Default Constructor
      */
