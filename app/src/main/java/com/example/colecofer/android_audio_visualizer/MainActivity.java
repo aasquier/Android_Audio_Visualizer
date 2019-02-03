@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        checkPermissions();
+
         playButton = findViewById(R.id.playButton);
         enablePlayButton = false;
         setPlayButton();
@@ -90,6 +92,23 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
             }
         });
 
+    }
+
+    /**
+     * Prompt the user for any dangerous permissions
+     */
+    private void checkPermissions() {
+        //Check Audio Record Permission
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.RECORD_AUDIO)) {
+                Toast.makeText(MainActivity.this, "RECORD_AUDIO permission is required.", Toast.LENGTH_SHORT).show();
+            } else {
+                //If no permission then request it to the user
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_PERMISSION);
+            }
+        } else {
+            //TODO: Exit if we can't get it.
+        }
     }
 
 
@@ -121,20 +140,10 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                     String trackURI = TRACK_BASE_URI + trackEditText.getText().toString();
                     VisualizerModel.getInstance().setTrackURI(trackURI);
 
-                    //Check Audio Record Permission
-                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.RECORD_AUDIO)) {
-                            Toast.makeText(MainActivity.this, "RECORD_AUDIO permission is required.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            //If no permission then request it to the user
-                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_PERMISSION);
-                        }
-                    } else {
-                        //Prepare player and transition to visualizer activity
-                        VisualizerModel.getInstance().setPlayer(player);
-                        Intent visualizerActivityIntent = new Intent(MainActivity.this, VisualizerActivity.class);
-                        startActivity(visualizerActivityIntent);
-                    }
+                    //Prepare player and transition to visualizer activity
+                    VisualizerModel.getInstance().setPlayer(player);
+                    Intent visualizerActivityIntent = new Intent(MainActivity.this, VisualizerActivity.class);
+                    startActivity(visualizerActivityIntent);
 
                 } else {
                     log("Error: User was not successfully logged into Spotify.");
