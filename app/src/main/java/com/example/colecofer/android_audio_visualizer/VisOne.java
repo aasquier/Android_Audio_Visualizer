@@ -4,6 +4,7 @@ import android.opengl.GLES20;
 import android.util.Log;
 
 import java.nio.FloatBuffer;
+import java.util.ArrayDeque;
 
 /**
  * Class VisOne
@@ -27,11 +28,13 @@ public class VisOne extends VisualizerBase {
     private final int POSITION_OFFSET = 0;
     private final int COLOR_OFFSET = 3;
     private final int COLOR_DATA_SIZE = 4;
+    private final float PIXEL = 0.002f;
 
-    private int vertexCount = 5;
+    private int vertexCount = 2049;
     private GLLine[] lines;  //Holds the lines to be displayed
-    private float[] lineColors;
+    private float[] lineColors; //Holds the line's color value. Should be size = 4
     private float lineOffSet = (RIGHT_DRAW_BOUNDARY * 2) / (LINE_AMT - 1); //We want to display lines from -.99 to .99 (.99+.99=1.98)
+    private float[] dbAmped;
 
 
     /**
@@ -54,7 +57,7 @@ public class VisOne extends VisualizerBase {
 
         // If colorScheme input is correct then copy it
         // Else use default which is just red
-        if(colorScheme != null || colorScheme.length == 4)
+        if(colorScheme != null && colorScheme.length == 4)
             System.arraycopy(colorScheme, 0, this.lineColors, 0, colorScheme.length);
         else {
             this.lineColors[0] = 1.0f;
@@ -62,6 +65,8 @@ public class VisOne extends VisualizerBase {
             this.lineColors[2] = 0.0f;
             this.lineColors[3] = 1.0f;
         }
+
+        dbAmped = createLine();
     }
 
     @Override
@@ -79,6 +84,8 @@ public class VisOne extends VisualizerBase {
             fftRender[j] = (float)amplify * AMP_MULT;
             fftRender[j+1] = k;
             fftRender[j+2] = 0.0f;
+
+            // Uses retrieved color scheme to set the color
             fftRender[j+3] = lineColors[0];
             fftRender[j+4] = lineColors[1];
             fftRender[j+5] = lineColors[2];
@@ -112,6 +119,60 @@ public class VisOne extends VisualizerBase {
         }
     }
 
+    public float[] createLine(){
+        float[] lineArrayDb = new float[(1024+1025)*7];
+
+        int j = 0;
+        float k = -1.0f;
+        float plus = (float) 2 / 2049;
+
+        for (int i = 0; i < lineArrayDb.length; i+=7) {
+            if(i % 2 == 1)
+                lineArrayDb[j] = 0.0f;
+            else
+                lineArrayDb[j] = 0.0f + PIXEL;
+            lineArrayDb[j+1] = k;
+            lineArrayDb[j+2] = 0.0f;
+
+            // Uses retrieved color scheme to set the color
+            lineArrayDb[j+3] = lineColors[0];
+            lineArrayDb[j+4] = lineColors[1];
+            lineArrayDb[j+5] = lineColors[2];
+            lineArrayDb[j+6] = lineColors[3];
+
+            k += plus;
+            j+= VERTEX_AMOUNT;
+        }
+
+        return lineArrayDb;
+    }
+
+    @Override
+    public void ampByDb(ArrayDeque<Float> dbHistory) {
+        // Just in case it's empty
+        if(dbHistory.isEmpty()){
+
+        }
+        else{
+            // Converting deque to array for traversal
+            Object[] arr = dbHistory.toArray();
+            int triangleTipVertex = 1;
+
+            for(int i = 0; i < arr.length; ++i){
+                float currentVertex = dbAmped[triangleTipVertex];
+                dbAmped[triangleTipVertex] = currentVertex + (currentVertex * (float)arr[i]);
+                triangleTipVertex += 2;
+            }
+        }
+
+        VisualizerModel.getInstance().currentVisualizer.ampByDb(dbAmped);
+    }
+
+    public void ampByDb(float[] dbAmped) {
+        for (int i = 0; i < LINE_AMT; ++i) {
+            lines[i].ampByDb(dbAmped);
+        }
+    }
 
     /**
      * This functions will check the updated fft value and see if it's time to
@@ -136,7 +197,7 @@ public class VisOne extends VisualizerBase {
         GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVertexData);
         GLES20.glEnableVertexAttribArray(colorHandle);
 
-        GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, vertexCount);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, vertexCount);
     }
 
     /**

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
+import java.util.ArrayDeque;
+
 
 public class VisualizerSurfaceView extends GLSurfaceView {
 
@@ -28,4 +30,7 @@ public class VisualizerSurfaceView extends GLSurfaceView {
         VisualizerModel.getInstance().currentVisualizer.updateFft(fft);
     }
 
+    public void ampByDb(ArrayDeque<Float> dbHistory){
+        VisualizerModel.getInstance().currentVisualizer.ampByDb(dbHistory);
+    }
 }

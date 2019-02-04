@@ -15,6 +15,7 @@ import android.util.Log;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import static com.example.colecofer.android_audio_visualizer.Utility.getDBs;
+import static com.example.colecofer.android_audio_visualizer.Utility.updateDbHistory;
 import static com.loopj.android.http.AsyncHttpClient.log;
 
 public class VisualizerActivity extends AppCompatActivity implements Visualizer.OnDataCaptureListener {
@@ -148,10 +149,13 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         /** Gives us the decibel level for the fft bucket we care about **/
         double dbs = getDBs(fft[REAL_BUCKET], fft[IMAGINARY_BUCKET], this.audioSampleSize);
 
-        //this.previousUpdateTime = updateDbHistory(dbs, VisualizerModel.getInstance().currentVisualizer.dbHistory, this.previousUpdateTime);
+        this.previousUpdateTime = updateDbHistory(dbs, VisualizerModel.getInstance().currentVisualizer.dbHistory, this.previousUpdateTime);
 
         /** TODO this needs to change as the whole fft should not influence the wave */
-        surfaceView.updateFft(fft);
+        //surfaceView.updateFft(fft);
+
+        // Amplifying via db
+        surfaceView.ampByDb(VisualizerModel.getInstance().currentVisualizer.dbHistory);
     }
 
 }

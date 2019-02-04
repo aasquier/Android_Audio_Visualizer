@@ -3,6 +3,7 @@ package com.example.colecofer.android_audio_visualizer;
 import android.opengl.GLES20;
 
 import java.nio.FloatBuffer;
+import java.util.ArrayDeque;
 
 public class VisTwo extends VisualizerBase {
 
@@ -37,6 +38,16 @@ public class VisTwo extends VisualizerBase {
     @Override
     public void draw() {
         drawDot(dot.draw(), dot.count());
+    }
+
+    @Override
+    public void ampByDb(ArrayDeque<Float> dbHistory) {
+
+    }
+
+    @Override
+    public void ampByDb(float[] dbAmped) {
+
     }
 
     private void drawDot(FloatBuffer dotVertexData, int count) {

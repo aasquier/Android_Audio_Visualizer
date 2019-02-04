@@ -59,5 +59,13 @@ abstract public class VisualizerBase {
      */
     abstract public void draw();
 
+    /**
+     * Called from the Renderer
+     * @param dbHistory
+     */
+    abstract public void ampByDb(ArrayDeque<Float> dbHistory);
+
+    abstract public void ampByDb(float[] dbAmped);
+
 
 }

@@ -3,6 +3,7 @@ package com.example.colecofer.android_audio_visualizer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.ArrayDeque;
 
 public class GLLine {
 
@@ -56,6 +57,22 @@ public class GLLine {
         lineVerticesBuffer = fftInput;
     }
 
+    /**
+     * Get the dB data to amplify the width of the line
+     * @param dbAmped
+     */
+    public void ampByDb(float[] dbAmped){
+        int size = dbAmped.length;
+
+        for(int i = 0; i < size; i += 7){
+            dbAmped[i] += xOffset;
+        }
+
+        //Puts the fft array into a FloatBuffer (drawable state for the GPU)
+        FloatBuffer dbInput = ByteBuffer.allocateDirect(dbAmped.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        dbInput.put(dbAmped).position(0);
+        lineVerticesBuffer = dbInput;
+    }
 
     /**
      * This method should be invoked when Visualizer One catches the pulsating flag.
@@ -76,5 +93,4 @@ public class GLLine {
     public FloatBuffer draw() {
         return this.lineVerticesBuffer;
     }
-
 }

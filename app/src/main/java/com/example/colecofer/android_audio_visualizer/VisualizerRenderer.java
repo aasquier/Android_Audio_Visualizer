@@ -2,6 +2,9 @@ package com.example.colecofer.android_audio_visualizer;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+
+import java.util.ArrayDeque;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -140,6 +143,11 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
     //Was newFftData
     public void updateFft(float[] fft) {
         VisualizerModel.getInstance().currentVisualizer.updateFft(fft);
+    }
+
+    //Amplifying the line by dbHistory
+    public void ampByDb(float[] dbHistory){
+        VisualizerModel.getInstance().currentVisualizer.ampByDb(dbHistory);
     }
 
     @Override
