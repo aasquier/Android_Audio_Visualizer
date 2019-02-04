@@ -30,7 +30,7 @@ public class VisOne extends VisualizerBase {
     private final int COLOR_DATA_SIZE = 4;
     private final float PIXEL = 0.002f;
 
-    private int vertexCount = 2049;
+    private int vertexCount;
     private GLLine[] lines;  //Holds the lines to be displayed
     private float[] lineColors; //Holds the line's color value. Should be size = 4
     private float lineOffSet = (RIGHT_DRAW_BOUNDARY * 2) / (LINE_AMT - 1); //We want to display lines from -.99 to .99 (.99+.99=1.98)
@@ -44,7 +44,8 @@ public class VisOne extends VisualizerBase {
      */
     public VisOne(int captureSize, float[] colorScheme) {
         this.captureSize = captureSize;
-        this.vertexCount = this.captureSize / VERTEX_AMOUNT;
+//        this.vertexCount = this.captureSize / VERTEX_AMOUNT;
+        this.vertexCount = 2049;
         this.lineColors = new float[4];
 
         //Create 100 lines
