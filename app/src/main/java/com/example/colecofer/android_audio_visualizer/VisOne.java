@@ -15,7 +15,7 @@ import java.nio.FloatBuffer;
 //public class VisOne extends VisualizerBase {
 public class VisOne extends VisualizerBase {
 
-    private final int LINE_AMT = 20;                  //Number of lines to display on the screen
+    private final int LINE_AMT = 10;                  //Number of lines to display on the screen
     private final float AMP_MULT = 0.000005f;         //Alters the lines horizontal amplitude
     private final int VERTEX_AMOUNT = 7;              //x, y, z, r, g, b, a
     private final int BYTES_PER_FLOAT = 4;            //Amount of bytes in a float
@@ -30,16 +30,19 @@ public class VisOne extends VisualizerBase {
 
     private int vertexCount = 5;
     private GLLine[] lines;  //Holds the lines to be displayed
+    private float[] lineColors;
     private float lineOffSet = (RIGHT_DRAW_BOUNDARY * 2) / (LINE_AMT - 1); //We want to display lines from -.99 to .99 (.99+.99=1.98)
 
 
     /**
      * Constructor
      * @param captureSize
+     * @param colorScheme Color scheme that will be passed in from the palette analysis
      */
-    public VisOne(int captureSize) {
+    public VisOne(int captureSize, float[] colorScheme) {
         this.captureSize = captureSize;
         this.vertexCount = this.captureSize / VERTEX_AMOUNT;
+        this.lineColors = new float[4];
 
         //Create 100 lines
         lines = new GLLine[LINE_AMT];
@@ -49,6 +52,16 @@ public class VisOne extends VisualizerBase {
             k += lineOffSet;
         }
 
+        // If colorScheme input is correct then copy it
+        // Else use default which is just red
+        if(colorScheme != null || colorScheme.length == 4)
+            System.arraycopy(colorScheme, 0, this.lineColors, 0, colorScheme.length);
+        else {
+            this.lineColors[0] = 1.0f;
+            this.lineColors[1] = 0.0f;
+            this.lineColors[2] = 0.0f;
+            this.lineColors[3] = 1.0f;
+        }
     }
 
     @Override
@@ -66,10 +79,10 @@ public class VisOne extends VisualizerBase {
             fftRender[j] = (float)amplify * AMP_MULT;
             fftRender[j+1] = k;
             fftRender[j+2] = 0.0f;
-            fftRender[j+3] = 1.0f;
-            fftRender[j+4] = 0.0f;
-            fftRender[j+5] = 0.0f;
-            fftRender[j+6] = 1.0f;
+            fftRender[j+3] = lineColors[0];
+            fftRender[j+4] = lineColors[1];
+            fftRender[j+5] = lineColors[2];
+            fftRender[j+6] = lineColors[3];
 
             k += plus;
             j+= VERTEX_AMOUNT;

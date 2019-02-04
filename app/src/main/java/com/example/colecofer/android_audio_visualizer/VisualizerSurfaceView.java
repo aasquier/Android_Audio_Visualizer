@@ -17,10 +17,10 @@ public class VisualizerSurfaceView extends GLSurfaceView {
         super(context, attrs);
     }
 
-    public void setRenderer(VisualizerRenderer inputRenderer, float inputDensity, int captureSize) {
+    public void setRenderer(VisualizerRenderer inputRenderer, float inputDensity, int captureSize, float[] colorScheme) {
         this.density = inputDensity;
         VisualizerModel.getInstance().renderer = inputRenderer;
-        VisualizerModel.getInstance().currentVisualizer = new VisOne(captureSize);
+        VisualizerModel.getInstance().currentVisualizer = new VisOne(captureSize, colorScheme);
         super.setRenderer(VisualizerModel.getInstance().renderer);
     }
 

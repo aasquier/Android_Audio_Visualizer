@@ -25,6 +25,10 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     private static int audioSampleSize;
     private long previousUpdateTime;
 
+    // For testing purposes declaring color scheme in here
+    //TODO: Need to get the color scheme from the palette analyzer
+    private float[] colorScheme = new float[]{0.1f, 0.2f, 0.5f, 1.0f};
+
     private MediaPlayer mediaPlayer;
     private Visualizer visualizer;
     private VisualizerSurfaceView surfaceView;
@@ -93,7 +97,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         if (supportsEs2) {
             surfaceView.setEGLContextClientVersion(2);
             visualizerRenderer = new VisualizerRenderer();
-            surfaceView.setRenderer(visualizerRenderer, displayMetrics.density, audioSampleSize);
+            surfaceView.setRenderer(visualizerRenderer, displayMetrics.density, audioSampleSize, colorScheme);
         } else {
             log.d("opengl", "Does not support ES2");
             // This is where you could create an OpenGL ES 1.x compatible
