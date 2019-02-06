@@ -1,7 +1,6 @@
 package com.example.colecofer.android_audio_visualizer;
 
 import android.opengl.GLES20;
-
 import java.nio.FloatBuffer;
 
 public class VisTwo extends VisualizerBase {
@@ -20,13 +19,13 @@ public class VisTwo extends VisualizerBase {
     public VisTwo(int captureSize) {
         this.captureSize = captureSize;
 
-        // create a layer with 600 * 600 dot
-        dot = new GLDot(60, 60, this.dbHistory.peekFirst());
+        // create a layer with 600 * 600 dots
+        dot = new GLDot(60, 60);
     }
 
     @Override
     public void updateFft(byte[] fft) {
-        dot = new GLDot(60, 60, this.dbHistory.peekFirst());
+
     }
 
     @Override
@@ -47,6 +46,11 @@ public class VisTwo extends VisualizerBase {
         dotVertexData.position(COLOR_OFFSET);
         GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, dotVertexData);
         GLES20.glEnableVertexAttribArray(colorHandle);
+
+        GLES20.glUniform1f(currentDbLevel, VisualizerModel.getInstance().currentVisualizer.dbHistory.peekFirst());
+
+//        GLES10.glScalef(0.0f, 0.0f, VisualizerModel.getInstance().currentVisualizer.dbHistory.peekFirst());
+
 
         GLES20.glDrawArrays(GLES20.GL_POINTS, 0, count);
     }

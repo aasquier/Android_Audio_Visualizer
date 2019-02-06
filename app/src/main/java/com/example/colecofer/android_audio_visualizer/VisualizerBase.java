@@ -13,6 +13,7 @@ abstract public class VisualizerBase {
     private final int SCREEN_SIZE = 1024;
 
     ArrayDeque<Float> dbHistory;
+    protected int currentDbLevel;
     protected int positionHandle;
     protected int colorHandle;
     protected int captureSize;
@@ -40,6 +41,8 @@ abstract public class VisualizerBase {
      * @param colorHandle
      */
     public void setColorHandle(int colorHandle) { this.colorHandle = colorHandle; }
+
+    public void setCurrentDbLevel(int currentDbLevel) { this.currentDbLevel = currentDbLevel; }
 
     /**
      * Called from the Surface View and should setup the initial fft values.

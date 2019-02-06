@@ -22,8 +22,8 @@ import static com.loopj.android.http.AsyncHttpClient.log;
 public class VisualizerActivity extends AppCompatActivity implements Visualizer.OnDataCaptureListener {
 
     private static final int REQUEST_PERMISSION = 101;
-    private static final int REAL_BUCKET = 3;
-    private static final int IMAGINARY_BUCKET = 4;
+    private static final int REAL_BUCKET = 5;
+    private static final int IMAGINARY_BUCKET = 6;
     private static int audioSampleSize;
     private long previousUpdateTime;
 

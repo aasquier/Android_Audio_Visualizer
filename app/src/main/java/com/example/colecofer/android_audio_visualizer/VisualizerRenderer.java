@@ -1,8 +1,8 @@
 package com.example.colecofer.android_audio_visualizer;
 
-import android.media.audiofx.Visualizer;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -10,6 +10,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
     private int positionHandle;
     private int colorHandle;
+    private int currentDbLevel;
 
     public VisualizerRenderer() {
 
@@ -18,18 +19,18 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-//        float currentDbLevel = 3.0f + 30.0f * VisualizerModel.getInstance().currentVisualizer.dbHistory.peekFirst();
 
         final String vertexShader =
                 "uniform mat4 u_MVPMatrix;" +		// A constant representing the combined model/view/projection matrix.
                 "attribute vec4 a_Position;\n" + 	// Per-vertex position information we will pass in.
                 "attribute vec4 a_Color;\n" +		// Per-vertex color information we will pass in.
-                "varying vec4 v_Color;\n" +		    // This will be passed into the fragment shader.
+                        "uniform float a_DB_Level;\n" +   // The current decibel level to be used by the shader.
+                "varying vec4 v_Color;\n" +         // This will be passed into the fragment shader.
                 "void main()\n" +           		// The entry point for our vertex shader.
                 "{\n" +
                 "   v_Color = a_Color;\n" +	    	// Pass the color through to the fragment shader.
                 "   gl_Position = a_Position;\n" + 	// gl_Position is a special variable used to store the final position.
-                "   gl_PointSize = 5.0;" +
+                "   gl_PointSize = 30.0 * a_DB_Level;\n" +  // Will vary the pixel size from 0.25px-1.25px
                 "}\n";                              // normalized screen coordinates.
 
         final String fragmentShader =
@@ -126,9 +127,11 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         //Get the position and color attributes
         positionHandle = GLES20.glGetAttribLocation(programHandle, "a_Position");
         colorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
+        currentDbLevel = GLES20.glGetUniformLocation(programHandle, "a_DB_Level");
 
         VisualizerModel.getInstance().currentVisualizer.setPositionHandle(positionHandle);
         VisualizerModel.getInstance().currentVisualizer.setColorHandle(colorHandle);
+        VisualizerModel.getInstance().currentVisualizer.setCurrentDbLevel(currentDbLevel);
 
         // Tell OpenGL to use this program when rendering.
         GLES20.glUseProgram(programHandle);
@@ -136,12 +139,13 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-        GLES20.glViewport(0, 0, width, height);
+        gl.glViewport(0, 0, width, height);
     }
 
     //Was newFftData
     public void updateFft(float[] fft) {
         VisualizerModel.getInstance().currentVisualizer.updateFft(fft);
+
     }
 
     @Override
