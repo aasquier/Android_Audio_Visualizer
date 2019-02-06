@@ -17,6 +17,8 @@ abstract public class VisualizerBase {
     protected int positionHandle;
     protected int colorHandle;
     protected int captureSize;
+    protected String vertexShader;
+    protected String fragmentShader;
 
     /**
      * Default Constructor
@@ -26,6 +28,14 @@ abstract public class VisualizerBase {
         for(int i = 0; i < SCREEN_SIZE; ++i) {
             this.dbHistory.addFirst(0.0f);
         }
+    }
+
+    public String getVertexShader() {
+        return this.vertexShader;
+    }
+
+    public String getFragmentShader() {
+        return this.fragmentShader;
     }
 
     /**

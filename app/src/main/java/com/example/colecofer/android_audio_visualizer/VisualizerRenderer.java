@@ -20,34 +20,12 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-        final String vertexShader =
-                "uniform mat4 u_MVPMatrix;" +		// A constant representing the combined model/view/projection matrix.
-                "attribute vec4 a_Position;\n" + 	// Per-vertex position information we will pass in.
-                "attribute vec4 a_Color;\n" +		// Per-vertex color information we will pass in.
-                        "uniform float a_DB_Level;\n" +   // The current decibel level to be used by the shader.
-                "varying vec4 v_Color;\n" +         // This will be passed into the fragment shader.
-                "void main()\n" +           		// The entry point for our vertex shader.
-                "{\n" +
-                "   v_Color = a_Color;\n" +	    	// Pass the color through to the fragment shader.
-                "   gl_Position = a_Position;\n" + 	// gl_Position is a special variable used to store the final position.
-                "   gl_PointSize = 30.0 * a_DB_Level;\n" +  // Will vary the pixel size from 0.25px-1.25px
-                "}\n";                              // normalized screen coordinates.
-
-        final String fragmentShader =
-                "precision mediump float;\n"	+	// Set the default precision to medium. We don't need as high of a
-                "varying vec4 v_Color;\n" +         // This is the color from the vertex shader interpolated across the
-                "void main()\n"	+	                // The entry point for our fragment shader.
-                "{\n" +
-                "   gl_FragColor = v_Color;\n"	+	// Pass the color directly through the pipeline.
-                "}\n";
-
-
         /* Vertex Shader Error Handling */
         int vertexShaderHandle = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
 
         if (vertexShaderHandle != 0)
         {
-            GLES20.glShaderSource(vertexShaderHandle, vertexShader);
+            GLES20.glShaderSource(vertexShaderHandle, VisualizerModel.getInstance().currentVisualizer.getVertexShader());
             GLES20.glCompileShader(vertexShaderHandle);
 
             final int[] compileStatus = new int[1];
@@ -72,7 +50,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
         if (fragmentShaderHandle != 0)
         {
-            GLES20.glShaderSource(fragmentShaderHandle, fragmentShader);
+            GLES20.glShaderSource(fragmentShaderHandle, VisualizerModel.getInstance().currentVisualizer.getFragmentShader());
             GLES20.glCompileShader(fragmentShaderHandle);
 
             final int[] compileStatus = new int[1];
@@ -127,11 +105,14 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         //Get the position and color attributes
         positionHandle = GLES20.glGetAttribLocation(programHandle, "a_Position");
         colorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
-        currentDbLevel = GLES20.glGetUniformLocation(programHandle, "a_DB_Level");
+
+        if (VisualizerModel.getInstance().currentVisualizer instanceof VisTwo) {
+            currentDbLevel = GLES20.glGetUniformLocation(programHandle, "a_DB_Level");
+            VisualizerModel.getInstance().currentVisualizer.setCurrentDbLevel(currentDbLevel);
+        }
 
         VisualizerModel.getInstance().currentVisualizer.setPositionHandle(positionHandle);
         VisualizerModel.getInstance().currentVisualizer.setColorHandle(colorHandle);
-        VisualizerModel.getInstance().currentVisualizer.setCurrentDbLevel(currentDbLevel);
 
         // Tell OpenGL to use this program when rendering.
         GLES20.glUseProgram(programHandle);
