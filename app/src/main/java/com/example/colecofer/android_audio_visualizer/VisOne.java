@@ -94,7 +94,7 @@ public class VisOne extends VisualizerBase {
             j+= VERTEX_AMOUNT;
         }
 
-        VisualizerModel.getInstance().renderer.updateFft(fftRender);
+        updateFft(fftRender);
     }
 
 

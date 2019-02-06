@@ -69,7 +69,6 @@ public class GLLine {
 
     }
 
-
     /**
      * Returns a floatbuffer of values to be drawn.
      */
