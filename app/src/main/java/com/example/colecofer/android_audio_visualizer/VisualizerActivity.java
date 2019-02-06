@@ -11,17 +11,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Pair;
 
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import static com.example.colecofer.android_audio_visualizer.Utility.getDBs;
+import static com.example.colecofer.android_audio_visualizer.Utility.updateDbHistory;
 import static com.loopj.android.http.AsyncHttpClient.log;
 
 public class VisualizerActivity extends AppCompatActivity implements Visualizer.OnDataCaptureListener {
 
     private static final int REQUEST_PERMISSION = 101;
-    private static final int REAL_BUCKET = 3;
-    private static final int IMAGINARY_BUCKET = 4;
+    private static final int REAL_BUCKET = 5;
+    private static final int IMAGINARY_BUCKET = 6;
+    private static final int MAX_FFT_SIZE = 1024;
     private static int audioSampleSize;
     private long previousUpdateTime;
 
@@ -75,8 +78,8 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
          *  This gives us a frequency granularity of 39.06 Hz, so our target will be the 3rd bucket for
          *  the real component, and 4th bucket for the imaginary component which covers 78.12-117.18 Hz
          */
-        if (this.audioSampleSize > 1024) {
-            this.audioSampleSize = 1024;
+        if (this.audioSampleSize > MAX_FFT_SIZE) {
+            this.audioSampleSize = MAX_FFT_SIZE;
         }
 
         final DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -144,10 +147,11 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         /** Gives us the decibel level for the fft bucket we care about **/
         double dbs = getDBs(fft[REAL_BUCKET], fft[IMAGINARY_BUCKET], this.audioSampleSize);
 
-        //this.previousUpdateTime = updateDbHistory(dbs, VisualizerModel.getInstance().currentVisualizer.dbHistory, this.previousUpdateTime);
+        Pair<Long, Boolean> currentStatus = updateDbHistory(dbs, VisualizerModel.getInstance().currentVisualizer.dbHistory, this.previousUpdateTime);
 
-        /** TODO this needs to change as the whole fft should not influence the wave */
-        surfaceView.updateFft(fft);
+        if(currentStatus.second == true) {
+            surfaceView.updateFft(fft);
+        }
     }
 
 }

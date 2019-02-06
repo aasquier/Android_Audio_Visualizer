@@ -13,9 +13,12 @@ abstract public class VisualizerBase {
     private final int SCREEN_SIZE = 1024;
 
     ArrayDeque<Float> dbHistory;
+    protected int currentDbLevel;
     protected int positionHandle;
     protected int colorHandle;
     protected int captureSize;
+    protected String vertexShader;
+    protected String fragmentShader;
 
     /**
      * Default Constructor
@@ -25,6 +28,14 @@ abstract public class VisualizerBase {
         for(int i = 0; i < SCREEN_SIZE; ++i) {
             this.dbHistory.addFirst(0.0f);
         }
+    }
+
+    public String getVertexShader() {
+        return this.vertexShader;
+    }
+
+    public String getFragmentShader() {
+        return this.fragmentShader;
     }
 
     /**
@@ -40,6 +51,8 @@ abstract public class VisualizerBase {
      * @param colorHandle
      */
     public void setColorHandle(int colorHandle) { this.colorHandle = colorHandle; }
+
+    public void setCurrentDbLevel(int currentDbLevel) { this.currentDbLevel = currentDbLevel; }
 
     /**
      * Called from the Surface View and should setup the initial fft values.
