@@ -21,9 +21,10 @@ abstract public class VisualizerBase {
      * Default Constructor
      */
     public VisualizerBase() {
-        this.dbHistory = new ArrayDeque<>();
-        for(int i = 0; i < SCREEN_SIZE; ++i) {
-            this.dbHistory.addFirst(0.0f);
+        this.dbHistory = new ArrayDeque<Float>();
+        this.dbHistory.add(0.0f);
+        for(int i = 0; i < SCREEN_SIZE-1; ++i) {
+            this.dbHistory.addLast(0.0f);
         }
     }
 

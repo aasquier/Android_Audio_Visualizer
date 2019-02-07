@@ -22,7 +22,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         final String vertexShader =
-                "uniform mat4 u_MVPMatrix;" +		// A constant representing the combined model/view/projection matrix.
+//                "uniform mat4 u_MVPMatrix;" +		// A constant representing the combined model/view/projection matrix.
                 "attribute vec4 a_Position;\n" + 	// Per-vertex position information we will pass in.
                 "attribute vec4 a_Color;\n" +		// Per-vertex color information we will pass in.
                 "varying vec4 v_Color;\n" +		    // This will be passed into the fragment shader.
@@ -30,7 +30,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
                 "{\n" +
                 "   v_Color = a_Color;\n" +	    	// Pass the color through to the fragment shader.
                 "   gl_Position = a_Position;\n" + 	// gl_Position is a special variable used to store the final position.
-                "   gl_PointSize = 1.0;" +
+//                "   gl_PointSize = 1.0;" +
                 "}\n";                              // normalized screen coordinates.
 
         final String fragmentShader =

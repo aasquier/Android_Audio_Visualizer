@@ -65,7 +65,7 @@ public class GLLine {
         int size = dbAmped.length;
 
         for(int i = 0; i < size; i += 7){
-            dbAmped[i] += xOffset;
+            dbAmped[i] += (xOffset - 0.0001);
         }
 
         //Puts the fft array into a FloatBuffer (drawable state for the GPU)

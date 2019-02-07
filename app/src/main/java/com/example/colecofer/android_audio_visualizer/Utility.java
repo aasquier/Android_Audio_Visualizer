@@ -1,5 +1,6 @@
 package com.example.colecofer.android_audio_visualizer;
 
+import android.util.Log;
 import android.util.Pair;
 
 import java.util.ArrayDeque;
@@ -7,7 +8,7 @@ import java.util.ArrayDeque;
 public class Utility {
 
     private static final float MAX_DB_LEVEL = 170.0f;
-    private static final long REFRESH_DECIBEL_TIME = 9L;
+    private static final long REFRESH_DECIBEL_TIME = 16L;
     private static final float MAX_DECIBEL_TIME = 1.0f;
 
     /** Takes the real and imaginary parts of an FFT frequency bin and returns the decibels for that bin. */
@@ -36,8 +37,9 @@ public class Utility {
         if (isTime.second == true) {
             float dbRatio = (float) newDB / MAX_DB_LEVEL;
             dbRatio = dbRatio > MAX_DECIBEL_TIME ? MAX_DECIBEL_TIME : dbRatio;
-            dbHistory.addFirst(dbRatio);
-            dbHistory.removeLast();
+            dbHistory.removeFirst();
+            dbHistory.addLast(dbRatio);
+            Log.d("DB", "---------------------------- Last: " + dbRatio);
         }
         return isTime.first;
     }

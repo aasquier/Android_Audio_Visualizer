@@ -159,14 +159,16 @@ public class VisOne extends VisualizerBase {
             Object[] arr = dbHistory.toArray();
             int triangleTipVertex = 7;
 
+            Log.d("GL", "----------------------------TOP DB : " + arr[1000]);
+
             for(int i = 0; i < arr.length; ++i){
                 float currentVertex = dbAmped[triangleTipVertex];
                 dbAmped[triangleTipVertex] = currentVertex + (currentVertex * (float)arr[i]);
                 triangleTipVertex += 7;
             }
-        }
 
-        VisualizerModel.getInstance().renderer.ampByDb(dbAmped);
+            VisualizerModel.getInstance().renderer.ampByDb(dbAmped);
+        }
     }
 
     public void ampByDb(float[] dbAmped) {
