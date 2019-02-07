@@ -28,7 +28,7 @@ public class VisOne extends VisualizerBase {
     private final int POSITION_OFFSET = 0;
     private final int COLOR_OFFSET = 3;
     private final int COLOR_DATA_SIZE = 4;
-    private final float PIXEL = 0.002f;
+    private final float PIXEL = 0.02f;
 
     private int vertexCount;
     private GLLine[] lines;  //Holds the lines to be displayed
@@ -157,16 +157,16 @@ public class VisOne extends VisualizerBase {
         else{
             // Converting deque to array for traversal
             Object[] arr = dbHistory.toArray();
-            int triangleTipVertex = 1;
+            int triangleTipVertex = 7;
 
             for(int i = 0; i < arr.length; ++i){
                 float currentVertex = dbAmped[triangleTipVertex];
                 dbAmped[triangleTipVertex] = currentVertex + (currentVertex * (float)arr[i]);
-                triangleTipVertex += 2;
+                triangleTipVertex += 7;
             }
         }
 
-        VisualizerModel.getInstance().currentVisualizer.ampByDb(dbAmped);
+        VisualizerModel.getInstance().renderer.ampByDb(dbAmped);
     }
 
     public void ampByDb(float[] dbAmped) {
