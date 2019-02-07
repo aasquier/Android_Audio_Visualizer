@@ -14,6 +14,9 @@ import android.util.Log;
 
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
+import java.util.ArrayDeque;
+import java.util.Random;
+
 import static com.example.colecofer.android_audio_visualizer.Utility.getDBs;
 import static com.example.colecofer.android_audio_visualizer.Utility.updateDbHistory;
 import static com.loopj.android.http.AsyncHttpClient.log;
@@ -35,6 +38,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     private VisualizerSurfaceView surfaceView;
     private VisualizerRenderer visualizerRenderer;
     private Visualizer.OnDataCaptureListener captureListener;
+    private ArrayDeque<Float> randomDb; // Test purpose
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +122,8 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
         this.previousUpdateTime = System.currentTimeMillis();
 
+        this.randomDb = randomDbValues();
+
         setContentView(surfaceView);
 
     }
@@ -154,8 +160,31 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         /** TODO this needs to change as the whole fft should not influence the wave */
         //surfaceView.updateFft(fft);
 
+        Random r = new Random();
+        float k;
+        k = r.nextFloat() * (1.25f);
+
+        randomDb.removeFirst();
+        randomDb.addLast(k);
+
         // Amplifying via db
-        surfaceView.ampByDb(VisualizerModel.getInstance().currentVisualizer.dbHistory);
+//        surfaceView.ampByDb(VisualizerModel.getInstance().currentVisualizer.dbHistory);
+        surfaceView.ampByDb(randomDb);
+    }
+
+    public ArrayDeque<Float> randomDbValues(){
+        ArrayDeque<Float> randDb = new ArrayDeque<>();
+        Random r = new Random();
+        float k;
+
+        randDb.add(0.0f);
+
+        for(int i = 0; i < 1023; i++){
+            k = r.nextFloat() * (1.25f);
+            randDb.addLast(k);
+        }
+
+        return randDb;
     }
 
 }

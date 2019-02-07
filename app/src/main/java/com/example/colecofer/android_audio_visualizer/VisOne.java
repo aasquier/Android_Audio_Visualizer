@@ -28,7 +28,7 @@ public class VisOne extends VisualizerBase {
     private final int POSITION_OFFSET = 0;
     private final int COLOR_OFFSET = 3;
     private final int COLOR_DATA_SIZE = 4;
-    private final float PIXEL = 0.02f;
+    private final float PIXEL = 0.08f;
 
     private int vertexCount;
     private GLLine[] lines;  //Holds the lines to be displayed
@@ -140,7 +140,7 @@ public class VisOne extends VisualizerBase {
         // Create the line
         for (int i = 0; i < lineArrayDb.length; i+=7) {
             // If left side of the line
-            if(i % 2 == 1)
+            if(i % 2 == 0)
                 lineArrayDb[j] = 0.0f;
             // Else right side of the line
             else
@@ -178,7 +178,7 @@ public class VisOne extends VisualizerBase {
             // First x is the left-side of the line so get the second vertex
             int triangleTipVertex = 7;
 
-//            Log.d("GL", "----------------------------TOP DB : " + arr[1000]);
+            Log.d("GL", "----------------------------TOP DB : " + arr[1000]);
 
             // Get the original so that width increase doesn't get accumulated
             System.arraycopy(this.dbAmped, 0, this.alteredDb, 0, this.dbAmped.length);
@@ -187,6 +187,7 @@ public class VisOne extends VisualizerBase {
             for(int i = 0; i < arr.length; ++i){
                 // Retrieve the right side vertex
                 float currentVertex = dbAmped[triangleTipVertex];
+                Log.d("GL", "-----------------Vertex : " + currentVertex);
 
                 // Increase the width by proportion
                 alteredDb[triangleTipVertex] = currentVertex + (currentVertex * (float)arr[i]);
