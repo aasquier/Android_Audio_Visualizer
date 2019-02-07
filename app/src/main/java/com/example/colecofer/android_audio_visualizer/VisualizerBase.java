@@ -10,13 +10,11 @@ import java.util.ArrayDeque;
  */
 abstract public class VisualizerBase {
 
-    private final int SCREEN_SIZE = 1024;
 
-    ArrayDeque<Float> dbHistory;
-    protected int currentDbLevel;
+    protected int currentDecibelLevel;
     protected int positionHandle;
     protected int colorHandle;
-    protected int captureSize;
+    protected int fftArraySize;
     protected String vertexShader;
     protected String fragmentShader;
 
@@ -24,10 +22,7 @@ abstract public class VisualizerBase {
      * Default Constructor
      */
     public VisualizerBase() {
-        this.dbHistory = new ArrayDeque<>();
-        for(int i = 0; i < SCREEN_SIZE; ++i) {
-            this.dbHistory.addFirst(0.0f);
-        }
+
     }
 
     public String getVertexShader() {
@@ -52,19 +47,14 @@ abstract public class VisualizerBase {
      */
     public void setColorHandle(int colorHandle) { this.colorHandle = colorHandle; }
 
-    public void setCurrentDbLevel(int currentDbLevel) { this.currentDbLevel = currentDbLevel; }
-
-    /**
-     * Called from the Surface View and should setup the initial fft values.
-     * @param fft
-     */
-    abstract public void updateFft(byte[] fft);
+    public void setCurrentDecibelLevel(int currentDecibelLevel) { this.currentDecibelLevel = currentDecibelLevel; }
 
     /**
      * Called from the Renderer and should be used to update animations
-     * @param fft
      */
-    abstract public void updateFft(float[] fft);
+    abstract public void updateVertices(ArrayDeque<Float> decibelHistory);
+
+    abstract public void updateVertices(float[] newVertices);
 
     /**
      * This method will be in charge of calling the individual draw() methods

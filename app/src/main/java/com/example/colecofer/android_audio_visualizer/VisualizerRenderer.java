@@ -108,7 +108,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
         if (VisualizerModel.getInstance().currentVisualizer instanceof VisTwo) {
             currentDbLevel = GLES20.glGetUniformLocation(programHandle, "a_DB_Level");
-            VisualizerModel.getInstance().currentVisualizer.setCurrentDbLevel(currentDbLevel);
+            VisualizerModel.getInstance().currentVisualizer.setCurrentDecibelLevel(currentDbLevel);
         }
 
         VisualizerModel.getInstance().currentVisualizer.setPositionHandle(positionHandle);

@@ -2,6 +2,7 @@ package com.example.colecofer.android_audio_visualizer;
 
 import android.opengl.GLES20;
 import java.nio.FloatBuffer;
+import java.util.ArrayDeque;
 
 public class VisTwo extends VisualizerBase {
 
@@ -17,7 +18,7 @@ public class VisTwo extends VisualizerBase {
     private GLDot dot;
 
     public VisTwo(int captureSize) {
-        this.captureSize = captureSize;
+        this.fftArraySize = captureSize;
 
         // create a layer with 600 * 600 dots
         dot = new GLDot(60, 60);
@@ -45,12 +46,12 @@ public class VisTwo extends VisualizerBase {
     }
 
     @Override
-    public void updateFft(byte[] fft) {
+    public void updateVertices(ArrayDeque<Float> decibelHistory) {
 
     }
 
     @Override
-    public void updateFft(float[] fft) {
+    public void updateVertices(float[] newVertices) {
 
     }
 
@@ -68,9 +69,9 @@ public class VisTwo extends VisualizerBase {
         GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, dotVertexData);
         GLES20.glEnableVertexAttribArray(colorHandle);
 
-        GLES20.glUniform1f(currentDbLevel, VisualizerModel.getInstance().currentVisualizer.dbHistory.peekFirst());
+        GLES20.glUniform1f(currentDecibelLevel, VisualizerModel.getInstance().currentVisualizer.decibelHistory.peekFirst());
 
-//        GLES10.glScalef(0.0f, 0.0f, VisualizerModel.getInstance().currentVisualizer.dbHistory.peekFirst());
+//        GLES10.glScalef(0.0f, 0.0f, VisualizerModel.getInstance().currentVisualizer.decibelHistory.peekFirst());
 
 
         GLES20.glDrawArrays(GLES20.GL_POINTS, 0, count);

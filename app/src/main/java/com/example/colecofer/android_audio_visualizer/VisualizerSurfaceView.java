@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 
 public class VisualizerSurfaceView extends GLSurfaceView {
 
-    private static float density;
+//    private static float density;
 
     public VisualizerSurfaceView(Context context) {
         super(context);
@@ -18,15 +18,15 @@ public class VisualizerSurfaceView extends GLSurfaceView {
     }
 
     public void setRenderer(VisualizerRenderer inputRenderer, float inputDensity, int captureSize) {
-        this.density = inputDensity;
+//        this.density = inputDensity;
         VisualizerModel.getInstance().renderer = inputRenderer;
-//        VisualizerModel.getInstance().currentVisualizer = new VisOne(captureSize);
+//        VisualizerModel.getInstance().currentVisualizer = new VisOne(fftArraySize);
         VisualizerModel.getInstance().currentVisualizer = new VisTwo(captureSize);
         super.setRenderer(VisualizerModel.getInstance().renderer);
     }
 
-    public void updateFft(byte[] fft) {
-        VisualizerModel.getInstance().currentVisualizer.updateFft(fft);
-    }
+//    public void updateVertices(byte[] fft) {
+//        VisualizerModel.getInstance().currentVisualizer.updateFft(fft);
+//    }
 
 }

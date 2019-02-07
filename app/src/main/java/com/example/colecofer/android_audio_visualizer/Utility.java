@@ -27,19 +27,21 @@ public class Utility {
     /**
      * Keeps a record of recent dBs as large as the screen is tall. It removes the last record and
      * removes the oldest record. If the current dB level exceeds our max setting it uses the max
-     * @param newDB
-     * @param dbHistory
+     * @param newDecibelLevel
+     * @param decibelHistory
      */
-    static Pair<Long, Boolean> updateDbHistory(double newDB, ArrayDeque<Float> dbHistory, long previousUpdateTime) {
-        Pair<Long, Boolean> isTime = isTimeToUpdate(previousUpdateTime);
+    static Pair<Long, Boolean> updateDecibelHistory(double newDecibelLevel, ArrayDeque<Float> decibelHistory, long previousUpdateTime) {
+        Pair<Long, Boolean> isTimeToUpdate = isTimeToUpdate(previousUpdateTime);
 
-        if (isTime.second == true) {
-            float dbRatio = (float) newDB / MAX_DB_LEVEL;
-            dbRatio = dbRatio > MAX_DECIBEL_RATIO ? MAX_DECIBEL_RATIO : dbRatio;
-            dbHistory.addFirst(dbRatio);
-            dbHistory.removeLast();
+        /** A check to ensure that the current time has exceeded the desired refresh time */
+        if (isTimeToUpdate.second == true) {
+            float newDbRatio = (float) newDecibelLevel / MAX_DB_LEVEL;
+            newDbRatio = newDbRatio > MAX_DECIBEL_RATIO ? MAX_DECIBEL_RATIO : newDbRatio;
+            /** Update the decibel history with the current decibel level */
+            decibelHistory.addFirst(newDbRatio);
+            decibelHistory.removeLast();
         }
-        return isTime;
+        return isTimeToUpdate;
     }
 
     /**

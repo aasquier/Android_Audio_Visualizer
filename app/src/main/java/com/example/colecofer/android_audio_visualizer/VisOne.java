@@ -1,14 +1,14 @@
 package com.example.colecofer.android_audio_visualizer;
 
 import android.opengl.GLES20;
-import android.util.Log;
 
 import java.nio.FloatBuffer;
+import java.util.ArrayDeque;
 
 /**
  * Class VisOne
  * This class extends VisualizerBase and overrides
- * updateFft() and draw() methods so that openGL can
+ * updateVertices() and draw() methods so that openGL can
  * render it's contents.
  * */
 
@@ -38,8 +38,8 @@ public class VisOne extends VisualizerBase {
      * @param captureSize
      */
     public VisOne(int captureSize) {
-        this.captureSize = captureSize;
-        this.vertexCount = this.captureSize / VERTEX_AMOUNT;
+        this.fftArraySize = captureSize;
+        this.vertexCount = this.fftArraySize / VERTEX_AMOUNT;
 
         //Create 100 lines
         lines = new GLLine[LINE_AMT];
@@ -71,39 +71,39 @@ public class VisOne extends VisualizerBase {
     }
 
     @Override
-    public void updateFft(byte[] fft) {
-        int arraySize = captureSize / 2;
-        float[] fftRender = new float[arraySize * VERTEX_AMOUNT];
+    public void updateVertices(ArrayDeque<Float> decibelHistory) {
+        int arraySize = fftArraySize / 2;
+        float[] newVerticesToRender = new float[arraySize * VERTEX_AMOUNT];
 
-        int j = 0;
-        float plus = (float) 1 / (arraySize / 16);
-        float k = -1.0f;
+//        int j = 0;
+//        float plus = (float) 1 / (arraySize / 16);
+//        float k = -1.0f;
+//
+//        for (int i = 0; i < fftArraySize - 1; i += 2) {
+////            int amplify = (fft[i]*fft[i]) + (fft[i+1]*fft[i+1]);
+//
+//            fftRender[j] = (float)amplify * AMP_MULT;
+//            fftRender[j+1] = k;
+//            fftRender[j+2] = 0.0f;
+//            fftRender[j+3] = 1.0f;
+//            fftRender[j+4] = 0.0f;
+//            fftRender[j+5] = 0.0f;
+//            fftRender[j+6] = 1.0f;
+//
+//            k += plus;
+//            j+= VERTEX_AMOUNT;
+//        }
 
-        for (int i = 0; i < captureSize - 1; i += 2) {
-            int amplify = (fft[i]*fft[i]) + (fft[i+1]*fft[i+1]);
-
-            fftRender[j] = (float)amplify * AMP_MULT;
-            fftRender[j+1] = k;
-            fftRender[j+2] = 0.0f;
-            fftRender[j+3] = 1.0f;
-            fftRender[j+4] = 0.0f;
-            fftRender[j+5] = 0.0f;
-            fftRender[j+6] = 1.0f;
-
-            k += plus;
-            j+= VERTEX_AMOUNT;
-        }
-
-        updateFft(fftRender);
+        updateVertices(newVerticesToRender);
     }
 
 
     @Override
-    public void updateFft(float[] fft) {
-        //Call updateFft() on each line
+    public void updateVertices(float[] newVertices) {
+        //Call updateVertices() on each line
         for (int i = 0; i < LINE_AMT; ++i) {
-            float[] fftInput = new float[fft.length];
-            System.arraycopy(fft, 0, fftInput, 0, fft.length);
+            float[] fftInput = new float[newVertices.length];
+            System.arraycopy(newVertices, 0, fftInput, 0, newVertices.length);
             lines[i].updateFft(fftInput);
         }
 
