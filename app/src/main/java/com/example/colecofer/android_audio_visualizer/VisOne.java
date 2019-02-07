@@ -34,7 +34,8 @@ public class VisOne extends VisualizerBase {
     private GLLine[] lines;  //Holds the lines to be displayed
     private float[] lineColors; //Holds the line's color value. Should be size = 4
     private float lineOffSet = (RIGHT_DRAW_BOUNDARY * 2) / (LINE_AMT - 1); //We want to display lines from -.99 to .99 (.99+.99=1.98)
-    private float[] dbAmped;
+    private float[] dbAmped; // Original straight line to come back to so that we don't accumulate width calculation and become gigantic line
+    private float[] alteredDb; // Calculated version which will be passed into GLLine
 
 
     /**
@@ -68,6 +69,7 @@ public class VisOne extends VisualizerBase {
         }
 
         dbAmped = createLine();
+        alteredDb = new float[(1024 + 1025) * VERTEX_AMOUNT];
     }
 
     @Override
@@ -120,16 +122,27 @@ public class VisOne extends VisualizerBase {
         }
     }
 
+    /**
+     * Create the straight line consisted of triangles
+     * @return
+     */
     public float[] createLine(){
-        float[] lineArrayDb = new float[(1024+1025)*7];
+        // There are 1024 vertices on the right side of the line
+        // and 1025 vertices on the left side of the line
+        // and each vertices have 7 data
+        float[] lineArrayDb = new float[(1024+1025)*VERTEX_AMOUNT];
 
+        // Measurements to go all the way from bottom to top
         int j = 0;
         float k = -1.0f;
         float plus = (float) 2 / 2049;
 
+        // Create the line
         for (int i = 0; i < lineArrayDb.length; i+=7) {
+            // If left side of the line
             if(i % 2 == 1)
                 lineArrayDb[j] = 0.0f;
+            // Else right side of the line
             else
                 lineArrayDb[j] = 0.0f + PIXEL;
             lineArrayDb[j+1] = k;
@@ -148,6 +161,11 @@ public class VisOne extends VisualizerBase {
         return lineArrayDb;
     }
 
+    /**
+     * Create an altered line vertices by increasing the width proportion via dbHistory
+     * then call the renderer to pass it back
+     * @param dbHistory
+     */
     @Override
     public void ampByDb(ArrayDeque<Float> dbHistory) {
         // Just in case it's empty
@@ -157,20 +175,35 @@ public class VisOne extends VisualizerBase {
         else{
             // Converting deque to array for traversal
             Object[] arr = dbHistory.toArray();
+            // First x is the left-side of the line so get the second vertex
             int triangleTipVertex = 7;
 
-            Log.d("GL", "----------------------------TOP DB : " + arr[1000]);
+//            Log.d("GL", "----------------------------TOP DB : " + arr[1000]);
 
+            // Get the original so that width increase doesn't get accumulated
+            System.arraycopy(this.dbAmped, 0, this.alteredDb, 0, this.dbAmped.length);
+
+            // Go through all the db data
             for(int i = 0; i < arr.length; ++i){
+                // Retrieve the right side vertex
                 float currentVertex = dbAmped[triangleTipVertex];
-                dbAmped[triangleTipVertex] = currentVertex + (currentVertex * (float)arr[i]);
-                triangleTipVertex += 7;
+
+                // Increase the width by proportion
+                alteredDb[triangleTipVertex] = currentVertex + (currentVertex * (float)arr[i]);
+
+                // Next in line please
+                triangleTipVertex += 14;
             }
 
-            VisualizerModel.getInstance().renderer.ampByDb(dbAmped);
+            // Send it off to the renderer bois
+            VisualizerModel.getInstance().renderer.ampByDb(alteredDb);
         }
     }
 
+    /**
+     * Sending the altered width data to individual lines
+     * @param dbAmped
+     */
     public void ampByDb(float[] dbAmped) {
         for (int i = 0; i < LINE_AMT; ++i) {
             lines[i].ampByDb(dbAmped);
