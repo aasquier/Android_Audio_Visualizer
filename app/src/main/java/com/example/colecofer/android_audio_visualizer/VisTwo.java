@@ -67,20 +67,24 @@ public class VisTwo extends VisualizerBase {
 
                 "void main()\n" +           		        // The entry point for our vertex shader.
                 "{\n" +
-                "   v_Color = a_Color;\n" +	    	        // Pass the color through to the fragment shader.
+//                "   vec4 newColor = vec4(a_Color.xyz, (a_Color.w + (snoise(a_Position.xy) * a_DB_Level)));\n" +
+//                "   v_Color = newColor;\n" +	    	        // Pass the color through to the fragment shader.
+                  "   v_Color = a_Color;\n" +
 //                "   vec4 newPosition = vec4(snoise(a_Position.xy*a_DB_Level)*2.0," +
 //                "                           snoise(a_Position.yx*a_DB_Level)*2.0, a_Position.zw);\n" +
 //                "   gl_Position = newPosition;\n" + 	        // gl_Position is a special variable used to store the final position.
                 "   gl_Position = a_Position;\n" +
-                "   gl_PointSize = 1.0 + a_DB_Level;\n" +  // Will vary the pixel size from 0.25px-1.25px
+                "   gl_PointSize = 20.0;\n" +  // Will vary the pixel size from 0.25px-1.25px
                 "}\n";
 
         this.fragmentShader =
                 "precision mediump float;\n"	+	// Set the default precision to medium. We don't need as high of a
                 "varying vec4 v_Color;\n" +         // This is the color from the vertex shader interpolated across the
+                "uniform float db_Level;\n" +
                 "void main()\n"	+	                // The entry point for our fragment shader.
                 "{\n" +
                 "   gl_FragColor = v_Color;\n"	+	// Pass the color directly through the pipeline.
+                "   gl_FragColor.a -= db_Level;\n" +
                 "}\n";
     }
 
@@ -102,6 +106,9 @@ public class VisTwo extends VisualizerBase {
     }
 
     private void drawDot(FloatBuffer dotVertexData, int count) {
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+
         /** Updates the position of individual dots for our screen rendering in the OpenGL pipeline */
         dotVertexData.position(POSITION_OFFSET);
         GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, VIS2_STRIDE_BYTES, dotVertexData);
@@ -114,7 +121,11 @@ public class VisTwo extends VisualizerBase {
 
         /** Updates the size of the dots using the most current decibel level, i.e. the first element of the decibel history */
         GLES20.glUniform1f(currentDecibelLevelHandle, decibelHistory.peekFirst());
+        GLES20.glUniform1f(currentFragmentDecibelLevelHandle, decibelHistory.peekFirst());
+
 
         GLES20.glDrawArrays(GLES20.GL_POINTS, 0, count);
+
+        GLES20.glDisable(GLES20.GL_BLEND);
     }
 }

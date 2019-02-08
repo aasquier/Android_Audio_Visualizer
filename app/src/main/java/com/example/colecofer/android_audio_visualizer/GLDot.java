@@ -12,6 +12,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.DOT_WIDTH
 public class GLDot {
 
     private FloatBuffer dotVerticesBuffer;
+    private Noise noise = new Noise();
 
     public GLDot() {
 
@@ -41,29 +42,33 @@ public class GLDot {
     }
 
     FloatBuffer draw() {
-        float[] vertices = new float[DOT_COUNT * 7];
 
-        int index = 0;
-
-        for(int i = 0; i < DOT_HEIGHT; i++) {
-
-            for(int j = 0; j < DOT_WIDTH; j++) {
-                vertices[index*7+0] = (float)(-1.0 + 2.0 /(DOT_HEIGHT + 1)*(1+i));
-                vertices[index*7+1] = (float)(-1.0 + 2.0 /(DOT_WIDTH + 1)*(1+j));
-                vertices[index*7+2] = 0.0f;
-                vertices[index*7+3] = 1.0f;
-                vertices[index*7+4] = 0.0f;
-                vertices[index*7+5] = 0.0f;
-                vertices[index*7+6] = 1.0f;
-
-                index++;
-            }
-        }
-
-        ByteBuffer vertexByteBuffer = ByteBuffer.allocateDirect(vertices.length * 4);
-        vertexByteBuffer.order(ByteOrder.nativeOrder());
-        dotVerticesBuffer = vertexByteBuffer.asFloatBuffer();
-        dotVerticesBuffer.put(vertices).position(0);
+//        float[] vertices = new float[DOT_COUNT * 7];
+//
+//        int index = 0;
+//
+//        for(int y = 0; y < DOT_HEIGHT; y++) {
+//            for(int x = 0; x < DOT_WIDTH; x++) {
+//                double nx = x/DOT_WIDTH - 0.5, ny = y/DOT_HEIGHT - 0.5;
+//
+//                vertices[index*7+0] = (float)(-1.0 + 2.0 /(DOT_HEIGHT + 1)*(1+y));
+//                vertices[index*7+1] = (float)(-1.0 + 2.0 /(DOT_WIDTH + 1)*(1+x));
+//                vertices[index*7+2] = 0.0f;
+//                vertices[index*7+3] = 1.0f;
+//                vertices[index*7+4] = 0.0f;
+//                vertices[index*7+5] = 0.0f;
+////                vertices[index*7+6] = (float) noise.noise(nx, ny, 0.0);
+//                vertices[index*7+6] = 1.0f;
+//
+//
+//                index++;
+//            }
+//        }
+//
+//        ByteBuffer vertexByteBuffer = ByteBuffer.allocateDirect(vertices.length * 4);
+//        vertexByteBuffer.order(ByteOrder.nativeOrder());
+//        dotVerticesBuffer = vertexByteBuffer.asFloatBuffer();
+//        dotVerticesBuffer.put(vertices).position(0);
 
         return this.dotVerticesBuffer;
     }

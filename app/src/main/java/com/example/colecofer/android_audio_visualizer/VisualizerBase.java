@@ -11,6 +11,7 @@ abstract public class VisualizerBase {
     protected int positionHandle;
     protected int colorHandle;
     protected int currentDecibelLevelHandle;
+    protected int currentFragmentDecibelLevelHandle;
     protected int fftArraySize;
     protected String vertexShader;
     protected String fragmentShader;
@@ -53,6 +54,10 @@ abstract public class VisualizerBase {
      * @param currentDecibelLevel
      */
     public void setCurrentDecibelLevelHandle(int currentDecibelLevel) { this.currentDecibelLevelHandle = currentDecibelLevel; }
+
+
+    public void setCurrentFragmentDecibelLevelHandle(int currentDecibelLevel) { this.currentFragmentDecibelLevelHandle = currentDecibelLevel; }
+
 
     /**
      * Called from the Renderer and should be used to update animations

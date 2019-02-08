@@ -10,6 +10,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
     private int positionHandle;
     private int colorHandle;
     private int currentDecibelLevelHandle;
+    private int currentFragmentDecibelLevelHandle;
 
     public VisualizerRenderer() {
 
@@ -81,6 +82,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
             GLES20.glBindAttribLocation(programHandle, 0, "a_Position");
             GLES20.glBindAttribLocation(programHandle, 1, "a_Color");
 
+
             // Link the two shaders together into a program.
             GLES20.glLinkProgram(programHandle);
 
@@ -108,6 +110,8 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         if (VisualizerModel.getInstance().currentVisualizer instanceof VisTwo) {
             currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, "a_DB_Level");
             VisualizerModel.getInstance().currentVisualizer.setCurrentDecibelLevelHandle(currentDecibelLevelHandle);
+            currentFragmentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, "db_Level");
+            VisualizerModel.getInstance().currentVisualizer.setCurrentFragmentDecibelLevelHandle(currentFragmentDecibelLevelHandle);
         }
 
         VisualizerModel.getInstance().currentVisualizer.setPositionHandle(positionHandle);
