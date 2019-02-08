@@ -15,7 +15,7 @@ public class VisTwo extends VisualizerBase {
 
     public VisTwo() {
         // create a layer with 600 * 600 dots
-        dot = new GLDot(1500, 1500);
+        dot = new GLDot(600, 600);
 
         this.vertexShader =
                 "vec3 mod289(vec3 x) {\n" +
