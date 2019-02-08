@@ -8,14 +8,12 @@ package com.example.colecofer.android_audio_visualizer;
  */
 abstract public class VisualizerBase {
 
-
     protected int positionHandle;
     protected int colorHandle;
+    protected int currentDecibelLevelHandle;
     protected int fftArraySize;
     protected String vertexShader;
     protected String fragmentShader;
-    protected int currentDecibelLevelHandle;
-
 
     /**
      * Default Constructor

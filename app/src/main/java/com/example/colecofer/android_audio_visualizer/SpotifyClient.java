@@ -16,26 +16,20 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
+import static com.example.colecofer.android_audio_visualizer.Constants.AUTH_URL;
+import static com.example.colecofer.android_audio_visualizer.Constants.BASE_URL;
+import static com.example.colecofer.android_audio_visualizer.Constants.CLIENT_SECRET;
+import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_PRIMARY_COLOR;
+import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_SECONDARY_COLOR;
+import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_TERTIARY_COLOR;
+import static com.example.colecofer.android_audio_visualizer.Constants.FEATURES_URL;
+import static com.example.colecofer.android_audio_visualizer.Constants.SEARCH_URL;
+import static com.example.colecofer.android_audio_visualizer.Constants.SPOTIFY_CLIENT_ID;
+import static com.example.colecofer.android_audio_visualizer.Constants.SPOTIFY_TAG;
+import static com.example.colecofer.android_audio_visualizer.Constants.TRACK_URL;
 import static com.loopj.android.http.AsyncHttpClient.log;
 
 public class SpotifyClient {
-
-    private final String BASE_URL = "https://api.spotify.com/v1";
-    private final String FEATURES_URL = "/audio-features/";
-    private final String SEARCH_URL = "/search/";
-    private final String TRACK_URL = "/tracks/";
-    private final String AUTH_URL = "https://accounts.spotify.com/api/token";
-
-    //TODO: Change these to our personal information (this is a public repo...)
-    private final String CLIENT_ID = "5f0eac9db12042cfa8b9fb95b0f3f4d8";
-    private final String CLIENT_SECRET = "4f0d128f8f1b4776a530292cdef1dd45";
-
-    private final static String SPOTIFY_TAG = "SPOTIFY";
-
-    private static final int defaultPrimaryColor = 0xFFF16C4E;
-    private static final int defaultSecondaryColor = 0xFF0FADB6;
-    private static final int defaultTertiaryColor = 0xFFDEDD64;
-
     /**
      * Gets the authorization token given the clientid and clientsecret
      *
@@ -45,7 +39,7 @@ public class SpotifyClient {
         AsyncHttpClient client = new AsyncHttpClient();
 
         RequestParams body = new RequestParams();
-        body.put("client_id", CLIENT_ID);
+        body.put("client_id", SPOTIFY_CLIENT_ID);
         body.put("client_secret", CLIENT_SECRET);
         body.put("grant_type", "client_credentials");
 
@@ -290,9 +284,9 @@ public class SpotifyClient {
             colors[2] = tertiarySwatch.getRgb();
         } else {
             // use default colors
-            colors[0] = defaultPrimaryColor;
-            colors[1] = defaultSecondaryColor;
-            colors[2] = defaultTertiaryColor;
+            colors[0] = DEFAULT_PRIMARY_COLOR;
+            colors[1] = DEFAULT_SECONDARY_COLOR;
+            colors[2] = DEFAULT_TERTIARY_COLOR;
         }
         return colors;
     }

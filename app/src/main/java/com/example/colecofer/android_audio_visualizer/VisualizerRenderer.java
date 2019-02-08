@@ -2,7 +2,6 @@ package com.example.colecofer.android_audio_visualizer;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -10,7 +9,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
     private int positionHandle;
     private int colorHandle;
-    private int currentDbLevel;
+    private int currentDecibelLevelHandle;
 
     public VisualizerRenderer() {
 
@@ -107,7 +106,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         colorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
 
         if (VisualizerModel.getInstance().currentVisualizer instanceof VisTwo) {
-            int currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, "a_DB_Level");
+            currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, "a_DB_Level");
             VisualizerModel.getInstance().currentVisualizer.setCurrentDecibelLevelHandle(currentDecibelLevelHandle);
         }
 

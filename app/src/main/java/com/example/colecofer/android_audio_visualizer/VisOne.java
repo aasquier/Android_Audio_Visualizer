@@ -1,10 +1,17 @@
 package com.example.colecofer.android_audio_visualizer;
 
 import android.opengl.GLES20;
-
 import java.nio.FloatBuffer;
 import java.nio.channels.FileLock;
-import java.util.ArrayDeque;
+import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
+import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
+import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_DRAW_BOUNDARY;
+import static com.example.colecofer.android_audio_visualizer.Constants.LINE_AMT;
+import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_DATA_SIZE;
+import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_OFFSET;
+import static com.example.colecofer.android_audio_visualizer.Constants.RIGHT_DRAW_BOUNDARY;
+import static com.example.colecofer.android_audio_visualizer.Constants.VERTEX_AMOUNT;
+import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_STRIDE_BYTES;
 
 /**
  * Class VisOne
@@ -15,19 +22,6 @@ import java.util.ArrayDeque;
 
 //public class VisOne extends VisualizerBase {
 public class VisOne extends VisualizerBase {
-
-    private final int LINE_AMT = 20;                  //Number of lines to display on the screen
-    private final float AMP_MULT = 0.000005f;         //Alters the lines horizontal amplitude
-    private final int VERTEX_AMOUNT = 7;              //x, y, z, r, g, b, a
-    private final int BYTES_PER_FLOAT = 4;            //Amount of bytes in a float
-    private final float LEFT_DRAW_BOUNDARY = -0.99f;  //Where to start drawing on the left side of the screen
-    private final float RIGHT_DRAW_BOUNDARY = 0.99f;  //Right side of the screen boundary
-
-    private final int POSITION_DATA_SIZE = 3;
-    private final int STRIDE_BYTES = 7 * BYTES_PER_FLOAT;
-    private final int POSITION_OFFSET = 0;
-    private final int COLOR_OFFSET = 3;
-    private final int COLOR_DATA_SIZE = 4;
 
     private int vertexCount = 5;
     private GLLine[] lines;  //Holds the lines to be displayed
@@ -136,11 +130,11 @@ public class VisOne extends VisualizerBase {
      */
     private void drawLine(FloatBuffer lineVertexData){
         lineVertexData.position(POSITION_OFFSET);
-        GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVertexData);
+        GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, lineVertexData);
         GLES20.glEnableVertexAttribArray(positionHandle);
 
         lineVertexData.position(COLOR_OFFSET);
-        GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, lineVertexData);
+        GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, lineVertexData);
         GLES20.glEnableVertexAttribArray(colorHandle);
 
         GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, vertexCount);

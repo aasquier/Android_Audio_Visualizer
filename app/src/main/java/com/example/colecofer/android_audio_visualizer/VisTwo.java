@@ -2,19 +2,14 @@ package com.example.colecofer.android_audio_visualizer;
 
 import android.opengl.GLES20;
 import java.nio.FloatBuffer;
-
+import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
+import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
+import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_DATA_SIZE;
+import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_OFFSET;
+import static com.example.colecofer.android_audio_visualizer.Constants.VIS2_STRIDE_BYTES;
 import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
 
 public class VisTwo extends VisualizerBase {
-
-    private final int POSITION_OFFSET = 0;
-    private final int COLOR_OFFSET = 3;
-
-    private final int POSITION_DATA_SIZE = 3;
-    private final int COLOR_DATA_SIZE = 4;
-
-    private final int BYTES_PER_FLOAT = 4;
-    private final int STRIDE_BYTES = (POSITION_DATA_SIZE + COLOR_DATA_SIZE) * BYTES_PER_FLOAT;
 
     private GLDot dot;
 
@@ -64,12 +59,12 @@ public class VisTwo extends VisualizerBase {
     private void drawDot(FloatBuffer dotVertexData, int count) {
         /** Updates the position of individual dots for our screen rendering in the OpenGL pipeline */
         dotVertexData.position(POSITION_OFFSET);
-        GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, dotVertexData);
+        GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, VIS2_STRIDE_BYTES, dotVertexData);
         GLES20.glEnableVertexAttribArray(positionHandle);
 
         /** Updates the color information for the dots rendered to the screen in the OpenGL pipeline */
         dotVertexData.position(COLOR_OFFSET);
-        GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, dotVertexData);
+        GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, VIS2_STRIDE_BYTES, dotVertexData);
         GLES20.glEnableVertexAttribArray(colorHandle);
 
         /** Updates the size of the dots using the most current decibel level, i.e. the first element of the decibel history */

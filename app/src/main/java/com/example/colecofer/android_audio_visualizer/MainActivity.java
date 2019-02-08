@@ -36,23 +36,17 @@ import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
 
+import static com.example.colecofer.android_audio_visualizer.Constants.CLIENT_ID;
+import static com.example.colecofer.android_audio_visualizer.Constants.REDIRECT_URI;
+import static com.example.colecofer.android_audio_visualizer.Constants.REQUEST_RECORD_PERMISSION;
+import static com.example.colecofer.android_audio_visualizer.Constants.SCOPES;
+import static com.example.colecofer.android_audio_visualizer.Constants.TRACK_BASE_URI;
 import static com.loopj.android.http.AsyncHttpClient.log;
+import static com.spotify.sdk.android.authentication.LoginActivity.REQUEST_CODE;
 
 public class MainActivity extends AppCompatActivity implements Player.NotificationCallback, ConnectionStateCallback {
 
     private final String TAG = MainActivity.class.getSimpleName();
-    private static final int REQUEST_RECORD_PERMISSION = 101;
-
-    //TODO: This is Spotify's test account because I don't want to hard code ours into a public repository...
-    private static final String CLIENT_ID = "089d841ccc194c10a77afad9e1c11d54";
-    private static final String REDIRECT_URI = "testschema://callback";
-    private static final String TRACK_BASE_URI = "spotify:track:";
-
-    //Used to verify that we've been redirected back from Spotify after authenticating in browser
-    private static final int REQUEST_CODE = 1337;
-
-    //Permission scopes for authentication
-    private static final String[] SCOPES = new String[]{"user-read-private", "playlist-read", "playlist-read-private", "streaming"};
 
     private SpotifyPlayer player;
     private PlaybackState currentPlaybackState;

@@ -16,17 +16,16 @@ import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import java.util.ArrayDeque;
 
+import static com.example.colecofer.android_audio_visualizer.Constants.IMAGINARY_BUCKET_INDEX;
+import static com.example.colecofer.android_audio_visualizer.Constants.MAX_FFT_ARRAY_SIZE;
+import static com.example.colecofer.android_audio_visualizer.Constants.REAL_BUCKET_INDEX;
+import static com.example.colecofer.android_audio_visualizer.Constants.REQUEST_PERMISSION;
+import static com.example.colecofer.android_audio_visualizer.Constants.SCREEN_VERTICAL_HEIGHT;
 import static com.example.colecofer.android_audio_visualizer.Utility.getDBs;
 import static com.example.colecofer.android_audio_visualizer.Utility.updateDecibelHistory;
 import static com.loopj.android.http.AsyncHttpClient.log;
 
 public class VisualizerActivity extends AppCompatActivity implements Visualizer.OnDataCaptureListener {
-
-    private static final int REQUEST_PERMISSION = 101;
-    private static final int REAL_BUCKET_INDEX = 5;
-    private static final int IMAGINARY_BUCKET_INDEX = 6;
-    private static final int MAX_FFT_ARRAY_SIZE = 1024;
-    private final int SCREEN_VERTICAL_HEIGHT = 1024;
 
     private static int fftArraySize;
     private long previousUpdateTime;
