@@ -95,7 +95,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         //Check if ES2 is supported on the device
         if (supportsEs2) {
             surfaceView.setEGLContextClientVersion(2);
-            visualizerRenderer = new VisualizerRenderer();
+            visualizerRenderer = new VisualizerRenderer(audioSampleSize);
             surfaceView.setRenderer(visualizerRenderer, displayMetrics.density, audioSampleSize);
         } else {
             log.d("opengl", "Does not support ES2");
@@ -145,13 +145,13 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     @Override
     public void onFftDataCapture(Visualizer visualizer, byte[] fft, int samplingRate) {
         /** Gives us the decibel level for the fft bucket we care about **/
-        double dbs = getDBs(fft[REAL_BUCKET], fft[IMAGINARY_BUCKET], this.audioSampleSize);
+//        double dbs = getDBs(fft[REAL_BUCKET], fft[IMAGINARY_BUCKET], this.audioSampleSize);
 
-        Pair<Long, Boolean> currentStatus = updateDbHistory(dbs, VisualizerModel.getInstance().currentVisualizer.dbHistory, this.previousUpdateTime);
+//        Pair<Long, Boolean> currentStatus = updateDbHistory(dbs, VisualizerModel.getInstance().currentVisualizer.dbHistory, this.previousUpdateTime);
 
-        if(currentStatus.second == true) {
-            surfaceView.updateFft(fft);
-        }
+//        if(currentStatus.second == true) {
+        surfaceView.updateFft(fft);
+//        }
     }
 
 }
