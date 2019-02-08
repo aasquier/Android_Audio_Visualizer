@@ -71,4 +71,9 @@ final class Constants {
     /** VisualizerModel constants */
     static final String MODEL_TAG = "MODEL_TAG";
 
+    /** GLDot constants */
+    static final int DOT_HEIGHT = 60;
+    static final int DOT_WIDTH  = 60;
+    static final int DOT_COUNT  = DOT_WIDTH * DOT_HEIGHT;
+
 }

@@ -4,6 +4,7 @@ import android.opengl.GLES20;
 import java.nio.FloatBuffer;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
+import static com.example.colecofer.android_audio_visualizer.Constants.DOT_COUNT;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_OFFSET;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS2_STRIDE_BYTES;
@@ -14,8 +15,7 @@ public class VisTwo extends VisualizerBase {
     private GLDot dot;
 
     public VisTwo() {
-        // create a layer with 600 * 600 dots
-        dot = new GLDot(600, 600);
+        dot = new GLDot();
 
         this.vertexShader =
                 "vec3 mod289(vec3 x) {\n" +
@@ -98,7 +98,7 @@ public class VisTwo extends VisualizerBase {
     // TODO We may want to consider moving the "drawDot" logic into this function, it seems to be serving no real purpose
     @Override
     public void draw() {
-        drawDot(dot.draw(), dot.count());
+        drawDot(dot.draw(), DOT_COUNT);
     }
 
     private void drawDot(FloatBuffer dotVertexData, int count) {
