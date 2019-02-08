@@ -145,10 +145,12 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 //
         songMargin.setMargins(100,100,5, 5);
         songTitle.setLayoutParams(songMargin);
+        songTitle.setPadding(30, 40, 100, 100);
         addContentView(songTitle, songMargin);
 
         artistMargin.setMargins(100,500,5, 5);
         artistName.setLayoutParams(artistMargin);
+        artistName.setPadding(30, 100, 100, 100);
         addContentView(artistName, artistMargin);
 
         songTitle.requestLayout();
