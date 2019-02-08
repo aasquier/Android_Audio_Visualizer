@@ -68,10 +68,11 @@ public class VisTwo extends VisualizerBase {
                 "void main()\n" +           		        // The entry point for our vertex shader.
                 "{\n" +
                 "   v_Color = a_Color;\n" +	    	        // Pass the color through to the fragment shader.
-                "   vec4 newPosition = vec4(snoise(a_Position.xy*a_DB_Level)*2.0," +
-                "                           snoise(a_Position.yx*a_DB_Level)*2.0, a_Position.zw);\n" +
-                "   gl_Position = newPosition;\n" + 	        // gl_Position is a special variable used to store the final position.
-                "   gl_PointSize = 0.25 + a_DB_Level;\n" +  // Will vary the pixel size from 0.25px-1.25px
+//                "   vec4 newPosition = vec4(snoise(a_Position.xy*a_DB_Level)*2.0," +
+//                "                           snoise(a_Position.yx*a_DB_Level)*2.0, a_Position.zw);\n" +
+//                "   gl_Position = newPosition;\n" + 	        // gl_Position is a special variable used to store the final position.
+                "   gl_Position = a_Position;\n" +
+                "   gl_PointSize = 1.0 + a_DB_Level;\n" +  // Will vary the pixel size from 0.25px-1.25px
                 "}\n";
 
         this.fragmentShader =
