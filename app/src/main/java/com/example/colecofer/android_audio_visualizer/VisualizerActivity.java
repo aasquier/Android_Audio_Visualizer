@@ -116,6 +116,8 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
         this.previousUpdateTime = System.currentTimeMillis();
 
+        Log.d("test", "******************** Visualizer was initialized ***********************");
+
         setContentView(surfaceView);
 
     }
@@ -123,7 +125,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     @Override
     protected void onResume() {
         super.onResume();
-        surfaceView.onResume();
+//        surfaceView.onResume();
     }
 
     @Override
