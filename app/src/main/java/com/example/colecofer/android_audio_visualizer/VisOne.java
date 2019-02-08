@@ -3,6 +3,7 @@ package com.example.colecofer.android_audio_visualizer;
 import android.opengl.GLES20;
 
 import java.nio.FloatBuffer;
+import java.nio.channels.FileLock;
 import java.util.ArrayDeque;
 
 /**
@@ -35,10 +36,10 @@ public class VisOne extends VisualizerBase {
 
     /**
      * Constructor
-     * @param captureSize
+     * @param currentVertexArraySize
      */
-    public VisOne(int captureSize) {
-        this.fftArraySize = captureSize;
+    public VisOne(int currentVertexArraySize) {
+        this.fftArraySize = currentVertexArraySize;
         this.vertexCount = this.fftArraySize / VERTEX_AMOUNT;
 
         //Create 100 lines
@@ -71,7 +72,7 @@ public class VisOne extends VisualizerBase {
     }
 
     @Override
-    public void updateVertices(ArrayDeque<Float> decibelHistory) {
+    public void updateVertices() {
         int arraySize = fftArraySize / 2;
         float[] newVerticesToRender = new float[arraySize * VERTEX_AMOUNT];
 

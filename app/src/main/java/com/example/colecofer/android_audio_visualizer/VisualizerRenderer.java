@@ -25,7 +25,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
         if (vertexShaderHandle != 0)
         {
-            GLES20.glShaderSource(vertexShaderHandle, VisualizerModel.getInstance().currentVisualizer.getVertexShader());
+            GLES20.glShaderSource(vertexShaderHandle, VisualizerModel.getInstance().currentVisualizer.getVertexShaderString());
             GLES20.glCompileShader(vertexShaderHandle);
 
             final int[] compileStatus = new int[1];
@@ -50,7 +50,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
         if (fragmentShaderHandle != 0)
         {
-            GLES20.glShaderSource(fragmentShaderHandle, VisualizerModel.getInstance().currentVisualizer.getFragmentShader());
+            GLES20.glShaderSource(fragmentShaderHandle, VisualizerModel.getInstance().currentVisualizer.getFragmentShaderString());
             GLES20.glCompileShader(fragmentShaderHandle);
 
             final int[] compileStatus = new int[1];
@@ -107,8 +107,8 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         colorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
 
         if (VisualizerModel.getInstance().currentVisualizer instanceof VisTwo) {
-            currentDbLevel = GLES20.glGetUniformLocation(programHandle, "a_DB_Level");
-            VisualizerModel.getInstance().currentVisualizer.setCurrentDecibelLevel(currentDbLevel);
+            int currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, "a_DB_Level");
+            VisualizerModel.getInstance().currentVisualizer.setCurrentDecibelLevelHandle(currentDecibelLevelHandle);
         }
 
         VisualizerModel.getInstance().currentVisualizer.setPositionHandle(positionHandle);
@@ -124,8 +124,8 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
     }
 
     //Was newFftData
-    public void updateFft(float[] fft) {
-        VisualizerModel.getInstance().currentVisualizer.updateFft(fft);
+    public void updateVertices(float[] newVertices) {
+        VisualizerModel.getInstance().currentVisualizer.updateVertices(newVertices);
 
     }
 

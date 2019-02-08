@@ -2,7 +2,8 @@ package com.example.colecofer.android_audio_visualizer;
 
 import android.opengl.GLES20;
 import java.nio.FloatBuffer;
-import java.util.ArrayDeque;
+
+import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
 
 public class VisTwo extends VisualizerBase {
 
@@ -17,9 +18,7 @@ public class VisTwo extends VisualizerBase {
 
     private GLDot dot;
 
-    public VisTwo(int captureSize) {
-        this.fftArraySize = captureSize;
-
+    public VisTwo() {
         // create a layer with 600 * 600 dots
         dot = new GLDot(60, 60);
 
@@ -33,7 +32,7 @@ public class VisTwo extends VisualizerBase {
                 "{\n" +
                 "   v_Color = a_Color;\n" +	    	        // Pass the color through to the fragment shader.
                 "   gl_Position = a_Position;\n" + 	        // gl_Position is a special variable used to store the final position.
-                "   gl_PointSize = 30.0 * a_DB_Level;\n" +  // Will vary the pixel size from 0.25px-1.25px
+                "   gl_PointSize = 30.0 * a_DB_Level;\n" +  // Will vary the pixel size from 0.25px-1.25px (eventually)
                 "}\n";
 
         this.fragmentShader =
@@ -45,8 +44,9 @@ public class VisTwo extends VisualizerBase {
                 "}\n";
     }
 
+
     @Override
-    public void updateVertices(ArrayDeque<Float> decibelHistory) {
+    public void updateVertices() {
 
     }
 
@@ -55,24 +55,25 @@ public class VisTwo extends VisualizerBase {
 
     }
 
+    // TODO We may want to consider moving the "drawDot" logic into this function, it seems to be serving no real purpose
     @Override
     public void draw() {
         drawDot(dot.draw(), dot.count());
     }
 
     private void drawDot(FloatBuffer dotVertexData, int count) {
+        /** Updates the position of individual dots for our screen rendering in the OpenGL pipeline */
         dotVertexData.position(POSITION_OFFSET);
         GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, dotVertexData);
         GLES20.glEnableVertexAttribArray(positionHandle);
 
+        /** Updates the color information for the dots rendered to the screen in the OpenGL pipeline */
         dotVertexData.position(COLOR_OFFSET);
         GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, STRIDE_BYTES, dotVertexData);
         GLES20.glEnableVertexAttribArray(colorHandle);
 
-        GLES20.glUniform1f(currentDecibelLevel, VisualizerModel.getInstance().currentVisualizer.decibelHistory.peekFirst());
-
-//        GLES10.glScalef(0.0f, 0.0f, VisualizerModel.getInstance().currentVisualizer.decibelHistory.peekFirst());
-
+        /** Updates the size of the dots using the most current decibel level, i.e. the first element of the decibel history */
+        GLES20.glUniform1f(currentDecibelLevelHandle, decibelHistory.peekFirst());
 
         GLES20.glDrawArrays(GLES20.GL_POINTS, 0, count);
     }

@@ -30,7 +30,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
     private static int fftArraySize;
     private long previousUpdateTime;
-    ArrayDeque<Float> decibelHistory;
+    static ArrayDeque<Float> decibelHistory;
 
     private MediaPlayer mediaPlayer;
     private Visualizer visualizer;
@@ -125,6 +125,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
     }
 
+    /** Sets the decibel history to all 0.0 to begin with */
     private void initDecibelHistory() {
         this.decibelHistory = new ArrayDeque<>();
         for(int i = 0; i < SCREEN_VERTICAL_HEIGHT; ++i) {
@@ -159,10 +160,13 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         /** Gives us the decibel level for the fft bucket we care about **/
         double currentDecibels = getDBs(fft[REAL_BUCKET_INDEX], fft[IMAGINARY_BUCKET_INDEX], this.fftArraySize);
 
-        Pair<Long, Boolean> currentStatus = updateDecibelHistory(currentDecibels, this.decibelHistory, this.previousUpdateTime);
+        /** Check and see if it is time to update the decibel history with the current decibel level, and check if it is time to
+         *  refresh the screen based on our 60 fps */
+        Pair<Long, Boolean> isTimeToRefreshScreen = updateDecibelHistory(currentDecibels, this.previousUpdateTime);
 
-        if(currentStatus.second == true) {
-            VisualizerModel.getInstance().currentVisualizer.updateVertices(this.decibelHistory);
+        /** Update the screen if the elapsed time has exceeded the threshold set */
+        if(isTimeToRefreshScreen.second) {
+            VisualizerModel.getInstance().currentVisualizer.updateVertices();
         }
     }
 
