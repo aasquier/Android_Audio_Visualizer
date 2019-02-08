@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
 import android.support.annotation.NonNull;
@@ -11,6 +12,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
@@ -30,6 +39,10 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     private VisualizerSurfaceView surfaceView;
     private VisualizerRenderer visualizerRenderer;
     private Visualizer.OnDataCaptureListener captureListener;
+
+    private TextView songTitle;
+    private TextView artistName;
+    private boolean marginsSet = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +127,58 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         this.previousUpdateTime = System.currentTimeMillis();
 
         setContentView(surfaceView);
+        songTitle = new TextView(this);
+        artistName = new TextView(this);
+
+        songTitle.setTextColor(Color.WHITE);
+        artistName.setTextColor(Color.WHITE);
+        songTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
+        artistName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
+
+        int height = surfaceView.getHeight();
+        int width = surfaceView.getWidth();
+        ViewGroup.MarginLayoutParams songMargin = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
+        ViewGroup.MarginLayoutParams artistMargin = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
+
+//        log.d("DIMENSIONS","Height: " + height);
+//        log.d("DIMENSIONS","Width: " + width);
+//
+        songMargin.setMargins(100,100,5, 5);
+        songTitle.setLayoutParams(songMargin);
+        addContentView(songTitle, songMargin);
+
+        artistMargin.setMargins(100,500,5, 5);
+        artistName.setLayoutParams(artistMargin);
+        addContentView(artistName, artistMargin);
+
+        songTitle.requestLayout();
+        artistName.requestLayout();
+//        RelativeLayout.LayoutParams songParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        RelativeLayout.LayoutParams artistParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+
+
+
+//        songMargin.setMargins(720,480,5, 5);
+//        addContentView(songTitle, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//        artistMargin.setMargins(720,680,5, 5);
+//        addContentView(artistName, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//        final ViewTreeObserver observer = surfaceView.getViewTreeObserver();
+//        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+////                setSongAndArtist();
+//                observer.removeOnGlobalLayoutListener(this);
+//            }
+//        });
+//        LayoutInflater inflater = LayoutInflater.from(this);
+//        View v = inflater.inflate(R.layout.activity_visualizer, null);
+//        songTitle = v.findViewById(R.id.tvSongTitle);
+//        artistName = v.findViewById(R.id.tvArtistName);
+//        songTitle.setTextColor(Color.WHITE);
+//        artistName.setTextColor(Color.WHITE);
+//        setContentView(R.layout.activity_visualizer);
+
 
     }
 
@@ -143,11 +208,33 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     public void onFftDataCapture(Visualizer visualizer, byte[] fft, int samplingRate) {
         /** Gives us the decibel level for the fft bucket we care about **/
         double dbs = getDBs(fft[REAL_BUCKET], fft[IMAGINARY_BUCKET], this.audioSampleSize);
-
+        updateSongAndArtistName();
         //this.previousUpdateTime = updateDbHistory(dbs, VisualizerModel.getInstance().currentVisualizer.dbHistory, this.previousUpdateTime);
 
         /** TODO this needs to change as the whole fft should not influence the wave */
         surfaceView.updateFft(fft);
+    }
+
+    private void updateSongAndArtistName() {
+//        if (marginsSet == false) {
+//            int height = surfaceView.getHeight();
+//            int width = surfaceView.getWidth();
+//            ViewGroup.MarginLayoutParams songMargin = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//            ViewGroup.MarginLayoutParams artistMargin = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//
+//            log.d("DIMENSIONS", "Height: " + height);
+//            log.d("DIMENSIONS", "Width: " + width);
+//
+//            songMargin.setMargins(width / 4, height / 4, 5, 5);
+//            addContentView(songTitle, songMargin);
+//
+//            artistMargin.setMargins(width / 4, height / 4 + 200, 5, 5);
+//            addContentView(artistName, artistMargin);
+//            marginsSet = true;
+//        }
+
+        songTitle.setText(VisualizerModel.getInstance().trackName);
+        artistName.setText(VisualizerModel.getInstance().artistName);
     }
 
 }

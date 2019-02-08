@@ -167,10 +167,17 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                     @Override
                     public void spotifyResponse(boolean success, String response) {
                         log(response);
+
                         TextView artistNameText = findViewById(R.id.artistNameTextView);
-                        artistNameText.setText(SpotifyClient.getArtistName(response));
+                        String artistName = SpotifyClient.getArtistName(response);
+                        artistNameText.setText(artistName);
+                        VisualizerModel.getInstance().artistName = artistName;
+
                         TextView albumNameText = findViewById(R.id.albumNameTextView);
                         albumNameText.setText((SpotifyClient.getAlbumName(response)));
+
+                        VisualizerModel.getInstance().trackName = SpotifyClient.getTrackName(response);
+
                         String imageUrl = SpotifyClient.getArtUrl(response);
                         log(imageUrl);
                         final ImageView albumArtView = findViewById(R.id.albumArtImageView);
@@ -201,7 +208,6 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
         int primaryColor = VisualizerModel.getInstance().colorMatrix[0];
         int secondaryColor = VisualizerModel.getInstance().colorMatrix[1];
         int ternaryColor = VisualizerModel.getInstance().colorMatrix[2];
-        log("Secondary Color: " + Integer.toString(secondaryColor));
         primaryColorSwatch.setBackgroundColor(primaryColor);
         secondaryColorSwatch.setBackgroundColor(secondaryColor);
         ternaryColorSwatch.setBackgroundColor(ternaryColor);
