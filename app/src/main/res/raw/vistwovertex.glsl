@@ -10,8 +10,8 @@ vec3 permute(vec3 x) {
     return mod289(((x*34.0)+1.0)*x);
 }
 
-float snoise(vec2 v)
-{
+float snoise(vec2 v) {
+
     const vec4 C = vec4(0.211324865405187,
                         0.366025403784439,
                        -0.577350269189626,
@@ -40,16 +40,18 @@ float snoise(vec2 v)
     return 130.0 * dot(m, g);
 }
 
-uniform mat4 u_MVPMatrix;	        // A constant representing the combined model/view/projection matrix.
-attribute vec4 a_Position;	        // Per-vertex position information we will pass in.
-attribute vec4 a_Color;	        // Per-vertex color information we will pass in.
-uniform float a_DB_Level;            // The current decibel level to be used by the shader.
-varying vec4 v_Color;                 // This will be passed into the fragment shader.
+uniform mat4   u_MVPMatrix;	    // A constant representing the combined model/view/projection matrix.
+attribute vec4 a_Position;	    // Per-vertex position information we will pass in  (a_Position.xyzw , w is always 1)
+attribute vec4 a_Color;	        // Per-vertex color information we will pass in  (a_Color.rgba -->  a_Color.xyzw)
+uniform float  a_DB_Level;      // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
+varying vec4   v_Color;         // This will be passed into the fragment shader as the final color values
 
-void main()           		        // The entry point for our vertex shader.
-{
+void main() {          		    // The entry point for our vertex shader.
     vec4 newColor = vec4(a_Color.xyz, ((a_DB_Level * 2.0) * abs(snoise(a_Position.xy))));
+//    vec4 newPosition = vec4(snoise(a_Position.xy*a_DB_Level)*2.0, snoise(a_Position.yx*a_DB_Level)*2.0, a_Position.zw);
     v_Color = newColor;
+//    v_Color = a_Color;
+//    gl_Position = newPosition;	        // gl_Position is a special variable used to store the final position.
     gl_Position = a_Position;
     gl_PointSize = 4.0 + a_DB_Level;
 }

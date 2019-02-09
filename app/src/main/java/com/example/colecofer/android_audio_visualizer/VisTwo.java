@@ -18,87 +18,6 @@ public class VisTwo extends VisualizerBase {
     private Utility util;
 
     /**
-     * Default Constructor
-     *
-     */
-//    public VisTwo() {
-//        util = new Utility();
-//        dot = new GLDot();
-//
-//        this.vertexShader =
-//                "vec3 mod289(vec3 x) {\n" +
-//                        "return x - floor(x * (1.0 / 289.0)) * 289.0;\n" +
-//                        "}\n" +
-//
-//                        "vec2 mod289(vec2 x) {\n" +
-//                        "return x - floor(x * (1.0 / 289.0)) * 289.0;\n" +
-//                        "}\n" +
-//
-//                        "vec3 permute(vec3 x) {\n" +
-//                        "return mod289(((x*34.0)+1.0)*x);\n" +
-//                        "}\n" +
-//
-//                        "float snoise(vec2 v)\n" +
-//                        "{\n" +
-//                        "const vec4 C = vec4(0.211324865405187,\n" +
-//                        "0.366025403784439,\n" +
-//                        "-0.577350269189626,\n" +
-//                        "0.024390243902439);\n" +
-//                        "vec2 i  = floor(v + dot(v, C.yy) );\n" +
-//                        "vec2 x0 = v -   i + dot(i, C.xx);\n" +
-//                        "vec2 i1;\n" +
-//                        "i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);\n" +
-//                        "vec4 x12 = x0.xyxy + C.xxzz;\n" +
-//                        "x12.xy -= i1;\n" +
-//                        "i = mod289(i);\n" +
-//                        "vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))\n" +
-//                        "+ i.x + vec3(0.0, i1.x, 1.0 ));\n" +
-//                        "vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);\n" +
-//                        "m = m*m ;\n" +
-//                        "m = m*m ;\n" +
-//                        "vec3 x = 2.0 * fract(p * C.www) - 1.0;\n" +
-//                        "vec3 h = abs(x) - 0.5;\n" +
-//                        "vec3 ox = floor(x + 0.5);\n" +
-//                        "vec3 a0 = x - ox;\n" +
-//                        "m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );\n" +
-//                        "vec3 g;\n" +
-//                        "g.x  = a0.x  * x0.x  + h.x  * x0.y;\n" +
-//                        "g.yz = a0.yz * x12.xz + h.yz * x12.yw;\n" +
-//                        "return 130.0 * dot(m, g);\n" +
-//                        "}\n" +
-//
-//                        "uniform mat4 u_MVPMatrix;" +		        // A constant representing the combined model/view/projection matrix.
-//                        "attribute vec4 a_Position;\n" + 	        // Per-vertex position information we will pass in.
-//                        "attribute vec4 a_Color;\n" +		        // Per-vertex color information we will pass in.
-//                        "uniform float a_DB_Level;\n" +             // The current decibel level to be used by the shader.
-//                        "varying vec4 v_Color;\n" +                 // This will be passed into the fragment shader.
-//                        "float nx;\n" +
-//                        "float ny;\n" +
-//
-//                        "void main()\n" +           		        // The entry point for our vertex shader.
-//                        "{\n" +
-////                "   vec4 newColor = vec4(a_Color.xyz, ((a_DB_Level * 2.0) * abs(snoise(a_Position.xy))));\n" +
-//                        "   vec4 newColor = vec4(a_Color.xyz, ((a_DB_Level * 2.0) * abs(snoise(a_Position.xy))));\n" +
-//                        "   v_Color = newColor;\n" +	    	        // Pass the color through to the fragment shader.
-////                  "   v_Color = a_Color;\n" +
-////                "   vec4 newPosition = vec4(snoise(a_Position.xy*a_DB_Level)*2.0," +
-////                "                           snoise(a_Position.yx*a_DB_Level)*2.0, a_Position.zw);\n" +
-////                "   gl_Position = newPosition;\n" + 	        // gl_Position is a special variable used to store the final position.
-//                        "   gl_Position = a_Position;\n" +
-//                        "   gl_PointSize = 4.0 + a_DB_Level;\n" +  // Will vary the pixel size from 0.25px-1.25px
-//                        "}\n";
-//
-//        this.fragmentShader =
-//
-//                "precision mediump float;\n"	+	// Set the default precision to medium. We don't need as high of a
-//                        "varying vec4 v_Color;\n" +         // This is the color from the vertex shader interpolated across the
-//                        "void main()\n"	+	                // The entry point for our fragment shader.
-//                        "{\n" +
-//                        "   gl_FragColor = v_Color;\n"	+	// Pass the color directly through the pipeline.
-//                        "}\n";
-//    }
-
-    /**
      *
      * @param context
      */
@@ -109,7 +28,6 @@ public class VisTwo extends VisualizerBase {
         this.vertexShader = util.getStringFromGLSL(R.raw.vistwovertex);
         this.fragmentShader = util.getStringFromGLSL(R.raw.vistwofragment);
     }
-
 
     @Override
     public void updateVertices() {

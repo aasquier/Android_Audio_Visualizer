@@ -3,13 +3,12 @@ package com.example.colecofer.android_audio_visualizer;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.annotation.RawRes;
+import android.util.Log;
 import android.util.Pair;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import cz.msebera.android.httpclient.client.cache.Resource;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_DB_LEVEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_DECIBEL_RATIO;
@@ -90,7 +89,7 @@ public class Utility {
     }
 
     /**
-     * Convert a glsl file into string
+     * Convert a glsl file into  a string for each visualizer
      *
      * @param id
      */
@@ -99,18 +98,18 @@ public class Utility {
         String str;
 
         try {
-            Resources r = context.getResources();
-            InputStream is = r.openRawResource(id);
+            Resources res = context.getResources();
+            InputStream is = res.openRawResource(id);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             int i = is.read();
             while (i != -1) {
                 byteArrayOutputStream.write(i);
                 i = is.read();
             }
-
             str = byteArrayOutputStream.toString();
             is.close();
         } catch (IOException e) {
+            Log.d("GLSL", "Failed to convert GLSL file into a proper String. " + e.getMessage());
             str = "";
         }
 
