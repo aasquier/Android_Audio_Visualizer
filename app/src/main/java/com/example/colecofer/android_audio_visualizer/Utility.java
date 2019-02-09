@@ -1,6 +1,7 @@
 package com.example.colecofer.android_audio_visualizer;
 
 import android.util.Pair;
+
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_DB_LEVEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_DECIBEL_RATIO;
 import static com.example.colecofer.android_audio_visualizer.Constants.REFRESH_DECIBEL_TIME;
@@ -8,7 +9,9 @@ import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.
 
 public class Utility {
 
-    /** Takes the real and imaginary parts of an FFT frequency bin and returns the decibels for that bin. */
+    /**
+     * Takes the real and imaginary parts of an FFT frequency bin and returns the decibels for that bin.
+     */
     static double getDBs(byte real, byte imaginary, int n) {
         /** Bit shifting to translate our bytes into doubles */
         double y = (real | imaginary << 8) / 32768.0;
@@ -25,6 +28,7 @@ public class Utility {
     /**
      * Keeps a record of recent dBs as large as the screen is tall. It removes the last record and
      * removes the oldest record. If the current dB level exceeds our max setting it uses the max
+     *
      * @param newDecibelLevel
      */
     static Pair<Long, Boolean> updateDecibelHistory(double newDecibelLevel, long previousUpdateTime) {
@@ -43,13 +47,14 @@ public class Utility {
 
     /**
      * Checks if it has been our predefined interval since last dB record update
+     *
      * @param previousUpdateTime
      * @return
      */
     static Pair<Long, Boolean> isTimeToUpdate(long previousUpdateTime) {
         Boolean success;
         Long currentTime = System.currentTimeMillis();
-        if(previousUpdateTime + REFRESH_DECIBEL_TIME <= currentTime) {
+        if (previousUpdateTime + REFRESH_DECIBEL_TIME <= currentTime) {
             previousUpdateTime = currentTime;
             success = true;
         } else {
@@ -57,5 +62,4 @@ public class Utility {
         }
         return new Pair(previousUpdateTime, success);
     }
-
 }

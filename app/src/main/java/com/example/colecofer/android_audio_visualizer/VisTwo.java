@@ -1,6 +1,7 @@
 package com.example.colecofer.android_audio_visualizer;
 
 import android.opengl.GLES20;
+
 import java.nio.FloatBuffer;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
@@ -13,6 +14,7 @@ import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.
 public class VisTwo extends VisualizerBase {
 
     private GLDot dot;
+    private Utility util = new Utility();
 
     public VisTwo() {
         dot = new GLDot();
@@ -29,7 +31,7 @@ public class VisTwo extends VisualizerBase {
                 "vec3 permute(vec3 x) {\n" +
                     "return mod289(((x*34.0)+1.0)*x);\n" +
                 "}\n" +
-//
+
                 "float snoise(vec2 v)\n" +
                 "{\n" +
                     "const vec4 C = vec4(0.211324865405187,\n" +
@@ -67,24 +69,23 @@ public class VisTwo extends VisualizerBase {
 
                 "void main()\n" +           		        // The entry point for our vertex shader.
                 "{\n" +
-//                "   vec4 newColor = vec4(a_Color.xyz, (a_Color.w + (snoise(a_Position.xy) * a_DB_Level)));\n" +
-//                "   v_Color = newColor;\n" +	    	        // Pass the color through to the fragment shader.
-                  "   v_Color = a_Color;\n" +
+                "   vec4 newColor = vec4(a_Color.xyz, (a_DB_Level * snoise(a_Position.xy) + 0.5));\n" +
+                "   v_Color = newColor;\n" +	    	        // Pass the color through to the fragment shader.
+//                  "   v_Color = a_Color;\n" +
 //                "   vec4 newPosition = vec4(snoise(a_Position.xy*a_DB_Level)*2.0," +
 //                "                           snoise(a_Position.yx*a_DB_Level)*2.0, a_Position.zw);\n" +
 //                "   gl_Position = newPosition;\n" + 	        // gl_Position is a special variable used to store the final position.
                 "   gl_Position = a_Position;\n" +
-                "   gl_PointSize = 20.0;\n" +  // Will vary the pixel size from 0.25px-1.25px
+                "   gl_PointSize = 1.0 + a_DB_Level;\n" +  // Will vary the pixel size from 0.25px-1.25px
                 "}\n";
 
         this.fragmentShader =
+
                 "precision mediump float;\n"	+	// Set the default precision to medium. We don't need as high of a
                 "varying vec4 v_Color;\n" +         // This is the color from the vertex shader interpolated across the
-                "uniform float db_Level;\n" +
                 "void main()\n"	+	                // The entry point for our fragment shader.
                 "{\n" +
                 "   gl_FragColor = v_Color;\n"	+	// Pass the color directly through the pipeline.
-                "   gl_FragColor.a -= db_Level;\n" +
                 "}\n";
     }
 
