@@ -1,6 +1,15 @@
 package com.example.colecofer.android_audio_visualizer;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.support.annotation.RawRes;
 import android.util.Pair;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import cz.msebera.android.httpclient.client.cache.Resource;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_DB_LEVEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_DECIBEL_RATIO;
@@ -8,6 +17,23 @@ import static com.example.colecofer.android_audio_visualizer.Constants.REFRESH_D
 import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
 
 public class Utility {
+
+    private Context context;
+
+    /**
+     * Default Constructor
+     *
+     */
+    public Utility() {}
+
+    /**
+     * Pass context for connecting Resource
+     *
+     * @param context
+     */
+    public Utility(Context context) {
+        this.context = context;
+    }
 
     /**
      * Takes the real and imaginary parts of an FFT frequency bin and returns the decibels for that bin.
@@ -61,5 +87,33 @@ public class Utility {
             success = false;
         }
         return new Pair(previousUpdateTime, success);
+    }
+
+    /**
+     * Convert a glsl file into string
+     *
+     * @param id
+     */
+
+    public String getStringFromGLSL(@RawRes int id) {
+        String str;
+
+        try {
+            Resources r = context.getResources();
+            InputStream is = r.openRawResource(id);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            int i = is.read();
+            while (i != -1) {
+                byteArrayOutputStream.write(i);
+                i = is.read();
+            }
+
+            str = byteArrayOutputStream.toString();
+            is.close();
+        } catch (IOException e) {
+            str = "";
+        }
+
+        return str;
     }
 }
