@@ -46,12 +46,26 @@ attribute vec4 a_Color;	        // Per-vertex color information we will pass in 
 uniform float  a_DB_Level;      // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
 varying vec4   v_Color;         // This will be passed into the fragment shader as the final color values
 
-void main() {          		    // The entry point for our vertex shader.
-    vec4 newColor = vec4(a_Color.xyz, ((a_DB_Level * 2.0) * abs(snoise(a_Position.xy))));
+uniform float time;
+
+void main() {
+//    float nx = ((a_Position.x*a_DB_Level)) - 0.5;
+//    float ny = ((a_Position.y*a_DB_Level)) - 0.5;
+//    vec2 noiseVec = vec2(nx, ny);
+//    vec4 newColor = vec4(a_Color.xyz, ((a_DB_Level * 2.0) * abs(snoise(a_Position.xy))));
+//    vec4 newColor = vec4(a_Color.xyz, abs(snoise(noiseVec)));
 //    vec4 newPosition = vec4(snoise(a_Position.xy*a_DB_Level)*2.0, snoise(a_Position.yx*a_DB_Level)*2.0, a_Position.zw);
-    v_Color = newColor;
-//    v_Color = a_Color;
-//    gl_Position = newPosition;	        // gl_Position is a special variable used to store the final position.
-    gl_Position = a_Position;
-    gl_PointSize = 4.0 + a_DB_Level;
+//    vec4 newPosition = vec4(snoise(nx, ny), snoise(nx, ny), a_Position.zw);
+//    v_Color = newColor;
+
+    vec2 res = vec2(1.0, 1.0);
+    vec2 cPos = vec2(-1.0 + 2.0 * a_Position.xy / res.xy);
+    float cLength = length(cPos);
+    vec2 uv = a_Position.xy / res.xy + (cPos/cLength) * cos(cLength * 12.0 - time * a_DB_Level) * 0.03;
+    vec4 newPosition = vec4(uv, a_Position.zw);
+
+    v_Color = a_Color;
+    gl_Position = newPosition;	        // gl_Position is a special variable used to store the final position for the fragment shader
+//    gl_Position = a_Position;
+    gl_PointSize = 1.0 + a_DB_Level;        // This will adjust the dot size from 1.0-2.0 based on decibel level which is in the range 0.0-1.0
 }

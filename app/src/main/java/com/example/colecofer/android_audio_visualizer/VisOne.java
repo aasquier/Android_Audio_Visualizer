@@ -47,8 +47,8 @@ public class VisOne extends VisualizerBase {
 
         util = new Utility(context);
 
-        this.vertexShader = util.getStringFromGLSL(R.raw.vistwovertex);
-        this.fragmentShader = util.getStringFromGLSL(R.raw.vistwofragment);
+        this.vertexShader = util.getStringFromGLSL(R.raw.visonevertex);
+        this.fragmentShader = util.getStringFromGLSL(R.raw.visonefragment);
     }
 
     @Override

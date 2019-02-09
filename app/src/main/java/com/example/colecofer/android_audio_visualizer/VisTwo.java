@@ -16,6 +16,7 @@ public class VisTwo extends VisualizerBase {
 
     private GLDot dot;
     private Utility util;
+    private long visTwoStartTime;
 
     /**
      *
@@ -27,6 +28,8 @@ public class VisTwo extends VisualizerBase {
 
         this.vertexShader = util.getStringFromGLSL(R.raw.vistwovertex);
         this.fragmentShader = util.getStringFromGLSL(R.raw.vistwofragment);
+
+        visTwoStartTime = System.currentTimeMillis();
     }
 
     @Override
@@ -61,8 +64,8 @@ public class VisTwo extends VisualizerBase {
 
         /** Updates the size of the dots using the most current decibel level, i.e. the first element of the decibel history */
         GLES20.glUniform1f(currentDecibelLevelHandle, decibelHistory.peekFirst());
-        GLES20.glUniform1f(currentFragmentDecibelLevelHandle, decibelHistory.peekFirst());
 
+        GLES20.glUniform1f(timeHandle, (float)(System.currentTimeMillis() - visTwoStartTime));
 
         GLES20.glDrawArrays(GLES20.GL_POINTS, 0, count);
 
