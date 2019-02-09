@@ -66,17 +66,20 @@ public class VisTwo extends VisualizerBase {
                 "attribute vec4 a_Color;\n" +		        // Per-vertex color information we will pass in.
                 "uniform float a_DB_Level;\n" +             // The current decibel level to be used by the shader.
                 "varying vec4 v_Color;\n" +                 // This will be passed into the fragment shader.
+                "float nx;\n" +
+                "float ny;\n" +
 
                 "void main()\n" +           		        // The entry point for our vertex shader.
                 "{\n" +
-                "   vec4 newColor = vec4(a_Color.xyz, (a_DB_Level * snoise(a_Position.xy) + 0.5));\n" +
-                "   v_Color = newColor;\n" +	    	        // Pass the color through to the fragment shader.
+//                "   vec4 newColor = vec4(a_Color.xyz, ((a_DB_Level * 2.0) * abs(snoise(a_Position.xy))));\n" +
+                "   vec4 newColor = vec4(a_Color.xyz, ((a_DB_Level * 2.0) * abs(snoise(a_Position.xy))));\n" +
+                        "   v_Color = newColor;\n" +	    	        // Pass the color through to the fragment shader.
 //                  "   v_Color = a_Color;\n" +
 //                "   vec4 newPosition = vec4(snoise(a_Position.xy*a_DB_Level)*2.0," +
 //                "                           snoise(a_Position.yx*a_DB_Level)*2.0, a_Position.zw);\n" +
 //                "   gl_Position = newPosition;\n" + 	        // gl_Position is a special variable used to store the final position.
                 "   gl_Position = a_Position;\n" +
-                "   gl_PointSize = 1.0 + a_DB_Level;\n" +  // Will vary the pixel size from 0.25px-1.25px
+                "   gl_PointSize = 4.0 + a_DB_Level;\n" +  // Will vary the pixel size from 0.25px-1.25px
                 "}\n";
 
         this.fragmentShader =
