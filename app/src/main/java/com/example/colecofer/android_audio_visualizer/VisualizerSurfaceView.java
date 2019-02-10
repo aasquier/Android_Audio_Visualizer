@@ -24,7 +24,8 @@ public class VisualizerSurfaceView extends GLSurfaceView {
 //        this.density = inputDensity;
         VisualizerModel.getInstance().renderer = inputRenderer;
 //        VisualizerModel.getInstance().currentVisualizer = new VisOne(vertexArraySize, context);
-        VisualizerModel.getInstance().currentVisualizer = new VisTwo(context);
+//        VisualizerModel.getInstance().currentVisualizer = new VisTwo(context);
+        VisualizerModel.getInstance().currentVisualizer = new VisThree(context);
         super.setRenderer(VisualizerModel.getInstance().renderer);
     }
 
