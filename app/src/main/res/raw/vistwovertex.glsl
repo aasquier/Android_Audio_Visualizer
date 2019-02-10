@@ -58,13 +58,27 @@ void main() {
 //    vec4 newPosition = vec4(snoise(nx, ny), snoise(nx, ny), a_Position.zw);
 //    v_Color = newColor;
 
+    float pointSizeOffset = 0.03;         // how deep does the a_DB_Level effect on the point size
+    float waveDeepOffset = 0.0035;         // how deep the wave effect the dot texture layer
+
     vec2 cPos = vec2(2.0 * a_Position.xy);
+
+    // refactor either width or height to keep the shape
+    //if (cPos.x > cPox.y) {
+    //    cPos.x *= 0.725;
+    //} else {
+    //    cPos.y *= 0.725;
+    //}
+
     float cLength = length(cPos);
-    vec2 uv = a_Position.xy + (cPos/cLength) * cos(cLength * 12.0 - time * a_DB_Level) * 0.03;
+    vec2 uv = a_Position.xy + (cPos/cLength) * cos(cLength * 12.0 - time * a_DB_Level) * waveDeepOffset;
     vec4 newPosition = vec4(uv, a_Position.zw);
 
     v_Color = a_Color;
     gl_Position = newPosition;	        // gl_Position is a special variable used to store the final position for the fragment shader
+    gl_PointSize = 1.0 + a_DB_Level * pointSizeOffset;     // This will adjust the dot size from 1.0-2.0 based on decibel level which is in the range 0.0-1.0
+
 //    gl_Position = a_Position;
-    gl_PointSize = 1.0 + a_DB_Level;        // This will adjust the dot size from 1.0-2.0 based on decibel level which is in the range 0.0-1.0
+//    gl_PointSize = 1.0;
+//    gl_PointSize = 1.0 + a_DB_Level;        // This will adjust the dot size from 1.0-2.0 based on decibel level which is in the range 0.0-1.0
 }
