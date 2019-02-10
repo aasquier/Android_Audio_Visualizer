@@ -124,7 +124,6 @@ public class SpotifyClient {
         JSONObject json = convertStringToJSON(responseJSON);
         String value = "Error: Couldn't find field";
         try {
-//            value = json.getJSONArray("artists").getJSONObject(0).getString("name");
             value = json.getString("name");
         } catch (JSONException e) {
             Log.d("Spotify", "Error - Could not extract artist name from response" + e.getMessage());

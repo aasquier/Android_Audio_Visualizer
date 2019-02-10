@@ -168,14 +168,17 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                     public void spotifyResponse(boolean success, String response) {
                         log(response);
 
+                        // Set artist name in model
                         TextView artistNameText = findViewById(R.id.artistNameTextView);
                         String artistName = SpotifyClient.getArtistName(response);
                         artistNameText.setText(artistName);
                         VisualizerModel.getInstance().artistName = artistName;
 
+                        // Set album name
                         TextView albumNameText = findViewById(R.id.albumNameTextView);
                         albumNameText.setText((SpotifyClient.getAlbumName(response)));
 
+                        // Set track name in model
                         VisualizerModel.getInstance().trackName = SpotifyClient.getTrackName(response);
 
                         String imageUrl = SpotifyClient.getArtUrl(response);

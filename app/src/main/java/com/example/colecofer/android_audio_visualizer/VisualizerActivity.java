@@ -42,7 +42,6 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
     private TextView songTitle;
     private TextView artistName;
-    private boolean marginsSet = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +126,8 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         this.previousUpdateTime = System.currentTimeMillis();
 
         setContentView(surfaceView);
+
+        // Add song and artist text view to the visualizer
         songTitle = new TextView(this);
         artistName = new TextView(this);
 
@@ -135,52 +136,19 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         songTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
         artistName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
 
-        int height = surfaceView.getHeight();
-        int width = surfaceView.getWidth();
         ViewGroup.MarginLayoutParams songMargin = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
         ViewGroup.MarginLayoutParams artistMargin = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
 
-//        log.d("DIMENSIONS","Height: " + height);
-//        log.d("DIMENSIONS","Width: " + width);
-//
-        songMargin.setMargins(100,100,5, 5);
         songTitle.setLayoutParams(songMargin);
-        songTitle.setPadding(30, 40, 100, 100);
+        songTitle.setPadding(100, 100, 100, 100);
         addContentView(songTitle, songMargin);
 
-        artistMargin.setMargins(100,500,5, 5);
         artistName.setLayoutParams(artistMargin);
-        artistName.setPadding(30, 100, 100, 100);
+        artistName.setPadding(100, 200, 100, 100);
         addContentView(artistName, artistMargin);
 
         songTitle.requestLayout();
         artistName.requestLayout();
-//        RelativeLayout.LayoutParams songParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        RelativeLayout.LayoutParams artistParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-
-
-
-//        songMargin.setMargins(720,480,5, 5);
-//        addContentView(songTitle, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//        artistMargin.setMargins(720,680,5, 5);
-//        addContentView(artistName, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//        final ViewTreeObserver observer = surfaceView.getViewTreeObserver();
-//        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//            @Override
-//            public void onGlobalLayout() {
-////                setSongAndArtist();
-//                observer.removeOnGlobalLayoutListener(this);
-//            }
-//        });
-//        LayoutInflater inflater = LayoutInflater.from(this);
-//        View v = inflater.inflate(R.layout.activity_visualizer, null);
-//        songTitle = v.findViewById(R.id.tvSongTitle);
-//        artistName = v.findViewById(R.id.tvArtistName);
-//        songTitle.setTextColor(Color.WHITE);
-//        artistName.setTextColor(Color.WHITE);
-//        setContentView(R.layout.activity_visualizer);
-
 
     }
 
@@ -218,22 +186,6 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     }
 
     private void updateSongAndArtistName() {
-//        if (marginsSet == false) {
-//            int height = surfaceView.getHeight();
-//            int width = surfaceView.getWidth();
-//            ViewGroup.MarginLayoutParams songMargin = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//            ViewGroup.MarginLayoutParams artistMargin = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//
-//            log.d("DIMENSIONS", "Height: " + height);
-//            log.d("DIMENSIONS", "Width: " + width);
-//
-//            songMargin.setMargins(width / 4, height / 4, 5, 5);
-//            addContentView(songTitle, songMargin);
-//
-//            artistMargin.setMargins(width / 4, height / 4 + 200, 5, 5);
-//            addContentView(artistName, artistMargin);
-//            marginsSet = true;
-//        }
 
         songTitle.setText(VisualizerModel.getInstance().trackName);
         artistName.setText(VisualizerModel.getInstance().artistName);
