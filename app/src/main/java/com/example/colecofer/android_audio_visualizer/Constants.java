@@ -60,8 +60,8 @@ final class Constants {
     /** Vis2 constants */
     static final int VIS2_STRIDE_BYTES = (POSITION_DATA_SIZE + COLOR_DATA_SIZE) * BYTES_PER_FLOAT;
     /** GLDot constants for Vis2*/
-    static final int DOT_HEIGHT = 600;
-    static final int DOT_WIDTH  = 600;
+    static final int DOT_HEIGHT = 2000;
+    static final int DOT_WIDTH  = 2000;
     static final int DOT_COUNT  = DOT_WIDTH * DOT_HEIGHT;
 
     /** VisualizerActivity constants */
