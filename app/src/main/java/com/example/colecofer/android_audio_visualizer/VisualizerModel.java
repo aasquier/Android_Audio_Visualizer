@@ -46,10 +46,12 @@ public class VisualizerModel {
     //TODO: This will only work with local files since it's based off the media player
     public void checkToSwitchVisualizer() {
         float currentTimeMillis = VisualizerActivity.mediaPlayer.getCurrentPosition();
-        if (currentTimeMillis >= visualizerSwitchTimeOne && this.currentVisualizer.visNum == 1) {
-            this.currentVisualizer = new VisTwo(this.currentVisualizer.captureSize);
-        } else if (currentTimeMillis >= visualizerSwitchTimeTwo && this.currentVisualizer.visNum == 2) {
-            this.currentVisualizer = new VisThree(this.currentVisualizer.captureSize);
+        if (currentTimeMillis >= visualizerSwitchTimeOne && currentVisualizer.visNum == 1) {
+            currentVisualizer.disableVertexAttribArrays();
+            currentVisualizer = new VisTwo(currentVisualizer.captureSize);
+        } else if (currentTimeMillis >= visualizerSwitchTimeTwo && currentVisualizer.visNum == 2) {
+            currentVisualizer.disableVertexAttribArrays();
+            currentVisualizer = new VisThree(currentVisualizer.captureSize);
         }
     }
 

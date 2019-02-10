@@ -1,5 +1,7 @@
 package com.example.colecofer.android_audio_visualizer;
 
+import android.opengl.GLES20;
+
 import java.util.ArrayDeque;
 
 /**
@@ -42,6 +44,10 @@ abstract public class VisualizerBase {
      */
     public void setColorHandle(int colorHandle) { this.colorHandle = colorHandle; }
 
+    public void disableVertexAttribArrays() {
+        GLES20.glDisableVertexAttribArray(positionHandle);
+        GLES20.glDisableVertexAttribArray(colorHandle);
+    }
     /**
      * Called from the Surface View and should setup the initial fft values.
      * @param fft
