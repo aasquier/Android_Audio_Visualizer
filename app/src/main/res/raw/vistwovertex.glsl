@@ -58,9 +58,12 @@ void main() {
 //    vec4 newPosition = vec4(snoise(nx, ny), snoise(nx, ny), a_Position.zw);
 //    v_Color = newColor;
 
-    vec2 cPos = vec2(2.0 * a_Position.xy);
+    float scaledTime = time / 250.0;
+
+    vec2 res = vec2(0.95, 0.95);
+    vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
     float cLength = length(cPos);
-    vec2 uv = a_Position.xy + (cPos/cLength) * cos(cLength * 12.0 - time * a_DB_Level) * 0.03;
+    vec2 uv = (a_Position.xy / res.xy) + (cPos / cLength) * sin(cLength * 12.0 - scaledTime * 4.0) * 0.03;
     vec4 newPosition = vec4(uv, a_Position.zw);
 
     v_Color = a_Color;
