@@ -15,9 +15,9 @@ public class VisualizerModel {
     private PlaybackState currentPlaybackState;
     private BroadcastReceiver networkStateReceiver;
     private String trackURI;
-    private String trackName;
-    private String artistName;
-    private String albumName;
+    String trackName;
+    String artistName;
+    String albumName;
     private int durationInMilliseconds;
     private int visualizerSwitchTimeOne;
     private int visualizerSwitchTimeTwo;

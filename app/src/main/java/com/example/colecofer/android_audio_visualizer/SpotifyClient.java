@@ -108,6 +108,23 @@ public class SpotifyClient {
         return value;
     }
 
+    /**
+     * Parse the track name from the JSON response
+     *
+     * @param responseJSON JSON response from the track info endpoint
+     * @return string representing the track name
+     */
+    public static String getTrackName(String responseJSON) {
+        JSONObject json = convertStringToJSON(responseJSON);
+        String value = "Error: Couldn't find field";
+        try {
+            value = json.getString("name");
+        } catch (JSONException e) {
+            Log.d("Spotify", "Error - Could not extract artist name from response" + e.getMessage());
+        }
+        return value;
+    }
+
 
     /**
      * Parse the album name from the JSON response

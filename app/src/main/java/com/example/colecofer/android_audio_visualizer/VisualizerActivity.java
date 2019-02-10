@@ -4,13 +4,18 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.util.Pair;
+
 
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
@@ -36,6 +41,9 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     private VisualizerSurfaceView surfaceView;
     private VisualizerRenderer visualizerRenderer;
     private Visualizer.OnDataCaptureListener captureListener;
+
+    private TextView songTitle;
+    private TextView artistName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +130,29 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
         setContentView(surfaceView);
 
+        // Add song and artist text view to the visualizer
+        songTitle = new TextView(this);
+        artistName = new TextView(this);
+
+        songTitle.setTextColor(Color.WHITE);
+        artistName.setTextColor(Color.WHITE);
+        songTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
+        artistName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
+
+        ViewGroup.MarginLayoutParams songMargin = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
+        ViewGroup.MarginLayoutParams artistMargin = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
+
+        songTitle.setLayoutParams(songMargin);
+        songTitle.setPadding(100, 100, 100, 100);
+        addContentView(songTitle, songMargin);
+
+        artistName.setLayoutParams(artistMargin);
+        artistName.setPadding(100, 200, 100, 100);
+        addContentView(artistName, artistMargin);
+
+        songTitle.requestLayout();
+        artistName.requestLayout();
+
     }
 
     /** Sets the decibel history to all 0.0 to begin with */
@@ -156,17 +187,25 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
     @Override
     public void onFftDataCapture(Visualizer visualizer, byte[] fft, int samplingRate) {
+      
         /** Gives us the decibel level for the fft bucket we care about **/
         double currentDecibels = getDBs(fft[REAL_BUCKET_INDEX], fft[IMAGINARY_BUCKET_INDEX], this.fftArraySize);
-
+        updateSongAndArtistName();
         /** Check and see if it is time to update the decibel history with the current decibel level, and check if it is time to
          *  refresh the screen based on our 60 fps */
         Pair<Long, Boolean> isTimeToRefreshScreen = updateDecibelHistory(currentDecibels, this.previousUpdateTime);
+
 
         /** Update the screen if the elapsed time has exceeded the threshold set */
         if(isTimeToRefreshScreen.second) {
             VisualizerModel.getInstance().currentVisualizer.updateVertices();
         }
+    }
+
+    private void updateSongAndArtistName() {
+
+        songTitle.setText(VisualizerModel.getInstance().trackName);
+        artistName.setText(VisualizerModel.getInstance().artistName);
     }
 
 }
