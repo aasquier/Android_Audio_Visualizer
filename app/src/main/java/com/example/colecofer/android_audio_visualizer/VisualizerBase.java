@@ -8,9 +8,13 @@ package com.example.colecofer.android_audio_visualizer;
  */
 abstract public class VisualizerBase {
 
+    /** These are the "index" handles that give OpenGL a reference to refer to Javaland variables */
     protected int positionHandle;
     protected int colorHandle;
     protected int currentDecibelLevelHandle;
+    protected int currentFragmentDecibelLevelHandle;
+    protected int timeHandle;
+
     protected int fftArraySize;
     protected String vertexShader;
     protected String fragmentShader;
@@ -53,6 +57,11 @@ abstract public class VisualizerBase {
      * @param currentDecibelLevel
      */
     public void setCurrentDecibelLevelHandle(int currentDecibelLevel) { this.currentDecibelLevelHandle = currentDecibelLevel; }
+
+
+    public void setCurrentFragmentDecibelLevelHandle(int currentDecibelLevel) { this.currentFragmentDecibelLevelHandle = currentDecibelLevel; }
+
+    public void setTimeHandle(int timeHandle) { this.timeHandle = timeHandle; }
 
     /**
      * Called from the Renderer and should be used to update animations

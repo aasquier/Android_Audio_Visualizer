@@ -2,14 +2,14 @@ package com.example.colecofer.android_audio_visualizer;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
+
+import java.nio.IntBuffer;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 public class VisualizerRenderer implements GLSurfaceView.Renderer {
-
-    private int positionHandle;
-    private int colorHandle;
-    private int currentDecibelLevelHandle;
 
     public VisualizerRenderer() {
 
@@ -17,6 +17,12 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        /** Locals to catch the index for glsl variables */
+        int positionHandle;
+        int colorHandle;
+        int currentDecibelLevelHandle;
+        int timeHandle;
+
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         /* Vertex Shader Error Handling */
@@ -34,15 +40,9 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
             if (compileStatus[0] == 0)
             {
                 GLES20.glDeleteShader(vertexShaderHandle);
-                vertexShaderHandle = 0;
+                throw new RuntimeException("Could not compile vertex shader program...");
             }
         }
-
-        if (vertexShaderHandle == 0)
-        {
-            throw new RuntimeException("Error creating vertex shader.");
-        }
-
 
         /* Fragment Shader Error Handling */
         int fragmentShaderHandle = GLES20.glCreateShader(GLES20.GL_FRAGMENT_SHADER);
@@ -59,13 +59,8 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
             if (compileStatus[0] == 0)
             {
                 GLES20.glDeleteShader(fragmentShaderHandle);
-                fragmentShaderHandle = 0;
+                throw new RuntimeException("Could not compile fragment shader program...");
             }
-        }
-
-        if (fragmentShaderHandle == 0)
-        {
-            throw new RuntimeException("Error creating fragment shader.");
         }
 
         // Create a program object and store the handle to it.
@@ -89,16 +84,11 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
             GLES20.glGetProgramiv(programHandle, GLES20.GL_LINK_STATUS, linkStatus, 0);
 
             // If the link failed, delete the program.
-            if (linkStatus[0] == 0)
+            if (linkStatus[0] != GLES20.GL_TRUE)
             {
                 GLES20.glDeleteProgram(programHandle);
-                programHandle = 0;
+                throw new RuntimeException("Could not link shader programs together...");
             }
-        }
-
-        if (programHandle == 0)
-        {
-            throw new RuntimeException("Error creating program.");
         }
 
         //Get the position and color attributes
@@ -108,6 +98,8 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         if (VisualizerModel.getInstance().currentVisualizer instanceof VisTwo) {
             currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, "a_DB_Level");
             VisualizerModel.getInstance().currentVisualizer.setCurrentDecibelLevelHandle(currentDecibelLevelHandle);
+            timeHandle = GLES20.glGetUniformLocation(programHandle, "time");
+            VisualizerModel.getInstance().currentVisualizer.setTimeHandle(timeHandle);
         }
 
         VisualizerModel.getInstance().currentVisualizer.setPositionHandle(positionHandle);

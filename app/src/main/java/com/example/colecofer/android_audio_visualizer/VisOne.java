@@ -1,5 +1,6 @@
 package com.example.colecofer.android_audio_visualizer;
 
+import android.content.Context;
 import android.opengl.GLES20;
 import java.nio.FloatBuffer;
 import java.nio.channels.FileLock;
@@ -26,13 +27,13 @@ public class VisOne extends VisualizerBase {
     private int vertexCount = 5;
     private GLLine[] lines;  //Holds the lines to be displayed
     private float lineOffSet = (RIGHT_DRAW_BOUNDARY * 2) / (LINE_AMT - 1); //We want to display lines from -.99 to .99 (.99+.99=1.98)
-
+    private Utility util;
 
     /**
      * Constructor
      * @param currentVertexArraySize
      */
-    public VisOne(int currentVertexArraySize) {
+    public VisOne(int currentVertexArraySize, Context context) {
         this.fftArraySize = currentVertexArraySize;
         this.vertexCount = this.fftArraySize / VERTEX_AMOUNT;
 
@@ -44,25 +45,10 @@ public class VisOne extends VisualizerBase {
             k += lineOffSet;
         }
 
-        this.vertexShader =
-                "uniform mat4 u_MVPMatrix;" +		        // A constant representing the combined model/view/projection matrix.
-                "attribute vec4 a_Position;\n" + 	        // Per-vertex position information we will pass in.
-                "attribute vec4 a_Color;\n" +		        // Per-vertex color information we will pass in.
-                "varying vec4 v_Color;\n" +                 // This will be passed into the fragment shader.
-                "void main()\n" +           		        // The entry point for our vertex shader.
-                "{\n" +
-                "   v_Color = a_Color;\n" +	    	        // Pass the color through to the fragment shader.
-                "   gl_Position = a_Position;\n" + 	        // gl_Position is a special variable used to store the final position.
-                "}\n";
+        util = new Utility(context);
 
-        this.fragmentShader =
-                "precision mediump float;\n"	+	// Set the default precision to medium. We don't need as high of a
-                "varying vec4 v_Color;\n" +         // This is the color from the vertex shader interpolated across the
-                "void main()\n"	+	                // The entry point for our fragment shader.
-                "{\n" +
-                "   gl_FragColor = v_Color;\n"	+	// Pass the color directly through the pipeline.
-                "}\n";
-
+        this.vertexShader = util.getStringFromGLSL(R.raw.visonevertex);
+        this.fragmentShader = util.getStringFromGLSL(R.raw.visonefragment);
     }
 
     @Override

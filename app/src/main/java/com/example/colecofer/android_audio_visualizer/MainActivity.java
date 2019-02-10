@@ -38,6 +38,7 @@ import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.CLIENT_ID;
 import static com.example.colecofer.android_audio_visualizer.Constants.REDIRECT_URI;
+import static com.example.colecofer.android_audio_visualizer.Constants.REQUEST_READ_EXTERNAL_STORAGE_PERMISSION;
 import static com.example.colecofer.android_audio_visualizer.Constants.REQUEST_RECORD_PERMISSION;
 import static com.example.colecofer.android_audio_visualizer.Constants.SCOPES;
 import static com.example.colecofer.android_audio_visualizer.Constants.TRACK_BASE_URI;
@@ -94,11 +95,23 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                 Toast.makeText(MainActivity.this, "RECORD_AUDIO permission is required.", Toast.LENGTH_SHORT).show();
             } else {
                 //If no permission then request it to the user
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_PERMISSION);
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO, }, REQUEST_RECORD_PERMISSION);
             }
         } else {
             //TODO: Exit if we can't get it.
         }
+
+//        //Check Read File Permission
+//        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+//                Toast.makeText(MainActivity.this, "READ_EXTERNAL_STORAGE permission is required.", Toast.LENGTH_SHORT).show();
+//            } else {
+//                //If no permission then request it to the user
+//                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, }, REQUEST_READ_EXTERNAL_STORAGE_PERMISSION);
+//            }
+//        } else {
+//            //TODO: Exit if we can't get it.
+//        }
     }
 
 

@@ -14,12 +14,13 @@ final class Constants {
     /** MainActivity constants */
     //TODO: This is Spotify's test account because I don't want to hard code ours into a public repository...
     //Used to verify that we've been redirected back from Spotify after authenticating in browser
-    static final String CLIENT_ID              = "089d841ccc194c10a77afad9e1c11d54";
-    static final int REQUEST_RECORD_PERMISSION = 101;
-    static final int REQUEST_CODE              = 1337;
-    static final String REDIRECT_URI           = "testschema://callback";
-    static final String TRACK_BASE_URI         = "spotify:track:";
-    static final String[] SCOPES               = new String[]{"user-read-private", "playlist-read", "playlist-read-private", "streaming"};
+    static final String CLIENT_ID                             = "089d841ccc194c10a77afad9e1c11d54";
+    static final int REQUEST_RECORD_PERMISSION                = 101;
+    static final int REQUEST_READ_EXTERNAL_STORAGE_PERMISSION = 102;
+    static final int REQUEST_CODE                             = 1337;
+    static final String REDIRECT_URI                          = "testschema://callback";
+    static final String TRACK_BASE_URI                        = "spotify:track:";
+    static final String[] SCOPES                              = new String[]{"user-read-private", "playlist-read", "playlist-read-private", "streaming"};
 
 
     /** SpotifyClient constants */
@@ -58,7 +59,10 @@ final class Constants {
 
     /** Vis2 constants */
     static final int VIS2_STRIDE_BYTES = (POSITION_DATA_SIZE + COLOR_DATA_SIZE) * BYTES_PER_FLOAT;
-
+    /** GLDot constants for Vis2*/
+    static final int DOT_HEIGHT = 600;
+    static final int DOT_WIDTH  = 600;
+    static final int DOT_COUNT  = DOT_WIDTH * DOT_HEIGHT;
 
     /** VisualizerActivity constants */
     static final int REQUEST_PERMISSION     = 101;

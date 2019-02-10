@@ -9,8 +9,11 @@ public class VisualizerSurfaceView extends GLSurfaceView {
 
 //    private static float density;
 
+    private Context context;
+
     public VisualizerSurfaceView(Context context) {
         super(context);
+        this.context = context;
     }
 
     public VisualizerSurfaceView(Context context, AttributeSet attrs) {
@@ -20,8 +23,8 @@ public class VisualizerSurfaceView extends GLSurfaceView {
     public void setRenderer(VisualizerRenderer inputRenderer, float inputDensity, int vertexArraySize) {
 //        this.density = inputDensity;
         VisualizerModel.getInstance().renderer = inputRenderer;
-//        VisualizerModel.getInstance().currentVisualizer = new VisOne(vertexArraySize);
-        VisualizerModel.getInstance().currentVisualizer = new VisTwo();
+//        VisualizerModel.getInstance().currentVisualizer = new VisOne(vertexArraySize, context);
+        VisualizerModel.getInstance().currentVisualizer = new VisTwo(context);
         super.setRenderer(VisualizerModel.getInstance().renderer);
     }
 
