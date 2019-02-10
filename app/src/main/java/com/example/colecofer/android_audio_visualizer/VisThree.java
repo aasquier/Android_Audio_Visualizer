@@ -3,12 +3,12 @@ package com.example.colecofer.android_audio_visualizer;
 public class VisThree extends VisualizerBase {
 
     @Override
-    public void updateFft(byte[] fft) {
+    public void updateVertices() {
 
     }
 
     @Override
-    public void updateFft(float[] fft) {
+    public void updateVertices(float[] newVertices) {
 
     }
 

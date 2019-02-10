@@ -4,18 +4,14 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import static com.example.colecofer.android_audio_visualizer.Constants.COUNT;
+
 public class GLCircle {
 
     private FloatBuffer circleVerticesBuffer;
     private float[] vertices;
-    private float xOffset;
-
-    private final int COUNT = 364;
 
     public GLCircle(float xPosition){
-
-        // xOffset is temporary not used
-        this.xOffset = xPosition;
 
         this.vertices = new float[COUNT * 7];
 
@@ -34,8 +30,6 @@ public class GLCircle {
         circleVerticesBuffer = vertexByteBuffer.asFloatBuffer();
         circleVerticesBuffer.put(vertices).position(0);
     }
-
-    public int count() { return this.COUNT; }
 
     public FloatBuffer draw() { return this.circleVerticesBuffer; }
 

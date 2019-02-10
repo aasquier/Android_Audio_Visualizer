@@ -1,14 +1,12 @@
 package com.example.colecofer.android_audio_visualizer;
 
 import android.util.Pair;
-
-import java.util.ArrayDeque;
+import static com.example.colecofer.android_audio_visualizer.Constants.MAX_DB_LEVEL;
+import static com.example.colecofer.android_audio_visualizer.Constants.MAX_DECIBEL_RATIO;
+import static com.example.colecofer.android_audio_visualizer.Constants.REFRESH_DECIBEL_TIME;
+import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
 
 public class Utility {
-
-    private static final float MAX_DB_LEVEL = 170.0f;
-    private static final long REFRESH_DECIBEL_TIME = 16L;
-    private static final float MAX_DECIBEL_RATIO = 1.0f;
 
     /** Takes the real and imaginary parts of an FFT frequency bin and returns the decibels for that bin. */
     static double getDBs(byte real, byte imaginary, int n) {
@@ -27,19 +25,20 @@ public class Utility {
     /**
      * Keeps a record of recent dBs as large as the screen is tall. It removes the last record and
      * removes the oldest record. If the current dB level exceeds our max setting it uses the max
-     * @param newDB
-     * @param dbHistory
+     * @param newDecibelLevel
      */
-    static Pair<Long, Boolean> updateDbHistory(double newDB, ArrayDeque<Float> dbHistory, long previousUpdateTime) {
-        Pair<Long, Boolean> isTime = isTimeToUpdate(previousUpdateTime);
+    static Pair<Long, Boolean> updateDecibelHistory(double newDecibelLevel, long previousUpdateTime) {
+        Pair<Long, Boolean> isTimeToUpdate = isTimeToUpdate(previousUpdateTime);
 
-        if (isTime.second == true) {
-            float dbRatio = (float) newDB / MAX_DB_LEVEL;
-            dbRatio = dbRatio > MAX_DECIBEL_RATIO ? MAX_DECIBEL_RATIO : dbRatio;
-            dbHistory.addFirst(dbRatio);
-            dbHistory.removeLast();
+        /** A check to ensure that the current time has exceeded the desired refresh time */
+        if (isTimeToUpdate.second) {
+            float newDbRatio = (float) newDecibelLevel / MAX_DB_LEVEL;
+            newDbRatio = newDbRatio > MAX_DECIBEL_RATIO ? MAX_DECIBEL_RATIO : newDbRatio;
+            /** Update the decibel history with the current decibel level */
+            decibelHistory.addFirst(newDbRatio);
+            decibelHistory.removeLast();
         }
-        return isTime;
+        return isTimeToUpdate;
     }
 
     /**
