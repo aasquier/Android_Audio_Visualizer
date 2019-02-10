@@ -2,13 +2,14 @@ package com.example.colecofer.android_audio_visualizer;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
+
+import java.nio.IntBuffer;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 public class VisualizerRenderer implements GLSurfaceView.Renderer {
-
-    private int positionHandle;
-    private int colorHandle;
 
     public VisualizerRenderer() {
 
@@ -16,34 +17,20 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        /** Locals to catch the index for glsl variables */
+        int positionHandle;
+        int colorHandle;
+        int currentDecibelLevelHandle;
+        int timeHandle;
+
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-        final String vertexShader =
-                "uniform mat4 u_MVPMatrix;" +		// A constant representing the combined model/view/projection matrix.
-                "attribute vec4 a_Position;\n" + 	// Per-vertex position information we will pass in.
-                "attribute vec4 a_Color;\n" +		// Per-vertex color information we will pass in.
-                "varying vec4 v_Color;\n" +		    // This will be passed into the fragment shader.
-                "void main()\n" +           		// The entry point for our vertex shader.
-                "{\n" +
-                "   v_Color = a_Color;\n" +	    	// Pass the color through to the fragment shader.
-                "   gl_Position = a_Position;\n" + 	// gl_Position is a special variable used to store the final position.
-                "}\n";                              // normalized screen coordinates.
-
-        final String fragmentShader =
-                "precision mediump float;\n"	+	// Set the default precision to medium. We don't need as high of a
-                "varying vec4 v_Color;\n" +         // This is the color from the vertex shader interpolated across the
-                "void main()\n"	+	                // The entry point for our fragment shader.
-                "{\n" +
-                "   gl_FragColor = v_Color;\n"	+	// Pass the color directly through the pipeline.
-                "}\n";
-
 
         /* Vertex Shader Error Handling */
         int vertexShaderHandle = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);
 
         if (vertexShaderHandle != 0)
         {
-            GLES20.glShaderSource(vertexShaderHandle, vertexShader);
+            GLES20.glShaderSource(vertexShaderHandle, VisualizerModel.getInstance().currentVisualizer.getVertexShaderString());
             GLES20.glCompileShader(vertexShaderHandle);
 
             final int[] compileStatus = new int[1];
@@ -53,22 +40,16 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
             if (compileStatus[0] == 0)
             {
                 GLES20.glDeleteShader(vertexShaderHandle);
-                vertexShaderHandle = 0;
+                throw new RuntimeException("Could not compile vertex shader program...");
             }
         }
-
-        if (vertexShaderHandle == 0)
-        {
-            throw new RuntimeException("Error creating vertex shader.");
-        }
-
 
         /* Fragment Shader Error Handling */
         int fragmentShaderHandle = GLES20.glCreateShader(GLES20.GL_FRAGMENT_SHADER);
 
         if (fragmentShaderHandle != 0)
         {
-            GLES20.glShaderSource(fragmentShaderHandle, fragmentShader);
+            GLES20.glShaderSource(fragmentShaderHandle, VisualizerModel.getInstance().currentVisualizer.getFragmentShaderString());
             GLES20.glCompileShader(fragmentShaderHandle);
 
             final int[] compileStatus = new int[1];
@@ -78,13 +59,8 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
             if (compileStatus[0] == 0)
             {
                 GLES20.glDeleteShader(fragmentShaderHandle);
-                fragmentShaderHandle = 0;
+                throw new RuntimeException("Could not compile fragment shader program...");
             }
-        }
-
-        if (fragmentShaderHandle == 0)
-        {
-            throw new RuntimeException("Error creating fragment shader.");
         }
 
         // Create a program object and store the handle to it.
@@ -108,21 +84,23 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
             GLES20.glGetProgramiv(programHandle, GLES20.GL_LINK_STATUS, linkStatus, 0);
 
             // If the link failed, delete the program.
-            if (linkStatus[0] == 0)
+            if (linkStatus[0] != GLES20.GL_TRUE)
             {
                 GLES20.glDeleteProgram(programHandle);
-                programHandle = 0;
+                throw new RuntimeException("Could not link shader programs together...");
             }
-        }
-
-        if (programHandle == 0)
-        {
-            throw new RuntimeException("Error creating program.");
         }
 
         //Get the position and color attributes
         positionHandle = GLES20.glGetAttribLocation(programHandle, "a_Position");
         colorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
+
+        if (VisualizerModel.getInstance().currentVisualizer instanceof VisTwo) {
+            currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, "a_DB_Level");
+            VisualizerModel.getInstance().currentVisualizer.setCurrentDecibelLevelHandle(currentDecibelLevelHandle);
+            timeHandle = GLES20.glGetUniformLocation(programHandle, "time");
+            VisualizerModel.getInstance().currentVisualizer.setTimeHandle(timeHandle);
+        }
 
         VisualizerModel.getInstance().currentVisualizer.setPositionHandle(positionHandle);
         VisualizerModel.getInstance().currentVisualizer.setColorHandle(colorHandle);
@@ -133,12 +111,13 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-        GLES20.glViewport(0, 0, width, height);
+        gl.glViewport(0, 0, width, height);
     }
 
     //Was newFftData
-    public void updateFft(float[] fft) {
-        VisualizerModel.getInstance().currentVisualizer.updateFft(fft);
+    public void updateVertices(float[] newVertices) {
+        VisualizerModel.getInstance().currentVisualizer.updateVertices(newVertices);
+
     }
 
     @Override

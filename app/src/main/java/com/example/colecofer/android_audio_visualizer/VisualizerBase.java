@@ -1,7 +1,5 @@
 package com.example.colecofer.android_audio_visualizer;
 
-import java.util.ArrayDeque;
-
 /**
  * VisualizerBase is the fundamental abstract class that all visualizers should
  * be derived from. This way, we can have an object of this base class
@@ -10,48 +8,67 @@ import java.util.ArrayDeque;
  */
 abstract public class VisualizerBase {
 
-    private final int SCREEN_SIZE = 1024;
-
-    ArrayDeque<Float> dbHistory;
+    /** These are the "index" handles that give OpenGL a reference to refer to Javaland variables */
     protected int positionHandle;
     protected int colorHandle;
-    protected int captureSize;
+    protected int currentDecibelLevelHandle;
+    protected int currentFragmentDecibelLevelHandle;
+    protected int timeHandle;
+
+    protected int fftArraySize;
+    protected String vertexShader;
+    protected String fragmentShader;
 
     /**
      * Default Constructor
      */
     public VisualizerBase() {
-        this.dbHistory = new ArrayDeque<>();
-        for(int i = 0; i < SCREEN_SIZE; ++i) {
-            this.dbHistory.addFirst(0.0f);
-        }
+
+    }
+
+    String getVertexShaderString() {
+        return this.vertexShader;
+    }
+
+    String getFragmentShaderString() {
+        return this.fragmentShader;
     }
 
     /**
      * Set the position handle
-     * This is necessary so that the renderer can update the position handle
+     * This is necessary so that the renderer can update the position handle by giving it a reference
+     * "handle": really just an index for OpenGL to use
      * @param positionHandle
      */
     public void setPositionHandle(int positionHandle) { this.positionHandle = positionHandle; }
 
     /**
      * Set the color handle
-     * This is necessary so that the renderer can update the color handle
+     * This is necessary so that the renderer can update the color handle by giving it a reference
+     * "handle": really just an index for OpenGL to use
      * @param colorHandle
      */
     public void setColorHandle(int colorHandle) { this.colorHandle = colorHandle; }
 
     /**
-     * Called from the Surface View and should setup the initial fft values.
-     * @param fft
+     * Set the decibelLevel handle
+     * This is necessary so that the renderer can update the deicbelLevel handle by giving it a reference
+     * "handle": really just an index for OpenGL to use
+     * @param currentDecibelLevel
      */
-    abstract public void updateFft(byte[] fft);
+    public void setCurrentDecibelLevelHandle(int currentDecibelLevel) { this.currentDecibelLevelHandle = currentDecibelLevel; }
+
+
+    public void setCurrentFragmentDecibelLevelHandle(int currentDecibelLevel) { this.currentFragmentDecibelLevelHandle = currentDecibelLevel; }
+
+    public void setTimeHandle(int timeHandle) { this.timeHandle = timeHandle; }
 
     /**
      * Called from the Renderer and should be used to update animations
-     * @param fft
      */
-    abstract public void updateFft(float[] fft);
+    abstract public void updateVertices();
+
+    abstract public void updateVertices(float[] newVertices);
 
     /**
      * This method will be in charge of calling the individual draw() methods

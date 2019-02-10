@@ -14,19 +14,27 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.util.Pair;
+
 
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
+import java.util.ArrayDeque;
+
+import static com.example.colecofer.android_audio_visualizer.Constants.IMAGINARY_BUCKET_INDEX;
+import static com.example.colecofer.android_audio_visualizer.Constants.MAX_FFT_ARRAY_SIZE;
+import static com.example.colecofer.android_audio_visualizer.Constants.REAL_BUCKET_INDEX;
+import static com.example.colecofer.android_audio_visualizer.Constants.REQUEST_PERMISSION;
+import static com.example.colecofer.android_audio_visualizer.Constants.SCREEN_VERTICAL_HEIGHT;
 import static com.example.colecofer.android_audio_visualizer.Utility.getDBs;
+import static com.example.colecofer.android_audio_visualizer.Utility.updateDecibelHistory;
 import static com.loopj.android.http.AsyncHttpClient.log;
 
 public class VisualizerActivity extends AppCompatActivity implements Visualizer.OnDataCaptureListener {
 
-    private static final int REQUEST_PERMISSION = 101;
-    private static final int REAL_BUCKET = 3;
-    private static final int IMAGINARY_BUCKET = 4;
-    private static int audioSampleSize;
+    private static int fftArraySize;
     private long previousUpdateTime;
+    static ArrayDeque<Float> decibelHistory;
 
     private MediaPlayer mediaPlayer;
     private Visualizer visualizer;
@@ -42,6 +50,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visualizer);
         //startTrackPlayback();  //Uncomment this line to start Spotify track playback
+        initDecibelHistory();
         initVisualizer();
     }
 
@@ -73,7 +82,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
      * when passing a 0 to the Visualizer constructor. This is necessary to use Spotify.
      */
     private void initVisualizer() {
-        this.audioSampleSize = Visualizer.getCaptureSizeRange()[1];
+        this.fftArraySize = Visualizer.getCaptureSizeRange()[1];
 
         /** This ends up being the max size we will use, it is actually half of this number that defines
          *  how many buckets we can have. So we have 512 "Frequency buckets" if this is 1024 to account
@@ -81,8 +90,8 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
          *  This gives us a frequency granularity of 39.06 Hz, so our target will be the 3rd bucket for
          *  the real component, and 4th bucket for the imaginary component which covers 78.12-117.18 Hz
          */
-        if (this.audioSampleSize > 1024) {
-            this.audioSampleSize = 1024;
+        if (this.fftArraySize > MAX_FFT_ARRAY_SIZE) {
+            this.fftArraySize = MAX_FFT_ARRAY_SIZE;
         }
 
         final DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -99,7 +108,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         if (supportsEs2) {
             surfaceView.setEGLContextClientVersion(2);
             visualizerRenderer = new VisualizerRenderer();
-            surfaceView.setRenderer(visualizerRenderer, displayMetrics.density, audioSampleSize);
+            surfaceView.setRenderer(visualizerRenderer, displayMetrics.density, fftArraySize);
         } else {
             log.d("opengl", "Does not support ES2");
             // This is where you could create an OpenGL ES 1.x compatible
@@ -113,7 +122,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         mediaPlayer.start();
 
         visualizer = new Visualizer(mediaPlayer.getAudioSessionId());
-        visualizer.setCaptureSize(audioSampleSize);
+        visualizer.setCaptureSize(fftArraySize);
         visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);
         visualizer.setEnabled(true);
 
@@ -146,6 +155,14 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
     }
 
+    /** Sets the decibel history to all 0.0 to begin with */
+    private void initDecibelHistory() {
+        this.decibelHistory = new ArrayDeque<>();
+        for(int i = 0; i < SCREEN_VERTICAL_HEIGHT; ++i) {
+            this.decibelHistory.addFirst(0.0f);
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -170,13 +187,19 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
     @Override
     public void onFftDataCapture(Visualizer visualizer, byte[] fft, int samplingRate) {
+      
         /** Gives us the decibel level for the fft bucket we care about **/
-        double dbs = getDBs(fft[REAL_BUCKET], fft[IMAGINARY_BUCKET], this.audioSampleSize);
+        double currentDecibels = getDBs(fft[REAL_BUCKET_INDEX], fft[IMAGINARY_BUCKET_INDEX], this.fftArraySize);
         updateSongAndArtistName();
-        //this.previousUpdateTime = updateDbHistory(dbs, VisualizerModel.getInstance().currentVisualizer.dbHistory, this.previousUpdateTime);
+        /** Check and see if it is time to update the decibel history with the current decibel level, and check if it is time to
+         *  refresh the screen based on our 60 fps */
+        Pair<Long, Boolean> isTimeToRefreshScreen = updateDecibelHistory(currentDecibels, this.previousUpdateTime);
 
-        /** TODO this needs to change as the whole fft should not influence the wave */
-        surfaceView.updateFft(fft);
+
+        /** Update the screen if the elapsed time has exceeded the threshold set */
+        if(isTimeToRefreshScreen.second) {
+            VisualizerModel.getInstance().currentVisualizer.updateVertices();
+        }
     }
 
     private void updateSongAndArtistName() {

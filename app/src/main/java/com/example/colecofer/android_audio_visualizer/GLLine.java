@@ -3,6 +3,7 @@ package com.example.colecofer.android_audio_visualizer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import static com.example.colecofer.android_audio_visualizer.Constants.BYTES_PER_FLOAT;
 
 public class GLLine {
 
@@ -10,7 +11,6 @@ public class GLLine {
     private float[] vertices;
     private float xOffset;
 
-    static final int BYTES_PER_FLOAT = 4;
 
 
     public GLLine(float xPosition) {
@@ -68,7 +68,6 @@ public class GLLine {
     private void highlightPulse(float[] colorCode, float yAxis) {
 
     }
-
 
     /**
      * Returns a floatbuffer of values to be drawn.

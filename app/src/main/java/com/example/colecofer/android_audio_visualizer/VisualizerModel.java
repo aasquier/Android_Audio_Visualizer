@@ -6,9 +6,9 @@ import android.util.Log;
 import com.spotify.sdk.android.player.PlaybackState;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
-public class VisualizerModel {
+import static com.example.colecofer.android_audio_visualizer.Constants.MODEL_TAG;
 
-    private final String MODEL_TAG = "MODEL_TAG";
+public class VisualizerModel {
 
     //Spotify data
     private SpotifyPlayer player;
@@ -18,6 +18,9 @@ public class VisualizerModel {
     String trackName;
     String artistName;
     String albumName;
+    private int durationInMilliseconds;
+    private int visualizerSwitchTimeOne;
+    private int visualizerSwitchTimeTwo;
     public int colorMatrix[];
 
     //Visualizer / OpenGL instances
@@ -70,6 +73,12 @@ public class VisualizerModel {
 
         this.colorMatrix[3] = 1;
 
+    }
+
+    public void setDuration(int duration) {
+        durationInMilliseconds = duration;
+        visualizerSwitchTimeOne = duration / 3;
+        visualizerSwitchTimeTwo = visualizerSwitchTimeOne * 2;
     }
 
     /**
