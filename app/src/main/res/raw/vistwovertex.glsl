@@ -64,11 +64,7 @@ void main() {
     vec2 cPos = vec2(2.0 * a_Position.xy);
 
     // refactor either width or height to keep the shape
-    //if (cPos.x > cPox.y) {
-    //    cPos.x *= 0.725;
-    //} else {
-    //    cPos.y *= 0.725;
-    //}
+    cPos.x *= 0.725;                    // we can do better here if we can have screen resolution
 
     float cLength = length(cPos);
     vec2 uv = a_Position.xy + (cPos/cLength) * cos(cLength * 12.0 - time * a_DB_Level) * waveDeepOffset;
