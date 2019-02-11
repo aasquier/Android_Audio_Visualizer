@@ -89,9 +89,21 @@ public class VisOne extends VisualizerBase {
 
         int xOffset = 0;
         for(int i = 0; i < SCREEN_VERTICAL_HEIGHT; i++){
-            this.baseLineVertices[xOffset] = PIXEL * (float)decibelArray[i];
-            xOffset += 7;
+            float ampData = (PIXEL + (PIXEL * (float) decibelArray[i]));
+
+            if(i % 2 == 1) {
+                this.baseLineVertices[xOffset] = ampData;
+                this.baseLineVertices[xOffset+7] = -ampData;
+            }
+            else{
+                this.baseLineVertices[xOffset] = -ampData;
+                this.baseLineVertices[xOffset+7] = ampData;
+            }
+
+            xOffset += 14;
         }
+
+        this.updateVertices(this.baseLineVertices);
     }
 
     public void updateVertices(float[] newVertices) {
@@ -121,6 +133,6 @@ public class VisOne extends VisualizerBase {
         GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, lineVertexData);
         GLES20.glEnableVertexAttribArray(colorHandle);
 
-        GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, VIS1_ARRAY_SIZE);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, VIS1_VERTEX_COUNT);
     }
 }
