@@ -3,7 +3,6 @@ package com.example.colecofer.android_audio_visualizer;
 import android.content.Context;
 import android.opengl.GLES20;
 import java.nio.FloatBuffer;
-import java.nio.channels.FileLock;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
 import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_DRAW_BOUNDARY;
@@ -13,6 +12,11 @@ import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_
 import static com.example.colecofer.android_audio_visualizer.Constants.RIGHT_DRAW_BOUNDARY;
 import static com.example.colecofer.android_audio_visualizer.Constants.VERTEX_AMOUNT;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_STRIDE_BYTES;
+import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_ARRAY_SIZE;
+import static com.example.colecofer.android_audio_visualizer.Constants.PIXEL;
+import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_VERTEX_COUNT;
+import static com.example.colecofer.android_audio_visualizer.Constants.SCREEN_VERTICAL_HEIGHT;
+import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
 
 /**
  * Class VisOne
@@ -24,22 +28,19 @@ import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_STRI
 //public class VisOne extends VisualizerBase {
 public class VisOne extends VisualizerBase {
 
-    private int vertexCount = 5;
     private GLLine[] lines;  //Holds the lines to be displayed
     private float lineOffSet = (RIGHT_DRAW_BOUNDARY * 2) / (LINE_AMT - 1); //We want to display lines from -.99 to .99 (.99+.99=1.98)
     private Utility util;
+    private float[] baseLineVertices;
 
     /**
      * Constructor
-     * @param currentVertexArraySize
      */
-    public VisOne(int currentVertexArraySize, Context context) {
-        this.fftArraySize = currentVertexArraySize;
-        this.vertexCount = this.fftArraySize / VERTEX_AMOUNT;
-
-        //Create 100 lines
+    public VisOne(Context context) {
         lines = new GLLine[LINE_AMT];
+
         float k = LEFT_DRAW_BOUNDARY;
+
         for(int i = 0; i < LINE_AMT; ++i) {
             lines[i] = new GLLine(k);
             k += lineOffSet;
@@ -47,15 +48,56 @@ public class VisOne extends VisualizerBase {
 
         util = new Utility(context);
 
+        // Create base line where we pass it into the line classes
+        this.createBaseLine();
+
         this.vertexShader = util.getStringFromGLSL(R.raw.visonevertex);
         this.fragmentShader = util.getStringFromGLSL(R.raw.visonefragment);
     }
 
+    public void createBaseLine(){
+        this.baseLineVertices = new float[VIS1_ARRAY_SIZE];
+
+        int vertexIndex = 0;
+        float yAxis = -1.0f;
+        float yOffset = (float) 2 / VIS1_VERTEX_COUNT;
+
+        for(int i = 0; i < VIS1_ARRAY_SIZE; i+=7){
+            // If left side of the line
+            if(i % 2 == 0)
+                this.baseLineVertices[vertexIndex] = 0.0f;
+                // Else right side of the line
+            else
+                this.baseLineVertices[vertexIndex] = 0.0f + PIXEL;
+            this.baseLineVertices[vertexIndex+1] = yAxis;
+            this.baseLineVertices[vertexIndex+2] = 0.0f;
+
+            // Uses retrieved color scheme to set the color
+            this.baseLineVertices[vertexIndex+3] = 1.0f;
+            this.baseLineVertices[vertexIndex+4] = 0.0f;
+            this.baseLineVertices[vertexIndex+5] = 0.0f;
+            this.baseLineVertices[vertexIndex+6] = 1.0f;
+
+            yAxis += yOffset;
+            vertexIndex+= VERTEX_AMOUNT;
+        }
+    }
+
     @Override
     public void updateVertices() {
+        Object[] decibelArray = decibelHistory.toArray();
+
+        int xOffset = 0;
+        for(int i = 0; i < SCREEN_VERTICAL_HEIGHT; i++){
+            this.baseLineVertices[xOffset] = PIXEL * (float)decibelArray[i];
+            xOffset += 7;
+        }
     }
 
     public void updateVertices(float[] newVertices) {
+        for(int i = 0; i < LINE_AMT; i++){
+            lines[i].updateLineVertex(newVertices);
+        }
     }
 
     @Override
@@ -79,6 +121,6 @@ public class VisOne extends VisualizerBase {
         GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, lineVertexData);
         GLES20.glEnableVertexAttribArray(colorHandle);
 
-        GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, vertexCount);
+        GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, VIS1_ARRAY_SIZE);
     }
 }

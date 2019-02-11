@@ -11,8 +11,6 @@ public class GLLine {
     private float[] vertices;
     private float xOffset;
 
-
-
     public GLLine(float xPosition) {
         this.xOffset = xPosition;
 
@@ -41,31 +39,18 @@ public class GLLine {
      * of the current line's x-axis.
      * Converts the array into a FloatBuffer for efficiency (can be used
      * in the GPU)
-     * @param fft
+     * @param lineVertex
      */
-    public void updateFft(float[] fft) {
-        int size = fft.length;
+    public void updateLineVertex(float[] lineVertex) {
+        int size = lineVertex.length;
         for(int x = 0; x < size; x += 7) {
-            fft[x] += xOffset;
+            lineVertex[x] += this.xOffset;
         }
 
         //Puts the fft array into a FloatBuffer (drawable state for the GPU)
-        FloatBuffer fftInput = ByteBuffer.allocateDirect(fft.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        fftInput.put(fft).position(0);
-        lineVerticesBuffer = fftInput;
-    }
-
-
-    /**
-     * This method should be invoked when Visualizer One catches the pulsating flag.
-     * Do a plus and minus (?) to get the range of the highlight.
-     * Change the float array in the y-axis range by the colorCode.
-     * Amplify the reaction by the pulseAmp variable to give it a larger amplification.
-     * @param colorCode
-     * @param yAxis
-     */
-    private void highlightPulse(float[] colorCode, float yAxis) {
-
+        FloatBuffer fftInput = ByteBuffer.allocateDirect(lineVertex.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        fftInput.put(lineVertex).position(0);
+        this.lineVerticesBuffer = fftInput;
     }
 
     /**
