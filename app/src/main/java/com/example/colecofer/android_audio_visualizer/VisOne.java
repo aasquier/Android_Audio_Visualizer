@@ -53,43 +53,10 @@ public class VisOne extends VisualizerBase {
 
     @Override
     public void updateVertices() {
-        int arraySize = fftArraySize / 2;
-        float[] newVerticesToRender = new float[arraySize * VERTEX_AMOUNT];
-
-//        int j = 0;
-//        float plus = (float) 1 / (arraySize / 16);
-//        float k = -1.0f;
-//
-//        for (int i = 0; i < fftArraySize - 1; i += 2) {
-////            int amplify = (fft[i]*fft[i]) + (fft[i+1]*fft[i+1]);
-//
-//            fftRender[j] = (float)amplify * AMP_MULT;
-//            fftRender[j+1] = k;
-//            fftRender[j+2] = 0.0f;
-//            fftRender[j+3] = 1.0f;
-//            fftRender[j+4] = 0.0f;
-//            fftRender[j+5] = 0.0f;
-//            fftRender[j+6] = 1.0f;
-//
-//            k += plus;
-//            j+= VERTEX_AMOUNT;
-//        }
-
-        updateVertices(newVerticesToRender);
     }
 
-
-    @Override
     public void updateVertices(float[] newVertices) {
-        //Call updateVertices() on each line
-        for (int i = 0; i < LINE_AMT; ++i) {
-            float[] fftInput = new float[newVertices.length];
-            System.arraycopy(newVertices, 0, fftInput, 0, newVertices.length);
-            lines[i].updateFft(fftInput);
-        }
-
     }
-
 
     @Override
     public void draw() {
@@ -98,17 +65,6 @@ public class VisOne extends VisualizerBase {
             drawLine(lines[i].draw());
         }
     }
-
-
-    /**
-     * This functions will check the updated fft value and see if it's time to
-     * do the highlighted pulse animation. See Leon's doc sheet for details on
-     * implementation.
-     */
-    public void checkPulse() {
-
-    }
-
 
     /**
      * Draw a line given a set of verticies
@@ -125,21 +81,4 @@ public class VisOne extends VisualizerBase {
 
         GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, vertexCount);
     }
-
-    /** I think this stuff is unnecessary as it is in the base class already */
-//    /**
-//     * Set the position handle
-//     * This is necessary so that the renderer can update the position handle
-//     * @param positionHandle
-//     */
-//    public void setPositionHandle(int positionHandle) { this.positionHandle = positionHandle; }
-//
-//    /**
-//     * Set the color handle
-//     * This is necessary so that the renderer can update the color handle
-//     * @param colorHandle
-//     */
-//    public void setColorHandle(int colorHandle) { this.colorHandle = colorHandle; }
-
-
 }

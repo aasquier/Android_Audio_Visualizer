@@ -14,7 +14,6 @@ public class GLLine {
 
 
     public GLLine(float xPosition) {
-
         this.xOffset = xPosition;
 
         //These are the default lines that are displayed before any fft values have been updated

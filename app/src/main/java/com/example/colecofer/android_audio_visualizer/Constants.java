@@ -69,7 +69,7 @@ final class Constants {
     static final int REAL_BUCKET_INDEX      = 5;
     static final int IMAGINARY_BUCKET_INDEX = 6;
     static final int MAX_FFT_ARRAY_SIZE     = 1024;
-    static final int SCREEN_VERTICAL_HEIGHT = 1024;
+    static final int SCREEN_VERTICAL_HEIGHT = 256;
 
 
     /** VisualizerModel constants */
