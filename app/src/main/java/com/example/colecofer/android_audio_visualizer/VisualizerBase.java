@@ -12,7 +12,7 @@ abstract public class VisualizerBase {
     protected int positionHandle;
     protected int colorHandle;
     protected int currentDecibelLevelHandle;
-    protected int currentFragmentDecibelLevelHandle;
+    protected int oldDecibelLevelHandle;
     protected int timeHandle;
 
     protected int fftArraySize;
@@ -58,8 +58,7 @@ abstract public class VisualizerBase {
      */
     public void setCurrentDecibelLevelHandle(int currentDecibelLevel) { this.currentDecibelLevelHandle = currentDecibelLevel; }
 
-
-    public void setCurrentFragmentDecibelLevelHandle(int currentDecibelLevel) { this.currentFragmentDecibelLevelHandle = currentDecibelLevel; }
+    public void setOldDecibelLevelHandle(int oldDecibelLevel) { this.currentDecibelLevelHandle = oldDecibelLevel; }
 
     public void setTimeHandle(int timeHandle) { this.timeHandle = timeHandle; }
 

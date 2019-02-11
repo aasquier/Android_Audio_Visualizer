@@ -21,6 +21,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         int positionHandle;
         int colorHandle;
         int currentDecibelLevelHandle;
+        int oldDecibelLevelHandle;
         int timeHandle;
 
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -96,8 +97,10 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         colorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
 
         if (VisualizerModel.getInstance().currentVisualizer instanceof VisTwo) {
-            currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, "a_DB_Level");
+            currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, "a_current_DB_Level");
             VisualizerModel.getInstance().currentVisualizer.setCurrentDecibelLevelHandle(currentDecibelLevelHandle);
+            oldDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, "an_old_DB_Level");
+            VisualizerModel.getInstance().currentVisualizer.setOldDecibelLevelHandle(oldDecibelLevelHandle);
             timeHandle = GLES20.glGetUniformLocation(programHandle, "time");
             VisualizerModel.getInstance().currentVisualizer.setTimeHandle(timeHandle);
         }

@@ -65,6 +65,10 @@ public class VisTwo extends VisualizerBase {
         /** Updates the size of the dots using the most current decibel level, i.e. the first element of the decibel history */
         GLES20.glUniform1f(currentDecibelLevelHandle, decibelHistory.peekFirst());
 
+        Float first = decibelHistory.getFirst();
+        GLES20.glUniform1f(oldDecibelLevelHandle, decibelHistory.peekFirst());
+        decibelHistory.addFirst(first);
+
         GLES20.glUniform1f(timeHandle, (float)(System.currentTimeMillis() - visTwoStartTime));
 
         GLES20.glDrawArrays(GLES20.GL_POINTS, 0, count);

@@ -43,7 +43,8 @@ float snoise(vec2 v) {
 uniform mat4   u_MVPMatrix;	    // A constant representing the combined model/view/projection matrix.
 attribute vec4 a_Position;	    // Per-vertex position information we will pass in  (a_Position.xyzw , w is always 1)
 attribute vec4 a_Color;	        // Per-vertex color information we will pass in  (a_Color.rgba -->  a_Color.xyzw)
-uniform float  a_DB_Level;      // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
+uniform float  an_old_DB_Level;      // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
+uniform float  a_current_DB_Level;      // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
 varying vec4   v_Color;         // This will be passed into the fragment shader as the final color values
 
 uniform float time;
@@ -100,28 +101,58 @@ float worley5(vec2 c, float time) {
     return w;
 }
 
-
+float fbm(vec2 uv)
+{
+    float value = 0.0;
+    float factor = 1.0;
+    for (int i = 0; i < 8; i++)
+    {
+        uv += (time/1000.0) * 0.04;
+        value += snoise(uv * factor) / factor;
+        factor *= 2.0;
+    }
+    return value;
+}
 
 void main() {
-//    vec2 res = vec2(1.0, 1.0);
-
-
-    float dis = worley5(a_Position.xy/0.35, (time/1500.0));
-    vec3 c = mix(vec3(1.0,0.95,0.5), vec3(0.7,0.0,0.0), dis);
-    v_Color = vec4(c*c, 1.0);
-
-    float scaledTime = time / 1000.0;
+    float scaledTime = time / 800.0;
 
     vec2 res = vec2(0.95, 0.95);
     vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
     float cLength = length(cPos);
-    vec2 uv = (a_Position.xy / res.xy) + (cPos / cLength) * sin(cLength * 12.0 - scaledTime * 4.0) * 0.03;
-    vec4 newPosition = vec4(uv, a_Position.zw);
+    vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(cLength * 12.0 - scaledTime * 4.0) * 0.03;
+    vec4 newPosition = vec4(uv2, a_Position.zw);
 
-//    v_Color = a_Color;
-//    gl_Position = a_Position;
+    vec2 uv = newPosition.xy * 5.0 / 1.0;
+    v_Color = vec4(vec3(fbm(uv) * 0.5 + 0.0) + a_Color.xyz,1.0);
+
 	gl_Position = newPosition;
-    gl_PointSize = 1.0;// + a_DB_Level;        // This will adjust the dot size from 1.0-2.0 based on decibel level which is in the range 0.0-1.0
+	gl_PointSize = 1.0 + a_current_DB_Level;        // This will adjust the dot size from 1.0-2.0 based on decibel level which is in the range 0.0-1.0
+}
+
+
+
+
+// TODO stable implementation
+//    vec2 res = vec2(1.0, 1.0);
+//
+//
+//    float dis = worley5(a_Position.xy/0.35, (time/1500.0));
+//    vec3 c = mix(vec3(1.0,0.95,0.5), vec3(0.7,0.0,0.0), dis);
+//    v_Color = vec4(c*c, 1.0);
+//
+//    float scaledTime = time / 1000.0;
+//
+//    vec2 res = vec2(0.95, 0.95);
+//    vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
+//    float cLength = length(cPos);
+//    vec2 uv = (a_Position.xy / res.xy) + (cPos / cLength) * sin(cLength * 12.0 - scaledTime * 4.0) * 0.03;
+//    vec4 newPosition = vec4(uv, a_Position.zw);
+//
+////    v_Color = a_Color;
+////    gl_Position = a_Position;
+//	gl_Position = newPosition;
+//    gl_PointSize = 1.0;// + a_DB_Level;        // This will adjust the dot size from 1.0-2.0 based on decibel level which is in the range 0.0-1.0
 
 
 // TODO Graveyard of former shader rejects
@@ -146,4 +177,4 @@ void main() {
 //    gl_Position = newPosition;	        // gl_Position is a special variable used to store the final position for the fragment shader
 ////    gl_Position = a_Position;
 //    gl_PointSize = 1.0 + a_DB_Level;        // This will adjust the dot size from 1.0-2.0 based on decibel level which is in the range 0.0-1.0
-}
+
