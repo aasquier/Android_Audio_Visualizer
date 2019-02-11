@@ -37,7 +37,7 @@ public class VisOne extends VisualizerBase {
      * Constructor
      */
     public VisOne(Context context) {
-        lines = new GLLine[LINE_AMT];
+        this.lines = new GLLine[LINE_AMT];
 
         float k = LEFT_DRAW_BOUNDARY;
 
@@ -60,22 +60,22 @@ public class VisOne extends VisualizerBase {
 
         int vertexIndex = 0;
         float yAxis = -1.0f;
-        float yOffset = (float) 2 / VIS1_VERTEX_COUNT;
+        float yOffset = (float) 2 / (VIS1_VERTEX_COUNT - 1);
 
         for(int i = 0; i < VIS1_ARRAY_SIZE; i+=7){
             // If left side of the line
             if(i % 2 == 0)
-                this.baseLineVertices[vertexIndex] = 0.0f;
+                this.baseLineVertices[vertexIndex] = 0.1f;
                 // Else right side of the line
             else
-                this.baseLineVertices[vertexIndex] = 0.0f + PIXEL;
+                this.baseLineVertices[vertexIndex] = 0.1f + PIXEL;
             this.baseLineVertices[vertexIndex+1] = yAxis;
             this.baseLineVertices[vertexIndex+2] = 0.0f;
 
             // Uses retrieved color scheme to set the color
-            this.baseLineVertices[vertexIndex+3] = 1.0f;
-            this.baseLineVertices[vertexIndex+4] = 0.0f;
-            this.baseLineVertices[vertexIndex+5] = 0.0f;
+            this.baseLineVertices[vertexIndex+3] = 0.1f;
+            this.baseLineVertices[vertexIndex+4] = 0.1f;
+            this.baseLineVertices[vertexIndex+5] = 0.8f;
             this.baseLineVertices[vertexIndex+6] = 1.0f;
 
             yAxis += yOffset;
@@ -89,7 +89,7 @@ public class VisOne extends VisualizerBase {
 
         int xOffset = 0;
         for(int i = 0; i < SCREEN_VERTICAL_HEIGHT; i++){
-            float ampData = (PIXEL + (PIXEL * (float) decibelArray[i]));
+            float ampData = (PIXEL + (2.0f * PIXEL * (float) decibelArray[i]));
 
             if(i % 2 == 1) {
                 this.baseLineVertices[xOffset] = ampData;
@@ -116,23 +116,23 @@ public class VisOne extends VisualizerBase {
     public void draw() {
         //Go through each line and draw them
         for(int i = 0; i < LINE_AMT; ++i) {
-            drawLine(lines[i].draw());
+            lines[i].draw(this.positionHandle, this.colorHandle);
         }
     }
 
-    /**
-     * Draw a line given a set of verticies
-     * @param lineVertexData
-     */
-    private void drawLine(FloatBuffer lineVertexData){
-        lineVertexData.position(POSITION_OFFSET);
-        GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, lineVertexData);
-        GLES20.glEnableVertexAttribArray(positionHandle);
-
-        lineVertexData.position(COLOR_OFFSET);
-        GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, lineVertexData);
-        GLES20.glEnableVertexAttribArray(colorHandle);
-
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, VIS1_VERTEX_COUNT);
-    }
+//    /**
+//     * Draw a line given a set of verticies
+//     * @param lineVertexData
+//     */
+//    private void drawLine(FloatBuffer lineVertexData){
+//        lineVertexData.position(POSITION_OFFSET);
+//        GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, lineVertexData);
+//        GLES20.glEnableVertexAttribArray(positionHandle);
+//
+//        lineVertexData.position(COLOR_OFFSET);
+//        GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, lineVertexData);
+//        GLES20.glEnableVertexAttribArray(colorHandle);
+//
+//        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, VIS1_VERTEX_COUNT);
+//    }
 }

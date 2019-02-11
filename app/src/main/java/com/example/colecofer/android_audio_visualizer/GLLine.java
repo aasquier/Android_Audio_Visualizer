@@ -1,9 +1,17 @@
 package com.example.colecofer.android_audio_visualizer;
 
+import android.opengl.GLES20;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import static com.example.colecofer.android_audio_visualizer.Constants.BYTES_PER_FLOAT;
+import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
+import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
+import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_DATA_SIZE;
+import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_OFFSET;
+import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_STRIDE_BYTES;
+import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_VERTEX_COUNT;
 
 public class GLLine {
 
@@ -44,7 +52,7 @@ public class GLLine {
     public void updateLineVertex(float[] lineVertex) {
         int size = lineVertex.length;
         for(int x = 0; x < size; x += 7) {
-            lineVertex[x] += this.xOffset;
+            lineVertex[x] += (this.xOffset);
         }
 
         //Puts the fft array into a FloatBuffer (drawable state for the GPU)
@@ -56,8 +64,15 @@ public class GLLine {
     /**
      * Returns a floatbuffer of values to be drawn.
      */
-    public FloatBuffer draw() {
-        return this.lineVerticesBuffer;
-    }
+    public void draw(int positionHandle, int colorHandle) {
+        this.lineVerticesBuffer.position(POSITION_OFFSET);
+        GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, this.lineVerticesBuffer);
+        GLES20.glEnableVertexAttribArray(positionHandle);
 
+        this.lineVerticesBuffer.position(COLOR_OFFSET);
+        GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, this.lineVerticesBuffer);
+        GLES20.glEnableVertexAttribArray(colorHandle);
+
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, VIS1_VERTEX_COUNT);
+    }
 }
