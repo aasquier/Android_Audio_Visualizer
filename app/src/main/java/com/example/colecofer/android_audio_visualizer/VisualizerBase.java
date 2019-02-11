@@ -66,7 +66,7 @@ abstract public class VisualizerBase {
     /**
      * Called from the Renderer and should be used to update animations
      */
-    abstract public void updateVertices();
+    abstract public void updateVertices(byte[] newVertices);
 
     abstract public void updateVertices(float[] newVertices);
 

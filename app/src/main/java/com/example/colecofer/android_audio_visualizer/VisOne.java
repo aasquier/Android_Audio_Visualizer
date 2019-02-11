@@ -4,6 +4,8 @@ import android.content.Context;
 import android.opengl.GLES20;
 import java.nio.FloatBuffer;
 import java.nio.channels.FileLock;
+
+import static com.example.colecofer.android_audio_visualizer.Constants.AMP_MULT;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
 import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_DRAW_BOUNDARY;
@@ -29,6 +31,25 @@ public class VisOne extends VisualizerBase {
     private float lineOffSet = (RIGHT_DRAW_BOUNDARY * 2) / (LINE_AMT - 1); //We want to display lines from -.99 to .99 (.99+.99=1.98)
     private Utility util;
 
+    final String vertexS =
+            "uniform mat4 u_MVPMatrix;" +		// A constant representing the combined model/view/projection matrix.
+                    "attribute vec4 a_Position;\n" + 	// Per-vertex position information we will pass in.
+                    "attribute vec4 a_Color;\n" +		// Per-vertex color information we will pass in.
+                    "varying vec4 v_Color;\n" +		    // This will be passed into the fragment shader.
+                    "void main()\n" +           		// The entry point for our vertex shader.
+                    "{\n" +
+                    "   v_Color = a_Color;\n" +	    	// Pass the color through to the fragment shader.
+                    "   gl_Position = a_Position;\n" + 	// gl_Position is a special variable used to store the final position.
+                    "}\n";                              // normalized screen coordinates.
+
+    final String fragmentS =
+            "precision mediump float;\n"	+	// Set the default precision to medium. We don't need as high of a
+                    "varying vec4 v_Color;\n" +         // This is the color from the vertex shader interpolated across the
+                    "void main()\n"	+	                // The entry point for our fragment shader.
+                    "{\n" +
+                    "   gl_FragColor = v_Color;\n"	+	// Pass the color directly through the pipeline.
+                    "}\n";
+
     /**
      * Constructor
      * @param currentVertexArraySize
@@ -47,33 +68,57 @@ public class VisOne extends VisualizerBase {
 
         util = new Utility(context);
 
-        this.vertexShader = util.getStringFromGLSL(R.raw.visonevertex);
-        this.fragmentShader = util.getStringFromGLSL(R.raw.visonefragment);
+
+//        attribute vec4 a_Position; 	        // Per-vertex position information we will pass in.
+//        attribute vec4 a_Color;		        // Per-vertex color information we will pass in.
+//        varying vec4 v_Color;		        // This will be passed into the fragment shader.
+//        void main()           		        // The entry point for our vertex shader.
+//        {
+//            v_Color = a_Color;	    	    // Pass the color through to the fragment shader.
+//            gl_Position = a_Position; 	    // gl_Position is a special variable used to store the final position.
+//        }
+//        this.vertexShader = util.getStringFromGLSL(R.raw.visonevertex);
+
+//        attribute vec4 a_Color;
+//        varying vec4 v_Color;
+//        void main()
+//        {
+//            v_Color = a_Color;
+//            gl_Position = a_Position;
+//        }
+
+
+        this.vertexShader = vertexS;
+//        this.fragmentShader = util.getStringFromGLSL(R.raw.visonefragment);
+
+
+        this.fragmentShader = fragmentS;
+
     }
 
     @Override
-    public void updateVertices() {
+    public void updateVertices(byte[] fft) {
         int arraySize = fftArraySize / 2;
         float[] newVerticesToRender = new float[arraySize * VERTEX_AMOUNT];
 
-//        int j = 0;
-//        float plus = (float) 1 / (arraySize / 16);
-//        float k = -1.0f;
-//
-//        for (int i = 0; i < fftArraySize - 1; i += 2) {
-////            int amplify = (fft[i]*fft[i]) + (fft[i+1]*fft[i+1]);
-//
-//            fftRender[j] = (float)amplify * AMP_MULT;
-//            fftRender[j+1] = k;
-//            fftRender[j+2] = 0.0f;
-//            fftRender[j+3] = 1.0f;
-//            fftRender[j+4] = 0.0f;
-//            fftRender[j+5] = 0.0f;
-//            fftRender[j+6] = 1.0f;
-//
-//            k += plus;
-//            j+= VERTEX_AMOUNT;
-//        }
+        int j = 0;
+        float plus = (float) 1 / (arraySize / 16);
+        float k = -1.0f;
+
+        for (int i = 0; i < fftArraySize - 1; i += 2) {
+            int amplify = (fft[i]*fft[i]) + (fft[i+1]*fft[i+1]);
+
+            newVerticesToRender[j] = (float) amplify * AMP_MULT;
+            newVerticesToRender[j+1] = k;
+            newVerticesToRender[j+2] = 0.0f;
+            newVerticesToRender[j+3] = 1.0f;
+            newVerticesToRender[j+4] = 0.0f;
+            newVerticesToRender[j+5] = 0.0f;
+            newVerticesToRender[j+6] = 1.0f;
+
+            k += plus;
+            j+= VERTEX_AMOUNT;
+        }
 
         updateVertices(newVerticesToRender);
     }

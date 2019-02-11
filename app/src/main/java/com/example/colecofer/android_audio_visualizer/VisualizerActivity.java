@@ -198,7 +198,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
         /** Update the screen if the elapsed time has exceeded the threshold set */
         if(isTimeToRefreshScreen.second) {
-            VisualizerModel.getInstance().currentVisualizer.updateVertices();
+            VisualizerModel.getInstance().currentVisualizer.updateVertices(fft);
         }
     }
 

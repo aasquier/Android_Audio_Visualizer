@@ -33,7 +33,7 @@ public class VisTwo extends VisualizerBase {
     }
 
     @Override
-    public void updateVertices() {
+    public void updateVertices(byte[] newVertices) {
 
     }
 

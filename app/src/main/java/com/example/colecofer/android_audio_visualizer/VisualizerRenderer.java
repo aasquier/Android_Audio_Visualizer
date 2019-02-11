@@ -31,6 +31,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         if (vertexShaderHandle != 0)
         {
             GLES20.glShaderSource(vertexShaderHandle, VisualizerModel.getInstance().currentVisualizer.getVertexShaderString());
+            Log.d("test", VisualizerModel.getInstance().currentVisualizer.getVertexShaderString());
             GLES20.glCompileShader(vertexShaderHandle);
 
             final int[] compileStatus = new int[1];
