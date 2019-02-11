@@ -68,32 +68,8 @@ public class VisOne extends VisualizerBase {
 
         util = new Utility(context);
 
-
-//        attribute vec4 a_Position; 	        // Per-vertex position information we will pass in.
-//        attribute vec4 a_Color;		        // Per-vertex color information we will pass in.
-//        varying vec4 v_Color;		        // This will be passed into the fragment shader.
-//        void main()           		        // The entry point for our vertex shader.
-//        {
-//            v_Color = a_Color;	    	    // Pass the color through to the fragment shader.
-//            gl_Position = a_Position; 	    // gl_Position is a special variable used to store the final position.
-//        }
-//        this.vertexShader = util.getStringFromGLSL(R.raw.visonevertex);
-
-//        attribute vec4 a_Color;
-//        varying vec4 v_Color;
-//        void main()
-//        {
-//            v_Color = a_Color;
-//            gl_Position = a_Position;
-//        }
-
-
-        this.vertexShader = vertexS;
-//        this.fragmentShader = util.getStringFromGLSL(R.raw.visonefragment);
-
-
-        this.fragmentShader = fragmentS;
-
+        this.vertexShader = util.getStringFromGLSL(R.raw.visonevertex);
+        this.fragmentShader = util.getStringFromGLSL(R.raw.visonefragment);
     }
 
     @Override
