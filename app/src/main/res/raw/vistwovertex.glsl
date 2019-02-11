@@ -104,29 +104,30 @@ float worley5(vec2 c, float time) {
 float fbm(vec2 uv)
 {
     float value = 0.0;
-    float factor = 1.0;
+    float factor = 1.1;
+    float scaledTime = time / 300.0;
+
     for (int i = 0; i < 8; i++)
     {
-        uv += (time/1000.0) * 0.04;
+        uv += scaledTime * 0.04;
         value += snoise(uv * factor) / factor;
         factor *= 2.0;
     }
     return value;
 }
 
+
+
 void main() {
-    float scaledTime = time / 800.0;
 
+
+    float scaledTime = time / 700.0;
     vec2 res = vec2(0.95, 0.95);
-    vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
-    float cLength = length(cPos);
-    vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(cLength * 12.0 - scaledTime * 4.0) * 0.03;
-    vec4 newPosition = vec4(uv2, a_Position.zw);
 
-    vec2 uv = newPosition.xy * 5.0 / 1.0;
+    vec2 uv = a_Position.xy * 4.0;
     v_Color = vec4(vec3(fbm(uv) * 0.5 + 0.0) + a_Color.xyz,1.0);
 
-	gl_Position = newPosition;
+	gl_Position = a_Position;
 	gl_PointSize = 1.0 + a_current_DB_Level;        // This will adjust the dot size from 1.0-2.0 based on decibel level which is in the range 0.0-1.0
 }
 
@@ -136,7 +137,9 @@ void main() {
 // TODO stable implementation
 //    vec2 res = vec2(1.0, 1.0);
 //
-//
+//    const float PI = 3.14159265359;
+  //    const float TAU = 6.28318530718;
+
 //    float dis = worley5(a_Position.xy/0.35, (time/1500.0));
 //    vec3 c = mix(vec3(1.0,0.95,0.5), vec3(0.7,0.0,0.0), dis);
 //    v_Color = vec4(c*c, 1.0);
