@@ -164,8 +164,8 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         float k;
         k = r.nextFloat() * (1.25f);
 
-        randomDb.removeFirst();
-        randomDb.addLast(k);
+        randomDb.removeLast();
+        randomDb.addFirst(k);
 
         // Amplifying via db
 //        surfaceView.ampByDb(VisualizerModel.getInstance().currentVisualizer.dbHistory);
