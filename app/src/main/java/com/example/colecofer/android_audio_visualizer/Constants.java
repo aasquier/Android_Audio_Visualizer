@@ -69,10 +69,11 @@ final class Constants {
     static final int REAL_BUCKET_INDEX      = 5;
     static final int IMAGINARY_BUCKET_INDEX = 6;
     static final int MAX_FFT_ARRAY_SIZE     = 1024;
-    static final int SCREEN_VERTICAL_HEIGHT = 100;
-    static final int VIS1_VERTEX_COUNT = SCREEN_VERTICAL_HEIGHT + SCREEN_VERTICAL_HEIGHT + 1;
+    static final int SCREEN_VERTICAL_HEIGHT = 80;
+    static final int VIS1_VERTEX_COUNT = SCREEN_VERTICAL_HEIGHT + SCREEN_VERTICAL_HEIGHT;
     static final int VIS1_ARRAY_SIZE = VIS1_VERTEX_COUNT * 7;
-    static final float PIXEL = 0.005f;
+    static final float PIXEL = 0.03f;
+    static final float AMPLIFIER = 3.0f;
 
 
     /** VisualizerModel constants */

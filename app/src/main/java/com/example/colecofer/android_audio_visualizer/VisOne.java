@@ -49,66 +49,69 @@ public class VisOne extends VisualizerBase {
         util = new Utility(context);
 
         // Create base line where we pass it into the line classes
-        this.createBaseLine();
+//        this.createBaseLine();
 
         this.vertexShader = util.getStringFromGLSL(R.raw.visonevertex);
         this.fragmentShader = util.getStringFromGLSL(R.raw.visonefragment);
     }
 
-    public void createBaseLine(){
-        this.baseLineVertices = new float[VIS1_ARRAY_SIZE];
-
-        int vertexIndex = 0;
-        float yAxis = -1.0f;
-        float yOffset = (float) 2 / (VIS1_VERTEX_COUNT - 1);
-
-        for(int i = 0; i < VIS1_ARRAY_SIZE; i+=7){
-            // If left side of the line
-            if(i % 2 == 0)
-                this.baseLineVertices[vertexIndex] = 0.1f;
-                // Else right side of the line
-            else
-                this.baseLineVertices[vertexIndex] = 0.1f + PIXEL;
-            this.baseLineVertices[vertexIndex+1] = yAxis;
-            this.baseLineVertices[vertexIndex+2] = 0.0f;
-
-            // Uses retrieved color scheme to set the color
-            this.baseLineVertices[vertexIndex+3] = 0.1f;
-            this.baseLineVertices[vertexIndex+4] = 0.1f;
-            this.baseLineVertices[vertexIndex+5] = 0.8f;
-            this.baseLineVertices[vertexIndex+6] = 1.0f;
-
-            yAxis += yOffset;
-            vertexIndex+= VERTEX_AMOUNT;
-        }
-    }
+//    public void createBaseLine(){
+//        this.baseLineVertices = new float[VIS1_ARRAY_SIZE];
+//
+//        int vertexIndex = 0;
+//        float yAxis = -1.0f;
+//        float yOffset = (float) 2 / (VIS1_VERTEX_COUNT - 1);
+//
+//        for(int i = 0; i < VIS1_ARRAY_SIZE; i+=7){
+//            // If left side of the line
+//            if(i % 2 == 0)
+//                this.baseLineVertices[vertexIndex] = 0.0f;
+//                // Else right side of the line
+//            else
+//                this.baseLineVertices[vertexIndex] = 0.0f + PIXEL;
+//            this.baseLineVertices[vertexIndex+1] = yAxis;
+//            this.baseLineVertices[vertexIndex+2] = 0.0f;
+//
+//            // Uses retrieved color scheme to set the color
+//            this.baseLineVertices[vertexIndex+3] = 0.9f;
+//            this.baseLineVertices[vertexIndex+4] = 0.1f;
+//            this.baseLineVertices[vertexIndex+5] = 0.0f;
+//            this.baseLineVertices[vertexIndex+6] = 1.0f;
+//
+//            yAxis += yOffset;
+//            vertexIndex+= VERTEX_AMOUNT;
+//        }
+//    }
 
     @Override
     public void updateVertices() {
-        Object[] decibelArray = decibelHistory.toArray();
-
-        int xOffset = 0;
-        for(int i = 0; i < SCREEN_VERTICAL_HEIGHT; i++){
-            float ampData = (PIXEL + (2.0f * PIXEL * (float) decibelArray[i]));
-
-            if(i % 2 == 1) {
-                this.baseLineVertices[xOffset] = ampData;
-                this.baseLineVertices[xOffset+7] = -ampData;
-            }
-            else{
-                this.baseLineVertices[xOffset] = -ampData;
-                this.baseLineVertices[xOffset+7] = ampData;
-            }
-
-            xOffset += 14;
+//        Object[] decibelArray = decibelHistory.toArray();
+//
+//        int xOffset = 0;
+//        for(int i = 0; i < SCREEN_VERTICAL_HEIGHT; i++){
+//            float ampData = (PIXEL + (2.0f * PIXEL * (float) decibelArray[i]));
+//
+//            if(i % 2 == 1) {
+//                this.baseLineVertices[xOffset] = ampData;
+//                this.baseLineVertices[xOffset+7] = -ampData;
+//            }
+//            else{
+//                this.baseLineVertices[xOffset] = -ampData;
+//                this.baseLineVertices[xOffset+7] = ampData;
+//            }
+//
+//            xOffset += 14;
+//        }
+//
+//        this.updateVertices(this.baseLineVertices);
+        for(int i = 0; i < LINE_AMT; i++){
+            lines[i].updateVertices();
         }
-
-        this.updateVertices(this.baseLineVertices);
     }
 
     public void updateVertices(float[] newVertices) {
         for(int i = 0; i < LINE_AMT; i++){
-            lines[i].updateLineVertex(newVertices);
+            lines[i].updateVertices();
         }
     }
 
