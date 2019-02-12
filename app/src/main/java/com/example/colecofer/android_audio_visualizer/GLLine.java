@@ -77,21 +77,22 @@ public class GLLine {
         float yAxis = -1.0f;
         float yOffset = (float) 2 / (VIS1_VERTEX_COUNT - 1);
 
-        for(int i = 0; i < VIS1_ARRAY_SIZE; i+=7){
-            // If left side of the line
-            if(i % 2 == 0)
-                this.vertices[vertexIndex] = xOffset;
-                // Else right side of the line
-            else
-                this.vertices[vertexIndex] = xOffset + PIXEL;
+        for(int i = 0; i < VIS1_ARRAY_SIZE; i+=14){
+            this.vertices[vertexIndex] = xOffset;
             this.vertices[vertexIndex+1] = yAxis;
             this.vertices[vertexIndex+2] = 0.0f;
-
-            // Uses retrieved color scheme to set the color
             this.vertices[vertexIndex+3] = 0.9f;
             this.vertices[vertexIndex+4] = 0.1f;
             this.vertices[vertexIndex+5] = 0.0f;
             this.vertices[vertexIndex+6] = 1.0f;
+
+            this.vertices[vertexIndex+7] = xOffset + PIXEL;
+            this.vertices[vertexIndex+8] = yAxis;
+            this.vertices[vertexIndex+9] = 0.0f;
+            this.vertices[vertexIndex+10] = 0.9f;
+            this.vertices[vertexIndex+11] = 0.1f;
+            this.vertices[vertexIndex+12] = 0.0f;
+            this.vertices[vertexIndex+13] = 1.0f;
 
             yAxis += yOffset;
             vertexIndex+= VERTEX_AMOUNT;
