@@ -44,7 +44,10 @@ final class Constants {
     static final float MAX_DECIBEL_RATIO   = 1.0f;
 
     /** Shared Visualizer Constants **/
-
+    static final String GLSL_POSITION_HANDLE = "a_Position";
+    static final String GLSL_COLOR_HANDLE = "a_Color";
+    static final String GLSL_DB_LEVEL = "a_DB_Level";
+    static final String GLSL_TIME = "time";
 
     /** Vis1 constants */
     static final int LINE_AMT              = 10;                  //Number of lines to display on the screen
