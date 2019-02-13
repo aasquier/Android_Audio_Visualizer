@@ -81,6 +81,7 @@ final class Constants {
     static final float PIXEL = 0.016f;
     static final float AMPLIFIER = 1.0f;
 
+
     /** VisualizerModel constants */
     static final String MODEL_TAG = "MODEL_TAG";
 

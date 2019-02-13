@@ -25,4 +25,5 @@ public class VisThree extends VisualizerBase {
     public void draw() {
 
     }
+
 }
