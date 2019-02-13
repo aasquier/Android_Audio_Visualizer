@@ -41,14 +41,11 @@ public class VisOne extends VisualizerBase {
     }
 
     /**
-     * Initialization during
-     * @param positionHandle
-     * @param colorHandle
+     * Initialization of handles during onSurfaceCreated in VisualizerRenderer
      */
     public void initOnSurfaceCreated(int positionHandle, int colorHandle) {
         this.positionHandle = positionHandle;
         this.colorHandle = colorHandle;
-
     }
 
     @Override

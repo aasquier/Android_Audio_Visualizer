@@ -9,6 +9,9 @@ import java.nio.IntBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_COLOR_HANDLE;
+import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_POSITION_HANDLE;
+
 public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
     public VisualizerRenderer() {
@@ -73,8 +76,8 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
             GLES20.glAttachShader(programHandle, fragmentShaderHandle);
 
             // Bind position and color attributes
-            GLES20.glBindAttribLocation(programHandle, 0, "a_Position");
-            GLES20.glBindAttribLocation(programHandle, 1, "a_Color");
+            GLES20.glBindAttribLocation(programHandle, 0, GLSL_POSITION_HANDLE);
+            GLES20.glBindAttribLocation(programHandle, 1, GLSL_COLOR_HANDLE);
 
             // Link the two shaders together into a program.
             GLES20.glLinkProgram(programHandle);
@@ -92,21 +95,22 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         }
 
         //Get the position and color attributes
-        positionHandle = GLES20.glGetAttribLocation(programHandle, "a_Position");
-        colorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
+        positionHandle = GLES20.glGetAttribLocation(programHandle, GLSL_POSITION_HANDLE);
+        colorHandle = GLES20.glGetAttribLocation(programHandle, GLSL_COLOR_HANDLE);
 
 
         VisualizerModel.getInstance().visOne.initOnSurfaceCreated(positionHandle, colorHandle);
+        VisualizerModel.getInstance().visTwo.initOnSurfaceCreated(positionHandle, colorHandle, programHandle);
 
-        if (VisualizerModel.getInstance().currentVisualizer instanceof VisTwo) {
-            currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, "a_DB_Level");
-            VisualizerModel.getInstance().currentVisualizer.setCurrentDecibelLevelHandle(currentDecibelLevelHandle);
-            timeHandle = GLES20.glGetUniformLocation(programHandle, "time");
-            VisualizerModel.getInstance().currentVisualizer.setTimeHandle(timeHandle);
-        }
+//        if (VisualizerModel.getInstance().currentVisualizer instanceof VisTwo) {
+//            currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, "a_DB_Level");
+//            VisualizerModel.getInstance().currentVisualizer.setCurrentDecibelLevelHandle(currentDecibelLevelHandle);
+//            timeHandle = GLES20.glGetUniformLocation(programHandle, "time");
+//            VisualizerModel.getInstance().currentVisualizer.setTimeHandle(timeHandle);
+//        }
 
-        VisualizerModel.getInstance().currentVisualizer.setPositionHandle(positionHandle);
-        VisualizerModel.getInstance().currentVisualizer.setColorHandle(colorHandle);
+//        VisualizerModel.getInstance().currentVisualizer.setPositionHandle(positionHandle);
+//        VisualizerModel.getInstance().currentVisualizer.setColorHandle(colorHandle);
 
         // Tell OpenGL to use this program when rendering.
         GLES20.glUseProgram(programHandle);
