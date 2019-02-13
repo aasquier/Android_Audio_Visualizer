@@ -9,19 +9,27 @@ import java.nio.IntBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_COLOR_HANDLE;
+import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_POSITION_HANDLE;
+import static com.example.colecofer.android_audio_visualizer.Constants.SHOULD_SWITCH_VIS;
+
 public class VisualizerRenderer implements GLSurfaceView.Renderer {
-
-    public VisualizerRenderer() {
-
-    }
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        initShaders();
+    }
+
+    /**
+     * This is separated from onSurfaceCreated because it needs to be called when
+     * a visualizer switches.
+     * This could be refactored, because currently each visualizer will be initialized
+     * when a visualizer switches which is unnecessary.
+     */
+    public static void initShaders() {
         /** Locals to catch the index for glsl variables */
         int positionHandle;
         int colorHandle;
-        int currentDecibelLevelHandle;
-        int timeHandle;
 
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -73,8 +81,8 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
             GLES20.glAttachShader(programHandle, fragmentShaderHandle);
 
             // Bind position and color attributes
-            GLES20.glBindAttribLocation(programHandle, 0, "a_Position");
-            GLES20.glBindAttribLocation(programHandle, 1, "a_Color");
+            GLES20.glBindAttribLocation(programHandle, 0, GLSL_POSITION_HANDLE);
+            GLES20.glBindAttribLocation(programHandle, 1, GLSL_COLOR_HANDLE);
 
             // Link the two shaders together into a program.
             GLES20.glLinkProgram(programHandle);
@@ -92,18 +100,13 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         }
 
         //Get the position and color attributes
-        positionHandle = GLES20.glGetAttribLocation(programHandle, "a_Position");
-        colorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
+        positionHandle = GLES20.glGetAttribLocation(programHandle, GLSL_POSITION_HANDLE);
+        colorHandle = GLES20.glGetAttribLocation(programHandle, GLSL_COLOR_HANDLE);
 
-        if (VisualizerModel.getInstance().currentVisualizer instanceof VisTwo) {
-            currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, "a_DB_Level");
-            VisualizerModel.getInstance().currentVisualizer.setCurrentDecibelLevelHandle(currentDecibelLevelHandle);
-            timeHandle = GLES20.glGetUniformLocation(programHandle, "time");
-            VisualizerModel.getInstance().currentVisualizer.setTimeHandle(timeHandle);
-        }
-
-        VisualizerModel.getInstance().currentVisualizer.setPositionHandle(positionHandle);
-        VisualizerModel.getInstance().currentVisualizer.setColorHandle(colorHandle);
+        //Initialize and handles to each specific visualizers
+        VisualizerModel.getInstance().visOne.initOnSurfaceCreated(positionHandle, colorHandle);
+        VisualizerModel.getInstance().visTwo.initOnSurfaceCreated(positionHandle, colorHandle, programHandle);
+        VisualizerModel.getInstance().visThree.initOnSurfaceCreated(positionHandle, colorHandle);
 
         // Tell OpenGL to use this program when rendering.
         GLES20.glUseProgram(programHandle);
@@ -114,14 +117,14 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         gl.glViewport(0, 0, width, height);
     }
 
-    //Was newFftData
-//    public void updateVertices(float[] newVertices) {
-//        VisualizerModel.getInstance().currentVisualizer.updateVertices(newVertices);
-//
-//    }
 
     @Override
     public void onDrawFrame(GL10 gl) {
+
+        if (SHOULD_SWITCH_VIS == true) {
+            VisualizerModel.getInstance().checkToSwitchVisualizer();
+        }
+
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
         VisualizerModel.getInstance().currentVisualizer.draw();
     }

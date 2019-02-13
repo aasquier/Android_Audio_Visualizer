@@ -11,8 +11,6 @@ import static com.example.colecofer.android_audio_visualizer.Constants.RIGHT_DRA
  * updateVertices() and draw() methods so that openGL can
  * render it's contents.
  * */
-
-//public class VisOne extends VisualizerBase {
 public class VisOne extends VisualizerBase {
 
     private GLLine[] lines;  //Holds the lines to be displayed
@@ -23,7 +21,7 @@ public class VisOne extends VisualizerBase {
      * Constructor
      */
     public VisOne(Context context) {
-        // Set up line array class
+        this.visNum = 1;
         this.lines = new GLLine[LINE_AMT];
 
         float k = LEFT_DRAW_BOUNDARY;
@@ -41,21 +39,19 @@ public class VisOne extends VisualizerBase {
     }
 
     /**
-     * Updates all the lines.
-     * No need for argument because decibel is static member
+     * Initialization of handles during onSurfaceCreated in VisualizerRenderer
      */
+    public void initOnSurfaceCreated(int positionHandle, int colorHandle) {
+        this.positionHandle = positionHandle;
+        this.colorHandle = colorHandle;
+    }
+
     @Override
     public void updateVertices() {
         for(int i = 0; i < LINE_AMT; i++){
             lines[i].updateVertices();
         }
     }
-
-//    public void updateVertices(float[] newVertices) {
-//        for(int i = 0; i < LINE_AMT; i++){
-//            lines[i].updateVertices();
-//        }
-//    }
 
     /**
      * Calls line's draw call

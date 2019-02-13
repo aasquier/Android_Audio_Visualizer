@@ -1,5 +1,7 @@
 package com.example.colecofer.android_audio_visualizer;
 
+import android.opengl.GLES20;
+
 /**
  * VisualizerBase is the fundamental abstract class that all visualizers should
  * be derived from. This way, we can have an object of this base class
@@ -14,6 +16,7 @@ abstract public class VisualizerBase {
     protected int currentDecibelLevelHandle;
     protected int currentFragmentDecibelLevelHandle;
     protected int timeHandle;
+    int visNum;  //A unique integer value to represent each visualizer
 
     protected int fftArraySize;
     protected String vertexShader;
@@ -60,6 +63,16 @@ abstract public class VisualizerBase {
 
 
     public void setCurrentFragmentDecibelLevelHandle(int currentDecibelLevel) { this.currentFragmentDecibelLevelHandle = currentDecibelLevel; }
+
+
+    /**
+     * Resets the position and color handle.
+     * This is useful for when switching visualizers during track playback.
+     */
+    public void disableVertexAttribArrays() {
+        GLES20.glDisableVertexAttribArray(positionHandle);
+        GLES20.glDisableVertexAttribArray(colorHandle);
+    }
 
     public void setTimeHandle(int timeHandle) { this.timeHandle = timeHandle; }
 

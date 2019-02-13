@@ -2,14 +2,15 @@ package com.example.colecofer.android_audio_visualizer;
 
 final class Constants {
 
-
     /** GLCircle constants */
     static final int COUNT = 364;
-
 
     /** GLLine constants */
     static final int BYTES_PER_FLOAT = 4;
 
+    /** Visualizer Switching */
+    static final boolean SHOULD_SWITCH_VIS = true;    //Set to false if you do not want to rotate visualizers
+    static final int SWITCH_VIS_TIME = 3000;          //Amount of time to switch from the first visualizer to the second.
 
     /** MainActivity constants */
     //TODO: This is Spotify's test account because I don't want to hard code ours into a public repository...
@@ -43,6 +44,11 @@ final class Constants {
     static final long REFRESH_DECIBEL_TIME = 16L;
     static final float MAX_DECIBEL_RATIO   = 1.0f;
 
+    /** Shared Visualizer Constants **/
+    static final String GLSL_POSITION_HANDLE = "a_Position";
+    static final String GLSL_COLOR_HANDLE = "a_Color";
+    static final String GLSL_DB_LEVEL = "a_DB_Level";
+    static final String GLSL_TIME = "time";
 
     /** Vis1 constants */
     static final int LINE_AMT              = 15;                  //Number of lines to display on the screen
@@ -56,10 +62,10 @@ final class Constants {
     static final int COLOR_OFFSET          = 3;
     static final int COLOR_DATA_SIZE       = 4;
 
-
     /** Vis2 constants */
     static final int VIS2_STRIDE_BYTES = (POSITION_DATA_SIZE + COLOR_DATA_SIZE) * BYTES_PER_FLOAT;
-    /** GLDot constants for Vis2*/
+
+    /** GLDot constants for Vis2 */
     static final int DOT_HEIGHT = 600;
     static final int DOT_WIDTH  = 600;
     static final int DOT_COUNT  = DOT_WIDTH * DOT_HEIGHT;

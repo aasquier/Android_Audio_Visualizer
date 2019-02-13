@@ -1,12 +1,13 @@
 package com.example.colecofer.android_audio_visualizer;
 
 import android.content.BroadcastReceiver;
-import android.graphics.Color;
+import android.content.Context;
 import android.util.Log;
 import com.spotify.sdk.android.player.PlaybackState;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.MODEL_TAG;
+import static com.example.colecofer.android_audio_visualizer.Constants.SWITCH_VIS_TIME;
 
 public class VisualizerModel {
 
@@ -28,6 +29,11 @@ public class VisualizerModel {
     public static VisualizerRenderer renderer;         //TODO: Consider making these private
     public static VisualizerBase currentVisualizer;
 
+    //Visualizer objects that the this.currentVisualizer object will point at
+    public VisOne visOne;
+    public VisTwo visTwo;
+    public VisThree visThree;
+
     /**
      * Default Constructor
      */
@@ -39,6 +45,51 @@ public class VisualizerModel {
         colorMatrix = new int[] {0, 0, 0, 0};
     }
 
+
+    /**
+     * Initialize the visualizers passing it the context.
+     * They need the context for importing the glsl files.
+     * This may not be optimal, but it's the only we found successful.
+     * @param context The context for VisualizerSurfaceView
+     */
+    public void initVisualizers(Context context) {
+        this.visOne = new VisOne(context);
+        this.visTwo = new VisTwo(context);
+        this.visThree = new VisThree(context);
+    }
+
+    /**
+     * Checks if it's time to switch visualizers, and if it's time
+     * then changes currentVisualizer to the new visualizer
+     */
+    //TODO: This will only work with local files since it's based off the media player
+    public void checkToSwitchVisualizer() {
+        float currentTimeMillis = VisualizerActivity.mediaPlayer.getCurrentPosition();
+        if (currentTimeMillis >= visualizerSwitchTimeOne && currentVisualizer.visNum == 1) {
+            this.currentVisualizer.disableVertexAttribArrays();
+            this.currentVisualizer = this.visTwo;
+            VisualizerRenderer.initShaders();
+        }
+
+        //TODO: Uncomment this when visualizer three is ready
+        //else if (currentTimeMillis >= visualizerSwitchTimeTwo && currentVisualizer.visNum == 2) {
+        //   currentVisualizer.disableVertexAttribArrays();
+        //   currentVisualizer = new VisThree();
+        //   VisualizerRenderer.initShaders();
+        //}
+    }
+
+    /**
+     * Sets the times to switch visualizers
+     * @param duration The length of the track in milliseconds
+     */
+    public void setDuration(int duration) {
+        //TODO: This is temporarily being set to a constant defined in constants.java for debugging convenience
+        this.visualizerSwitchTimeOne = SWITCH_VIS_TIME;
+        //durationInMilliseconds = duration;
+        //visualizerSwitchTimeOne = duration / 3;
+        //visualizerSwitchTimeTwo = visualizerSwitchTimeOne * 2;
+    }
 
     /**
      * Allows access to the VisualizerModel Singleton outside of class scope.
@@ -73,12 +124,6 @@ public class VisualizerModel {
 
         this.colorMatrix[3] = 1;
 
-    }
-
-    public void setDuration(int duration) {
-        durationInMilliseconds = duration;
-        visualizerSwitchTimeOne = duration / 3;
-        visualizerSwitchTimeTwo = visualizerSwitchTimeOne * 2;
     }
 
     /**
