@@ -2,16 +2,14 @@ package com.example.colecofer.android_audio_visualizer;
 
 final class Constants {
 
-
     /** GLCircle constants */
     static final int COUNT = 364;
-
 
     /** GLLine constants */
     static final int BYTES_PER_FLOAT = 4;
 
     /** Visualizer Switching */
-    static final boolean SHOULD_SWITCH_VIS = false;    //Set to false if you do not want to rotate visualizers
+    static final boolean SHOULD_SWITCH_VIS = true;    //Set to false if you do not want to rotate visualizers
     static final int SWITCH_VIS_TIME = 2000;          //Amount of time to switch from the first visualizer to the second.
 
     /** MainActivity constants */
