@@ -15,10 +15,6 @@ import static com.example.colecofer.android_audio_visualizer.Constants.SHOULD_SW
 
 public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
-    public VisualizerRenderer() {
-
-    }
-
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         /** Locals to catch the index for glsl variables */
@@ -97,11 +93,10 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         positionHandle = GLES20.glGetAttribLocation(programHandle, GLSL_POSITION_HANDLE);
         colorHandle = GLES20.glGetAttribLocation(programHandle, GLSL_COLOR_HANDLE);
 
-
         //Initialize and handles to each specific visualizers
         VisualizerModel.getInstance().visOne.initOnSurfaceCreated(positionHandle, colorHandle);
         VisualizerModel.getInstance().visTwo.initOnSurfaceCreated(positionHandle, colorHandle, programHandle);
-        //VisualizerModel.getInstance().visThree.initOnSurfaceCreated();
+        VisualizerModel.getInstance().visThree.initOnSurfaceCreated(positionHandle, colorHandle);
 
         // Tell OpenGL to use this program when rendering.
         GLES20.glUseProgram(programHandle);

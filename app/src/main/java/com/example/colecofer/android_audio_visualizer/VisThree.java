@@ -8,6 +8,14 @@ public class VisThree extends VisualizerBase {
         this.visNum = 3;
     }
 
+    /**
+     * Initialization of handles during onSurfaceCreated in VisualizerRenderer
+     */
+    public void initOnSurfaceCreated(int positionHandle, int colorHandle) {
+        this.positionHandle = positionHandle;
+        this.colorHandle = colorHandle;
+    }
+
     @Override
     public void updateVertices() {
 
