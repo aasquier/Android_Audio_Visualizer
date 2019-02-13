@@ -12,6 +12,10 @@ final class Constants {
     static final boolean SHOULD_SWITCH_VIS = true;    //Set to false if you do not want to rotate visualizers
     static final int SWITCH_VIS_TIME = 3000;          //Amount of time to switch from the first visualizer to the second.
 
+    /** Lyrics Animations and Title Positions */
+    static final int LEFT_PADDING = 100;
+    static final int RIGHT_PADDING = 100;
+
     /** MainActivity constants */
     //TODO: This is Spotify's test account because I don't want to hard code ours into a public repository...
     //Used to verify that we've been redirected back from Spotify after authenticating in browser
@@ -80,7 +84,6 @@ final class Constants {
     static final int VIS1_ARRAY_SIZE = VIS1_VERTEX_COUNT * 7;
     static final float PIXEL = 0.016f;
     static final float AMPLIFIER = 1.0f;
-
 
     /** VisualizerModel constants */
     static final String MODEL_TAG = "MODEL_TAG";

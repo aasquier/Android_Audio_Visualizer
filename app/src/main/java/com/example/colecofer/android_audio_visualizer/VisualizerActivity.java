@@ -12,7 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.util.Pair;
 
@@ -22,9 +24,11 @@ import com.spotify.sdk.android.player.SpotifyPlayer;
 import java.util.ArrayDeque;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.IMAGINARY_BUCKET_INDEX;
+import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_PADDING;
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_FFT_ARRAY_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.REAL_BUCKET_INDEX;
 import static com.example.colecofer.android_audio_visualizer.Constants.REQUEST_PERMISSION;
+import static com.example.colecofer.android_audio_visualizer.Constants.RIGHT_PADDING;
 import static com.example.colecofer.android_audio_visualizer.Constants.SCREEN_VERTICAL_HEIGHT;
 import static com.example.colecofer.android_audio_visualizer.Utility.getDBs;
 import static com.example.colecofer.android_audio_visualizer.Utility.updateDecibelHistory;
@@ -42,8 +46,13 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     private VisualizerRenderer visualizerRenderer;
     private Visualizer.OnDataCaptureListener captureListener;
 
+    //Title UI Elements
     private TextView songTitle;
     private TextView artistName;
+
+    //Lyrics Animation Elements
+    private View lyricsView2;
+    private LyricsView lyricsView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,17 +152,46 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         ViewGroup.MarginLayoutParams artistMargin = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
 
         songTitle.setLayoutParams(songMargin);
-        songTitle.setPadding(100, 100, 100, 100);
+        songTitle.setPadding(LEFT_PADDING, 100, RIGHT_PADDING, 100);
         addContentView(songTitle, songMargin);
 
         artistName.setLayoutParams(artistMargin);
-        artistName.setPadding(100, 200, 100, 100);
+        artistName.setPadding(LEFT_PADDING, 200, RIGHT_PADDING, 100);
         addContentView(artistName, artistMargin);
 
         songTitle.requestLayout();
         artistName.requestLayout();
 
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screenWidth = displayMetrics.widthPixels;
+        int screenHeight = displayMetrics.heightPixels;
+
+        lyricsView = new LyricsView(this, screenWidth, screenHeight);
+
     }
+
+//    private void initLyricsAnimation() {
+//
+        //Get the screen width & height
+//        DisplayMetrics displayMetrics = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+//        int height = displayMetrics.heightPixels;
+//        int width = displayMetrics.widthPixels;
+//
+//        TextView temp = new TextView(this);
+//        temp.setText("THIS IS A TEST");
+//
+//        //Setup the main view that will hold multiple textViews
+//        lyricsView2 = new View(this);
+//        lyricsView2.getLayoutParams().width = (int) (width * 0.8);
+//        lyricsView2.getLayoutParams().height = 400;
+//        lyricsView2.setPadding(LEFT_PADDING, height / 3, RIGHT_PADDING, 10);
+//
+////        addContentView(lyricsView, temp);
+//
+////        LinearLayout l = findViewById(R.id.lyricsView);
+//
+//    }
 
     /** Sets the decibel history to all 0.0 to begin with */
     private void initDecibelHistory() {
