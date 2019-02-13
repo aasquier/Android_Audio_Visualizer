@@ -2,6 +2,7 @@ package com.example.colecofer.android_audio_visualizer;
 
 import android.content.Context;
 import android.opengl.GLES20;
+import android.util.Log;
 
 import java.nio.FloatBuffer;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;

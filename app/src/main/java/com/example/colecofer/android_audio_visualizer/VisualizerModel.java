@@ -29,6 +29,11 @@ public class VisualizerModel {
     public static VisualizerRenderer renderer;         //TODO: Consider making these private
     public static VisualizerBase currentVisualizer;
 
+    //Visualizer objects that the this.currentVisualizer object will point at
+    public VisOne visOne;
+    public VisTwo visTwo;
+    public VisThree visThree;
+
     /**
      * Default Constructor
      */
