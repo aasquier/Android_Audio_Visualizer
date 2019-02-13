@@ -104,7 +104,6 @@ public class VisualizerModel {
         if (currentTimeMillis >= visualizerSwitchTimeOne && currentVisualizer.visNum == 1) {
             this.currentVisualizer.disableVertexAttribArrays();
             this.currentVisualizer = this.visTwo;
-//            currentVisualizer = new VisTwo();
         }
 
         //TODO: Uncomment this when visualizer three is ready
