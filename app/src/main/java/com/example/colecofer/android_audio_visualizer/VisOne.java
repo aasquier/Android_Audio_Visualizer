@@ -41,9 +41,16 @@ public class VisOne extends VisualizerBase {
     }
 
     /**
-     * Updates all the lines.
-     * No need for argument because decibel is static member
+     * Initialization during
+     * @param positionHandle
+     * @param colorHandle
      */
+    public void initOnSurfaceCreated(int positionHandle, int colorHandle) {
+        this.positionHandle = positionHandle;
+        this.colorHandle = colorHandle;
+
+    }
+
     @Override
     public void updateVertices() {
         for(int i = 0; i < LINE_AMT; i++){
@@ -51,11 +58,6 @@ public class VisOne extends VisualizerBase {
         }
     }
 
-//    public void updateVertices(float[] newVertices) {
-//        for(int i = 0; i < LINE_AMT; i++){
-//            lines[i].updateVertices();
-//        }
-//    }
 
     /**
      * Calls line's draw call

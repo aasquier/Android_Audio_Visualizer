@@ -43,6 +43,8 @@ final class Constants {
     static final long REFRESH_DECIBEL_TIME = 16L;
     static final float MAX_DECIBEL_RATIO   = 1.0f;
 
+    /** Shared Visualizer Constants **/
+
 
     /** Vis1 constants */
     static final int LINE_AMT              = 15;                  //Number of lines to display on the screen

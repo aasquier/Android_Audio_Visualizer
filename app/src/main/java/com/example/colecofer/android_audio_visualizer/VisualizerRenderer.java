@@ -95,6 +95,9 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         positionHandle = GLES20.glGetAttribLocation(programHandle, "a_Position");
         colorHandle = GLES20.glGetAttribLocation(programHandle, "a_Color");
 
+
+        VisualizerModel.getInstance().visOne.initOnSurfaceCreated(positionHandle, colorHandle);
+
         if (VisualizerModel.getInstance().currentVisualizer instanceof VisTwo) {
             currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, "a_DB_Level");
             VisualizerModel.getInstance().currentVisualizer.setCurrentDecibelLevelHandle(currentDecibelLevelHandle);

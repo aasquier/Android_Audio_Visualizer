@@ -7,9 +7,7 @@ import android.util.AttributeSet;
 
 public class VisualizerSurfaceView extends GLSurfaceView {
 
-//    private static float density;
-
-    static Context context;
+    private Context context; //This exists so that we can read in the glsl files
 
     public VisualizerSurfaceView(Context context) {
         super(context);
@@ -21,9 +19,9 @@ public class VisualizerSurfaceView extends GLSurfaceView {
     }
 
     public void setRenderer(VisualizerRenderer inputRenderer, float inputDensity, int vertexArraySize) {
-//        this.density = inputDensity;
         VisualizerModel.getInstance().renderer = inputRenderer;
-        VisualizerModel.getInstance().currentVisualizer = new VisOne(context);
+        VisualizerModel.getInstance().initVisualizers(this.context);
+        VisualizerModel.getInstance().currentVisualizer = VisualizerModel.getInstance().visOne;
 //        VisualizerModel.getInstance().currentVisualizer = new VisTwo(context);
         super.setRenderer(VisualizerModel.getInstance().renderer);
     }

@@ -1,6 +1,7 @@
 package com.example.colecofer.android_audio_visualizer;
 
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 import com.spotify.sdk.android.player.PlaybackState;
@@ -47,6 +48,18 @@ public class VisualizerModel {
 
 
     /**
+     * Initialize the visualizers passing it the context.
+     * They need the context for importing the glsl files.
+     * This may not be optimal, but it's the only we found successful.
+     * @param context The context for VisualizerSurfaceView
+     */
+    public void initVisualizers(Context context) {
+        this.visOne = new VisOne(context);
+        this.visTwo = new VisTwo(context);
+        this.visThree = new VisThree(context);
+    }
+
+    /**
      * Allows access to the VisualizerModel Singleton outside of class scope.
      * @return The VisualizerModel singleton
      */
@@ -89,14 +102,15 @@ public class VisualizerModel {
     public void checkToSwitchVisualizer() {
         float currentTimeMillis = VisualizerActivity.mediaPlayer.getCurrentPosition();
         if (currentTimeMillis >= visualizerSwitchTimeOne && currentVisualizer.visNum == 1) {
-            currentVisualizer.disableVertexAttribArrays();
-            currentVisualizer = new VisTwo(VisualizerSurfaceView.context);
+            this.currentVisualizer.disableVertexAttribArrays();
+            this.currentVisualizer = this.visTwo;
+//            currentVisualizer = new VisTwo();
         }
 
         //TODO: Uncomment this when visualizer three is ready
         //else if (currentTimeMillis >= visualizerSwitchTimeTwo && currentVisualizer.visNum == 2) {
         //   currentVisualizer.disableVertexAttribArrays();
-        //    currentVisualizer = new VisThree(VisualizerSurfaceView.context);
+        //    currentVisualizer = new VisThree();
         //}
     }
 
