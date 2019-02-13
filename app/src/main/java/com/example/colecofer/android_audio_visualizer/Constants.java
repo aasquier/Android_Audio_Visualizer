@@ -10,6 +10,9 @@ final class Constants {
     /** GLLine constants */
     static final int BYTES_PER_FLOAT = 4;
 
+    /** Visualizer Switching */
+    static final boolean SHOULD_SWITCH_VIS = false;    //Set to false if you do not want to rotate visualizers
+    static final int SWITCH_VIS_TIME = 2000;          //Amount of time to switch from the first visualizer to the second.
 
     /** MainActivity constants */
     //TODO: This is Spotify's test account because I don't want to hard code ours into a public repository...
@@ -64,7 +67,7 @@ final class Constants {
     /** Vis2 constants */
     static final int VIS2_STRIDE_BYTES = (POSITION_DATA_SIZE + COLOR_DATA_SIZE) * BYTES_PER_FLOAT;
 
-    /** GLDot constants for Vis2*/
+    /** GLDot constants for Vis2 */
     static final int DOT_HEIGHT = 600;
     static final int DOT_WIDTH  = 600;
     static final int DOT_COUNT  = DOT_WIDTH * DOT_HEIGHT;
@@ -82,6 +85,5 @@ final class Constants {
 
     /** VisualizerModel constants */
     static final String MODEL_TAG = "MODEL_TAG";
-    static final int SWITCH_VIS_TIME = 2000;   //Amount of time to switch from the first visualizer to the second.
 
 }
