@@ -51,7 +51,7 @@ public class GLLine {
 
         int vertexIndex = 0;
         float yAxis = -1.0f;
-        float yOffset = (float) 2 / (VIS1_VERTEX_COUNT - 1);
+        float yOffset = (float) 2 / (VIS1_VERTEX_COUNT/2);
 
         // Setting up right triangles
         for(int i = 0; i < VIS1_ARRAY_SIZE; i+=14){
@@ -74,8 +74,8 @@ public class GLLine {
             this.vertices[vertexIndex+13] = 1.0f;
 
             // Next y coord
-            yAxis += (yOffset*2);
-            vertexIndex+= VERTEX_AMOUNT;
+            yAxis += yOffset;
+            vertexIndex+= (VERTEX_AMOUNT*2);
         }
     }
 
@@ -101,14 +101,8 @@ public class GLLine {
             // Will come back to it later
             //TODO: Figure out what is going on with this algorithm
 
-//            if(i % 2 == 1) {
-                this.vertices[xOffset] = ampDataLeft;
-                this.vertices[xOffset+7] = ampDataRight;
-//            }
-//            else{
-//                this.vertices[xOffset] = ampDataRight;
-//                this.vertices[xOffset+7] = ampDataLeft;
-//            }
+            this.vertices[xOffset] = ampDataLeft;
+            this.vertices[xOffset+7] = ampDataRight;
 
             xOffset += 14;
         }

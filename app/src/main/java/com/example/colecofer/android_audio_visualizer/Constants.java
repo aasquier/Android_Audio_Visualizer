@@ -45,7 +45,7 @@ final class Constants {
 
 
     /** Vis1 constants */
-    static final int LINE_AMT              = 10;                  //Number of lines to display on the screen
+    static final int LINE_AMT              = 15;                  //Number of lines to display on the screen
     static final float AMP_MULT            = 0.000005f;           //Alters the lines horizontal amplitude
     static final int VERTEX_AMOUNT         = 7;                   //x, y, z, r, g, b, a
     static final float LEFT_DRAW_BOUNDARY  = -0.99f;              //Where to start drawing on the left side of the screen
@@ -69,10 +69,10 @@ final class Constants {
     static final int REAL_BUCKET_INDEX      = 5;
     static final int IMAGINARY_BUCKET_INDEX = 6;
     static final int MAX_FFT_ARRAY_SIZE     = 1024;
-    static final int SCREEN_VERTICAL_HEIGHT = 80;
+    static final int SCREEN_VERTICAL_HEIGHT = 50;
     static final int VIS1_VERTEX_COUNT = SCREEN_VERTICAL_HEIGHT + SCREEN_VERTICAL_HEIGHT;
     static final int VIS1_ARRAY_SIZE = VIS1_VERTEX_COUNT * 7;
-    static final float PIXEL = 0.03f;
+    static final float PIXEL = 0.016f;
     static final float AMPLIFIER = 1.0f;
 
 
