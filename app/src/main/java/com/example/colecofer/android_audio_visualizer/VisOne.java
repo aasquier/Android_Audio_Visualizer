@@ -84,6 +84,17 @@ public class VisOne extends VisualizerBase {
 //        }
 //    }
 
+    /**
+     * Initialization during
+     * @param positionHandle
+     * @param colorHandle
+     */
+    public void initOnSurfaceCreated(int positionHandle, int colorHandle) {
+        this.positionHandle = positionHandle;
+        this.colorHandle = colorHandle;
+
+    }
+
     @Override
     public void updateVertices() {
 //        Object[] decibelArray = decibelHistory.toArray();
