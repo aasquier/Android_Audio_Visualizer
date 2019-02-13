@@ -2,7 +2,6 @@ package com.example.colecofer.android_audio_visualizer;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import com.spotify.sdk.android.player.PlaybackState;
 import com.spotify.sdk.android.player.SpotifyPlayer;
@@ -104,6 +103,7 @@ public class VisualizerModel {
         if (currentTimeMillis >= visualizerSwitchTimeOne && currentVisualizer.visNum == 1) {
             this.currentVisualizer.disableVertexAttribArrays();
             this.currentVisualizer = this.visTwo;
+            VisualizerRenderer.initShaders();
         }
 
         //TODO: Uncomment this when visualizer three is ready
