@@ -11,6 +11,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_COLOR_HANDLE;
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_POSITION_HANDLE;
+import static com.example.colecofer.android_audio_visualizer.Constants.SHOULD_SWITCH_VIS;
 
 public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
@@ -23,8 +24,6 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         /** Locals to catch the index for glsl variables */
         int positionHandle;
         int colorHandle;
-        int currentDecibelLevelHandle;
-        int timeHandle;
 
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -99,18 +98,10 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         colorHandle = GLES20.glGetAttribLocation(programHandle, GLSL_COLOR_HANDLE);
 
 
+        //Initialize and handles to each specific visualizers
         VisualizerModel.getInstance().visOne.initOnSurfaceCreated(positionHandle, colorHandle);
         VisualizerModel.getInstance().visTwo.initOnSurfaceCreated(positionHandle, colorHandle, programHandle);
-
-//        if (VisualizerModel.getInstance().currentVisualizer instanceof VisTwo) {
-//            currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, "a_DB_Level");
-//            VisualizerModel.getInstance().currentVisualizer.setCurrentDecibelLevelHandle(currentDecibelLevelHandle);
-//            timeHandle = GLES20.glGetUniformLocation(programHandle, "time");
-//            VisualizerModel.getInstance().currentVisualizer.setTimeHandle(timeHandle);
-//        }
-
-//        VisualizerModel.getInstance().currentVisualizer.setPositionHandle(positionHandle);
-//        VisualizerModel.getInstance().currentVisualizer.setColorHandle(colorHandle);
+        //VisualizerModel.getInstance().visThree.initOnSurfaceCreated();
 
         // Tell OpenGL to use this program when rendering.
         GLES20.glUseProgram(programHandle);
@@ -129,7 +120,11 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        VisualizerModel.getInstance().checkToSwitchVisualizer();
+
+        if (SHOULD_SWITCH_VIS == true) {
+            VisualizerModel.getInstance().checkToSwitchVisualizer();
+        }
+
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
         VisualizerModel.getInstance().currentVisualizer.draw();
     }
