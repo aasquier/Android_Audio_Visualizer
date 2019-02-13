@@ -37,6 +37,7 @@ public class VisOne extends VisualizerBase {
      * Constructor
      */
     public VisOne(Context context) {
+        this.visNum = 1;
         this.lines = new GLLine[LINE_AMT];
 
         float k = LEFT_DRAW_BOUNDARY;

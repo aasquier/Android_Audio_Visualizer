@@ -25,12 +25,12 @@ public class Utility {
      */
     public Utility() {}
 
-    /**
-     * Pass context for connecting Resource
-     *
-     * @param context
-     */
-    public Utility(Context context) {
+  /**
+   * Pass context for connecting Resource
+   *
+   *context* *
+   */
+  public Utility(Context context) {
         this.context = context;
     }
 
