@@ -8,11 +8,6 @@ public class VisThree extends VisualizerBase {
     }
 
     @Override
-    public void updateVertices(float[] newVertices) {
-
-    }
-
-    @Override
     public void draw() {
 
     }

@@ -68,8 +68,6 @@ abstract public class VisualizerBase {
      */
     abstract public void updateVertices();
 
-    abstract public void updateVertices(float[] newVertices);
-
     /**
      * This method will be in charge of calling the individual draw() methods
      * of other items that need to be rendered.
