@@ -17,6 +17,11 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        initShaders();
+    }
+
+
+    public static void initShaders() {
         /** Locals to catch the index for glsl variables */
         int positionHandle;
         int colorHandle;
