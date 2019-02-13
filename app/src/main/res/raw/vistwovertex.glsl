@@ -40,34 +40,6 @@ float snoise(vec2 v) {
     return 130.0 * dot(m, g);
 }
 
-uniform mat4   u_MVPMatrix;	    // A constant representing the combined model/view/projection matrix.
-attribute vec4 a_Position;	    // Per-vertex position information we will pass in  (a_Position.xyzw , w is always 1)
-attribute vec4 a_Color;	        // Per-vertex color information we will pass in  (a_Color.rgba -->  a_Color.xyzw)
-uniform float  an_old_DB_Level;      // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
-uniform float  a_current_DB_Level;      // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
-varying vec4   v_Color;         // This will be passed into the fragment shader as the final color values
-
-uniform float time;
-
-//vec2 Hash(vec2 P)
-//{
-// 	return fract(cos(P*mat2(-64.2,71.3,81.4,-29.8))*8321.3);
-//}
-//float Worley(vec2 P)
-//{
-//    float Dist = 1.;
-//    vec2 I = floor(P);
-//    vec2 F = fract(P);
-//
-//    for(int X = -1;X<=1;X++)
-//    for(int Y = -1;Y<=1;Y++)
-//    {
-//        float D = distance(Hash(I+vec2(X,Y))+vec2(X,Y),F);
-//        Dist = min(Dist,D);
-//    }
-//    return Dist;
-//}
-
 float hash(float n) {
  	return fract(cos(n*89.42)*343.42);
 }
@@ -101,7 +73,7 @@ float worley5(vec2 c, float time) {
     return w;
 }
 
-float fbm(vec2 uv)
+float fbm(vec2 uv, float time)
 {
     float value = 0.0;
     float factor = 1.1;
@@ -116,13 +88,21 @@ float fbm(vec2 uv)
     return value;
 }
 
+uniform mat4   u_MVPMatrix;	    // A constant representing the combined model/view/projection matrix.
+attribute vec4 a_Position;	    // Per-vertex position information we will pass in  (a_Position.xyzw , w is always 1)
+attribute vec4 a_Color;	        // Per-vertex color information we will pass in  (a_Color.rgba -->  a_Color.xyzw)
+uniform float  an_old_DB_Level;      // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
+uniform float  a_current_DB_Level;      // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
+varying vec4   v_Color;         // This will be passed into the fragment shader as the final color values
+uniform float time;
+
 void main() {
     float scaledTime = time / 300.0;
     float scaledTime2 = time / 1000.0;
     vec2 res = vec2(0.95, 0.95);
 
     vec2 uv = a_Position.xy * 4.0;
-    v_Color = vec4(vec3(fbm(uv) * 0.5 + 0.0) + a_Color.xyz,1.0);
+    v_Color = vec4(vec3(fbm(uv, time) * 0.5 + 0.0) + a_Color.xyz,1.0);
 
     vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
     float cLength = length(cPos);
