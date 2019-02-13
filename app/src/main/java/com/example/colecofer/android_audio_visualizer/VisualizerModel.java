@@ -7,6 +7,7 @@ import com.spotify.sdk.android.player.PlaybackState;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.MODEL_TAG;
+import static com.example.colecofer.android_audio_visualizer.Constants.SWITCH_VIS_TIME;
 
 public class VisualizerModel {
 
@@ -75,10 +76,35 @@ public class VisualizerModel {
 
     }
 
+    /**
+     * Checks if it's time to switch visualizers, and if it's time
+     * then changes currentVisualizer to the new visualizer
+     */
+    //TODO: This will only work with local files since it's based off the media player
+    public void checkToSwitchVisualizer() {
+        float currentTimeMillis = VisualizerActivity.mediaPlayer.getCurrentPosition();
+        if (currentTimeMillis >= visualizerSwitchTimeOne && currentVisualizer.visNum == 1) {
+            currentVisualizer.disableVertexAttribArrays();
+            currentVisualizer = new VisTwo(VisualizerSurfaceView.context);
+        }
+
+        //TODO: Uncomment this when visualizer three is ready
+        //else if (currentTimeMillis >= visualizerSwitchTimeTwo && currentVisualizer.visNum == 2) {
+        //   currentVisualizer.disableVertexAttribArrays();
+        //    currentVisualizer = new VisThree(VisualizerSurfaceView.context);
+        //}
+    }
+
+    /**
+     * Sets the times to switch visualizers
+     * @param duration The length of the track in milliseconds
+     */
     public void setDuration(int duration) {
-        durationInMilliseconds = duration;
-        visualizerSwitchTimeOne = duration / 3;
-        visualizerSwitchTimeTwo = visualizerSwitchTimeOne * 2;
+        //TODO: This is temporarily being set to a constant defined in constants.java until things are working properly
+        this.visualizerSwitchTimeOne = SWITCH_VIS_TIME;
+        //durationInMilliseconds = duration;
+        //visualizerSwitchTimeOne = duration / 3;
+        //visualizerSwitchTimeTwo = visualizerSwitchTimeOne * 2;
     }
 
     /**

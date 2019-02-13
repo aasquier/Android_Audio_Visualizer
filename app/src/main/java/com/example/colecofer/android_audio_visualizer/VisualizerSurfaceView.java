@@ -9,7 +9,7 @@ public class VisualizerSurfaceView extends GLSurfaceView {
 
 //    private static float density;
 
-    private Context context;
+    static Context context;
 
     public VisualizerSurfaceView(Context context) {
         super(context);

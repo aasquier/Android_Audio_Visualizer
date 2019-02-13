@@ -23,6 +23,7 @@ public class VisTwo extends VisualizerBase {
      * @param context
      */
     public VisTwo(Context context) {
+        this.visNum = 2;
         util = new Utility(context);
         dot = new GLDot();
 

@@ -36,7 +36,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     private long previousUpdateTime;
     static ArrayDeque<Float> decibelHistory;
 
-    private MediaPlayer mediaPlayer;
+    static MediaPlayer mediaPlayer;
     private Visualizer visualizer;
     private VisualizerSurfaceView surfaceView;
     private VisualizerRenderer visualizerRenderer;

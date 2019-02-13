@@ -56,9 +56,9 @@ final class Constants {
     static final int COLOR_OFFSET          = 3;
     static final int COLOR_DATA_SIZE       = 4;
 
-
     /** Vis2 constants */
     static final int VIS2_STRIDE_BYTES = (POSITION_DATA_SIZE + COLOR_DATA_SIZE) * BYTES_PER_FLOAT;
+
     /** GLDot constants for Vis2*/
     static final int DOT_HEIGHT = 600;
     static final int DOT_WIDTH  = 600;
@@ -75,8 +75,8 @@ final class Constants {
     static final float PIXEL = 0.016f;
     static final float AMPLIFIER = 1.0f;
 
-
     /** VisualizerModel constants */
     static final String MODEL_TAG = "MODEL_TAG";
+    static final int SWITCH_VIS_TIME = 2000;   //Amount of time to switch from the first visualizer to the second.
 
 }
