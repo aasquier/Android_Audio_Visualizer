@@ -11,8 +11,6 @@ import static com.example.colecofer.android_audio_visualizer.Constants.RIGHT_DRA
  * updateVertices() and draw() methods so that openGL can
  * render it's contents.
  * */
-
-//public class VisOne extends VisualizerBase {
 public class VisOne extends VisualizerBase {
 
     private GLLine[] lines;  //Holds the lines to be displayed
@@ -54,7 +52,6 @@ public class VisOne extends VisualizerBase {
             lines[i].updateVertices();
         }
     }
-
 
     /**
      * Calls line's draw call

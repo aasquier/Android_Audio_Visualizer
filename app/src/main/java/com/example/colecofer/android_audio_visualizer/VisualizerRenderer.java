@@ -20,7 +20,12 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         initShaders();
     }
 
-
+    /**
+     * This is separated from onSurfaceCreated because it needs to be called when
+     * a visualizer switches.
+     * This could be refactored, because currently each visualizer will be initialized
+     * when a visualizer switches which is unnecessary.
+     */
     public static void initShaders() {
         /** Locals to catch the index for glsl variables */
         int positionHandle;
@@ -112,11 +117,6 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         gl.glViewport(0, 0, width, height);
     }
 
-    //Was newFftData
-//    public void updateVertices(float[] newVertices) {
-//        VisualizerModel.getInstance().currentVisualizer.updateVertices(newVertices);
-//
-//    }
 
     @Override
     public void onDrawFrame(GL10 gl) {
