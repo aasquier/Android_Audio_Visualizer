@@ -24,52 +24,28 @@ public class GLLine {
 
     private FloatBuffer lineVerticesBuffer;
     private float[] vertices;
-    private float xOffset;
+    private float leftSide;
     private float rightSide;
 
+    /**
+     * Constructor
+     * @param xPosition: Current line's base position
+     */
     public GLLine(float xPosition) {
-        this.xOffset = xPosition;
-        this.rightSide = xOffset + PIXEL;
+        this.leftSide = xPosition;   // Current line's left side coord
+        this.rightSide = leftSide + PIXEL;  // Current line's right side coord
 
-        //These are the default lines that are displayed before any fft values have been updated
-        //TODO: This needs to generate X number of lines in the correct locations
-//        this.vertices = new float[] {
-//            // X, Y, Z
-//            // R, G, B, A
-//
-//            //Bottom point
-//            -1.0f, 0.0f, 0.0f,
-//            1.0f, 0.0f, 0.0f, 1.0f,
-//
-//            //Top point
-//            -0.5f, 0.0f, 0.0f,
-//            1.0f, 0.0f, 0.0f, 1.0f,
-//        };
-
+        // Initialize the current line's base vertices
         createBaseLine();
 
+        // Set up the FloatBuffer to draw before the onDataCapture kicks in
         lineVerticesBuffer = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         lineVerticesBuffer.put(vertices).position(0);
     }
 
     /**
-     * Modifies the passed in fft which is just an amplification value
-     * of the current line's x-axis.
-     * Converts the array into a FloatBuffer for efficiency (can be used
-     * in the GPU)
+     * Creating the base line vertices
      */
-//    public void updateLineVertex(float[] lineVertex) {
-//        int size = lineVertex.length;
-//        for(int x = 0; x < size; x += 7) {
-//            lineVertex[x] += (this.xOffset);
-//        }
-//
-//        //Puts the fft array into a FloatBuffer (drawable state for the GPU)
-//        FloatBuffer fftInput = ByteBuffer.allocateDirect(lineVertex.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-//        fftInput.put(lineVertex).position(0);
-//        this.lineVerticesBuffer = fftInput;
-//    }
-
     public void createBaseLine(){
         this.vertices = new float[VIS1_ARRAY_SIZE];
 
@@ -77,8 +53,10 @@ public class GLLine {
         float yAxis = -1.0f;
         float yOffset = (float) 2 / (VIS1_VERTEX_COUNT - 1);
 
+        // Setting up right triangles
         for(int i = 0; i < VIS1_ARRAY_SIZE; i+=14){
-            this.vertices[vertexIndex] = xOffset;
+            // Left side
+            this.vertices[vertexIndex] = this.leftSide;
             this.vertices[vertexIndex+1] = yAxis;
             this.vertices[vertexIndex+2] = 0.0f;
             this.vertices[vertexIndex+3] = 0.9f;
@@ -86,7 +64,8 @@ public class GLLine {
             this.vertices[vertexIndex+5] = 0.0f;
             this.vertices[vertexIndex+6] = 1.0f;
 
-            this.vertices[vertexIndex+7] = xOffset + PIXEL;
+            // Right side
+            this.vertices[vertexIndex+7] = this.rightSide;
             this.vertices[vertexIndex+8] = yAxis;
             this.vertices[vertexIndex+9] = 0.0f;
             this.vertices[vertexIndex+10] = 0.9f;
@@ -94,28 +73,42 @@ public class GLLine {
             this.vertices[vertexIndex+12] = 0.0f;
             this.vertices[vertexIndex+13] = 1.0f;
 
-            yAxis += yOffset;
+            // Next y coord
+            yAxis += (yOffset*2);
             vertexIndex+= VERTEX_AMOUNT;
         }
     }
 
+    /**
+     * Update the base line with decibel value
+     */
     public void updateVertices() {
-//        float[] lineVertices = new float[VIS1_ARRAY_SIZE];
+        // Change to object array to traverse
         Object[] decibelArray = decibelHistory.toArray();
 
         int xOffset = 0;
+
+        // Only loop for the size of the decibel array size
         for(int i = 0; i < SCREEN_VERTICAL_HEIGHT; i++){
-            float ampDataLeft = ((this.xOffset + (AMPLIFIER * PIXEL * (float) decibelArray[i]))) / 2;
+            // Calculate the coordinates after the amplification
+            // Left side needs to move in negative direction
+            // Right side needs to move in positive direction
+            // Amplification should be half for both sides because Amplification = left + right
+            float ampDataLeft = ((this.leftSide - (AMPLIFIER * PIXEL * (float) decibelArray[i]))) / 2;
             float ampDataRight = ((this.rightSide + (AMPLIFIER * PIXEL * (float) decibelArray[i]))) / 2;
 
-            if(i % 2 == 1) {
+            // Not sure about the full algorithm with if and else statement here
+            // Will come back to it later
+            //TODO: Figure out what is going on with this algorithm
+
+//            if(i % 2 == 1) {
                 this.vertices[xOffset] = ampDataLeft;
                 this.vertices[xOffset+7] = ampDataRight;
-            }
-            else{
-                this.vertices[xOffset] = ampDataRight;
-                this.vertices[xOffset+7] = ampDataLeft;
-            }
+//            }
+//            else{
+//                this.vertices[xOffset] = ampDataRight;
+//                this.vertices[xOffset+7] = ampDataLeft;
+//            }
 
             xOffset += 14;
         }

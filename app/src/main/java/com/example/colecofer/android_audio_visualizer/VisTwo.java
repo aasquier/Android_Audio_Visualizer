@@ -37,11 +37,6 @@ public class VisTwo extends VisualizerBase {
 
     }
 
-    @Override
-    public void updateVertices(float[] newVertices) {
-
-    }
-
     // TODO We may want to consider moving the "drawDot" logic into this function, it seems to be serving no real purpose
     @Override
     public void draw() {

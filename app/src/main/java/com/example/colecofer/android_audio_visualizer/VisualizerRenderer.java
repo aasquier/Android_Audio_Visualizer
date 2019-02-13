@@ -115,10 +115,10 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
     }
 
     //Was newFftData
-    public void updateVertices(float[] newVertices) {
-        VisualizerModel.getInstance().currentVisualizer.updateVertices(newVertices);
-
-    }
+//    public void updateVertices(float[] newVertices) {
+//        VisualizerModel.getInstance().currentVisualizer.updateVertices(newVertices);
+//
+//    }
 
     @Override
     public void onDrawFrame(GL10 gl) {
