@@ -101,6 +101,7 @@ void main() {
     float scaledTime = time / 300.0;
     float scaledTime2 = time / 1000.0;
     vec2 res = vec2(0.95, 0.95);
+    vec2 dbS = vec2(a_current_DB_Level, an_old_DB_Level);
 
     // Creating the noise field
     vec2 uv = a_Position.xy * 4.0;
