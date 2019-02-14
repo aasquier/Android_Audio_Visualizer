@@ -204,6 +204,20 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                                 }
                             }
                         });
+                        MusixmatchClient.trackSearch(SpotifyClient.getTrackName(response), SpotifyClient.getArtistName(response), new MusixmatchRequestCallBack() {
+                            @Override
+                            public void musixmatchResponse(boolean success, String response) {
+                                if (success == true) {
+                                    MusixmatchClient.getLyrics(response, new MusixmatchRequestCallBack() {
+                                        @Override
+                                        public void musixmatchResponse(boolean success, String response) {
+                                            VisualizerModel.getInstance().setLyricMap(MusixmatchClient.parseLyrics(response));
+                                        }
+                                    });
+                                }
+                            }
+                        });
+
                     }
                 });
             }

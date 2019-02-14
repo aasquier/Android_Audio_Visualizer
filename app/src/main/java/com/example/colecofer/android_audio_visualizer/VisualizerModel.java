@@ -6,6 +6,8 @@ import android.util.Log;
 import com.spotify.sdk.android.player.PlaybackState;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
+import java.util.TreeMap;
+
 import static com.example.colecofer.android_audio_visualizer.Constants.MODEL_TAG;
 import static com.example.colecofer.android_audio_visualizer.Constants.SWITCH_VIS_TIME;
 
@@ -23,6 +25,8 @@ public class VisualizerModel {
     private int visualizerSwitchTimeOne;
     private int visualizerSwitchTimeTwo;
     public int colorMatrix[];
+    private TreeMap lyricMap;
+
 
     //Visualizer / OpenGL instances
     private static final VisualizerModel visualizerModel = new VisualizerModel(); //VisualizerModel Singleton
@@ -125,6 +129,13 @@ public class VisualizerModel {
         this.colorMatrix[3] = 1;
 
     }
+
+    public void setLyricMap(TreeMap lyrics) {
+        this.lyricMap = lyrics;
+    }
+
+    public TreeMap<Integer, String[]> getLyricMap() {return this.lyricMap;}
+
 
     /**
      * Removes the need to specify the TAG each time you log.
