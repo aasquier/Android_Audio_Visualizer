@@ -1,5 +1,3 @@
-#version 120
-
 precision mediump float;	    // Set the default precision to medium. We don't need as high of a
 varying vec4 v_Color;           // This is the color from the vertex shader interpolated across the
 
