@@ -97,18 +97,22 @@ varying vec4   v_Color;         // This will be passed into the fragment shader 
 uniform float time;
 
 void main() {
+    // Scales the system time fed into the renderer
     float scaledTime = time / 300.0;
     float scaledTime2 = time / 1000.0;
     vec2 res = vec2(0.95, 0.95);
 
+    // Creating the noise field
     vec2 uv = a_Position.xy * 4.0;
-    v_Color = vec4(vec3(fbm(uv, time) * 0.5 + 0.0) + a_Color.xyz,1.0);
+    v_Color = vec4(vec3(fbm(uv, time) * 0.5) + a_Color.xyz,1.0);
 
+    // Creating the wave itself
     vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
     float cLength = length(cPos);
-    vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(cLength * 12.0 - scaledTime2 * 4.0) * 0.03;
+    vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(cLength * 12.0 - scaledTime2 * 4.0) * 0.02;
     vec4 newPosition = vec4(uv2, a_Position.zw);
 
+    // Feeding the position to the fragment shader
     gl_Position = newPosition;
     gl_PointSize = 1.0 + a_current_DB_Level;
 }
