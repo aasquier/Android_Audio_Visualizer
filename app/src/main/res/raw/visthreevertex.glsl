@@ -118,11 +118,6 @@ void main() {           		    // The entry point for our vertex shader.
         uv2.y = -(uv2.y - 1.04);
     }
 
-    // vertical mirror
-    //if(uv2.x < 0.0){
-    //    uv2.x = -(uv2.x-1.04);
-    //}
-
     vec4 newPosition = vec4(uv2, a_Position.zw);
     gl_Position = newPosition; 	    // gl_Position is a special variable used to store the final position.
 }
