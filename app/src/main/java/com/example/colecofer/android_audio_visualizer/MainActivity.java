@@ -189,7 +189,6 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                         VisualizerModel.getInstance().trackName = SpotifyClient.getTrackName(response);
 
                         String imageUrl = SpotifyClient.getArtUrl(response);
-                        log(imageUrl);
                         VisualizerModel.getInstance().setDuration(SpotifyClient.getDuration(response));
                         final ImageView albumArtView = findViewById(R.id.albumArtImageView);
                         SpotifyClient.getAlbumArt(imageUrl, new BitmapRequestCallBack() {
@@ -216,9 +215,9 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
         View secondaryColorSwatch = findViewById(R.id.secondaryColor);
         View ternaryColorSwatch = findViewById(R.id.ternaryColor);
 
-        int primaryColor = VisualizerModel.getInstance().colorMatrix[0];
-        int secondaryColor = VisualizerModel.getInstance().colorMatrix[1];
-        int ternaryColor = VisualizerModel.getInstance().colorMatrix[2];
+        int primaryColor = VisualizerModel.getInstance().colorMatrix.get(0);
+        int secondaryColor = VisualizerModel.getInstance().colorMatrix.get(1);
+        int ternaryColor = VisualizerModel.getInstance().colorMatrix.get(2);
         primaryColorSwatch.setBackgroundColor(primaryColor);
         secondaryColorSwatch.setBackgroundColor(secondaryColor);
         ternaryColorSwatch.setBackgroundColor(ternaryColor);
