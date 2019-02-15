@@ -11,7 +11,7 @@ final class Constants {
     static final int BYTES_PER_FLOAT = 4;
 
     /** Visualizer Switching */
-    static final boolean SHOULD_SWITCH_VIS = true;    //Set to false if you do not want to rotate visualizers
+    static final boolean SHOULD_SWITCH_VIS = false;    //Set to false if you do not want to rotate visualizers
     static final int SWITCH_VIS_TIME = 3000;          //Amount of time to switch from the first visualizer to the second.
 
     /** MainActivity constants */
@@ -83,6 +83,14 @@ final class Constants {
     static final float PIXEL = 0.016f;
     static final float AMPLIFIER = 1.0f;
 
+    /** Vis3 contants */
+    static final int LINE_AMT_V3            = 20;
+
     /** VisualizerModel constants */
     static final String MODEL_TAG = "MODEL_TAG";
+
+    /** Vis3 constants */
+    static final int SCREEN_VERTICAL_HEIGHT_V3 = 50;
+    static final int VIS3_VERTEX_COUNT = (SCREEN_VERTICAL_HEIGHT_V3)*2;
+    static final int VIS3_ARRAY_SIZE = VIS3_VERTEX_COUNT * 7;
 }
