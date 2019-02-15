@@ -47,6 +47,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
             // If the compilation failed, delete the shader.
             if (compileStatus[0] == 0)
             {
+                Log.d("Vertex Error", GLES20.glGetShaderInfoLog(vertexShaderHandle));
                 GLES20.glDeleteShader(vertexShaderHandle);
                 throw new RuntimeException("Could not compile vertex shader program...");
             }
@@ -66,6 +67,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
             // If the compilation failed, delete the shader.
             if (compileStatus[0] == 0)
             {
+                Log.d("Vertex Error", GLES20.glGetShaderInfoLog(fragmentShaderHandle));
                 GLES20.glDeleteShader(fragmentShaderHandle);
                 throw new RuntimeException("Could not compile fragment shader program...");
             }

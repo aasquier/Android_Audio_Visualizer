@@ -115,7 +115,7 @@ void main() {           		    // The entry point for our vertex shader.
 
     // horizontal mirror
     if(uv2.y > 0.0){
-        uv2.y = -(uv2.y - 1.04);
+        uv2.y = -(uv2.y - 1.04)
     }
 
     vec4 newPosition = vec4(uv2, a_Position.zw);
