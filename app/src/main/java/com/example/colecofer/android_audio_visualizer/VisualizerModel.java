@@ -6,6 +6,10 @@ import android.util.Log;
 import com.spotify.sdk.android.player.PlaybackState;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
 import static com.example.colecofer.android_audio_visualizer.Constants.MODEL_TAG;
 import static com.example.colecofer.android_audio_visualizer.Constants.SWITCH_VIS_TIME;
 
@@ -22,7 +26,7 @@ public class VisualizerModel {
     private int durationInMilliseconds;
     private int visualizerSwitchTimeOne;
     private int visualizerSwitchTimeTwo;
-    public int colorMatrix[];
+    public ArrayList<Integer> colorMatrix;
 
     //Visualizer / OpenGL instances
     private static final VisualizerModel visualizerModel = new VisualizerModel(); //VisualizerModel Singleton
@@ -42,7 +46,7 @@ public class VisualizerModel {
         trackName = "Not defined";
         artistName = "Not defined";
         albumName = "Not defined";
-        colorMatrix = new int[] {0, 0, 0, 0};
+        colorMatrix = new ArrayList(3);
     }
 
 
@@ -117,13 +121,11 @@ public class VisualizerModel {
 
     public void setColors(int[] colors) {
 
+        this.colorMatrix.clear();
         for(int i = 0; i < 3; ++i) {
-
-            this.colorMatrix[i] = colors[i];
+            this.colorMatrix.add(colors[i]);
         }
-
-        this.colorMatrix[3] = 1;
-
+        Collections.shuffle(colorMatrix);
     }
 
     /**
@@ -134,6 +136,13 @@ public class VisualizerModel {
 
     public static void initRenderer(VisualizerRenderer inputRenderer) {
         renderer = inputRenderer;
+    }
+
+    public int getColor(int index) {
+        if (index >= 0 && index < colorMatrix.size()) {
+            return colorMatrix.get(index);
+        }
+        return colorMatrix.get(index);
     }
 
 }
