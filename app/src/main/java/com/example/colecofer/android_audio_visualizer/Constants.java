@@ -9,7 +9,7 @@ final class Constants {
     static final int BYTES_PER_FLOAT = 4;
 
     /** Visualizer Switching */
-    static final boolean SHOULD_SWITCH_VIS = true;    //Set to false if you do not want to rotate visualizers
+    static final boolean SHOULD_SWITCH_VIS = false;    //Set to false if you do not want to rotate visualizers
     static final int SWITCH_VIS_TIME = 3000;          //Amount of time to switch from the first visualizer to the second.
 
     /** MainActivity constants */
@@ -66,8 +66,8 @@ final class Constants {
     static final int VIS2_STRIDE_BYTES = (POSITION_DATA_SIZE + COLOR_DATA_SIZE) * BYTES_PER_FLOAT;
 
     /** GLDot constants for Vis2 */
-    static final int DOT_HEIGHT = 600;
-    static final int DOT_WIDTH  = 600;
+    static final int DOT_HEIGHT = 1600;
+    static final int DOT_WIDTH  = 1600;
     static final int DOT_COUNT  = DOT_WIDTH * DOT_HEIGHT;
 
     /** VisualizerActivity constants */
@@ -81,6 +81,8 @@ final class Constants {
     static final float PIXEL = 0.016f;
     static final float AMPLIFIER = 1.0f;
 
+    /** Vis3 contants */
+    static final int LINE_AMT_V3            = 20;
 
     /** VisualizerModel constants */
     static final String MODEL_TAG = "MODEL_TAG";

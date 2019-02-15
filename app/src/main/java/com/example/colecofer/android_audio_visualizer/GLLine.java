@@ -10,9 +10,11 @@ import static com.example.colecofer.android_audio_visualizer.Constants.AMPLIFIER
 import static com.example.colecofer.android_audio_visualizer.Constants.BYTES_PER_FLOAT;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
+import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_DRAW_BOUNDARY;
 import static com.example.colecofer.android_audio_visualizer.Constants.PIXEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_OFFSET;
+import static com.example.colecofer.android_audio_visualizer.Constants.RIGHT_DRAW_BOUNDARY;
 import static com.example.colecofer.android_audio_visualizer.Constants.SCREEN_VERTICAL_HEIGHT;
 import static com.example.colecofer.android_audio_visualizer.Constants.VERTEX_AMOUNT;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_ARRAY_SIZE;
@@ -47,35 +49,69 @@ public class GLLine {
      * Creating the base line vertices
      */
     public void createBaseLine(){
-        this.vertices = new float[VIS1_ARRAY_SIZE];
+        // V1 version
+        if (VisualizerModel.getInstance().currentVisualizer instanceof VisThree) {
+            this.vertices = new float[VIS1_ARRAY_SIZE];
 
-        int vertexIndex = 0;
-        float yAxis = -1.0f;
-        float yOffset = (float) 2 / (VIS1_VERTEX_COUNT/2);
+            int vertexIndex = 0;
+            float yAxis = -1.0f;
+            float yOffset = (float) 2 / (VIS1_VERTEX_COUNT/2);
 
-        // Setting up right triangles
-        for(int i = 0; i < VIS1_ARRAY_SIZE; i+=14){
-            // Left side
-            this.vertices[vertexIndex] = this.leftSide;
-            this.vertices[vertexIndex+1] = yAxis;
-            this.vertices[vertexIndex+2] = 0.0f;
-            this.vertices[vertexIndex+3] = 0.9f;
-            this.vertices[vertexIndex+4] = 0.1f;
-            this.vertices[vertexIndex+5] = 0.0f;
-            this.vertices[vertexIndex+6] = 1.0f;
+            // Setting up right triangles
+            for(int i = 0; i < VIS1_ARRAY_SIZE; i+=14){
+                // Left side
+                this.vertices[vertexIndex] = this.leftSide;
+                this.vertices[vertexIndex+1] = yAxis;
+                this.vertices[vertexIndex+2] = 0.0f;
+                this.vertices[vertexIndex+3] = 0.9f;
+                this.vertices[vertexIndex+4] = 0.1f;
+                this.vertices[vertexIndex+5] = 0.0f;
+                this.vertices[vertexIndex+6] = 1.0f;
 
-            // Right side
-            this.vertices[vertexIndex+7] = this.rightSide;
-            this.vertices[vertexIndex+8] = yAxis;
-            this.vertices[vertexIndex+9] = 0.0f;
-            this.vertices[vertexIndex+10] = 0.9f;
-            this.vertices[vertexIndex+11] = 0.1f;
-            this.vertices[vertexIndex+12] = 0.0f;
-            this.vertices[vertexIndex+13] = 1.0f;
+                // Right side
+                this.vertices[vertexIndex+7] = this.rightSide;
+                this.vertices[vertexIndex+8] = yAxis;
+                this.vertices[vertexIndex+9] = 0.0f;
+                this.vertices[vertexIndex+10] = 0.9f;
+                this.vertices[vertexIndex+11] = 0.1f;
+                this.vertices[vertexIndex+12] = 0.0f;
+                this.vertices[vertexIndex+13] = 1.0f;
 
-            // Next y coord
-            yAxis += yOffset;
-            vertexIndex+= (VERTEX_AMOUNT*2);
+                // Next y coord
+                yAxis += yOffset;
+                vertexIndex+= (VERTEX_AMOUNT*2);
+            }
+        } else { // V3 version
+            this.vertices = new float[VIS1_ARRAY_SIZE];
+
+            int vertexIndex = 0;
+            float xAxis = -1.0f;
+            float xOffset = (float) 2 / (VIS1_VERTEX_COUNT/2) + 1;
+
+            // Setting up right triangles
+            for(int i = 0; i < VIS1_ARRAY_SIZE; i+=14){
+                // Left side
+                this.vertices[vertexIndex] = xAxis;
+                this.vertices[vertexIndex+1] = this.leftSide;
+                this.vertices[vertexIndex+2] = 0.0f;
+                this.vertices[vertexIndex+3] = 0.9f;
+                this.vertices[vertexIndex+4] = 0.1f;
+                this.vertices[vertexIndex+5] = 0.0f;
+                this.vertices[vertexIndex+6] = 1.0f;
+
+                // Right side
+                this.vertices[vertexIndex+7] = xAxis;
+                this.vertices[vertexIndex+8] = this.rightSide;
+                this.vertices[vertexIndex+9] = 0.0f;
+                this.vertices[vertexIndex+10] = 0.9f;
+                this.vertices[vertexIndex+11] = 0.1f;
+                this.vertices[vertexIndex+12] = 0.0f;
+                this.vertices[vertexIndex+13] = 1.0f;
+
+                // Next y coord
+                xAxis += xOffset;
+                vertexIndex+= (VERTEX_AMOUNT*2);
+            }
         }
     }
 
@@ -83,33 +119,63 @@ public class GLLine {
      * Update the base line with decibel value
      */
     public void updateVertices() {
-        // Change to object array to traverse
-        Object[] decibelArray = decibelHistory.toArray();
+        if (VisualizerModel.getInstance().currentVisualizer instanceof VisThree) {
+            // Change to object array to traverse
+            Object[] decibelArray = decibelHistory.toArray();
 
-        int xOffset = 0;
+            int xOffset = 0;
 
-        // Only loop for the size of the decibel array size
-        for(int i = 0; i < SCREEN_VERTICAL_HEIGHT; i++){
-            // Calculate the coordinates after the amplification
-            // Left side needs to move in negative direction
-            // Right side needs to move in positive direction
-            // Amplification should be half for both sides because Amplification = left + right
-            float ampDataLeft = ((this.leftSide - (AMPLIFIER * PIXEL * (float) decibelArray[i]))) / 2;
-            float ampDataRight = ((this.rightSide + (AMPLIFIER * PIXEL * (float) decibelArray[i]))) / 2;
+            // Only loop for the size of the decibel array size
+            for(int i = 0; i < SCREEN_VERTICAL_HEIGHT; i++){
+                // Calculate the coordinates after the amplification
+                // Left side needs to move in negative direction
+                // Right side needs to move in positive direction
+                // Amplification should be half for both sides because Amplification = left + right
+                float ampDataLeft = ((this.leftSide - (AMPLIFIER * PIXEL * (float) decibelArray[i]))) / 2;
+                float ampDataRight = ((this.rightSide + (AMPLIFIER * PIXEL * (float) decibelArray[i]))) / 2;
 
-            // Not sure about the full algorithm with if and else statement here
-            // Will come back to it later
-            //TODO: Figure out what is going on with this algorithm
+                // Not sure about the full algorithm with if and else statement here
+                // Will come back to it later
+                //TODO: Figure out what is going on with this algorithm
 
-            this.vertices[xOffset] = ampDataLeft;
-            this.vertices[xOffset+7] = ampDataRight;
+                this.vertices[xOffset] = ampDataLeft;
+                this.vertices[xOffset+7] = ampDataRight;
 
-            xOffset += 14;
+                xOffset += 14;
+            }
+
+            FloatBuffer fftInput = ByteBuffer.allocateDirect(this.vertices.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+            fftInput.put(this.vertices).position(0);
+            this.lineVerticesBuffer = fftInput;
+        } else {
+            // Change to object array to traverse
+            Object[] decibelArray = decibelHistory.toArray();
+
+            int xOffset = 0;
+
+            // Only loop for the size of the decibel array size
+            for(int i = 0; i < SCREEN_VERTICAL_HEIGHT; i++){
+                // Calculate the coordinates after the amplification
+                // Left side needs to move in negative direction
+                // Right side needs to move in positive direction
+                // Amplification should be half for both sides because Amplification = left + right
+                float ampDataLeft = ((this.leftSide - (AMPLIFIER * PIXEL * (float) decibelArray[i]))) / 2;
+                float ampDataRight = ((this.rightSide + (AMPLIFIER * PIXEL * (float) decibelArray[i]))) / 2;
+
+                // Not sure about the full algorithm with if and else statement here
+                // Will come back to it later
+                //TODO: Figure out what is going on with this algorithm
+
+                this.vertices[xOffset] = ampDataLeft;
+                this.vertices[xOffset+7] = ampDataRight;
+
+                xOffset += 14;
+            }
+
+//            FloatBuffer fftInput = ByteBuffer.allocateDirect(this.vertices.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+//            fftInput.put(this.vertices).position(0);
+//            this.lineVerticesBuffer = fftInput;
         }
-
-        FloatBuffer fftInput = ByteBuffer.allocateDirect(this.vertices.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        fftInput.put(this.vertices).position(0);
-        this.lineVerticesBuffer = fftInput;
     }
 
     /**
