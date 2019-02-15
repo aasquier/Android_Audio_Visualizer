@@ -10,7 +10,7 @@ final class Constants {
 
     /** Visualizer Switching */
     static final boolean SHOULD_SWITCH_VIS = true;    //Set to false if you do not want to rotate visualizers
-    static final int SWITCH_VIS_TIME = 3000;          //Amount of time to switch from the first visualizer to the second.
+    static final int SWITCH_VIS_TIME = 30000;          //Amount of time to switch from the first visualizer to the second.
 
     /** MainActivity constants */
     //TODO: This is Spotify's test account because I don't want to hard code ours into a public repository...
@@ -51,7 +51,7 @@ final class Constants {
     static final String GLSL_TIME = "time";
 
     /** Vis1 constants */
-    static final int LINE_AMT              = 15;                  //Number of lines to display on the screen
+    static final int LINE_AMT              = 100;                  //Number of lines to display on the screen
     static final float AMP_MULT            = 0.000005f;           //Alters the lines horizontal amplitude
     static final int VERTEX_AMOUNT         = 7;                   //x, y, z, r, g, b, a
     static final float LEFT_DRAW_BOUNDARY  = -0.99f;              //Where to start drawing on the left side of the screen
@@ -78,7 +78,7 @@ final class Constants {
     static final int SCREEN_VERTICAL_HEIGHT = 50;
     static final int VIS1_VERTEX_COUNT = SCREEN_VERTICAL_HEIGHT + SCREEN_VERTICAL_HEIGHT;
     static final int VIS1_ARRAY_SIZE = VIS1_VERTEX_COUNT * 7;
-    static final float PIXEL = 0.016f;
+    static final float PIXEL = 0.0015f;
     static final float AMPLIFIER = 1.0f;
 
 
