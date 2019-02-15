@@ -106,7 +106,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         //Initialize and handles to each specific visualizers
         VisualizerModel.getInstance().visOne.initOnSurfaceCreated(positionHandle, colorHandle);
         VisualizerModel.getInstance().visTwo.initOnSurfaceCreated(positionHandle, colorHandle, programHandle);
-        VisualizerModel.getInstance().visThree.initOnSurfaceCreated(positionHandle, colorHandle, programHandle);
+        VisualizerModel.getInstance().visThree.initOnSurfaceCreated(positionHandle, colorHandle);
 
         // Tell OpenGL to use this program when rendering.
         GLES20.glUseProgram(programHandle);
