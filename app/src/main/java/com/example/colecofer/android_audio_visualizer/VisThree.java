@@ -2,7 +2,6 @@ package com.example.colecofer.android_audio_visualizer;
 
 import android.content.Context;
 import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_DRAW_BOUNDARY;
-import static com.example.colecofer.android_audio_visualizer.Constants.LINE_AMT;
 import static com.example.colecofer.android_audio_visualizer.Constants.LINE_AMT_V3;
 import static com.example.colecofer.android_audio_visualizer.Constants.RIGHT_DRAW_BOUNDARY;
 

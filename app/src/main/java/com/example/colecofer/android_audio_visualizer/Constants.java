@@ -86,5 +86,8 @@ final class Constants {
 
     /** VisualizerModel constants */
     static final String MODEL_TAG = "MODEL_TAG";
+    static final int SCREEN_VERTICAL_HEIGHT_V3 = 30;
+    static final int VIS3_VERTEX_COUNT = SCREEN_VERTICAL_HEIGHT_V3 + SCREEN_VERTICAL_HEIGHT_V3;
+    static final int VIS3_ARRAY_SIZE = VIS1_VERTEX_COUNT * 7;
 
 }

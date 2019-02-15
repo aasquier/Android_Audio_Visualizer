@@ -17,10 +17,13 @@ import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_OFFSET;
 import static com.example.colecofer.android_audio_visualizer.Constants.RIGHT_DRAW_BOUNDARY;
 import static com.example.colecofer.android_audio_visualizer.Constants.SCREEN_VERTICAL_HEIGHT;
+import static com.example.colecofer.android_audio_visualizer.Constants.SCREEN_VERTICAL_HEIGHT_V3;
 import static com.example.colecofer.android_audio_visualizer.Constants.VERTEX_AMOUNT;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_ARRAY_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_STRIDE_BYTES;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_VERTEX_COUNT;
+import static com.example.colecofer.android_audio_visualizer.Constants.VIS3_ARRAY_SIZE;
+import static com.example.colecofer.android_audio_visualizer.Constants.VIS3_VERTEX_COUNT;
 import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
 
 public class GLLine {
@@ -58,14 +61,15 @@ public class GLLine {
      * Creating the base line vertices
      */
     public void createBaseLine(){
-        this.vertices = new float[VIS1_ARRAY_SIZE];
-
-        int vertexIndex = 0;
-        float yAxis = -1.0f;
-        float yOffset = (float) 2 / (VIS1_VERTEX_COUNT/2);
 
         // TODO: error when switch visualizer, condition below doesn't work
         if (VisualizerModel.getInstance().currentVisualizer instanceof VisOne) {
+            this.vertices = new float[VIS1_ARRAY_SIZE];
+
+            int vertexIndex = 0;
+            float yAxis = -1.0f;
+            float yOffset = (float) 2 / (VIS1_VERTEX_COUNT/2);
+
             // Setting up right triangles
             for(int i = 0; i < VIS1_ARRAY_SIZE; i+=14){
                 // Left side
@@ -92,7 +96,13 @@ public class GLLine {
             }
         } else {
             // V3 version
-            for(int i = 0; i < VIS1_ARRAY_SIZE; i+=14){
+            this.vertices = new float[VIS3_ARRAY_SIZE];
+
+            int vertexIndex = 0;
+            float yAxis = -1.0f;
+            float yOffset = (float) 2 / (VIS3_VERTEX_COUNT/2);
+
+            for(int i = 0; i < VIS3_ARRAY_SIZE; i+=14){
                 // Left side
                 this.vertices[vertexIndex] = yAxis;
                 this.vertices[vertexIndex+1] = this.leftSide;
@@ -126,34 +136,48 @@ public class GLLine {
         Object[] decibelArray = decibelHistory.toArray();
 
         int xOffset = 0;
+        // TODO: error when switch visualizer, condition below doesn't work
+        if (VisualizerModel.getInstance().currentVisualizer instanceof VisOne) {
+            // Only loop for the size of the decibel array size
+            for(int i = 0; i < SCREEN_VERTICAL_HEIGHT; i++){
+                // Calculate the coordinates after the amplification
+                // Left side needs to move in negative direction
+                // Right side needs to move in positive direction
+                // Amplification should be half for both sides because Amplification = left + right
 
-        // Only loop for the size of the decibel array size
-        for(int i = 0; i < SCREEN_VERTICAL_HEIGHT; i++){
-            // Calculate the coordinates after the amplification
-            // Left side needs to move in negative direction
-            // Right side needs to move in positive direction
-            // Amplification should be half for both sides because Amplification = left + right
+                // Not sure about the full algorithm with if and else statement here
+                // Will come back to it later
+                //TODO: Figure out what is going on with this algorithm
 
-            // Not sure about the full algorithm with if and else statement here
-            // Will come back to it later
-            //TODO: Figure out what is going on with this algorithm
-            // V1 version
-            // TODO: error when switch visualizer, condition below doesn't work
-            if (VisualizerModel.getInstance().currentVisualizer instanceof VisOne) {
                 float ampDataLeft = ((this.leftSide - (AMPLIFIER * PIXEL * (float) decibelArray[i]))) / 2;
                 float ampDataRight = ((this.rightSide + (AMPLIFIER * PIXEL * (float) decibelArray[i]))) / 2;
                 this.vertices[xOffset] = ampDataLeft;
                 this.vertices[xOffset+7] = ampDataRight;
-            } else {
+
+                xOffset += 14;
+            }
+        } else {
+            // Only loop for the size of the decibel array size
+            for(int i = 0; i < SCREEN_VERTICAL_HEIGHT_V3; i++){
+                // Calculate the coordinates after the amplification
+                // Left side needs to move in negative direction
+                // Right side needs to move in positive direction
+                // Amplification should be half for both sides because Amplification = left + right
+
+                // Not sure about the full algorithm with if and else statement here
+                // Will come back to it later
+                //TODO: Figure out what is going on with this algorithm
+
                 // V3 version
                 float ampDataLeft = ((this.leftSide - (AMPLIFIER * PIXEL * (float) decibelArray[i])));
                 float ampDataRight = ((this.rightSide + (AMPLIFIER * PIXEL * (float) decibelArray[i])));
                 this.vertices[xOffset+1] = ampDataLeft;
                 this.vertices[xOffset+8] = ampDataRight;
-            }
 
-            xOffset += 14;
+                xOffset += 14;
+            }
         }
+
 
         FloatBuffer fftInput = ByteBuffer.allocateDirect(this.vertices.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         fftInput.put(this.vertices).position(0);
