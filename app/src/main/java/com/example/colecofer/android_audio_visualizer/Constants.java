@@ -85,10 +85,4 @@ final class Constants {
 
     /** VisualizerModel constants */
     static final String MODEL_TAG = "MODEL_TAG";
-
-    /** Fonts */
-//    Typeface titleFont = Typeface.createFromAsset(
-//            getContext().getAssets(),
-//            "fonts/androidnation.ttf");
-
 }
