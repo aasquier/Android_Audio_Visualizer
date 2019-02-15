@@ -94,14 +94,35 @@ attribute vec4 a_Color;	        // Per-vertex color information we will pass in 
 uniform float  an_old_DB_Level;      // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
 uniform float  a_current_DB_Level;      // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
 varying vec4   v_Color;         // This will be passed into the fragment shader as the final color values
-uniform float time;
+uniform float  time;
 
 void main() {           		    // The entry point for our vertex shader.
-    v_Color = a_Color;    	        // Pass the color through to the fragment shader.
 
-    vec2 uv = a_Position.xy * 4.0;
-    float time_test = time;
-    v_Color = vec4(vec3(fbm(uv, time) * 0.5 + 0.0) + a_Color.xyz,1.0);
+    vec2 res = vec2(1.2, 1.2);
 
-    gl_Position = a_Position; 	    // gl_Position is a special variable used to store the final position.
+    // default
+    v_Color = a_Color;
+    //gl_Position = a_Position; 	    // gl_Position is a special variable used to store the final position.
+
+    // apply fractal displacement on color
+    //vec2 uv = a_Position.xy / res.xy;
+    //v_Color = vec4(vec3(fbm(uv, time) * 0.5 + 0.0) + a_Color.xyz,1.0);
+
+
+    // making mirror
+    vec2 uv2 = a_Position.xy;
+    //vec2 uv2 = a_Position.xy / res.xy;
+
+    // horizontal mirror
+    if(uv2.y > 0.0){
+        uv2.y = -(uv2.y - 1.04);
+    }
+
+    // vertical mirror
+    //if(uv2.x < 0.0){
+    //    uv2.x = -(uv2.x-1.04);
+    //}
+
+    vec4 newPosition = vec4(uv2, a_Position.zw);
+    gl_Position = newPosition; 	    // gl_Position is a special variable used to store the final position.
 }
