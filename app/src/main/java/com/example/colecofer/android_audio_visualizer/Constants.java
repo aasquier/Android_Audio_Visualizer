@@ -1,5 +1,7 @@
 package com.example.colecofer.android_audio_visualizer;
 
+import android.graphics.Typeface;
+
 final class Constants {
 
     /** GLCircle constants */
@@ -81,8 +83,12 @@ final class Constants {
     static final float PIXEL = 0.016f;
     static final float AMPLIFIER = 1.0f;
 
-
     /** VisualizerModel constants */
     static final String MODEL_TAG = "MODEL_TAG";
+
+    /** Fonts */
+//    Typeface titleFont = Typeface.createFromAsset(
+//            getContext().getAssets(),
+//            "fonts/androidnation.ttf");
 
 }

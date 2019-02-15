@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
 import android.support.annotation.NonNull;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -52,6 +54,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         //startTrackPlayback();  //Uncomment this line to start Spotify track playback
         initDecibelHistory();
         initVisualizer();
+        initUI();
     }
 
     /**
@@ -129,30 +132,49 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         this.previousUpdateTime = System.currentTimeMillis();
 
         setContentView(surfaceView);
+    }
 
-        // Add song and artist text view to the visualizer
+    /**
+     * Setup the UI elements including the track Title, subtitile, and lyric text
+     */
+    private void initUI() {
         songTitle = new TextView(this);
         artistName = new TextView(this);
 
+        //Text color
         songTitle.setTextColor(Color.WHITE);
         artistName.setTextColor(Color.WHITE);
-        songTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
+
+        //Font size
+        songTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22f);
         artistName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
 
+        //Parameters for text views
         ViewGroup.MarginLayoutParams songMargin = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
         ViewGroup.MarginLayoutParams artistMargin = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
-
         songTitle.setLayoutParams(songMargin);
-        songTitle.setPadding(100, 100, 100, 100);
-        addContentView(songTitle, songMargin);
-
         artistName.setLayoutParams(artistMargin);
+
+        //Padding
+        songTitle.setPadding(100, 100, 100, 100);
         artistName.setPadding(100, 200, 100, 100);
+
+        //Create the Typeface objects
+        Typeface titleTypeFace = ResourcesCompat.getFont(this, R.font.sofiaproblack);
+        Typeface subtitleAndLyrics = ResourcesCompat.getFont(this, R.font.sofiaproextralight);
+
+        //Set the custome fonts
+        artistName.setTypeface(subtitleAndLyrics);
+        songTitle.setTypeface(titleTypeFace);
+
+        //Capitalize the title
+        songTitle.setAllCaps(true);
+
+        addContentView(songTitle, songMargin);
         addContentView(artistName, artistMargin);
 
         songTitle.requestLayout();
         artistName.requestLayout();
-
     }
 
     /** Sets the decibel history to all 0.0 to begin with */
