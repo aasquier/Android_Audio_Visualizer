@@ -13,6 +13,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -177,6 +178,14 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         artistName.requestLayout();
     }
 
+    /**
+     * Updates the opacity of the title textview between 0.5 and 1.0
+     */
+    private void animateTitleOpacity() {
+        float alpha = 0.50f + decibelHistory.peekFirst() * 0.50f;
+        this.songTitle.setAlpha(alpha);
+    }
+
     /** Sets the decibel history to all 0.0 to begin with */
     private void initDecibelHistory() {
         this.decibelHistory = new ArrayDeque<>();
@@ -220,6 +229,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
         /** Update the screen if the elapsed time has exceeded the threshold set */
         if(isTimeToRefreshScreen.second) {
+            this.animateTitleOpacity();
             VisualizerModel.getInstance().currentVisualizer.updateVertices();
         }
     }
