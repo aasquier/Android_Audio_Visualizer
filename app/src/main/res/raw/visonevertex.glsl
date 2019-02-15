@@ -90,37 +90,7 @@ uniform float time;
 
 
 void main() {           		    // The entry point for our vertex shader.
-    vec2 res = vec2(0.5, 0.5);
-    float scaledTime = time / 1000.0;
-    // Normalized pixel coordinates (from 0 to 1)
-    vec2 uv = a_Position.xy / res.xy;
 
-//    // Creating the noise field
-//    vec2 uv = a_Position.xy * 4.0;
-//    v_Color = vec4(vec3(fbm(uv, time) * 0.5) + a_Color.xyz,1.0);
-
-//    float _Time = iTime /*+ smoothstep(0.0, 0.25, abs(uv.x - abs(fract(iTime * 0.1)*2.-1.)))*/;
-
-    // Time varying pixel color
-    float refNoise = noise3D(vec3(uv.xy*7., scaledTime*0.8)) ;
-
-    vec2 N=vec2(refNoise,refNoise);
-
-    float index=0.1;
-    float dotProduct=dot(N,uv);
-
-    float constant1=1.-pow(index, 2.1)*(1.-pow(dotProduct,2.1));
-    uv= index*uv  - (index*dotProduct+sqrt(constant1))*N;
-
-
-    vec3 col = clamp(vec3(noise3D(vec3(uv.xy*2. + 100., scaledTime/4.))*1.,
-                    noise3D(vec3(uv.xy*2. + 5220., scaledTime/4.))*1.0,
-                    noise3D(vec3(uv.xy*2. + 6200., scaledTime/5.)))*2.+0.5,0.,1.);
-    col.y = min(col.z, max(col.y, col.x))*col.x;
-
-
-    // Output to screen
-    v_Color = vec4(col,1.0);
     gl_Position = a_Position;
-//    v_Color = a_Color;
+    v_Color = a_Color;
 }
