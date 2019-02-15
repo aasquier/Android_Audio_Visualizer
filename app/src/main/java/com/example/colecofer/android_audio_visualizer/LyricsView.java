@@ -1,6 +1,7 @@
 package com.example.colecofer.android_audio_visualizer;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -13,17 +14,21 @@ import static com.example.colecofer.android_audio_visualizer.Constants.RIGHT_PAD
 
 public class LyricsView extends View {
 
-        TextView test;
+    TextView test;
 
     public LyricsView(Context context, int screenWidth, int screenHeight) {
         super(context);
 
         this.test = new TextView(context);
         this.test.setText("THIS IS A TEST");
+        this.test.setTextColor(Color.GREEN);
+        this.test.setPadding(300, 300, 300, 300);
 
-        this.getLayoutParams().width = (int) (screenWidth * 0.8);
-        this.getLayoutParams().height = 400;
-        this.setPadding(LEFT_PADDING, screenHeight / 3, RIGHT_PADDING, 10);
+//        this.setPadding(100, 100, 100, 100);
+
+//        this.getLayoutParams().width = (int) (screenWidth * 0.8);
+//        this.getLayoutParams().height = 400;
+//        this.setPadding(LEFT_PADDING, screenHeight / 3, RIGHT_PADDING, 10);
     }
 
     public void init() {

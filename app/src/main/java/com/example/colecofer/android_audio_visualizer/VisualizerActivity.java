@@ -12,9 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.util.Pair;
 
@@ -162,36 +165,97 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         songTitle.requestLayout();
         artistName.requestLayout();
 
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int screenWidth = displayMetrics.widthPixels;
-        int screenHeight = displayMetrics.heightPixels;
 
-        lyricsView = new LyricsView(this, screenWidth, screenHeight);
+        ///////////////////////////////////
+
+
+
+
+//        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+//        int screenWidth = displayMetrics.widthPixels;
+//        int screenHeight = displayMetrics.heightPixels;
+//
+//
+
+//
+//        TextView tv = new TextView(this);
+//        tv.setTextColor(Color.RED);
+//        tv.setText("THIS IS A TEST");
+//
+//        View v = new View(this);
+//        v.setBackgroundColor(Color.BLUE);
+////        v.setPadding(100, 100, 100, 100);
+//
+//        View v2 = new View(this);
+//        v2.setBackgroundColor(Color.RED);
+//        v2.setPadding(100, 100, 100, 100);
+//
+//
+//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+//                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+//        rmain.addView(v, params);
+//        setContentView(rmain, params);
+/////////////////////////////////
+
+//        LinearLayout rlmain = new LinearLayout(this);
+//        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+//        LinearLayout   ll1 = new LinearLayout (this);
+//        rlmain.setGravity(100);
+
+//        ll1.setGravity(1);
+
+//        ImageView iv = new ImageView(this);
+//        iv.setImageResource(R.drawable.logo);
+//        TextView iv = new TextView(this);
+//        iv.setText("THIS IS A TEST TEXTTTTT");
+
+//        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+//        int screenWidth = displayMetrics.widthPixels;
+//        int screenHeight = displayMetrics.heightPixels;
+//
+//        View iv = new View(this);
+//        iv.setBackgroundColor(Color.BLUE);
+//        iv.setPadding(0, 0, 0,  0);
+//
+//        View iv2 = new View(this);
+//        iv2.setBackgroundColor(Color.GREEN);
+//        iv2.setPadding(0, 0, 0, 0);
+//
+//
+//        //Layout params
+//        LinearLayout .LayoutParams lp = new LinearLayout.LayoutParams(600, 600);
+//
+//
+//        //Add the view onto the layout
+//        iv.setLayoutParams(lp);
+//        ll1.addView(iv);
+//        ll1.addView(iv2);
+//
+//        rlmain.addView(ll1);
+//        setContentView(rlmain, llp);
+
+        ///////////////////////////////////////////
+
+
+
+//        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+//        int screenWidth = displayMetrics.widthPixels;
+//        int screenHeight = displayMetrics.heightPixels;
+//
+////        //Add the lyrics view onto the visualizer activity
+//        lyricsView = new LyricsView(this, screenWidth, screenHeight);
+//
+//        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(599, 600);
+//        ViewGroup.MarginLayoutParams lyricsMargin = new ViewGroup.MarginLayoutParams(900, 900);
+//
+//        lyricsView.setLayoutParams(params);
+//        lyricsView.setBackgroundColor(Color.BLUE);
+//        lyricsView.setPadding(100, 300, 100, 300);
+//        addContentView(lyricsView, lyricsMargin);
 
     }
 
-//    private void initLyricsAnimation() {
-//
-        //Get the screen width & height
-//        DisplayMetrics displayMetrics = new DisplayMetrics();
-//        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-//        int height = displayMetrics.heightPixels;
-//        int width = displayMetrics.widthPixels;
-//
-//        TextView temp = new TextView(this);
-//        temp.setText("THIS IS A TEST");
-//
-//        //Setup the main view that will hold multiple textViews
-//        lyricsView2 = new View(this);
-//        lyricsView2.getLayoutParams().width = (int) (width * 0.8);
-//        lyricsView2.getLayoutParams().height = 400;
-//        lyricsView2.setPadding(LEFT_PADDING, height / 3, RIGHT_PADDING, 10);
-//
-////        addContentView(lyricsView, temp);
-//
-////        LinearLayout l = findViewById(R.id.lyricsView);
-//
-//    }
 
     /** Sets the decibel history to all 0.0 to begin with */
     private void initDecibelHistory() {
