@@ -198,4 +198,26 @@ public class GLLine {
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, VIS1_VERTEX_COUNT);
     }
+
+    /**
+     * Returns a floatbuffer of values to be drawn. (with timeHandle)
+     */
+    public void draw(int positionHandle, int colorHandle, int timeHandle, long startTime) {
+        /** Position Handle */
+        this.lineVerticesBuffer.position(POSITION_OFFSET);
+        GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, this.lineVerticesBuffer);
+        GLES20.glEnableVertexAttribArray(positionHandle);
+
+        /** Color Handle */
+        this.lineVerticesBuffer.position(COLOR_OFFSET);
+        GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, this.lineVerticesBuffer);
+        GLES20.glEnableVertexAttribArray(colorHandle);
+
+        /** Time Handle */
+        //GLES20.glUniform1f(timeHandle, (float)(System.currentTimeMillis() - startTime));
+
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, VIS1_VERTEX_COUNT);
+
+
+    }
 }
