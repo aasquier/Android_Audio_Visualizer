@@ -1,5 +1,7 @@
 package com.example.colecofer.android_audio_visualizer;
 
+import android.graphics.Typeface;
+
 final class Constants {
 
     /** GLCircle constants */
@@ -91,5 +93,4 @@ final class Constants {
     static final int SCREEN_VERTICAL_HEIGHT_V3 = 50;
     static final int VIS3_VERTEX_COUNT = (SCREEN_VERTICAL_HEIGHT_V3)*2;
     static final int VIS3_ARRAY_SIZE = VIS3_VERTEX_COUNT * 7;
-
 }
