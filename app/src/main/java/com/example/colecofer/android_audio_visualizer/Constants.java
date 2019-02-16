@@ -11,7 +11,7 @@ final class Constants {
     static final int BYTES_PER_FLOAT = 4;
 
     /** Visualizer Switching */
-    static final boolean SHOULD_SWITCH_VIS = true;  //Set to false if you do not want to rotate visualizers
+    static final boolean SHOULD_SWITCH_VIS = false;  //Set to false if you do not want to rotate visualizers
     static final int SWITCH_VIS_TIME_ONE = 3000;  //Amount of time to switch from the first visualizer to the second.
     static final int SWITCH_VIS_TIME_TWO = SWITCH_VIS_TIME_ONE + 3000; //Amount of time to switch from the first visualizer to the second.
 
@@ -54,7 +54,7 @@ final class Constants {
     static final String GLSL_TIME = "time";
 
     /** Vis1 constants */
-    static final int LINE_AMT              = 50;                  //Number of lines to display on the screen
+    static final int LINE_AMT              = 20;                  //Number of lines to display on the screen
     static final float AMP_MULT            = 0.000005f;           //Alters the lines horizontal amplitude
     static final int VERTEX_AMOUNT         = 7;                   //x, y, z, r, g, b, a
     static final float LEFT_DRAW_BOUNDARY  = -0.99f;              //Where to start drawing on the left side of the screen
