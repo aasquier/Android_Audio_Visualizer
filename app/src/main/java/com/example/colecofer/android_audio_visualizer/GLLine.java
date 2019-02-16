@@ -108,8 +108,8 @@ public class GLLine {
             // Will come back to it later
             //TODO: Figure out what is going on with this algorithm
 
-            float ampDataLeft = ((this.leftSide - (AMPLIFIER * PIXEL * (float) decibelArray[i]))) / 2;
-            float ampDataRight = ((this.rightSide + (AMPLIFIER * PIXEL * (float) decibelArray[i]))) / 2;
+            float ampDataLeft = ((this.leftSide - (AMPLIFIER * PIXEL * (float) decibelArray[i])));
+            float ampDataRight = ((this.rightSide + (AMPLIFIER * PIXEL * (float) decibelArray[i])));
             this.vertices[xOffset] = ampDataLeft;
             this.vertices[xOffset+7] = ampDataRight;
 
