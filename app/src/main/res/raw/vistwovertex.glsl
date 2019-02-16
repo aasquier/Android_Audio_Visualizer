@@ -106,8 +106,6 @@ void main() {
 
     int distanceIndex = int(sqrt(a_Position.x * a_Position.x + a_Position.y * a_Position.y)*49.);
 
-//    highp int b = 720;
-
     float db = a_current_DB_Level[distanceIndex];
 
     // Creating the wave itself
@@ -115,8 +113,9 @@ void main() {
     float cLength = length(cPos);
     vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(cLength * 12.0 - scaledTime * 4.0) * 0.02;
     vec4 newPosition = vec4(uv2, a_Position.zw);
-
-    // Feeding the position to the fragment shader
+//
+//    // Feeding the position to the fragment shader
     gl_Position = newPosition;
+//    gl_Position = a_Position;
     gl_PointSize = 1.0 + a_current_DB_Level[0];
 }

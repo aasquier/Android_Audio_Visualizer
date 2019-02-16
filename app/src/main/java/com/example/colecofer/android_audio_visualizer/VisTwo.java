@@ -54,13 +54,10 @@ public class VisTwo extends VisualizerBase {
 
     }
 
-    // TODO We may want to consider moving the "drawDot" logic into this function, it seems to be serving no real purpose
     @Override
     public void draw() {
-        drawDot(dot.draw(), DOT_COUNT);
-    }
+        FloatBuffer dotVertexData = dot.draw();
 
-    private void drawDot(FloatBuffer dotVertexData, int count) {
         GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -87,7 +84,7 @@ public class VisTwo extends VisualizerBase {
 
         GLES20.glUniform1f(timeHandle, (float)(System.currentTimeMillis() - visTwoStartTime));
 
-        GLES20.glDrawArrays(GLES20.GL_POINTS, 0, count);
+        GLES20.glDrawArrays(GLES20.GL_POINTS, 0, DOT_COUNT);
 
         GLES20.glDisable(GLES20.GL_BLEND);
     }
