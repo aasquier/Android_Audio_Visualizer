@@ -6,6 +6,7 @@ import android.util.Log;
 import com.spotify.sdk.android.player.PlaybackState;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
+import java.util.TreeMap;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -26,7 +27,9 @@ public class VisualizerModel {
     private int durationInMilliseconds;
     private int visualizerSwitchTimeOne;
     private int visualizerSwitchTimeTwo;
+    private TreeMap lyricMap;
     public ArrayList<Integer> colorMatrix;
+
 
     //Visualizer / OpenGL instances
     private static final VisualizerModel visualizerModel = new VisualizerModel(); //VisualizerModel Singleton
@@ -126,6 +129,13 @@ public class VisualizerModel {
         }
         Collections.shuffle(colorMatrix);
     }
+
+    public void setLyricMap(TreeMap lyrics) {
+        this.lyricMap = lyrics;
+    }
+
+    public TreeMap<Integer, String[]> getLyricMap() {return this.lyricMap;}
+
 
     /**
      * Removes the need to specify the TAG each time you log.
