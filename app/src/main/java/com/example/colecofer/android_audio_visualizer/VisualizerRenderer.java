@@ -4,8 +4,6 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 
-import java.nio.IntBuffer;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -47,6 +45,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
             // If the compilation failed, delete the shader.
             if (compileStatus[0] == 0)
             {
+                Log.d("Vertex Error", GLES20.glGetShaderInfoLog(vertexShaderHandle));
                 GLES20.glDeleteShader(vertexShaderHandle);
                 throw new RuntimeException("Could not compile vertex shader program...");
             }
@@ -66,6 +65,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
             // If the compilation failed, delete the shader.
             if (compileStatus[0] == 0)
             {
+                Log.d("Vertex Error", GLES20.glGetShaderInfoLog(fragmentShaderHandle));
                 GLES20.glDeleteShader(fragmentShaderHandle);
                 throw new RuntimeException("Could not compile fragment shader program...");
             }
@@ -106,7 +106,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         //Initialize and handles to each specific visualizers
         VisualizerModel.getInstance().visOne.initOnSurfaceCreated(positionHandle, colorHandle);
         VisualizerModel.getInstance().visTwo.initOnSurfaceCreated(positionHandle, colorHandle, programHandle);
-        VisualizerModel.getInstance().visThree.initOnSurfaceCreated(positionHandle, colorHandle);
+        VisualizerModel.getInstance().visThree.initOnSurfaceCreated(positionHandle, colorHandle, programHandle);
 
         // Tell OpenGL to use this program when rendering.
         GLES20.glUseProgram(programHandle);

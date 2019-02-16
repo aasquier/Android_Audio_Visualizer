@@ -7,9 +7,12 @@ import com.spotify.sdk.android.player.PlaybackState;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.MODEL_TAG;
-import static com.example.colecofer.android_audio_visualizer.Constants.SWITCH_VIS_TIME;
+import static com.example.colecofer.android_audio_visualizer.Constants.SWITCH_VIS_TIME_ONE;
+import static com.example.colecofer.android_audio_visualizer.Constants.SWITCH_VIS_TIME_TWO;
 
 public class VisualizerModel {
 
@@ -24,8 +27,8 @@ public class VisualizerModel {
     private int durationInMilliseconds;
     private int visualizerSwitchTimeOne;
     private int visualizerSwitchTimeTwo;
-    public int colorMatrix[];
     private TreeMap lyricMap;
+    public ArrayList<Integer> colorMatrix;
 
 
     //Visualizer / OpenGL instances
@@ -46,7 +49,7 @@ public class VisualizerModel {
         trackName = "Not defined";
         artistName = "Not defined";
         albumName = "Not defined";
-        colorMatrix = new int[] {0, 0, 0, 0};
+        colorMatrix = new ArrayList(3);
     }
 
 
@@ -73,14 +76,11 @@ public class VisualizerModel {
             this.currentVisualizer.disableVertexAttribArrays();
             this.currentVisualizer = this.visTwo;
             VisualizerRenderer.initShaders();
+        } else if (currentTimeMillis >= visualizerSwitchTimeTwo && currentVisualizer.visNum == 2) {
+           this.currentVisualizer.disableVertexAttribArrays();
+           this.currentVisualizer = this.visThree;
+           VisualizerRenderer.initShaders();
         }
-
-        //TODO: Uncomment this when visualizer three is ready
-        //else if (currentTimeMillis >= visualizerSwitchTimeTwo && currentVisualizer.visNum == 2) {
-        //   currentVisualizer.disableVertexAttribArrays();
-        //   currentVisualizer = new VisThree();
-        //   VisualizerRenderer.initShaders();
-        //}
     }
 
     /**
@@ -89,7 +89,9 @@ public class VisualizerModel {
      */
     public void setDuration(int duration) {
         //TODO: This is temporarily being set to a constant defined in constants.java for debugging convenience
-        this.visualizerSwitchTimeOne = SWITCH_VIS_TIME;
+        this.visualizerSwitchTimeOne = SWITCH_VIS_TIME_ONE;
+        this.visualizerSwitchTimeTwo = SWITCH_VIS_TIME_TWO;
+
         //durationInMilliseconds = duration;
         //visualizerSwitchTimeOne = duration / 3;
         //visualizerSwitchTimeTwo = visualizerSwitchTimeOne * 2;
@@ -121,13 +123,11 @@ public class VisualizerModel {
 
     public void setColors(int[] colors) {
 
+        this.colorMatrix.clear();
         for(int i = 0; i < 3; ++i) {
-
-            this.colorMatrix[i] = colors[i];
+            this.colorMatrix.add(colors[i]);
         }
-
-        this.colorMatrix[3] = 1;
-
+        Collections.shuffle(colorMatrix);
     }
 
     public void setLyricMap(TreeMap lyrics) {
@@ -145,6 +145,13 @@ public class VisualizerModel {
 
     public static void initRenderer(VisualizerRenderer inputRenderer) {
         renderer = inputRenderer;
+    }
+
+    public int getColor(int index) {
+        if (index >= 0 && index < colorMatrix.size()) {
+            return colorMatrix.get(index);
+        }
+        return colorMatrix.get(index);
     }
 
 }

@@ -88,7 +88,6 @@ public class MusixmatchClient {
         //params.put("f_subtitle_length_max_deviation", 0);
 
 
-
         client.get(MATCHER_URL, params, new TextHttpResponseHandler() {
 
             @Override

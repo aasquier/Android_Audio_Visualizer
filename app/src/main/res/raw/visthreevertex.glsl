@@ -92,30 +92,32 @@ uniform mat4   u_MVPMatrix;	    // A constant representing the combined model/vi
 attribute vec4 a_Position;	    // Per-vertex position information we will pass in  (a_Position.xyzw , w is always 1)
 attribute vec4 a_Color;	        // Per-vertex color information we will pass in  (a_Color.rgba -->  a_Color.xyzw)
 uniform float  an_old_DB_Level;      // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
-uniform float  a_current_DB_Level[50];      // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
+uniform float  a_current_DB_Level;      // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
 varying vec4   v_Color;         // This will be passed into the fragment shader as the final color values
-uniform float time;
+uniform float  time;
 
-void main() {
-    float scaledTime = time / 700.0;
-    vec2 res = vec2(0.95, 0.95);
+void main() {           		    // The entry point for our vertex shader.
 
-    // Creating the noise field
-    vec2 uv = a_Position.xy * 4.0;
-    v_Color = vec4(vec3(fbm(uv, time) * 0.5) + a_Color.xyz,1.0);
+    vec2 res = vec2(1.2, 1.2);
 
-    int distanceIndex = int(sqrt(a_Position.x * a_Position.x + a_Position.y * a_Position.y)*49.);
+    // default
+    v_Color = a_Color;
+    //gl_Position = a_Position; 	    // gl_Position is a special variable used to store the final position.
 
-    float db = a_current_DB_Level[distanceIndex];
+    // apply fractal displacement on color
+    //vec2 uv = a_Position.xy / res.xy;
+    //v_Color = vec4(vec3(fbm(uv, time) * 0.5 + 0.0) + a_Color.xyz,1.0);
 
-    // Creating the wave itself
-    vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
-    float cLength = length(cPos);
-    vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(cLength * 12.0 - scaledTime * 4.0) * 0.02;
+
+    // making mirror
+    vec2 uv2 = a_Position.xy;
+    //vec2 uv2 = a_Position.xy / res.xy;
+
+    // horizontal mirror
+    if(uv2.y > 0.0){
+        uv2.y = -(uv2.y - 1.04);
+    }
+
     vec4 newPosition = vec4(uv2, a_Position.zw);
-//
-//    // Feeding the position to the fragment shader
-    gl_Position = newPosition;
-//    gl_Position = a_Position;
-    gl_PointSize = 1.0 + a_current_DB_Level[0];
+    gl_Position = newPosition; 	    // gl_Position is a special variable used to store the final position.
 }
