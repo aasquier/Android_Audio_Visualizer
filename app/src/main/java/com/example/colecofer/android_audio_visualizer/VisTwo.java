@@ -5,6 +5,8 @@ import android.opengl.GLES20;
 import android.util.Log;
 
 import java.nio.FloatBuffer;
+import java.util.Iterator;
+
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
 import static com.example.colecofer.android_audio_visualizer.Constants.DOT_COUNT;
@@ -12,6 +14,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_DB_L
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_TIME;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_OFFSET;
+import static com.example.colecofer.android_audio_visualizer.Constants.SCREEN_VERTICAL_HEIGHT;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS2_STRIDE_BYTES;
 import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
 
@@ -71,8 +74,16 @@ public class VisTwo extends VisualizerBase {
         GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, VIS2_STRIDE_BYTES, dotVertexData);
         GLES20.glEnableVertexAttribArray(colorHandle);
 
+        Iterator iterator = decibelHistory.iterator();
+        float[] dbs = new float[SCREEN_VERTICAL_HEIGHT];
+        int i = 0;
+        while(iterator.hasNext()) {
+            dbs[i] = (float)iterator.next();
+            i++;
+        }
+
         /** Updates the size of the dots using the most current decibel level, i.e. the first element of the decibel history */
-        GLES20.glUniform1f(currentDecibelLevelHandle, decibelHistory.peekFirst());
+        GLES20.glUniform1fv(currentDecibelLevelHandle, SCREEN_VERTICAL_HEIGHT, dbs, 0);
 
         GLES20.glUniform1f(timeHandle, (float)(System.currentTimeMillis() - visTwoStartTime));
 
