@@ -82,13 +82,53 @@ float fbm(vec2 uv, float time)
     return value;
 }
 
+float hash(float n) {
+ 	return fract(cos(n*89.42)*343.42);
+}
+
+vec2 hash2(vec2 n) {
+ 	return vec2(hash(n.x*23.62-300.0+n.y*34.35),hash(n.x*45.13+256.0+n.y*38.89));
+}
+
+float worley(vec2 c, float time) {
+    float dis = 1.0;
+    for(int x = -1; x <= 1; x++)
+        for(int y = -1; y <= 1; y++){
+            vec2 p = floor(c)+vec2(x,y);
+            vec2 a = hash2(p) * time;
+            vec2 rnd = 0.5+sin(a)*0.5;
+            float d = length(rnd+vec2(x,y)-fract(c));
+            dis = min(dis, d);
+        }
+    return dis;
+}
+
+float worley5(vec2 c, float time) {
+    float w = 0.0;
+    float a = 0.5;
+    for (int i = 0; i<5; i++) {
+        w += worley(c, time)*a;
+        c*=2.0;
+        time*=2.0;
+        a*=0.5;
+    }
+    return w;
+}
+
 uniform mat4   u_MVPMatrix;	        // A constant representing the combined model/view/projection matrix.
 attribute vec4 a_Position;	        // Per-vertex position information we will pass in.
 attribute vec4 a_Color;	            // Per-vertex color information we will pass in.
 varying vec4   v_Color;             // This will be passed into the fragment shader.
 uniform float time;
+uniform float current_decibel;
 
 void main() {           		    // The entry point for our vertex shader.
+    float noise = snoise(a_Position.xy);
+    float scaledTime = time / 700.0;
+//    float worleyNoise = worley5(a_Position.xy, scaledTime);
+    gl_Position = vec4(a_Position.x + (noise * current_decibel * 0.05), a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
+//    gl_Position = vec4(a_Position.x + (worleyNoise * current_decibel * 0.09), a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
     v_Color = a_Color;    	        // Pass the color through to the fragment shader.
-    gl_Position = a_Position; 	    // gl_Position is a special variable used to store the final position.
+
+
 }
