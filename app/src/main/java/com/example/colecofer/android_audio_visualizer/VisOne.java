@@ -16,6 +16,7 @@ public class VisOne extends VisualizerBase {
     private GLLine[] lines;  //Holds the lines to be displayed
     private float lineOffSet = (RIGHT_DRAW_BOUNDARY * 2) / (LINE_AMT - 1); //We want to display lines from -.99 to .99 (.99+.99=1.98)
     private Utility util;
+    private Long visOneStartTime;
 
     /**
      * Constructor
@@ -36,6 +37,8 @@ public class VisOne extends VisualizerBase {
 
         this.vertexShader = util.getStringFromGLSL(R.raw.visonevertex);
         this.fragmentShader = util.getStringFromGLSL(R.raw.visonefragment);
+
+        this.visOneStartTime = System.currentTimeMillis();
     }
 
     /**
@@ -60,7 +63,7 @@ public class VisOne extends VisualizerBase {
     public void draw() {
         //Go through each line and draw them
         for(int i = 0; i < LINE_AMT; ++i) {
-            lines[i].draw(this.positionHandle, this.colorHandle);
+            lines[i].draw(this.positionHandle, this.colorHandle, this.visOneStartTime);
         }
     }
 }
