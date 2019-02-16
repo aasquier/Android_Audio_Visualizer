@@ -7,11 +7,11 @@ import com.spotify.sdk.android.player.PlaybackState;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.MODEL_TAG;
-import static com.example.colecofer.android_audio_visualizer.Constants.SWITCH_VIS_TIME;
+import static com.example.colecofer.android_audio_visualizer.Constants.SWITCH_VIS_TIME_ONE;
+import static com.example.colecofer.android_audio_visualizer.Constants.SWITCH_VIS_TIME_TWO;
 
 public class VisualizerModel {
 
@@ -73,14 +73,11 @@ public class VisualizerModel {
             this.currentVisualizer.disableVertexAttribArrays();
             this.currentVisualizer = this.visTwo;
             VisualizerRenderer.initShaders();
+        } else if (currentTimeMillis >= visualizerSwitchTimeTwo && currentVisualizer.visNum == 2) {
+           this.currentVisualizer.disableVertexAttribArrays();
+           this.currentVisualizer = this.visThree;
+           VisualizerRenderer.initShaders();
         }
-
-        //TODO: Uncomment this when visualizer three is ready
-        //else if (currentTimeMillis >= visualizerSwitchTimeTwo && currentVisualizer.visNum == 2) {
-        //   currentVisualizer.disableVertexAttribArrays();
-        //   currentVisualizer = new VisThree();
-        //   VisualizerRenderer.initShaders();
-        //}
     }
 
     /**
@@ -89,7 +86,9 @@ public class VisualizerModel {
      */
     public void setDuration(int duration) {
         //TODO: This is temporarily being set to a constant defined in constants.java for debugging convenience
-        this.visualizerSwitchTimeOne = SWITCH_VIS_TIME;
+        this.visualizerSwitchTimeOne = SWITCH_VIS_TIME_ONE;
+        this.visualizerSwitchTimeTwo = SWITCH_VIS_TIME_TWO;
+
         //durationInMilliseconds = duration;
         //visualizerSwitchTimeOne = duration / 3;
         //visualizerSwitchTimeTwo = visualizerSwitchTimeOne * 2;
