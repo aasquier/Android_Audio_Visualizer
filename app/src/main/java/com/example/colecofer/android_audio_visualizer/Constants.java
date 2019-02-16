@@ -81,7 +81,7 @@ final class Constants {
     static final int SCREEN_VERTICAL_HEIGHT = 50;
     static final int VIS1_VERTEX_COUNT = SCREEN_VERTICAL_HEIGHT + SCREEN_VERTICAL_HEIGHT;
     static final int VIS1_ARRAY_SIZE = VIS1_VERTEX_COUNT * 7;
-    static final float PIXEL = 0.009f;
+    static final float PIXEL = 0.003f;
     static final float AMPLIFIER = 1.0f;
 
     /** Vis3 contants */

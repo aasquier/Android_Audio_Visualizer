@@ -126,6 +126,8 @@ public class GLLine {
      * Returns a floatbuffer of values to be drawn.
      */
     public void draw(int positionHandle, int colorHandle, Long visOneStartTime) {
+        while (decibelHistory.peekFirst() == null) { continue; }
+
         this.lineVerticesBuffer.position(POSITION_OFFSET);
         GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, this.lineVerticesBuffer);
         GLES20.glEnableVertexAttribArray(positionHandle);
@@ -136,7 +138,7 @@ public class GLLine {
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, VIS1_VERTEX_COUNT);
 
-        GLES20.glUniform1f(VisualizerModel.getInstance().currentVisualizer.timeHandle, (float)(System.currentTimeMillis() - visOneStartTime));
+        GLES20.glUniform1f(VisualizerModel.getInstance().currentVisualizer.timeHandle, (float) (System.currentTimeMillis() - visOneStartTime));
 
         GLES20.glUniform1f(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, decibelHistory.peekFirst());
 

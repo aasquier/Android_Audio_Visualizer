@@ -126,7 +126,7 @@ void main() {           		    // The entry point for our vertex shader.
     float noise = snoise(a_Position.xy);
     float scaledTime = time / 700.0;
 //    float worleyNoise = worley5(a_Position.xy, scaledTime);
-    gl_Position = vec4(a_Position.x + (noise * current_decibel * 0.05), a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
+    gl_Position = vec4(a_Position.x + (noise * current_decibel * 0.009), a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
 //    gl_Position = vec4(a_Position.x + (worleyNoise * current_decibel * 0.09), a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
     v_Color = a_Color;    	        // Pass the color through to the fragment shader.
 
