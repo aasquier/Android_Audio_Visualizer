@@ -104,7 +104,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         colorHandle = GLES20.glGetAttribLocation(programHandle, GLSL_COLOR_HANDLE);
 
         //Initialize and handles to each specific visualizers
-        VisualizerModel.getInstance().visOne.initOnSurfaceCreated(positionHandle, colorHandle);
+        VisualizerModel.getInstance().visOne.initOnSurfaceCreated(positionHandle, colorHandle, programHandle);
         VisualizerModel.getInstance().visTwo.initOnSurfaceCreated(positionHandle, colorHandle, programHandle);
         VisualizerModel.getInstance().visThree.initOnSurfaceCreated(positionHandle, colorHandle, programHandle);
 

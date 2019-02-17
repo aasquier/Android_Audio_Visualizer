@@ -71,12 +71,10 @@ public class VisTwo extends VisualizerBase {
         GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, VIS2_STRIDE_BYTES, dotVertexData);
         GLES20.glEnableVertexAttribArray(colorHandle);
 
-        Iterator iterator = decibelHistory.iterator();
+        Float[] temp = decibelHistory.toArray(new Float[SCREEN_VERTICAL_HEIGHT]);
         float[] dbs = new float[SCREEN_VERTICAL_HEIGHT];
-        int i = 0;
-        while(iterator.hasNext()) {
-            dbs[i] = (float)iterator.next();
-            i++;
+        for (int i = 0; i < SCREEN_VERTICAL_HEIGHT; ++i) {
+            dbs[i] = temp[i] == null ? 0.0f : temp[i];
         }
 
         /** Updates the size of the dots using the most current decibel level, i.e. the first element of the decibel history */

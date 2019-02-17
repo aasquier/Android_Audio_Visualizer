@@ -6,6 +6,7 @@ import android.util.Log;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.Iterator;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.AMPLIFIER;
 import static com.example.colecofer.android_audio_visualizer.Constants.BYTES_PER_FLOAT;
@@ -126,6 +127,8 @@ public class GLLine {
      * Returns a floatbuffer of values to be drawn.
      */
     public void draw(int positionHandle, int colorHandle, Long visOneStartTime) {
+        while (decibelHistory.peekFirst() == null) { continue; }
+
         this.lineVerticesBuffer.position(POSITION_OFFSET);
         GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, this.lineVerticesBuffer);
         GLES20.glEnableVertexAttribArray(positionHandle);
@@ -136,7 +139,21 @@ public class GLLine {
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, VIS1_VERTEX_COUNT);
 
-        GLES20.glUniform1f(VisualizerModel.getInstance().currentVisualizer.timeHandle, (float)(System.currentTimeMillis() - visOneStartTime));
+        GLES20.glUniform1f(VisualizerModel.getInstance().currentVisualizer.timeHandle, (float) (System.currentTimeMillis() - visOneStartTime));
+
+        Float[] temp = decibelHistory.toArray(new Float[SCREEN_VERTICAL_HEIGHT]);
+        float[] dbs = new float[SCREEN_VERTICAL_HEIGHT];
+        for (int i = 0; i < SCREEN_VERTICAL_HEIGHT; ++i) {
+            dbs[i] = temp[i] == null ? 0.0f : temp[i];
+//            if (Math.random() > 0.5) {
+//                dbs[i] *= -1;
+//            }
+        }
+
+        /** Updates the size of the dots using the most current decibel level, i.e. the first element of the decibel history */
+        GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, SCREEN_VERTICAL_HEIGHT, dbs, 0);
+
+//        GLES20.glUniform1f(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, decibelHistory.peekFirst());
 
     }
 }

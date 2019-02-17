@@ -1,6 +1,10 @@
 package com.example.colecofer.android_audio_visualizer;
 
 import android.content.Context;
+import android.opengl.GLES20;
+
+import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_DB_LEVEL;
+import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_TIME;
 import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_DRAW_BOUNDARY;
 import static com.example.colecofer.android_audio_visualizer.Constants.LINE_AMT;
 import static com.example.colecofer.android_audio_visualizer.Constants.RIGHT_DRAW_BOUNDARY;
@@ -44,9 +48,11 @@ public class VisOne extends VisualizerBase {
     /**
      * Initialization of handles during onSurfaceCreated in VisualizerRenderer
      */
-    public void initOnSurfaceCreated(int positionHandle, int colorHandle) {
+    public void initOnSurfaceCreated(int positionHandle, int colorHandle, int programHandle) {
         this.positionHandle = positionHandle;
         this.colorHandle = colorHandle;
+        this.currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, GLSL_DB_LEVEL);
+        this.timeHandle = GLES20.glGetUniformLocation(programHandle, GLSL_TIME);
     }
 
     @Override
