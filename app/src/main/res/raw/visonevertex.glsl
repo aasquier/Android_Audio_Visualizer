@@ -147,21 +147,21 @@ float snoise(vec3 v)
   return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1),
                                 dot(p2,x2), dot(p3,x3) ) );
   }
-//
-//float fbm(vec2 uv, float time)
-//{
-//    float value = 0.0;
-//    float factor = 1.1;
-//    float scaledTime = time / 300.0;
-//
-//    for (int i = 0; i < 8; i++)
-//    {
-//        uv += scaledTime * 0.04;
-//        value += snoise(uv * factor) / factor;
-//        factor *= 2.0;
-//    }
-//    return value;
-//}
+
+float fbm(vec2 uv, float time)
+{
+    float value = 0.0;
+    float factor = -2.1;
+    float scaledTime = time / 700.0;
+
+    for (int i = 0; i < 8; i++)
+    {
+        uv += scaledTime * 0.04;
+        value += snoise(uv * factor) / factor;
+        factor *= 2.0;
+    }
+    return value;
+}
 //
 //float hash(float n) {
 // 	return fract(cos(n*89.42)*343.42);
@@ -196,6 +196,7 @@ float snoise(vec3 v)
 //    return w;
 //}
 
+
 uniform mat4   u_MVPMatrix;	        // A constant representing the combined model/view/projection matrix.
 attribute vec4 a_Position;	        // Per-vertex position information we will pass in.
 attribute vec4 a_Color;	            // Per-vertex color information we will pass in.
@@ -210,11 +211,26 @@ void main() {           		    // The entry point for our vertex shader.
 //    } else {
 //        positionIndex = int(24. + floor(a_Position.y * 24.));
 //    }
-//    float noise = snoise(vec3(a_Position.xy, a_DB_Level[positionIndex]));
+//    float noise = snoise(a_Position.xyz);
     float noise = snoise(a_Position.xy);
 
-//    gl_Position = vec4(a_Position.x + (noise * a_DB_Level[positionIndex] * 0.025), a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
-    gl_Position = vec4(a_Position.x + (noise * a_DB_Level[0] * 0.06), a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
+//    float fbmNoise = fbm(a_Position.xy, time);
 
-    v_Color = a_Color;    	        // Pass the color through to the fragment shader.
+//    float s1 = abs(snoise(a_Position.xy + time/2.0 + snoise(a_Position.xy + snoise(a_Position.xy + time/4.0) / 10.0)));
+
+//    gl_Position = vec4(a_Position.x + (fbmNoise * a_DB_Level[positionIndex] * 0.055), a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
+    gl_Position = vec4(a_Position.x + (noise * a_DB_Level[0] * 0.06), a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
+//    gl_Position = vec4(a_Position.x + (fbmNoise * a_DB_Level[0] * 0.055), a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
+//    gl_Position = vec4((a_Position.x + s1 + a_DB_Level[positionIndex]) * 0.015, a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
+
+    v_Color = a_Color;
+
+//    vec2 uv = fragCoord.xy/iResolution.xy;
+//    uv.x *= iResolution.x/iResolution.y;
+//    float scl = 2.85;
+//    float d = distance(vec2(uv.x,uv.y), vec2(0.5));
+//    uv += iTime*.25+(1.8*snoise(vec3(uv.x*scl, uv.y*scl, iTime*0.012)));
+//    float n = snoise(vec3(uv.x*scl, uv.y*scl, iTime*.015));
+//	n = s(0.146, 0.702,n-d*.1);
+//    fragColor = vec4(vec3(n),1.0);
 }
