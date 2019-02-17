@@ -184,6 +184,12 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         initLyricsUI();
     }
 
+
+    public void initLyricsUI2() {
+//        VisualizerSurfaceView sv = (VisualizerSurfaceView)findViewById(R.id.)
+    }
+
+
     public void initLyricsUI() {
 
         //Create a view to be placed within the relative layout?

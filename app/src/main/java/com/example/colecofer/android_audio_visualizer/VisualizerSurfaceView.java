@@ -3,6 +3,7 @@ package com.example.colecofer.android_audio_visualizer;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.view.SurfaceHolder;
 
 public class VisualizerSurfaceView extends GLSurfaceView {
 
