@@ -16,6 +16,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.util.Pair;
 
@@ -51,6 +53,10 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Hide title bar
+        getSupportActionBar().hide();
+
         setContentView(R.layout.activity_visualizer);
         //startTrackPlayback();  //Uncomment this line to start Spotify track playback
         initDecibelHistory();
@@ -164,7 +170,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         Typeface titleTypeFace = ResourcesCompat.getFont(this, R.font.sofiaproblack);
         Typeface subtitleAndLyrics = ResourcesCompat.getFont(this, R.font.sofiaproextralight);
 
-        //Set the custome fonts
+        //Set the custom fonts
         artistName.setTypeface(subtitleAndLyrics);
         songTitle.setTypeface(titleTypeFace);
 
