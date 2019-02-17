@@ -110,7 +110,7 @@ void main() {
     // Creating the wave itself
     vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
     float cLength = length(cPos);
-    vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(cLength * 12.0 - scaledTime * 4.0) * 0.02;
+    vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(db * cLength * 12.0 - scaledTime * 4.0) * 0.02;
     vec4 newPosition = vec4(uv2, a_Position.zw);
 //
 //    // Feeding the position to the fragment shader

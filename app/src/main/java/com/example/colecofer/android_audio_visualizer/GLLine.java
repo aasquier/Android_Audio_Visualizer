@@ -145,6 +145,9 @@ public class GLLine {
         float[] dbs = new float[SCREEN_VERTICAL_HEIGHT];
         for (int i = 0; i < SCREEN_VERTICAL_HEIGHT; ++i) {
             dbs[i] = temp[i] == null ? 0.0f : temp[i];
+//            if (Math.random() > 0.5) {
+//                dbs[i] *= -1;
+//            }
         }
 
         /** Updates the size of the dots using the most current decibel level, i.e. the first element of the decibel history */

@@ -13,7 +13,7 @@ final class Constants {
     /** Visualizer Switching */
     static final boolean SHOULD_SWITCH_VIS = true;                       //Set to false if you do not want to rotate visualizers
     static final int SWITCH_VIS_TIME_ONE   = 15000;                      //Amount of time to switch from the first visualizer to the second.
-    static final int SWITCH_VIS_TIME_TWO   = SWITCH_VIS_TIME_ONE + 3000; //Amount of time to switch from the first visualizer to the second.
+    static final int SWITCH_VIS_TIME_TWO   = SWITCH_VIS_TIME_ONE + 15000; //Amount of time to switch from the first visualizer to the second.
 
     /** MainActivity constants */
     //TODO: This is Spotify's test account because I don't want to hard code ours into a public repository...
@@ -44,7 +44,7 @@ final class Constants {
 
     /** Utility constants */
     static final float MAX_DB_LEVEL        = 170.0f;
-    static final long REFRESH_DECIBEL_TIME = 16L;
+    static final long REFRESH_DECIBEL_TIME = 2L;
     static final float MAX_DECIBEL_RATIO   = 1.0f;
 
     /** Shared Visualizer Constants **/
@@ -87,7 +87,7 @@ final class Constants {
     static final int SCREEN_VERTICAL_HEIGHT = 50;
     static final int VIS1_VERTEX_COUNT      = SCREEN_VERTICAL_HEIGHT + SCREEN_VERTICAL_HEIGHT;
     static final int VIS1_ARRAY_SIZE        = VIS1_VERTEX_COUNT * 7;
-    static final float PIXEL                = 0.003f;
+    static final float PIXEL                = 0.0035f;
     static final float AMPLIFIER            = 1.0f;
 
 
