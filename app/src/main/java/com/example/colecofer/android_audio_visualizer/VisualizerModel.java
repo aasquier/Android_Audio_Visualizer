@@ -3,10 +3,11 @@ package com.example.colecofer.android_audio_visualizer;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.util.Log;
+import android.util.Pair;
+
 import com.spotify.sdk.android.player.PlaybackState;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
-import java.util.TreeMap;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -27,7 +28,7 @@ public class VisualizerModel {
     private int durationInMilliseconds;
     private int visualizerSwitchTimeOne;
     private int visualizerSwitchTimeTwo;
-    private TreeMap lyricMap;
+    private ArrayList<Pair<Integer, String[]>> lyricList;
     public ArrayList<Integer> colorMatrix;
 
 
@@ -130,11 +131,11 @@ public class VisualizerModel {
         Collections.shuffle(colorMatrix);
     }
 
-    public void setLyricMap(TreeMap lyrics) {
-        this.lyricMap = lyrics;
+    public void setLyrics(ArrayList lyrics) {
+        this.lyricList = lyrics;
     }
 
-    public TreeMap<Integer, String[]> getLyricMap() {return this.lyricMap;}
+    public ArrayList<Pair<Integer, String[]>> getLyricMap() {return this.lyricList;}
 
 
     /**

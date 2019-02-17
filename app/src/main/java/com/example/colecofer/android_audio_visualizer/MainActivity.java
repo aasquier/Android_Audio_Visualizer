@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements Player.Notificati
                                     MusixmatchClient.getLyrics(response, new MusixmatchRequestCallBack() {
                                         @Override
                                         public void musixmatchResponse(boolean success, String response) {
-                                            VisualizerModel.getInstance().setLyricMap(MusixmatchClient.parseLyrics(response));
+                                            VisualizerModel.getInstance().setLyrics(MusixmatchClient.parseLyrics(response));
                                         }
                                     });
                                 }

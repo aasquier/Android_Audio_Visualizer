@@ -1,6 +1,7 @@
 package com.example.colecofer.android_audio_visualizer;
 
 import android.util.Log;
+import android.util.Pair;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
@@ -9,7 +10,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.TreeMap;
+import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -104,15 +105,15 @@ public class MusixmatchClient {
     }
 
     /**
-     * Parses timestamps and lyrics and stores them in a treemap as Key/Value pairs
+     * Parses timestamps and lyrics and stores them in a Arraylist of Millisecond/Word[] pairs
      *
      * TODO: Delete fullString declaration and uncomment all commented lines once we have a commercial apikey
      *
      * @param responseJSON
-     * @return a TreeMap<Integer, String[]> that uses milliseconds as a key for an array of strings containing 1 word each
+     * @return a ArrayList<Pair<Integer, String[]>> with milliseconds associated to a line of lyrics
      */
-    public static TreeMap<Integer, String[]> parseLyrics(String responseJSON) {
-        TreeMap valueMap = new TreeMap();
+    public static ArrayList<Pair<Integer, String[]>> parseLyrics(String responseJSON) {
+        ArrayList<Pair<Integer, String[]>> lyricList= new ArrayList<>();
 //        JSONObject json = SpotifyClient.convertStringToJSON(responseJSON);
 //        String fullString = "Error - Could not extract lyrics";
         String fullString = "[00:00.30] One, two, three!\n[00:01.53] My baby don't mess around\n[00:03.60] Because she loves me so\n[00:05.22] This I know fo sho!\n[00:09.74] But does she really wanna\n[00:12.14] But can't stand to see me walk out the door\n[00:18.04] Don't try to fight the feeling\n[00:20.61] Because the thought alone is killin' me right now\n[00:26.56] Thank God for Mom and Dad\n[00:28.78] For sticking to together\n[00:30.46] Like we don't know how\n[00:34.39] Hey ya! Hey ya!\n[00:41.57] Hey ya! Hey ya!\n[00:48.45] Hey ya! Hey ya!\n[00:55.38] Hey ya! Hey ya!\n[01:07.95] You think you've got it\n[01:09.03] Oh, you think you've got it\n[01:10.52] But got it just don't get it when there's nothin' at all\n[01:16.18] We get together\n[01:17.27] Oh, we get together\n[01:18.74] But separate's always better when there's feelings involved";
@@ -131,8 +132,9 @@ public class MusixmatchClient {
                     int seconds = Integer.parseInt(segments[1]);
                     int jiffies = Integer.parseInt(segments[2]);
                     int durationInMillis = minutes * 60000 + seconds * 1000 + jiffies * 10;
+                    Pair currPair = new Pair(durationInMillis, lyricStrings[i].split(" "));
 
-                    valueMap.put(durationInMillis, lyricStrings[i].split(" "));
+                    lyricList.add(currPair);
 //                }
 //
 //            } catch (JSONException e) {
@@ -140,8 +142,8 @@ public class MusixmatchClient {
 //                return null;
             }
 
-                return valueMap;
-        }
+                return lyricList;
+    }
 
 
 }
