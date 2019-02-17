@@ -23,6 +23,7 @@ import android.util.Pair;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -55,10 +56,10 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visualizer);
         //startTrackPlayback();  //Uncomment this line to start Spotify track playback
-        TreeMap map = VisualizerModel.getInstance().getLyricMap();
+        ArrayList<Pair<Integer, String[]>> list = VisualizerModel.getInstance().getLyrics();
 
-        Map.Entry<Integer,String[]> entry = map.firstEntry();
-        Log.d("test", "Entry: " + entry.getKey() + " : " + entry.getValue()[2]);
+        Pair<Integer, String[]> pair = list.get(0);
+        Log.d("test", "Entry: " + pair.first + " : " + pair.second);
 
 
         initDecibelHistory();

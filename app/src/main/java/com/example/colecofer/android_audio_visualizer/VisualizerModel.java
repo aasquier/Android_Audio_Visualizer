@@ -135,7 +135,7 @@ public class VisualizerModel {
         this.lyricList = lyrics;
     }
 
-    public ArrayList<Pair<Integer, String[]>> getLyricMap() {return this.lyricList;}
+    public ArrayList<Pair<Integer, String[]>> getLyrics() {return this.lyricList;}
 
 
     /**
