@@ -15,7 +15,11 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.util.Pair;
 
@@ -41,7 +45,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
     static MediaPlayer mediaPlayer;
     private Visualizer visualizer;
-    private VisualizerSurfaceView surfaceView;
+    static VisualizerSurfaceView surfaceView;
     private VisualizerRenderer visualizerRenderer;
     private Visualizer.OnDataCaptureListener captureListener;
 
@@ -164,7 +168,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         Typeface titleTypeFace = ResourcesCompat.getFont(this, R.font.sofiaproblack);
         Typeface subtitleAndLyrics = ResourcesCompat.getFont(this, R.font.sofiaproextralight);
 
-        //Set the custome fonts
+        //Set the custom fonts
         artistName.setTypeface(subtitleAndLyrics);
         songTitle.setTypeface(titleTypeFace);
 
@@ -176,6 +180,40 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
         songTitle.requestLayout();
         artistName.requestLayout();
+
+        initLyricsUI();
+    }
+
+    public void initLyricsUI() {
+
+        //Create a view to be placed within the relative layout?
+        View v = new View(this);
+        v.setBackgroundColor(Color.BLUE);
+
+        //Create Relative Layout
+        RelativeLayout rmain = new RelativeLayout(this);
+
+        //Setup how it acts to it's parent (GLSurfaceView?)
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(30,    300, 10, 200);
+        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+        rmain.setBackgroundColor(Color.TRANSPARENT);
+        rmain.setAlpha(0);
+//        rmain.setBackground(R.drawable.lyricsviewbg);
+        rmain.addView(v, params);
+//        setContentView(rmain, params);
+
+
+//        // CODE FOR ADD MARGINS
+//        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(
+//                new LinearLayout.LayoutParams(
+//                        LinearLayout.LayoutParams.MATCH_PARENT,
+//                        LinearLayout.LayoutParams.WRAP_CONTENT));
+//        linearParams.setMargins(0, 80, 0, 0);
+//        rmain.setLayoutParams(linearParams);
+//        rmain.requestLayout();
+
     }
 
     /**

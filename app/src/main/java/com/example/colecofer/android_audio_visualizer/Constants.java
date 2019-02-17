@@ -11,9 +11,9 @@ final class Constants {
     static final int BYTES_PER_FLOAT = 4;
 
     /** Visualizer Switching */
-    static final boolean SHOULD_SWITCH_VIS = true;  //Set to false if you do not want to rotate visualizers
-    static final int SWITCH_VIS_TIME_ONE = 3000;  //Amount of time to switch from the first visualizer to the second.
-    static final int SWITCH_VIS_TIME_TWO = SWITCH_VIS_TIME_ONE + 3000; //Amount of time to switch from the first visualizer to the second.
+    static final boolean SHOULD_SWITCH_VIS = false;  //Set to false if you do not want to rotate visualizers
+    static final int SWITCH_VIS_TIME_ONE = 3000;     //Amount of time to switch from the first visualizer to the second.
+    static final int SWITCH_VIS_TIME_TWO = SWITCH_VIS_TIME_ONE + 3000; //Amount of time to switch from the second visualizer to the third.
 
     /** MainActivity constants */
     //TODO: This is Spotify's test account because I don't want to hard code ours into a public repository...
