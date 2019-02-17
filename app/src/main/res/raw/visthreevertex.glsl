@@ -56,20 +56,19 @@ void main() {           		    // The entry point for our vertex shader.
     // ------------ wave effect begin ------------------------------------
 
     float noise = snoise(a_Position.xy);
-    gl_Position = vec4(a_Position.x, a_Position.y + (noise * a_DB_Level[0] * 0.06), a_Position.zw);
+    vec4 newPosition = vec4(a_Position.x, a_Position.y + (noise * a_DB_Level[0] * 0.06), a_Position.zw);
 
     // -------- mirror effect begin (comment out temporary) --------------
     // making mirror
-    //vec2 uv2 = a_Position.xy;
-    //vec2 uv2 = a_Position.xy / res.xy;
+    //vec2 uv2 = newPosition.xy;
 
     // horizontal mirror
     //if(uv2.y > 0.0){
     //    uv2.y = -(uv2.y - 1.04);
     //}
 
-    //vec4 newPosition = vec4(uv2, a_Position.zw);
-    //gl_Position = newPosition; 	    // gl_Position is a special variable used to store the final position.
-
+    //vec4 newPosition = vec4(uv2, newPosition.zw);
     // -------- mirror effect end --------------
+
+    gl_Position = newPosition; 	    // gl_Position is a special variable used to store the final position.
 }
