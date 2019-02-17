@@ -51,17 +51,14 @@ void main() {           		    // The entry point for our vertex shader.
 
     //vec2 res = vec2(1.2, 1.2);
 
-    // default
-    v_Color = a_Color;
-    //gl_Position = a_Position; 	    // gl_Position is a special variable used to store the final position.
+    v_Color = a_Color;              // just pass whatever input color to fragment shader, do nothing
 
-    // apply fractal displacement on color
-    //vec2 uv = a_Position.xy / res.xy;
-    //v_Color = vec4(vec3(fbm(uv, time) * 0.5 + 0.0) + a_Color.xyz,1.0);
+    // ------------ wave effect begin ------------------------------------
 
     float noise = snoise(a_Position.xy);
     gl_Position = vec4(a_Position.x, a_Position.y + (noise * a_DB_Level[0] * 0.06), a_Position.zw);
 
+    // -------- mirror effect begin (comment out temporary) --------------
     // making mirror
     //vec2 uv2 = a_Position.xy;
     //vec2 uv2 = a_Position.xy / res.xy;
@@ -73,4 +70,6 @@ void main() {           		    // The entry point for our vertex shader.
 
     //vec4 newPosition = vec4(uv2, a_Position.zw);
     //gl_Position = newPosition; 	    // gl_Position is a special variable used to store the final position.
+
+    // -------- mirror effect end --------------
 }
