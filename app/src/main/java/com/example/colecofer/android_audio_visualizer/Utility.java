@@ -19,20 +19,14 @@ public class Utility {
 
     private Context context;
 
-    /**
-     * Default Constructor
-     *
-     */
-    public Utility() {}
-
-  /**
-   * Pass context for connecting Resource
-   *
-   *context* *
-   */
-  public Utility(Context context) {
-        this.context = context;
-    }
+      /**
+       * Pass context for connecting Resource
+       *
+       *context* *
+       */
+      public Utility(Context context) {
+            this.context = context;
+      }
 
     /**
      * Takes the real and imaginary parts of an FFT frequency bin and returns the decibels for that bin.

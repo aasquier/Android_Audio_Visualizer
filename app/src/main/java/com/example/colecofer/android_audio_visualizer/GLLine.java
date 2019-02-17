@@ -6,6 +6,7 @@ import android.util.Log;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.Iterator;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.AMPLIFIER;
 import static com.example.colecofer.android_audio_visualizer.Constants.BYTES_PER_FLOAT;
@@ -140,7 +141,16 @@ public class GLLine {
 
         GLES20.glUniform1f(VisualizerModel.getInstance().currentVisualizer.timeHandle, (float) (System.currentTimeMillis() - visOneStartTime));
 
-        GLES20.glUniform1f(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, decibelHistory.peekFirst());
+        Float[] temp = decibelHistory.toArray(new Float[SCREEN_VERTICAL_HEIGHT]);
+        float[] dbs = new float[SCREEN_VERTICAL_HEIGHT];
+        for (int i = 0; i < SCREEN_VERTICAL_HEIGHT; ++i) {
+            dbs[i] = temp[i] == null ? 0.0f : temp[i];
+        }
+
+        /** Updates the size of the dots using the most current decibel level, i.e. the first element of the decibel history */
+        GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, SCREEN_VERTICAL_HEIGHT, dbs, 0);
+
+//        GLES20.glUniform1f(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, decibelHistory.peekFirst());
 
     }
 }

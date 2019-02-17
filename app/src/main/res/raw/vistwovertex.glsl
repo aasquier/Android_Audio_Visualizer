@@ -91,8 +91,7 @@ float fbm(vec2 uv, float time)
 uniform mat4   u_MVPMatrix;	    // A constant representing the combined model/view/projection matrix.
 attribute vec4 a_Position;	    // Per-vertex position information we will pass in  (a_Position.xyzw , w is always 1)
 attribute vec4 a_Color;	        // Per-vertex color information we will pass in  (a_Color.rgba -->  a_Color.xyzw)
-uniform float  an_old_DB_Level;      // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
-uniform float  a_current_DB_Level[50];      // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
+uniform float  a_DB_Level[50];  // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
 varying vec4   v_Color;         // This will be passed into the fragment shader as the final color values
 uniform float time;
 
@@ -106,7 +105,7 @@ void main() {
 
     int distanceIndex = int(sqrt(a_Position.x * a_Position.x + a_Position.y * a_Position.y)*49.);
 
-    float db = a_current_DB_Level[distanceIndex];
+    float db = a_DB_Level[distanceIndex];
 
     // Creating the wave itself
     vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
@@ -117,5 +116,5 @@ void main() {
 //    // Feeding the position to the fragment shader
     gl_Position = newPosition;
 //    gl_Position = a_Position;
-    gl_PointSize = 1.0 + a_current_DB_Level[0];
+    gl_PointSize = 1.0 + a_DB_Level[0];
 }
