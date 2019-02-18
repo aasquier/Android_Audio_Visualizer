@@ -9,18 +9,26 @@ import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Layout;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.util.Pair;
 
@@ -196,6 +204,92 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
         songTitle.requestLayout();
         artistName.requestLayout();
+        this.setupLyricsUI();
+    }
+
+
+    private void setupLyricsUI() {
+
+
+        TextView lyricsTV = new TextView(this);
+
+        //Setup the text and colors
+        Spannable word = new SpannableString("Your message");
+//        word.setSpan(new ForegroundColorSpan(Color.BLUE), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        word.setSpan(new ForegroundColorSpan(0x50FFFFFF), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        lyricsTV.setText(word);
+        Spannable word1 = new SpannableString("Your new message");
+        word1.setSpan(new ForegroundColorSpan(Color.RED), 0, word1.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        lyricsTV.append(word1);
+
+        ViewGroup.MarginLayoutParams lyricsParams = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.MATCH_PARENT);
+        lyricsTV.setLayoutParams(lyricsParams);
+        lyricsTV.setPadding(100, 800, 100, 300);
+        addContentView(lyricsTV, lyricsParams);
+        lyricsTV.requestLayout();
+
+
+        /////////////////////////
+        //This adds a view over the surfaceview, but... you can't place it anywhere since margins doing work...
+        //        View v = new View(this);
+        //        v.setBackgroundColor(Color.BLUE);
+        //        ViewGroup.MarginLayoutParams viewMargin = new ViewGroup.MarginLayoutParams(100, 100);
+        //        viewMargin.setMargins(200, 200, 200, 200);
+        //        v.setLayoutParams(viewMargin);
+        //        v.setPadding(300, 300, 100, 100);
+        //
+        //        addContentView(v, viewMargin);
+        //        v.requestLayout();
+
+
+        /////////////////////Linear Layout attmpt///////////////////
+        //        LinearLayout rlmain = new LinearLayout(this);
+        //        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+        //        LinearLayout   ll1 = new LinearLayout (this);
+        //
+        //        View iv = new View(this);
+        //        iv.setBackgroundColor(Color.BLUE);
+        //        LinearLayout .LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        //
+        //        iv.setLayoutParams(lp);
+        //        ll1.addView(iv);
+        //        rlmain.addView(ll1);
+        //        setContentView(rlmain, llp);
+
+        ///////////////// I have no idea I guess constraint attempt ////////////////////////////////
+        //        ConstraintLayout rlmain = new ConstraintLayout(this);
+        //        ConstraintLayout.LayoutParams llp = new ConstraintLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        //        ConstraintLayout   ll1 = new ConstraintLayout (this);
+        //        ConstraintSet set = new ConstraintSet();
+        //
+        //        View iv = new View(this);
+        //        iv.setBackgroundColor(Color.BLUE);
+        //        ConstraintLayout .LayoutParams lp = new ConstraintLayout.LayoutParams(250, 200);
+        //
+        //        set.clone(rlmain);
+        //        set.connect(iv.getId(), ConstraintSet.TOP, rlmain.getId(), ConstraintSet.BOTTOM, 150);
+        //        set.applyTo(rlmain);
+        //
+        //        iv.setLayoutParams(lp);
+        ////        ll1.setAlpha(0);
+        //        ll1.addView(iv);
+        //        rlmain.addView(ll1);
+        //        setContentView(rlmain, llp);
+
+        //k////////// Constraint attempt ///////////////
+        //        ConstraintLayout mConstraintLayout  = (ConstraintLayout) findViewById(R.id.constraintLayout);
+        //        mConstraintLayout = new ConstraintLayout(this);
+        //        ConstraintSet set = new ConstraintSet();
+        //
+        //        View lyricsView = findViewById(R.id.lyricView);
+        //        lyricsView = new View(this);
+        //        mConstraintLayout.addView(lyricsView,0);
+        //        set.clone(mConstraintLayout);
+        //        set.connect(lyricsView.getId(), ConstraintSet.BOTTOM, mConstraintLayout.getId(), ConstraintSet.TOP, 60);
+        //        set.applyTo(mConstraintLayout);
+
+
+
     }
 
     /**
