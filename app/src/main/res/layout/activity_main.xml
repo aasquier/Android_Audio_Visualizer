@@ -7,129 +7,124 @@
     tools:context=".MainActivity"
     tools:layout_editor_absoluteY="81dp">
 
+    <View
+        android:id="@+id/view"
+        android:layout_width="708dp"
+        android:layout_height="312dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.493" />
+
     <Button
         android:id="@+id/playButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="8dp"
         android:text="Play"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/albumArtImageView"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/artistNameTextView"
         android:layout_width="336dp"
         android:layout_height="23dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="28dp"
         android:layout_marginEnd="8dp"
         android:text="Artist: "
+        app:layout_constraintBottom_toTopOf="@+id/albumNameTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.508"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/trackEditText" />
+        app:layout_constraintHorizontal_bias="0.598"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/albumNameTextView"
         android:layout_width="336dp"
         android:layout_height="23dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="20dp"
         android:text="Album: "
         app:layout_constraintBottom_toTopOf="@+id/albumArtImageView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.508"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/artistNameTextView"
-        app:layout_constraintVertical_bias="0.264" />
+        app:layout_constraintHorizontal_bias="0.598"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/albumArtImageView"
-        android:layout_width="343dp"
-        android:layout_height="264dp"
+        android:layout_width="209dp"
+        android:layout_height="132dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/playButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.615"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.643"
         app:srcCompat="@android:drawable/btn_star"
         tools:srcCompat="@tools:sample/backgrounds/scenic[2]" />
 
     <EditText
         android:id="@+id/trackEditText"
         android:layout_width="260dp"
-        android:layout_height="45dp"
+        android:layout_height="46dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="53dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="12dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="7KwZNVEaqikRSBSpyhXK2j"
-        app:layout_constraintBottom_toTopOf="@+id/albumArtImageView"
-        app:layout_constraintEnd_toStartOf="@+id/searchButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintBottom_toTopOf="@+id/artistNameTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
         android:id="@+id/searchButton"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/albumArtImageView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.468"
+        app:layout_constraintBottom_toTopOf="@+id/artistNameTextView"
+        app:layout_constraintStart_toEndOf="@+id/trackEditText"
         app:srcCompat="@android:drawable/ic_search_category_default" />
 
     <View
         android:id="@+id/primaryColor"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/secondaryColor"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/albumArtImageView" />
+        android:layout_marginBottom="8dp"
+        android:background="#c2cece"
+        app:layout_constraintBottom_toTopOf="@+id/ternaryColor"
+        app:layout_constraintStart_toEndOf="@+id/albumArtImageView"
+        app:layout_constraintTop_toBottomOf="@+id/secondaryColor"
+        app:layout_constraintVertical_bias="0.471" />
 
     <View
         android:id="@+id/secondaryColor"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/playButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/albumArtImageView"
-        app:layout_constraintVertical_bias="0.0" />
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="20dp"
+        android:background="#c2cece"
+        app:layout_constraintStart_toEndOf="@+id/albumArtImageView"
+        app:layout_constraintTop_toBottomOf="@+id/albumNameTextView" />
 
     <View
         android:id="@+id/ternaryColor"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/secondaryColor"
-        app:layout_constraintTop_toBottomOf="@+id/albumArtImageView" />
+        android:layout_marginStart="4dp"
+        android:background="#c2cece"
+        app:layout_constraintBottom_toTopOf="@+id/playButton"
+        app:layout_constraintStart_toEndOf="@+id/albumArtImageView" />
 
 </android.support.constraint.ConstraintLayout>
