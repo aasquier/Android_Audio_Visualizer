@@ -23,6 +23,9 @@ import android.util.Pair;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.IMAGINARY_BUCKET_INDEX;
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_FFT_ARRAY_SIZE;
@@ -53,6 +56,12 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visualizer);
         //startTrackPlayback();  //Uncomment this line to start Spotify track playback
+        ArrayList<Pair<Integer, String[]>> list = VisualizerModel.getInstance().getLyrics();
+
+        Pair<Integer, String[]> pair = list.get(0);
+        Log.d("test", "Entry: " + pair.first + " : " + pair.second);
+
+
         initDecibelHistory();
         initVisualizer();
         initUI();
