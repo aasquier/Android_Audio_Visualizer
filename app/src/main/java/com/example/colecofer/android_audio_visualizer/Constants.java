@@ -88,7 +88,7 @@ final class Constants {
     static final int VIS1_VERTEX_COUNT      = SCREEN_VERTICAL_HEIGHT + SCREEN_VERTICAL_HEIGHT;
     static final int VIS1_ARRAY_SIZE        = VIS1_VERTEX_COUNT * 7;
     static final float PIXEL                = 0.0016f;
-    static final float AMPLIFIER            = 0.003f;
+    static final float AMPLIFIER            = 0.005f;
     static final float DORMANT_LINE_SIZE    = 0.0001f;
 
 
