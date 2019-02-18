@@ -196,8 +196,8 @@ float worley5(vec2 c, float time) {
     return w;
 }
 
-vec2 size = vec2(8.,6.);
-//vec2 otherlocation = vec2(100.0, 100.0);
+
+vec2 otherlocation = vec2(100.0, 100.0);
 
 float rand(float seed) {
     // Deterministically produce noise in the range [0, 1].
@@ -231,14 +231,15 @@ uniform float time;                 // Time since this visualizer began
 uniform float a_DB_Level[50];       // Decibel level history, need to change the 50 as the constant changes
 
 void main() {           		    // The entry point for our vertex shader.
-//    int positionIndex;
-//    if(a_Position.y >= 0.) {
-//        positionIndex = int(25. + floor(a_Position.y * 24.));
-//    } else {
-//        positionIndex = int(24. + ceil(a_Position.y * 24.));
-//    }
+    int positionIndex;
+    if(a_Position.y >= 0.) {
+        positionIndex = int(25. + floor(a_Position.y * 24.));
+    } else {
+        positionIndex = int(24. + ceil(a_Position.y * 24.));
+    }
 
-    vec2 res = vec2(0.75, 0.75);
+    vec2 size = vec2(12.*a_DB_Level[1],8.*a_DB_Level[0]);
+    vec2 res = vec2(0.75, 0.95);
 
 //    float noise = snoise(a_Position.xy);
     float noise = snoise(vec3(a_Position.xy, a_DB_Level[0]));
@@ -248,7 +249,7 @@ void main() {           		    // The entry point for our vertex shader.
 // Normalized pixel coordinates (from 0 to 1)
     vec2 uv = a_Position.xy/res.xy;
     vec2 pos = uv * size;	// Position in the grid
-    pos.x += (time / 500.0);
+    pos.x += time/2000.0;
     vec2 cell = floor(pos);	// Grid cell number
     vec2 offs = fract(pos);	// Location in grid cell
     offs.x = smooth2(offs.x);
@@ -258,14 +259,14 @@ void main() {           		    // The entry point for our vertex shader.
     vec2 up = vec2(0.0, 1.0);
     float val1 = mix(rand(rand(cell)), rand(rand(cell + right)), offs.x);
     float val2 = mix(rand(rand(cell + up)), rand(rand(cell + up + right)), offs.x);
-//    cell += otherlocation;
-//    float val3 = mix(rand(rand(cell)), rand(rand(cell + right)), offs.x);
-//    float val4 = mix(rand(rand(cell + up)), rand(rand(cell + up + right)), offs.x);
+    cell += otherlocation;
+    float val3 = mix(rand(rand(cell)), rand(rand(cell + right)), offs.x);
+    float val4 = mix(rand(rand(cell + up)), rand(rand(cell + up + right)), offs.x);
     float valx = mix(val1, val2, offs.y);
-//    float valy = mix(val3, val4, offs.y);
+    float valy = mix(val3, val4, offs.y);
 
 //    vec2 texoff = vec2(valx, valy);
-    gl_Position = vec4(a_Position.x + (valx * (noise*a_DB_Level[0]) * 0.08), a_Position.yzw);
+    gl_Position = vec4(a_Position.x + (valx * noise * 0.08), a_Position.yzw);
 
     v_Color = a_Color;
 }

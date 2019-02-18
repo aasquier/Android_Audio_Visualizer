@@ -12,7 +12,7 @@ final class Constants {
 
     /** Visualizer Switching */
     static final boolean SHOULD_SWITCH_VIS = true;                       //Set to false if you do not want to rotate visualizers
-    static final int SWITCH_VIS_TIME_ONE   = 15000;                      //Amount of time to switch from the first visualizer to the second.
+    static final int SWITCH_VIS_TIME_ONE   = 30000;                      //Amount of time to switch from the first visualizer to the second.
     static final int SWITCH_VIS_TIME_TWO   = SWITCH_VIS_TIME_ONE + 15000; //Amount of time to switch from the first visualizer to the second.
 
     /** MainActivity constants */
@@ -88,7 +88,7 @@ final class Constants {
     static final int VIS1_VERTEX_COUNT      = SCREEN_VERTICAL_HEIGHT + SCREEN_VERTICAL_HEIGHT;
     static final int VIS1_ARRAY_SIZE        = VIS1_VERTEX_COUNT * 7;
     static final float PIXEL                = 0.0016f;
-    static final float AMPLIFIER            = 0.005f;
+    static final float AMPLIFIER            = 0.003f;
     static final float DORMANT_LINE_SIZE    = 0.0001f;
 
 
