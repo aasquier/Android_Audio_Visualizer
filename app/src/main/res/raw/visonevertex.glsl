@@ -239,7 +239,7 @@ void main() {           		    // The entry point for our vertex shader.
     }
 
     vec2 size = vec2(12.*a_DB_Level[1],8.*a_DB_Level[0]);
-    vec2 res = vec2(0.75, 0.95);
+    vec2 res = vec2(0.95, 0.95);
 
 //    float noise = snoise(a_Position.xy);
     float noise = snoise(vec3(a_Position.xy, a_DB_Level[0]));
@@ -267,6 +267,10 @@ void main() {           		    // The entry point for our vertex shader.
 
 //    vec2 texoff = vec2(valx, valy);
     gl_Position = vec4(a_Position.x + (valx * noise * 0.08), a_Position.yzw);
+
+//    vec4 white = vec4(1.0,1.0,1.0,1.0);
+//    v_Color = (a_Color * a_Color.w) + (white * (1. - a_Color.w));
+//
 
     v_Color = a_Color;
 }

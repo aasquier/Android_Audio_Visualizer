@@ -8,6 +8,9 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.Iterator;
 
+import static android.opengl.GLES20.GL_BLEND;
+import static android.opengl.GLES20.GL_ONE;
+import static android.opengl.GLES20.GL_SRC_ALPHA;
 import static com.example.colecofer.android_audio_visualizer.Constants.AMPLIFIER;
 import static com.example.colecofer.android_audio_visualizer.Constants.BYTES_PER_FLOAT;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
@@ -130,6 +133,9 @@ public class GLLine {
     public void draw(int positionHandle, int colorHandle, Long visOneStartTime) {
         while (decibelHistory.peekFirst() == null) { continue; }
 
+        GLES20.glEnable(GL_BLEND);
+        GLES20.glBlendFunc(GL_ONE, GL_ONE);
+
         this.lineVerticesBuffer.position(POSITION_OFFSET);
         GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, this.lineVerticesBuffer);
         GLES20.glEnableVertexAttribArray(positionHandle);
@@ -153,6 +159,8 @@ public class GLLine {
         GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, SCREEN_VERTICAL_HEIGHT, dbs, 0);
 
 //        GLES20.glUniform1f(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, decibelHistory.peekFirst());
+
+        GLES20.glDisable(GL_BLEND);
 
     }
 }
