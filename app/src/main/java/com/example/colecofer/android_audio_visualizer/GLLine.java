@@ -60,6 +60,11 @@ public class GLLine {
 
         this.vertices = new float[VIS1_ARRAY_SIZE];
 
+
+        float r = 85/255f;
+        float g = 179/255f;
+        float b = 175/255f;
+
         int vertexIndex = 0;
         float yAxis = -1.0f;
         float yOffset = (float) 2 / (SCREEN_VERTICAL_HEIGHT - 1);
@@ -76,9 +81,12 @@ public class GLLine {
 //            this.vertices[vertexIndex+3] = 0.9f;
 //            this.vertices[vertexIndex+4] = 0.1f;
 //            this.vertices[vertexIndex+5] = 0.0f;
-            this.vertices[vertexIndex+3] = (float) (Color.red(visColor) * 0.01);
-            this.vertices[vertexIndex+4] = (float) (Color.green(visColor) * 0.01);
-            this.vertices[vertexIndex+5] = (float) (Color.blue(visColor) * 0.01);
+            this.vertices[vertexIndex+3] = r;
+            this.vertices[vertexIndex+4] = g;
+            this.vertices[vertexIndex+5] = b;
+//            this.vertices[vertexIndex+3] = (float) (Color.red(visColor) * 0.01);
+//            this.vertices[vertexIndex+4] = (float) (Color.green(visColor) * 0.01);
+//            this.vertices[vertexIndex+5] = (float) (Color.blue(visColor) * 0.01);
             this.vertices[vertexIndex+6] = 1.0f;
 
             // Right side
@@ -88,9 +96,12 @@ public class GLLine {
 //            this.vertices[vertexIndex+10] = 0.9f;
 //            this.vertices[vertexIndex+11] = 0.1f;
 //            this.vertices[vertexIndex+12] = 0.0f;
-            this.vertices[vertexIndex+10] = (float) (Color.red(visColor) * 0.01);
-            this.vertices[vertexIndex+11] = (float) (Color.green(visColor) * 0.01);
-            this.vertices[vertexIndex+12] = (float) (Color.blue(visColor) * 0.01);
+            this.vertices[vertexIndex+10] = r;
+            this.vertices[vertexIndex+11] = g;
+            this.vertices[vertexIndex+12] = b;
+//            this.vertices[vertexIndex+10] = (float) (Color.red(visColor) * 0.01);
+//            this.vertices[vertexIndex+11] = (float) (Color.green(visColor) * 0.01);
+//            this.vertices[vertexIndex+12] = (float) (Color.blue(visColor) * 0.01);
             this.vertices[vertexIndex+13] = 1.0f;
 
             // Next y coord
