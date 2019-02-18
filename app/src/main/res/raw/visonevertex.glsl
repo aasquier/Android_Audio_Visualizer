@@ -249,7 +249,7 @@ void main() {           		    // The entry point for our vertex shader.
 // Normalized pixel coordinates (from 0 to 1)
     vec2 uv = a_Position.xy/res.xy;
     vec2 pos = uv * size;	// Position in the grid
-    pos.x += time/2000.0;
+    pos.x += time/20000.0;
     vec2 cell = floor(pos);	// Grid cell number
     vec2 offs = fract(pos);	// Location in grid cell
     offs.x = smooth2(offs.x);
