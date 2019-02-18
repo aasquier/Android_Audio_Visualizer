@@ -196,6 +196,32 @@ float worley5(vec2 c, float time) {
     return w;
 }
 
+vec2 size = vec2(8.,6.);
+//vec2 otherlocation = vec2(100.0, 100.0);
+
+float rand(float seed) {
+    // Deterministically produce noise in the range [0, 1].
+    // No idea how it's actually distributed but it looks ok.
+    return fract(15547.3 * sin(fract(94.3*seed + 10579.6) * fract(76.5*seed + 8437.2)));
+}
+
+float rand(vec2 seed) {
+    // Turn a pair of floats into a single float in an isotropic, asymmetric way
+    //return mix(seed.x, seed.y, seed.x / seed.y);	// Good for most areas, except around the axes
+    if (seed.y > seed.x)
+    	return mix(seed.x, seed.y, (seed.x + 50.) / (seed.y + 250.));	// Good for most reasonable y
+    return mix(seed.x, seed.y, (seed.y + 50.) / (seed.x + 250.));;
+}
+
+float smooth1(float x) {
+    // Cubic smoothing, same as smoothstep
+    return x * x * (3.0 - 2.0 * x);
+}
+
+float smooth2(float x) {
+    // Ken Perlin's Famous Quintic Smoothing
+    return x * x * x * (x * (x * 6.0 - 15.0) + 10.0);
+}
 
 uniform mat4   u_MVPMatrix;	        // A constant representing the combined model/view/projection matrix.
 attribute vec4 a_Position;	        // Per-vertex position information we will pass in.
@@ -212,12 +238,34 @@ void main() {           		    // The entry point for our vertex shader.
 //        positionIndex = int(24. + ceil(a_Position.y * 24.));
 //    }
 
-    vec2 res = vec2(0.95, 0.95);
+    vec2 res = vec2(0.75, 0.75);
 
-    float noise = snoise(a_Position.xy);
-//    float noise = snoise(vec3(a_Position.xy, a_DB_Level[0]));
+//    float noise = snoise(a_Position.xy);
+    float noise = snoise(vec3(a_Position.xy, a_DB_Level[0]));
+//
+//    gl_Position = vec4(a_Position.x + (noise * a_DB_Level[0] * 0.09), a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
 
-    gl_Position = vec4(a_Position.x + (noise * a_DB_Level[0] * 0.09), a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
+// Normalized pixel coordinates (from 0 to 1)
+    vec2 uv = a_Position.xy/res.xy;
+    vec2 pos = uv * size;	// Position in the grid
+    pos.x += (time / 500.0);
+    vec2 cell = floor(pos);	// Grid cell number
+    vec2 offs = fract(pos);	// Location in grid cell
+    offs.x = smooth2(offs.x);
+    offs.y = smooth2(offs.y);
+
+    vec2 right = vec2(1.0, 0.0);
+    vec2 up = vec2(0.0, 1.0);
+    float val1 = mix(rand(rand(cell)), rand(rand(cell + right)), offs.x);
+    float val2 = mix(rand(rand(cell + up)), rand(rand(cell + up + right)), offs.x);
+//    cell += otherlocation;
+//    float val3 = mix(rand(rand(cell)), rand(rand(cell + right)), offs.x);
+//    float val4 = mix(rand(rand(cell + up)), rand(rand(cell + up + right)), offs.x);
+    float valx = mix(val1, val2, offs.y);
+//    float valy = mix(val3, val4, offs.y);
+
+//    vec2 texoff = vec2(valx, valy);
+    gl_Position = vec4(a_Position.x + (valx * (noise*a_DB_Level[0]) * 0.08), a_Position.yzw);
 
     v_Color = a_Color;
 }
