@@ -121,16 +121,17 @@ public class GLLine {
             //TODO: Figure out what is going on with this algorithm
             float currentDecibel = (float) decibelArray[i];
 
+            // Scales particular decibel ranges for adjustment into line thicknesses
             if (currentDecibel <= 0.6) {
-                currentDecibel = 0.0f;
+                currentDecibel = 25.0f;
             } else if (currentDecibel <= 0.7) {
-                currentDecibel *= 100.0f;
+                currentDecibel *= 125.0f;
             } else if (currentDecibel <= 0.8) {
-                currentDecibel *= 200.0f;
+                currentDecibel *= 250.0f;
             } else if (currentDecibel <= 0.9) {
-                currentDecibel *= 300.0f;
+                currentDecibel *= 500.0f;
             } else {
-                currentDecibel *= 400.0f;
+                currentDecibel *= 1000.0f;
             }
 
 //            float currentDecibel = (float) decibelArray[i] > 0.4 ? 0.0f : (float) decibelArray[i] * 250.0f;
