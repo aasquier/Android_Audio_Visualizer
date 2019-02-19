@@ -272,6 +272,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
          *  refresh the screen based on our 60 fps */
         Pair<Long, Boolean> isTimeToRefreshScreen = updateDecibelHistory(currentDecibels, this.previousUpdateTime);
 
+        //if (animateLyrics.)
 
         /** Update the screen if the elapsed time has exceeded the threshold set */
         if(isTimeToRefreshScreen.second) {

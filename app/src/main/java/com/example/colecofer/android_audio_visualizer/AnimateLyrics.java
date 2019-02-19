@@ -32,34 +32,48 @@ public class AnimateLyrics {
     static TextView lyricsTextView;
     static ViewGroup.MarginLayoutParams lyricsParams;
 
+    private ArrayList<Pair<Integer, String[]>> lyricList;
+    private int lyricAmt = 0;    //Amount of lyric segments to disaply to the screen
     private Spannable lyrics[];
     private int screenWidth;
     private int screenHeight;
+    private int lyricIndex = 0;
 
-    public AnimateLyrics(Context context, int screenWidth, int screenHeight) {
+    /**
+     * Animate Lyrics Constructor
+     * @param context Context for reference
+     * @param screenWidth Screen width in pixels
+     * @param screenHeight Screen height in pixels
+     * @param lyricList ArrayList of lyrics with time stamps
+     */
+    public AnimateLyrics(Context context, int screenWidth, int screenHeight, ArrayList<Pair<Integer, String[]>> lyricList) {
 
+        //Lyric Text Setup
         this.lyricsTypeface = ResourcesCompat.getFont(context, R.font.sofiaprobold);
         this.lyricsTextView = new TextView(context);
         this.lyricsTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, LYRICS_TEXT_SIZE);
         this.lyricsTextView.setTypeface(lyricsTypeface);
         this.lyricsTextView.setTextColor(Color.WHITE);
-        this.screenWidth = screenWidth;
-        this.screenHeight = screenHeight;
-
-//        //Setup the text and colors
-//        Spannable word = new SpannableString("Hah, sika than your average\n");
-//
-//        //The first two value of the hex are opacity... So perhaps we could alter these to fade them in and out... ?
-//        word.setSpan(new ForegroundColorSpan(0x50FFFFFF), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        lyricsTextView.setText(word);
-//
-//        Spannable word1 = new SpannableString("Poppa twist cabbage off instinct");
-//        word1.setSpan(new ForegroundColorSpan(Color.RED), 0, word1.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        lyricsTextView.append(word1);
-
         this.lyricsParams = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.MATCH_PARENT);
         this.lyricsTextView.setLayoutParams(lyricsParams);
         this.lyricsTextView.setPadding(100, 800, 100, 300);
+
+        //Lyric Containers
+        this.lyricList = (ArrayList<Pair<Integer, String[]>>) lyricList.clone();
+        this.lyricAmt = this.lyricList.size();
+        this.lyricIndex = 0;
+
+        //Screen dimensions
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
+    }
+
+
+    public boolean isTimeToUpdate() {
+
+//        if (VisualizerActivity.mediaPlayer.getCurrentPosition())
+
+        return false;
     }
 
     /**
@@ -75,6 +89,17 @@ public class AnimateLyrics {
         }
         this.lyricsTextView.setText(lyricsToDisplay);
     }
+
+    //        //Setup the text and colors
+//        Spannable word = new SpannableString("Hah, sika than your average\n");
+//
+//        //The first two value of the hex are opacity... So perhaps we could alter these to fade them in and out... ?
+//        word.setSpan(new ForegroundColorSpan(0x50FFFFFF), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        lyricsTextView.setText(word);
+//
+//        Spannable word1 = new SpannableString("Poppa twist cabbage off instinct");
+//        word1.setSpan(new ForegroundColorSpan(Color.RED), 0, word1.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        lyricsTextView.append(word1);
 
 
 }
