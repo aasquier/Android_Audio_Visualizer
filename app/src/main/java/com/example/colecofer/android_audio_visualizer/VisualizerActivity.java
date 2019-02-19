@@ -74,7 +74,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         int screenWidth = displayMetrics.widthPixels;
         int screenHeight = displayMetrics.heightPixels;
 
-        this.animateLyrics = new AnimateLyrics(this, screenWidth, screenHeight);
+        this.animateLyrics = new AnimateLyrics(this, screenWidth, screenHeight, VisualizerModel.getInstance().getLyrics());
 
         //Hide title bar
         getSupportActionBar().hide();
@@ -155,7 +155,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         }
 
         //Sets up the visualizer for local files
-        mediaPlayer = MediaPlayer.create(this, R.raw.jazz);
+        mediaPlayer = MediaPlayer.create(this, R.raw.heyya);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
 
@@ -272,7 +272,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
          *  refresh the screen based on our 60 fps */
         Pair<Long, Boolean> isTimeToRefreshScreen = updateDecibelHistory(currentDecibels, this.previousUpdateTime);
 
-        //if (animateLyrics.)
+        animateLyrics.update();
 
         /** Update the screen if the elapsed time has exceeded the threshold set */
         if(isTimeToRefreshScreen.second) {
