@@ -15,6 +15,8 @@ final class Constants {
     static final int SWITCH_VIS_TIME_ONE   = 15000;                      //Amount of time to switch from the first visualizer to the second.
     static final int SWITCH_VIS_TIME_TWO   = SWITCH_VIS_TIME_ONE + 15000; //Amount of time to switch from the first visualizer to the second.
 
+    /** Lyrics Animation */
+    static final float LYRICS_TEXT_SIZE = 22f;
 
     /** MainActivity constants */
     //TODO: This is Spotify's test account because I don't want to hard code ours into a public repository...
