@@ -31,7 +31,6 @@ public class VisualizerModel {
     private ArrayList<Pair<Integer, String[]>> lyricList;
     public ArrayList<Integer> colorMatrix;
 
-
     //Visualizer / OpenGL instances
     private static final VisualizerModel visualizerModel = new VisualizerModel(); //VisualizerModel Singleton
     public static VisualizerRenderer renderer;         //TODO: Consider making these private

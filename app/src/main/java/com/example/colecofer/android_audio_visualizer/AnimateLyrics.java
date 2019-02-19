@@ -7,6 +7,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.util.TypedValue;
 import android.view.ViewGroup;
@@ -32,13 +33,18 @@ public class AnimateLyrics {
     static ViewGroup.MarginLayoutParams lyricsParams;
 
     private Spannable lyrics[];
+    private int screenWidth;
+    private int screenHeight;
 
-    public AnimateLyrics(Context context) {
-        lyricsTypeface = ResourcesCompat.getFont(context, R.font.sofiaprobold);
-        lyricsTextView = new TextView(context);
-        lyricsTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, LYRICS_TEXT_SIZE);
-        lyricsTextView.setTypeface(lyricsTypeface);
-        lyricsTextView.setTextColor(Color.WHITE);
+    public AnimateLyrics(Context context, int screenWidth, int screenHeight) {
+
+        this.lyricsTypeface = ResourcesCompat.getFont(context, R.font.sofiaprobold);
+        this.lyricsTextView = new TextView(context);
+        this.lyricsTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, LYRICS_TEXT_SIZE);
+        this.lyricsTextView.setTypeface(lyricsTypeface);
+        this.lyricsTextView.setTextColor(Color.WHITE);
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
 
 //        //Setup the text and colors
 //        Spannable word = new SpannableString("Hah, sika than your average\n");
@@ -51,9 +57,9 @@ public class AnimateLyrics {
 //        word1.setSpan(new ForegroundColorSpan(Color.RED), 0, word1.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 //        lyricsTextView.append(word1);
 
-        lyricsParams = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.MATCH_PARENT);
-        lyricsTextView.setLayoutParams(lyricsParams);
-        lyricsTextView.setPadding(100, 800, 100, 300);
+        this.lyricsParams = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.MATCH_PARENT);
+        this.lyricsTextView.setLayoutParams(lyricsParams);
+        this.lyricsTextView.setPadding(100, 800, 100, 300);
     }
 
     /**
