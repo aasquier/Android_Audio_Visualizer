@@ -211,35 +211,12 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         songTitle.requestLayout();
         artistName.requestLayout();
 
-        addContentView(AnimateLyrics.lyrics, AnimateLyrics.lyricsParams);
-        AnimateLyrics.lyrics.requestLayout();
-    }
+        //Setup text animation
+        addContentView(animateLyrics.lyricsTextView, animateLyrics.lyricsParams);
+        animateLyrics.lyricsTextView.requestLayout();
 
-
-    private void setupLyricsUI() {
-
-
-//        TextView lyricsTV = new TextView(this);
-//        lyricsTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22f);
-//        Typeface subtitleAndLyrics = ResourcesCompat.getFont(this, R.font.sofiaproextralight);
-//        lyricsTV.setTypeface(subtitleAndLyrics);
-//
-//
-//        //Setup the text and colors
-//        Spannable word = new SpannableString("Hah, sika than your average\n");
-//
-//        //The first two value of the hex are opacity... So perhaps we could alter these to fade them in and out... ?
-//        word.setSpan(new ForegroundColorSpan(0x50FFFFFF), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        lyricsTV.setText(word);
-//        Spannable word1 = new SpannableString("Poppa twist cabbage off instinct");
-//        word1.setSpan(new ForegroundColorSpan(Color.RED), 0, word1.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        lyricsTV.append(word1);
-//
-//        ViewGroup.MarginLayoutParams lyricsParams = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.MATCH_PARENT);
-//        lyricsTV.setLayoutParams(lyricsParams);
-//        lyricsTV.setPadding(100, 800, 100, 300);
-//        addContentView(lyricsTV, lyricsParams);
-//        lyricsTV.requestLayout();
+        String test[] = {"Hello, ", "this ", "is ", "a ", "test!"};
+        animateLyrics.displayLyrics(test);
 
     }
 
