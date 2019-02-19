@@ -87,7 +87,7 @@ public class AnimateLyrics {
      * the lyric animation TextView.
      * @param lyrics String array of lyrics (word by word)
      */
-    public void displayLyrics(String[] lyrics) {
+    private void displayLyrics(String[] lyrics) {
         int wordsAmt = lyrics.length;
         String lyricsToDisplay = "";
         for (int i = 0; i < wordsAmt; ++i) {
