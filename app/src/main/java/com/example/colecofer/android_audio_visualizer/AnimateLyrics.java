@@ -26,12 +26,10 @@ import static com.example.colecofer.android_audio_visualizer.Constants.LYRICS_TE
  * inside of a TextView.
  */
 public class AnimateLyrics {
-
-    private Typeface lyricsTypeface;
-
     static TextView lyricsTextView;
     static ViewGroup.MarginLayoutParams lyricsParams;
 
+    private Typeface lyricsTypeface;
     private ArrayList<Pair<Integer, String[]>> lyricList;
     private int lyricAmt = 0;    //Amount of lyric segments to disaply to the screen
     private Spannable lyrics[];
@@ -68,12 +66,20 @@ public class AnimateLyrics {
         this.screenHeight = screenHeight;
     }
 
+    /**
+     * Displays the next set of lyrics according to the timestamps
+     * TODO: Possibly take lyrics off screen if they sit around too long (like the end)
+     */
+    public void update() {
 
-    public boolean isTimeToUpdate() {
+        float lyricDisplayTime = lyricList.get(this.lyricIndex).first - 300; //Displays 300 millis before the lyrics start
+        float currTime = VisualizerActivity.mediaPlayer.getCurrentPosition();
+        if (currTime >= lyricDisplayTime && this.lyricIndex < this.lyricAmt) {
+            String[] lyricsToDisplay = lyricList.get(this.lyricIndex).second;
+            this.displayLyrics(lyricsToDisplay);
+            this.lyricIndex += 1;
+        }
 
-//        if (VisualizerActivity.mediaPlayer.getCurrentPosition())
-
-        return false;
     }
 
     /**
@@ -85,7 +91,7 @@ public class AnimateLyrics {
         int wordsAmt = lyrics.length;
         String lyricsToDisplay = "";
         for (int i = 0; i < wordsAmt; ++i) {
-            lyricsToDisplay += lyrics[i];
+            lyricsToDisplay += lyrics[i] + " ";
         }
         this.lyricsTextView.setText(lyricsToDisplay);
     }
