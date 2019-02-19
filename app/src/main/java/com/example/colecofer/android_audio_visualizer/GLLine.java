@@ -13,6 +13,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.AMPLIFIER
 import static com.example.colecofer.android_audio_visualizer.Constants.BYTES_PER_FLOAT;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
+import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_LINE_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_DRAW_BOUNDARY;
 import static com.example.colecofer.android_audio_visualizer.Constants.PIXEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_DATA_SIZE;
@@ -118,9 +119,24 @@ public class GLLine {
             // Not sure about the full algorithm with if and else statement here
             // Will come back to it later
             //TODO: Figure out what is going on with this algorithm
+            float currentDecibel = (float) decibelArray[i];
 
-            float ampDataLeft = ((this.leftSide - (AMPLIFIER * PIXEL * (float) decibelArray[i])));
-            float ampDataRight = ((this.rightSide + (AMPLIFIER * PIXEL * (float) decibelArray[i])));
+            if (currentDecibel <= 0.6) {
+                currentDecibel = 0.0f;
+            } else if (currentDecibel <= 0.7) {
+                currentDecibel *= 100.0f;
+            } else if (currentDecibel <= 0.8) {
+                currentDecibel *= 200.0f;
+            } else if (currentDecibel <= 0.9) {
+                currentDecibel *= 300.0f;
+            } else {
+                currentDecibel *= 400.0f;
+            }
+
+//            float currentDecibel = (float) decibelArray[i] > 0.4 ? 0.0f : (float) decibelArray[i] * 250.0f;
+
+            float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE + AMPLIFIER * currentDecibel));
+            float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE + AMPLIFIER * currentDecibel));
             this.vertices[xOffset] = ampDataLeft;
             this.vertices[xOffset+7] = ampDataRight;
 

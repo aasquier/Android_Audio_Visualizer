@@ -204,17 +204,21 @@ uniform float time;                 // Time since this visualizer began
 uniform float a_DB_Level[50];       // Decibel level history, need to change the 50 as the constant changes
 
 void main() {           		    // The entry point for our vertex shader.
+    vec2 res = vec2(0.95, 0.95);
+
 //    int positionIndex;
 //    if(a_Position.y >= 0.) {
 //        positionIndex = int(25. + floor(a_Position.y * 24.));
 //    } else {
 //        positionIndex = int(24. + floor(a_Position.y * 24.));
 //    }
-//    float noise = snoise(vec3(a_Position.xy, a_DB_Level[positionIndex]));
-    float noise = snoise(a_Position.xy);
+    float noise = snoise(vec3(a_Position.xy, a_DB_Level[0]));
+//    float noise = snoise(a_Position.xy);
 
 //    gl_Position = vec4(a_Position.x + (noise * a_DB_Level[positionIndex] * 0.025), a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
-    gl_Position = vec4(a_Position.x + (noise * a_DB_Level[0] * 0.06), a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
+    vec4 newPosition = vec4(a_Position.x + (noise * a_DB_Level[0] * 0.02), a_Position.yzw) * 0.01; 	    // gl_Position is a special variable used to store the final position.
+
+    gl_Position = vec4(newPosition.xy / res.xy, newPosition.zw);
 
     v_Color = a_Color;    	        // Pass the color through to the fragment shader.
 }
