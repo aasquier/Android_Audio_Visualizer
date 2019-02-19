@@ -15,6 +15,8 @@ final class Constants {
     static final boolean SHOULD_LOOP_VIS   = true;                       //Set to true if you want the final visualizer to loop back to the first
     static final int SWITCH_VIS_TIME       = 5000;                      //Number of milliseconds to wait before switching
 
+    /** Lyrics Animation */
+    static final float LYRICS_TEXT_SIZE = 22f;
 
     /** MainActivity constants */
     //TODO: This is Spotify's test account because I don't want to hard code ours into a public repository...
