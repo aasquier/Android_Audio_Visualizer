@@ -205,19 +205,19 @@ uniform float a_DB_Level[50];       // Decibel level history, need to change the
 
 void main() {           		    // The entry point for our vertex shader.
     vec2 res = vec2(0.95, 0.95);
-    float scaledTime = time / 6500.0;
+    float scaledTime = time / 4500.0;
 
-//    int positionIndex;
-//    if(a_Position.y >= 0.) {
-//        positionIndex = int(25. + floor(a_Position.y * 24.));
-//    } else {
-//        positionIndex = int(24. + floor(a_Position.y * 24.));
-//    }
+    int positionIndex;
+    if(a_Position.y >= 0.) {
+        positionIndex = int(25. + floor(a_Position.y * 24.));
+    } else {
+        positionIndex = int(24. + floor(a_Position.y * 24.));
+    }
     float noise = snoise(vec3(a_Position.xy, scaledTime));
 //    float noise = snoise(a_Position.xy);
 
 //    gl_Position = vec4(a_Position.x + (noise * a_DB_Level[positionIndex] * 0.025), a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
-    vec4 newPosition = vec4(a_Position.x + (noise * ((a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3]) / 4.0) * 0.09), a_Position.yzw) * 0.02; 	    // gl_Position is a special variable used to store the final position.
+    vec4 newPosition = vec4(a_Position.x + (noise * ((a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3])+a_DB_Level[4]+a_DB_Level[5] / 6.0) * 0.02), a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
 
     gl_Position = vec4(newPosition.xy / res.xy, newPosition.zw);
 
