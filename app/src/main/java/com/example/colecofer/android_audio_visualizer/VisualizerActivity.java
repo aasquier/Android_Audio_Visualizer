@@ -68,7 +68,13 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.animateLyrics = new AnimateLyrics(this);
+        //Get screen dimensions and store in model
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screenWidth = displayMetrics.widthPixels;
+        int screenHeight = displayMetrics.heightPixels;
+
+        this.animateLyrics = new AnimateLyrics(this, screenWidth, screenHeight);
 
         //Hide title bar
         getSupportActionBar().hide();
@@ -209,7 +215,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         songTitle.requestLayout();
         artistName.requestLayout();
 
-        //Setup text animation
+        //Setup lyric animation
         addContentView(animateLyrics.lyricsTextView, animateLyrics.lyricsParams);
         animateLyrics.lyricsTextView.requestLayout();
 
