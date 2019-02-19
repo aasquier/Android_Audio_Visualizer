@@ -115,14 +115,12 @@ public class GLLine {
             // Right side needs to move in positive direction
             // Amplification should be half for both sides because Amplification = left + right
 
-            // Not sure about the full algorithm with if and else statement here
-            // Will come back to it later
-            //TODO: Figure out what is going on with this algorithm
-
-            float ampDataLeft = ((this.leftSide - (AMPLIFIER * PIXEL * (float) decibelArray[i])));
-            float ampDataRight = ((this.rightSide + (AMPLIFIER * PIXEL * (float) decibelArray[i])));
-            this.vertices[xOffset] = ampDataLeft;
-            this.vertices[xOffset+7] = ampDataRight;
+            if((float)decibelArray[i] > 0.8f) {
+                float ampDataLeft = ((this.leftSide - (AMPLIFIER * PIXEL * (float) decibelArray[i])));
+                float ampDataRight = ((this.rightSide + (AMPLIFIER * PIXEL * (float) decibelArray[i])));
+                this.vertices[xOffset] = ampDataLeft;
+                this.vertices[xOffset + 7] = ampDataRight;
+            }
 
             xOffset += 14;
         }
