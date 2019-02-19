@@ -88,9 +88,9 @@ final class Constants {
     static final int SCREEN_VERTICAL_HEIGHT = 50;
     static final int VIS1_VERTEX_COUNT      = SCREEN_VERTICAL_HEIGHT + SCREEN_VERTICAL_HEIGHT;
     static final int VIS1_ARRAY_SIZE        = VIS1_VERTEX_COUNT * 7;
-    static final float PIXEL                = 0.0007f;
-    static final float AMPLIFIER            = 0.000005f;
-    static final float DEFAULT_LINE_SIZE    = 0.00009f;
+    static final float PIXEL                = 0.0009f;
+    static final float AMPLIFIER            = 0.000004f;
+    static final float DEFAULT_LINE_SIZE    = 0.00015f;
 
 
     /** VisualizerModel constants */
