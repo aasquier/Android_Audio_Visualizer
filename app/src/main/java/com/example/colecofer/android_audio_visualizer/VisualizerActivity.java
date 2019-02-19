@@ -218,10 +218,6 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         //Setup lyric animation
         addContentView(animateLyrics.lyricsTextView, animateLyrics.lyricsParams);
         animateLyrics.lyricsTextView.requestLayout();
-
-        String test[] = {"Hello, ", "this ", "is ", "a ", "test!"};
-        animateLyrics.displayLyrics(test);
-
     }
 
     /**
@@ -272,7 +268,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
          *  refresh the screen based on our 60 fps */
         Pair<Long, Boolean> isTimeToRefreshScreen = updateDecibelHistory(currentDecibels, this.previousUpdateTime);
 
-        animateLyrics.update();
+        animateLyrics.update(); //Check if it's time to display new lyrics
 
         /** Update the screen if the elapsed time has exceeded the threshold set */
         if(isTimeToRefreshScreen.second) {
