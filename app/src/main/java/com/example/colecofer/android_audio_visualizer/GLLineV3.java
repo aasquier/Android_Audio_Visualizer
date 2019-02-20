@@ -102,7 +102,7 @@ public class GLLineV3 {
         int rightOffset = (SCREEN_VERTICAL_HEIGHT_V3-1) * 14;
 
         // Only loop for the size of the decibel array size
-        for(int i = 0; i < SCREEN_VERTICAL_HEIGHT_V3/2; i++){
+        for(int i = 0; i < SCREEN_VERTICAL_HEIGHT_V3/2; i++) {
             // Calculate the coordinates after the amplification
             // Left side needs to move in negative direction
             // Right side needs to move in positive direction
