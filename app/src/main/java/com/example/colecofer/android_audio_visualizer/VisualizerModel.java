@@ -8,10 +8,13 @@ import android.util.Pair;
 import com.spotify.sdk.android.player.PlaybackState;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.MODEL_TAG;
+import static com.example.colecofer.android_audio_visualizer.Constants.SHOULD_LOOP_VIS;
+import static com.example.colecofer.android_audio_visualizer.Constants.SWITCH_VIS_TIME;
 import static com.example.colecofer.android_audio_visualizer.Constants.SWITCH_VIS_TIME_ONE;
 import static com.example.colecofer.android_audio_visualizer.Constants.SWITCH_VIS_TIME_TWO;
 
@@ -26,6 +29,8 @@ public class VisualizerModel {
     String artistName;
     String albumName;
     private int durationInMilliseconds;
+    private int visualizerSwitchTime;
+    private int lastSwitchTime;
     private int visualizerSwitchTimeOne;
     private int visualizerSwitchTimeTwo;
     private ArrayList<Pair<Integer, String[]>> lyricList;
@@ -41,6 +46,9 @@ public class VisualizerModel {
     public VisOne visOne;
     public VisTwo visTwo;
     public VisThree visThree;
+    private int visCount;
+
+    private ArrayDeque<VisualizerBase> visQueue;
 
     /**
      * Default Constructor
@@ -64,6 +72,41 @@ public class VisualizerModel {
         this.visOne = new VisOne(context);
         this.visTwo = new VisTwo(context);
         this.visThree = new VisThree(context);
+        initVisualizerQueue();
+    }
+
+    /**
+     * Initialize the queue of visualizers and use the size of the queue to calculate certain fields
+     */
+    public void initVisualizerQueue() {
+        visQueue = new ArrayDeque<>();
+
+        visQueue.add(visOne);
+        visQueue.add(visTwo);
+        visQueue.add(visThree);
+
+        visCount = visQueue.size();
+
+        calculateSwitchTime();
+    }
+
+    public VisualizerBase getNextVis() {
+        if(SHOULD_LOOP_VIS) {
+            visQueue.add(visQueue.peek());
+        }
+        return visQueue.poll();
+    }
+
+    public VisualizerBase peekNextVis() {
+        return visQueue.peek();
+    }
+
+    public void addVisToQueue(VisualizerBase newVis) {
+        visQueue.add(newVis);
+    }
+
+    public int getVisQueueSize() {
+        return visQueue.size();
     }
 
     /**
@@ -72,15 +115,21 @@ public class VisualizerModel {
      */
     //TODO: This will only work with local files since it's based off the media player
     public void checkToSwitchVisualizer() {
-        float currentTimeMillis = VisualizerActivity.mediaPlayer.getCurrentPosition();
-        if (currentTimeMillis >= visualizerSwitchTimeOne && currentVisualizer.visNum == 1) {
-            this.currentVisualizer.disableVertexAttribArrays();
-            this.currentVisualizer = this.visTwo;
+        int currentTimeMillis = VisualizerActivity.mediaPlayer.getCurrentPosition();
+//        if (currentTimeMillis >= visualizerSwitchTimeOne && currentVisualizer.visNum == 1) {
+//            this.currentVisualizer.disableVertexAttribArrays();
+//            this.currentVisualizer = this.visTwo;
+//            VisualizerRenderer.initShaders();
+//        } else if (currentTimeMillis >= visualizerSwitchTimeTwo && currentVisualizer.visNum == 2) {
+//           this.currentVisualizer.disableVertexAttribArrays();
+//           this.currentVisualizer = this.visThree;
+//           VisualizerRenderer.initShaders();
+//        }
+        if (currentTimeMillis > lastSwitchTime + visualizerSwitchTime) {
+            lastSwitchTime = currentTimeMillis;
+            currentVisualizer.disableVertexAttribArrays();
+            currentVisualizer = getNextVis();
             VisualizerRenderer.initShaders();
-        } else if (currentTimeMillis >= visualizerSwitchTimeTwo && currentVisualizer.visNum == 2) {
-           this.currentVisualizer.disableVertexAttribArrays();
-           this.currentVisualizer = this.visThree;
-           VisualizerRenderer.initShaders();
         }
     }
 
@@ -93,9 +142,15 @@ public class VisualizerModel {
         this.visualizerSwitchTimeOne = SWITCH_VIS_TIME_ONE;
         this.visualizerSwitchTimeTwo = SWITCH_VIS_TIME_TWO;
 
-        //durationInMilliseconds = duration;
-        //visualizerSwitchTimeOne = duration / 3;
-        //visualizerSwitchTimeTwo = visualizerSwitchTimeOne * 2;
+        durationInMilliseconds = duration;
+//        visualizerSwitchTimeOne = duration / visQueue.size();
+//        visualizerSwitchTimeTwo = visualizerSwitchTimeOne * 2;
+    }
+
+    private void calculateSwitchTime() {
+        //this.visualizerSwitchTime = durationInMilliseconds / visCount;
+        this.visualizerSwitchTime = SWITCH_VIS_TIME;
+        this.lastSwitchTime = 0;
     }
 
     /**
