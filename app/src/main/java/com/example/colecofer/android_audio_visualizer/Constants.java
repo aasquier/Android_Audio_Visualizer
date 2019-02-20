@@ -55,7 +55,7 @@ final class Constants {
     static final String GLSL_TIME            = "time";
 
     /** Vis1 constants */
-    static final int LINE_AMT              = 75;                  //Number of lines to display on the screen
+    static final int LINE_AMT              = 50;                  //Number of lines to display on the screen
     static final float AMP_MULT            = 0.000005f;           //Alters the lines horizontal amplitude
     static final int VERTEX_AMOUNT         = 7;                   //x, y, z, r, g, b, a
     static final float LEFT_DRAW_BOUNDARY  = -0.99f;              //Where to start drawing on the left side of the screen
