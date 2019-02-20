@@ -17,7 +17,7 @@ final class Constants {
     static final int SWITCH_VIS_TIME_TWO   = SWITCH_VIS_TIME_ONE + 15000; //Amount of time to switch from the first visualizer to the second.
     static final int SWITCH_VIS_TIME       = 1000;                      //
 
-    
+
     /** MainActivity constants */
     //TODO: This is Spotify's test account because I don't want to hard code ours into a public repository...
     //Used to verify that we've been redirected back from Spotify after authenticating in browser
