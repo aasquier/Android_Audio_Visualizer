@@ -96,23 +96,26 @@ public class GLLineV3 {
      */
     public void updateVertices() {
         // Change to object array to traverse
-        Object[] decibelArray = decibelHistory.toArray();
+        Float[] decibelArray = decibelHistory.toArray(new Float[SCREEN_VERTICAL_HEIGHT]);
 
         int leftOffset = 0;
         int rightOffset = (SCREEN_VERTICAL_HEIGHT_V3-1) * 14;
 
         // Only loop for the size of the decibel array size
-        for(int i = 0; i < SCREEN_VERTICAL_HEIGHT_V3/2; i++){
+        for(int i = 0; i < SCREEN_VERTICAL_HEIGHT_V3/2; i++) {
             // Calculate the coordinates after the amplification
             // Left side needs to move in negative direction
             // Right side needs to move in positive direction
             // Amplification should be half for both sides because Amplification = left + right
 
-            float currentDecibel = (float) decibelArray[i] <= 0.66 ? 15.0f : (float) decibelArray[i] * 170.0f;
-//            float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE + AMPLIFIER * currentDecibel));
+            float currentDecibel = decibelArray[i] <= 0.66 ? 15.0f : decibelArray[i] * 170.0f;
 
             // V3 version
+            float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE_V3 + (AMPLIFIER_V3 * currentDecibel)));
             float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE_V3 + (AMPLIFIER_V3 * currentDecibel)));
+
+            this.vertices[leftOffset+1] = ampDataLeft;
+            this.vertices[rightOffset+1] = ampDataLeft;
 
             this.vertices[leftOffset+8] = ampDataRight;
             this.vertices[rightOffset+8] = ampDataRight;
