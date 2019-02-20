@@ -13,6 +13,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.AMPLIFIER
 import static com.example.colecofer.android_audio_visualizer.Constants.BYTES_PER_FLOAT;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
+import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_LINE_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_DRAW_BOUNDARY;
 import static com.example.colecofer.android_audio_visualizer.Constants.PIXEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_DATA_SIZE;
@@ -119,8 +120,10 @@ public class GLLine {
             // Will come back to it later
             //TODO: Figure out what is going on with this algorithm
 
-            float ampDataLeft = ((this.leftSide - (AMPLIFIER * PIXEL * (float) decibelArray[i])));
-            float ampDataRight = ((this.rightSide + (AMPLIFIER * PIXEL * (float) decibelArray[i])));
+            float currentDecibel = (float) decibelArray[i] <= 0.66 ? 15.0f : (float) decibelArray[i] * 170.0f;
+
+            float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE + AMPLIFIER * currentDecibel));
+            float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE + AMPLIFIER * currentDecibel));
             this.vertices[xOffset] = ampDataLeft;
             this.vertices[xOffset+7] = ampDataRight;
 
@@ -151,7 +154,7 @@ public class GLLine {
 
         GLES20.glUniform1f(VisualizerModel.getInstance().currentVisualizer.timeHandle, (float) (System.currentTimeMillis() - visOneStartTime));
 
-        Float[] temp = decibelHistory.toArray(new Float[SCREEN_VERTICAL_HEIGHT]);
+        Float[] temp = decibelHistory.toArray(new Float[0]);
         float[] dbs = new float[SCREEN_VERTICAL_HEIGHT];
         for (int i = 0; i < SCREEN_VERTICAL_HEIGHT; ++i) {
             dbs[i] = temp[i] == null ? 0.0f : temp[i];

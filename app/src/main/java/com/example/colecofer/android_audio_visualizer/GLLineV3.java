@@ -8,9 +8,12 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.AMPLIFIER;
+import static com.example.colecofer.android_audio_visualizer.Constants.AMPLIFIER_V3;
 import static com.example.colecofer.android_audio_visualizer.Constants.BYTES_PER_FLOAT;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
+import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_LINE_SIZE;
+import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_LINE_SIZE_V3;
 import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_DRAW_BOUNDARY;
 import static com.example.colecofer.android_audio_visualizer.Constants.PIXEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_DATA_SIZE;
@@ -40,7 +43,8 @@ public class GLLineV3 {
     public GLLineV3(float xPosition) {
 
         this.leftSide = xPosition;   // Current line's left side coord
-        this.rightSide = leftSide + 0.005f;  // Current line's right side coord
+//        this.rightSide = leftSide + 0.005f;  // Current line's right side coord
+        this.rightSide = leftSide + 0.004f;  // Current line's right side coord
 
 
         // Initialize the current line's base vertices
@@ -60,7 +64,7 @@ public class GLLineV3 {
 
         int vertexIndex = 0;
         float xAxis = -1.0f;
-        float xOffset = (float) 2 / (SCREEN_VERTICAL_HEIGHT_V3 -1);
+        float xOffset = (float) 2 / (SCREEN_VERTICAL_HEIGHT_V3);
 
         for(int i = 0; i < VIS3_ARRAY_SIZE; i+=14){
             // Left side
@@ -104,12 +108,11 @@ public class GLLineV3 {
             // Right side needs to move in positive direction
             // Amplification should be half for both sides because Amplification = left + right
 
-            // V3 version
-            float ampDataLeft = ((this.leftSide - (AMPLIFIER * PIXEL * (float) decibelArray[i])));
-            float ampDataRight = ((this.rightSide + (AMPLIFIER * PIXEL * (float) decibelArray[i])*2));
+            float currentDecibel = (float) decibelArray[i] <= 0.66 ? 15.0f : (float) decibelArray[i] * 170.0f;
+//            float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE + AMPLIFIER * currentDecibel));
 
-            this.vertices[leftOffset+1] = ampDataLeft;
-            this.vertices[rightOffset+1] = ampDataLeft;
+            // V3 version
+            float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE_V3 + (AMPLIFIER_V3 * currentDecibel)));
 
             this.vertices[leftOffset+8] = ampDataRight;
             this.vertices[rightOffset+8] = ampDataRight;
@@ -118,9 +121,9 @@ public class GLLineV3 {
             rightOffset -= 14;
         }
 
-        FloatBuffer fftInput = ByteBuffer.allocateDirect(this.vertices.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        fftInput.put(this.vertices).position(0);
-        this.lineVerticesBuffer = fftInput;
+        FloatBuffer lineVerticesInput = ByteBuffer.allocateDirect(this.vertices.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        lineVerticesInput.put(this.vertices).position(0);
+        this.lineVerticesBuffer = lineVerticesInput;
     }
 
     /**
