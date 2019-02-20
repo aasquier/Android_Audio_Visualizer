@@ -12,10 +12,8 @@ final class Constants {
 
     /** Visualizer Switching */
     static final boolean SHOULD_SWITCH_VIS = true;                       //Set to false if you do not want to rotate visualizers
-    static final boolean SHOULD_LOOP_VIS   = true;
-    static final int SWITCH_VIS_TIME_ONE   = 15000;                      //Amount of time to switch from the first visualizer to the second.
-    static final int SWITCH_VIS_TIME_TWO   = SWITCH_VIS_TIME_ONE + 15000; //Amount of time to switch from the first visualizer to the second.
-    static final int SWITCH_VIS_TIME       = 1000;                      //
+    static final boolean SHOULD_LOOP_VIS   = true;                       //Set to true if you want the final visualizer to loop back to the first
+    static final int SWITCH_VIS_TIME       = 15000;                      //Number of milliseconds to wait before switching
 
 
     /** MainActivity constants */
