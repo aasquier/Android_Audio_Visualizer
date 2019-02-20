@@ -8,16 +8,13 @@ import android.util.Pair;
 import com.spotify.sdk.android.player.PlaybackState;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.MODEL_TAG;
 import static com.example.colecofer.android_audio_visualizer.Constants.SHOULD_LOOP_VIS;
 import static com.example.colecofer.android_audio_visualizer.Constants.SWITCH_VIS_TIME;
-import static com.example.colecofer.android_audio_visualizer.Constants.SWITCH_VIS_TIME_ONE;
-import static com.example.colecofer.android_audio_visualizer.Constants.SWITCH_VIS_TIME_TWO;
-
 public class VisualizerModel {
 
     //Spotify data
@@ -31,8 +28,6 @@ public class VisualizerModel {
     private int durationInMilliseconds;
     private int visualizerSwitchTime;
     private int lastSwitchTime;
-    private int visualizerSwitchTimeOne;
-    private int visualizerSwitchTimeTwo;
     private ArrayList<Pair<Integer, String[]>> lyricList;
     public ArrayList<Integer> colorMatrix;
 
@@ -48,7 +43,7 @@ public class VisualizerModel {
     public VisThree visThree;
     private int visCount;
 
-    private ArrayDeque<VisualizerBase> visQueue;
+    private ConcurrentLinkedQueue<VisualizerBase> visQueue;
 
     /**
      * Default Constructor
@@ -80,7 +75,7 @@ public class VisualizerModel {
      * the size of the queue to calculate certain fields
      */
     public void initVisualizerQueue() {
-        visQueue = new ArrayDeque<>();
+        visQueue = new ConcurrentLinkedQueue<>();
 
         visQueue.add(visOne);
         visQueue.add(visTwo);
