@@ -47,7 +47,7 @@ final class Constants {
 
     /** Utility constants */
     static final float MAX_DB_LEVEL        = 170.0f;
-    static final long REFRESH_DECIBEL_TIME = 2L;
+    static final long REFRESH_DECIBEL_TIME = 16L;
     static final float MAX_DECIBEL_RATIO   = 1.0f;
 
     /** Shared Visualizer Constants **/
@@ -57,7 +57,7 @@ final class Constants {
     static final String GLSL_TIME            = "time";
 
     /** Vis1 constants */
-    static final int LINE_AMT              = 50;                  //Number of lines to display on the screen
+    static final int LINE_AMT              = 75;                  //Number of lines to display on the screen
     static final float AMP_MULT            = 0.000005f;           //Alters the lines horizontal amplitude
     static final int VERTEX_AMOUNT         = 7;                   //x, y, z, r, g, b, a
     static final float LEFT_DRAW_BOUNDARY  = -0.99f;              //Where to start drawing on the left side of the screen
@@ -77,24 +77,23 @@ final class Constants {
     static final int DOT_COUNT  = DOT_WIDTH * DOT_HEIGHT;
 
     /** Vis3 constants */
-    static final int SCREEN_VERTICAL_HEIGHT_V3 = 75;
+    static final int SCREEN_VERTICAL_HEIGHT_V3 = 50;
     static final int VIS3_VERTEX_COUNT         = (SCREEN_VERTICAL_HEIGHT_V3)*2;
     static final int VIS3_ARRAY_SIZE           = VIS3_VERTEX_COUNT * 7;
-    static final int LINE_AMT_V3               = 20;
-    static final float PIXEL_V3                = 0.0035f;
-    static final float AMPLIFIER_V3            = 0.015f;
-    static final float DEFAULT_LINE_SIZE_V3    = 0.0002f;
+    static final int LINE_AMT_V3               = 40;
+    static final float AMPLIFIER_V3            = 0.0000075f;
+    static final float DEFAULT_LINE_SIZE_V3    = 0.000002f;
 
     /** VisualizerActivity constants */
     static final int REQUEST_PERMISSION     = 101;
-    static final int REAL_BUCKET_INDEX      = 4;
-    static final int IMAGINARY_BUCKET_INDEX = 5;
+    static final int REAL_BUCKET_INDEX      = 3;
+    static final int IMAGINARY_BUCKET_INDEX = 4;
     static final int MAX_FFT_ARRAY_SIZE     = 1024;
     static final int SCREEN_VERTICAL_HEIGHT = 50;
     static final int VIS1_VERTEX_COUNT      = SCREEN_VERTICAL_HEIGHT + SCREEN_VERTICAL_HEIGHT;
     static final int VIS1_ARRAY_SIZE        = VIS1_VERTEX_COUNT * 7;
     static final float PIXEL                = 0.0009f;
-    static final float AMPLIFIER            = 0.0000085f;
+    static final float AMPLIFIER            = 0.0000075f;
     static final float DEFAULT_LINE_SIZE    = 0.0002f;
 
 

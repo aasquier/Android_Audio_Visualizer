@@ -18,7 +18,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.RIGHT_DRA
 public class VisThree extends VisualizerBase {
 
     private GLLineV3[] lines;  //Holds the lines to be displayed
-    private float lineOffSet = (RIGHT_DRAW_BOUNDARY * 2) / (LINE_AMT_V3 - 1); //We want to display lines from -.99 to .99 (.99+.99=1.98)
+    private float lineOffSet = (RIGHT_DRAW_BOUNDARY * 2 + 0.014f) / (LINE_AMT_V3 - 1); //We want to display lines from -.99 to .99 (.99+.99=1.98)
     private Utility util;
 
     private long visThreeStartTime;
