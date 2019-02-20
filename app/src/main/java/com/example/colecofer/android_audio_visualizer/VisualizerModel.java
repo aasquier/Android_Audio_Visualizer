@@ -76,7 +76,8 @@ public class VisualizerModel {
     }
 
     /**
-     * Initialize the queue of visualizers and use the size of the queue to calculate certain fields
+     * Initialize the queue of visualizers and use
+     * the size of the queue to calculate certain fields
      */
     public void initVisualizerQueue() {
         visQueue = new ArrayDeque<>();
@@ -90,6 +91,12 @@ public class VisualizerModel {
         calculateSwitchTime();
     }
 
+    /**
+     * Removes and returns the first element in the queue.
+     * If constant SHOULD_LOOP_VIS is set to true, first append
+     * that element to the end of the queue
+     * @return the first element in the queue
+     */
     public VisualizerBase getNextVis() {
         if(SHOULD_LOOP_VIS) {
             visQueue.add(visQueue.peek());
@@ -97,14 +104,26 @@ public class VisualizerModel {
         return visQueue.poll();
     }
 
+    /**
+     * Allows other classes to peek at the next visualizer in line
+     * @return
+     */
     public VisualizerBase peekNextVis() {
         return visQueue.peek();
     }
 
+    /**
+     * Allows other classes to add a visualizer to the back of the queue
+     * @param newVis
+     */
     public void addVisToQueue(VisualizerBase newVis) {
         visQueue.add(newVis);
     }
 
+    /**
+     * Allows other classes to query the current size of the visualizer queue
+     * @return
+     */
     public int getVisQueueSize() {
         return visQueue.size();
     }
@@ -116,15 +135,7 @@ public class VisualizerModel {
     //TODO: This will only work with local files since it's based off the media player
     public void checkToSwitchVisualizer() {
         int currentTimeMillis = VisualizerActivity.mediaPlayer.getCurrentPosition();
-//        if (currentTimeMillis >= visualizerSwitchTimeOne && currentVisualizer.visNum == 1) {
-//            this.currentVisualizer.disableVertexAttribArrays();
-//            this.currentVisualizer = this.visTwo;
-//            VisualizerRenderer.initShaders();
-//        } else if (currentTimeMillis >= visualizerSwitchTimeTwo && currentVisualizer.visNum == 2) {
-//           this.currentVisualizer.disableVertexAttribArrays();
-//           this.currentVisualizer = this.visThree;
-//           VisualizerRenderer.initShaders();
-//        }
+
         if (currentTimeMillis > lastSwitchTime + visualizerSwitchTime) {
             lastSwitchTime = currentTimeMillis;
             currentVisualizer.disableVertexAttribArrays();
@@ -139,14 +150,15 @@ public class VisualizerModel {
      */
     public void setDuration(int duration) {
         //TODO: This is temporarily being set to a constant defined in constants.java for debugging convenience
-        this.visualizerSwitchTimeOne = SWITCH_VIS_TIME_ONE;
-        this.visualizerSwitchTimeTwo = SWITCH_VIS_TIME_TWO;
-
         durationInMilliseconds = duration;
-//        visualizerSwitchTimeOne = duration / visQueue.size();
+//        visualizerSwitchTimeOne = duration / visCount;
 //        visualizerSwitchTimeTwo = visualizerSwitchTimeOne * 2;
     }
 
+    /**
+     * Calculates how often visualizers should switch based on
+     * the number of visualizers in the original queue
+     */
     private void calculateSwitchTime() {
         //this.visualizerSwitchTime = durationInMilliseconds / visCount;
         this.visualizerSwitchTime = SWITCH_VIS_TIME;
