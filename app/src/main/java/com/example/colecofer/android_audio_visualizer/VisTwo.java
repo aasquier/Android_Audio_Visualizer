@@ -71,7 +71,7 @@ public class VisTwo extends VisualizerBase {
         GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, VIS2_STRIDE_BYTES, dotVertexData);
         GLES20.glEnableVertexAttribArray(colorHandle);
 
-        Float[] temp = decibelHistory.toArray(new Float[SCREEN_VERTICAL_HEIGHT]);
+        Float[] temp = decibelHistory.toArray(new Float[0]);
         float[] dbs = new float[SCREEN_VERTICAL_HEIGHT];
         for (int i = 0; i < SCREEN_VERTICAL_HEIGHT; ++i) {
             dbs[i] = temp[i] == null ? 0.0f : temp[i];
