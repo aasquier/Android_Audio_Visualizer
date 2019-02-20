@@ -27,10 +27,8 @@ import android.util.Pair;
 
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.IMAGINARY_BUCKET_INDEX;
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_FFT_ARRAY_SIZE;
@@ -45,7 +43,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
     private static int fftArraySize;
     private long previousUpdateTime;
-    static ArrayDeque<Float> decibelHistory;
+    static ConcurrentLinkedDeque<Float> decibelHistory;
 
     static MediaPlayer mediaPlayer;
     private Visualizer visualizer;
@@ -210,7 +208,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
     /** Sets the decibel history to all 0.0 to begin with */
     private void initDecibelHistory() {
-        this.decibelHistory = new ArrayDeque<>();
+        this.decibelHistory = new ConcurrentLinkedDeque<>();
         for(int i = 0; i < SCREEN_VERTICAL_HEIGHT; ++i) {
             this.decibelHistory.addFirst(0.0f);
         }
