@@ -43,7 +43,7 @@ public class VisThree extends VisualizerBase {
         this.vertexShader = util.getStringFromGLSL(R.raw.visthreevertex);
         this.fragmentShader = util.getStringFromGLSL(R.raw.visthreefragment);
 
-        visThreeStartTime = System.currentTimeMillis();
+        this.visThreeStartTime = System.currentTimeMillis();
     }
 
     /**
