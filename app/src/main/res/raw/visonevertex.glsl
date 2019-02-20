@@ -207,12 +207,12 @@ void main() {           		    // The entry point for our vertex shader.
     vec2 res = vec2(0.95, 0.95);
     float scaledTime = time / 4500.0;
 
-    int positionIndex;
-    if(a_Position.y >= 0.) {
-        positionIndex = int(25. + floor(a_Position.y * 24.));
-    } else {
-        positionIndex = int(24. + floor(a_Position.y * 24.));
-    }
+//    int positionIndex;
+//    if(a_Position.y >= 0.) {
+//        positionIndex = int(25. + floor(a_Position.y * 24.));
+//    } else {
+//        positionIndex = int(24. + floor(a_Position.y * 24.));
+//    }
     float noise = snoise(vec3(a_Position.xy, scaledTime));
 //    float noise = snoise(a_Position.xy);
 

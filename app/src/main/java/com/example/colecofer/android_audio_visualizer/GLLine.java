@@ -119,22 +119,8 @@ public class GLLine {
             // Not sure about the full algorithm with if and else statement here
             // Will come back to it later
             //TODO: Figure out what is going on with this algorithm
-            float currentDecibel = (float) decibelArray[i];
 
-            // Scales particular decibel ranges for adjustment into line thicknesses
-            if (currentDecibel <= 0.6) {
-                currentDecibel = 25.0f;
-            } else if (currentDecibel <= 0.7) {
-                currentDecibel *= 125.0f;
-            } else if (currentDecibel <= 0.8) {
-                currentDecibel *= 250.0f;
-            } else if (currentDecibel <= 0.9) {
-                currentDecibel *= 500.0f;
-            } else {
-                currentDecibel *= 1000.0f;
-            }
-
-//            float currentDecibel = (float) decibelArray[i] > 0.4 ? 0.0f : (float) decibelArray[i] * 250.0f;
+            float currentDecibel = (float) decibelArray[i] <= 0.66 ? 15.0f : (float) decibelArray[i] * 170.0f;
 
             float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE + AMPLIFIER * currentDecibel));
             float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE + AMPLIFIER * currentDecibel));
@@ -168,7 +154,7 @@ public class GLLine {
 
         GLES20.glUniform1f(VisualizerModel.getInstance().currentVisualizer.timeHandle, (float) (System.currentTimeMillis() - visOneStartTime));
 
-        Float[] temp = decibelHistory.toArray(new Float[SCREEN_VERTICAL_HEIGHT]);
+        Float[] temp = decibelHistory.toArray(new Float[0]);
         float[] dbs = new float[SCREEN_VERTICAL_HEIGHT];
         for (int i = 0; i < SCREEN_VERTICAL_HEIGHT; ++i) {
             dbs[i] = temp[i] == null ? 0.0f : temp[i];
