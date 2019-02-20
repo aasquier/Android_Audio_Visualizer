@@ -111,6 +111,9 @@ public class GLLineV3 {
             float currentDecibel = (float) decibelArray[i] <= 0.66 ? 15.0f : (float) decibelArray[i] * 170.0f;
 //            float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE + AMPLIFIER * currentDecibel));
 
+            float ampDataLeft = ((this.leftSide - (AMPLIFIER * PIXEL * (float) decibelArray[i])));
+            float ampDataRight = ((this.rightSide + (AMPLIFIER * PIXEL * (float) decibelArray[i])*2));
+
             this.vertices[leftOffset+1] = ampDataLeft;
             this.vertices[rightOffset+1] = ampDataLeft;
 
