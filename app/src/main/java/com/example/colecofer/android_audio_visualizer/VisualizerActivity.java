@@ -62,7 +62,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         getSupportActionBar().hide();
 
         setContentView(R.layout.activity_visualizer);
-        //startTrackPlayback();  //Uncomment this line to start Spotify track playback
+        startTrackPlayback();  //Uncomment this line to start Spotify track playback
         ArrayList<Pair<Integer, String[]>> list = VisualizerModel.getInstance().getLyrics();
 
         Pair<Integer, String[]> pair = list.get(0);
@@ -137,11 +137,12 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         }
 
         //Sets up the visualizer for local files
-        mediaPlayer = MediaPlayer.create(this, R.raw.jazz);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+        mediaPlayer = MediaPlayer.create(this, R.raw.jazz); //for some reason creating the
+        mediaPlayer.setLooping(true);         // media player seems to be essential even if we don't use it
 
-        visualizer = new Visualizer(mediaPlayer.getAudioSessionId());
+//        mediaPlayer.start();
+
+        visualizer = new Visualizer(0); //0 session ID, listening to Biggie
         visualizer.setCaptureSize(fftArraySize);
         visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);
         visualizer.setEnabled(true);
