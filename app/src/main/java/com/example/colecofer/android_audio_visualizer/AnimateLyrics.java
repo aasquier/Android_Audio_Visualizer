@@ -54,7 +54,6 @@ public class AnimateLyrics {
         this.lyricsTextView.setTextColor(Color.WHITE);
         this.lyricsParams = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.MATCH_PARENT);
         this.lyricsTextView.setLayoutParams(lyricsParams);
-        this.lyricsTextView.setPadding(100, 800, 100, 300);
 
         //Lyric Containers
         this.lyricList = (ArrayList<Pair<Integer, String[]>>) lyricList.clone();
@@ -64,6 +63,9 @@ public class AnimateLyrics {
         //Screen dimensions
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
+
+        int height = (int) (this.screenHeight * 0.60);
+        this.lyricsTextView.setPadding(100, height, 100, 100);
     }
 
     /**
