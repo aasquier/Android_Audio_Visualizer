@@ -8,14 +8,18 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Pair;
 import android.util.TypedValue;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import static com.example.colecofer.android_audio_visualizer.Constants.DISPLAY_MULTILINE_PROXIMITY;
 import static com.example.colecofer.android_audio_visualizer.Constants.LYRICS_TEXT_SIZE;
+import static com.example.colecofer.android_audio_visualizer.Constants.PERCENTAGE_FROM_TOP;
 
 
 /**
@@ -64,7 +68,8 @@ public class AnimateLyrics {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
 
-        int height = (int) (this.screenHeight * 0.60);
+        //Set the height as a percentage of the screen height
+        int height = (int) (this.screenHeight * PERCENTAGE_FROM_TOP);
         this.lyricsTextView.setPadding(100, height, 100, 100);
     }
 
@@ -77,9 +82,28 @@ public class AnimateLyrics {
         float lyricDisplayTime = lyricList.get(this.lyricIndex).first - 300; //Displays 300 millis before the lyrics start
         float currTime = VisualizerActivity.mediaPlayer.getCurrentPosition();
         if (currTime >= lyricDisplayTime && this.lyricIndex < this.lyricAmt) {
-            String[] lyricsToDisplay = lyricList.get(this.lyricIndex).second;
+            List<String> lyricsToDisplay = new ArrayList<String>();
+
+            //Check if there are more lyrics after this one
+            if(this.lyricIndex +1 < this.lyricAmt) {
+                //Add those lyrics into the next string to be displayed
+                for (String item : lyricList.get(this.lyricIndex).second) {
+                    lyricsToDisplay.add(item);
+                }
+                this.lyricIndex += 1;
+                Log.d("test: ", "Length: " + (lyricList.get(this.lyricIndex + 1).first - lyricList.get(this.lyricIndex).first));
+
+                //Check if the lyrics are close enough so that we can display them at the same time
+                if (lyricList.get(this.lyricIndex + 1).first - lyricList.get(this.lyricIndex).first
+                        < DISPLAY_MULTILINE_PROXIMITY) {
+                    //Add the lyrics to be displayed
+                    for (String item : lyricList.get(this.lyricIndex).second) {
+                        lyricsToDisplay.add(item);
+                    }
+                    this.lyricIndex += 1;
+                }
+            }
             this.displayLyrics(lyricsToDisplay);
-            this.lyricIndex += 1;
         }
 
     }
@@ -89,11 +113,21 @@ public class AnimateLyrics {
      * the lyric animation TextView.
      * @param lyrics String array of lyrics (word by word)
      */
-    private void displayLyrics(String[] lyrics) {
-        int wordsAmt = lyrics.length;
+//    private void displayLyrics(String[] lyrics) {
+//        int wordsAmt = lyrics.length;
+//        String lyricsToDisplay = "";
+//        for (int i = 0; i < wordsAmt; ++i) {
+//            lyricsToDisplay += lyrics[i] + " ";
+//        }
+//        this.lyricsTextView.setText(lyricsToDisplay);
+//    }
+
+    private void displayLyrics(List<String> lyrics) {
+        int wordsAmt = lyrics.size();
         String lyricsToDisplay = "";
         for (int i = 0; i < wordsAmt; ++i) {
-            lyricsToDisplay += lyrics[i] + " ";
+            //lyricsToDisplay += lyrics[i] + " ";
+            lyricsToDisplay += " " + lyrics.get(i);
         }
         this.lyricsTextView.setText(lyricsToDisplay);
     }
