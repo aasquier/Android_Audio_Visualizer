@@ -53,22 +53,20 @@ void main() {           		    // The entry point for our vertex shader.
 
     v_Color = a_Color;              // just pass whatever input color to fragment shader, do nothing
 
-    // ------------ wave effect begin ------------------------------------
+    vec4 newPosition = a_Position;
 
-    float noise = snoise(a_Position.xy);
-    vec4 newPosition = vec4(a_Position.x, a_Position.y + (noise * a_DB_Level[0] * 0.06), a_Position.zw);
+    // ------------ wave effect ------------------------------------
 
-    // -------- mirror effect begin (comment out temporary) --------------
-    // making mirror
-    //vec2 uv2 = newPosition.xy;
+    float noise = snoise(newPosition.xy);
+    newPosition.y += noise * a_DB_Level[0] * 0.06;
 
-    // horizontal mirror
-    //if(uv2.y > 0.0){
-    //    uv2.y = -(uv2.y - 1.04);
+    // -------- mirror effect (comment out temporary) --------------
+
+    //if (newPosition.y < 0.0) {
+    //    newPosition.y = -newPosition.y - 1.04;
     //}
 
-    //vec4 newPosition = vec4(uv2, newPosition.zw);
-    // -------- mirror effect end --------------
+    // -------- apply final result --------------
 
     gl_Position = newPosition; 	    // gl_Position is a special variable used to store the final position.
 }

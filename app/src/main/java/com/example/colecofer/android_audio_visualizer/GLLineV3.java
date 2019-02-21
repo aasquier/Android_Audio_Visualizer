@@ -157,7 +157,7 @@ public class GLLineV3 {
 //                dbs[i] *= -1;
 //            }
         }
-        
+
         GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, SCREEN_VERTICAL_HEIGHT, dbs, 0);
 
         /** finally draw buffer */
