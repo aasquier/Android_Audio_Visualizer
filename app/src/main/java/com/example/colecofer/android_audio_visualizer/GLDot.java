@@ -24,6 +24,7 @@ public class GLDot {
 
         int visTwoIndex = 1;
         int visColor = VisualizerModel.getInstance().getColor(visTwoIndex);
+        float shiftValue = 0.001f;
 
         for(int i = 0; i < DOT_HEIGHT; i++) {
             Log.d("VISCOLOR", "color: " + Integer.toString(visColor));
@@ -32,12 +33,9 @@ public class GLDot {
                 vertices[index*7+0] = -1.0f + 2.0f /(DOT_WIDTH + 1)*(1+i);
                 vertices[index*7+1] = -1.0f + 2.0f /(DOT_HEIGHT + 1)*(1+j);
                 vertices[index*7+2] = 0.0f;
-//                vertices[index*7+3] = 1.0f; //(float) (Color.red(visColor) * 0.01);
-//                vertices[index*7+4] = 0.0f; //(float) (Color.green(visColor) * 0.01);
-//                vertices[index*7+5] = 0.0f; //(float) (Color.blue(visColor) * 0.01);
-                vertices[index*7+3] = (float) (Color.red(visColor) * 0.01);
-                vertices[index*7+4] = (float) (Color.green(visColor) * 0.01);
-                vertices[index*7+5] = (float) (Color.blue(visColor) * 0.01);
+                vertices[index*7+3] = (Color.red(visColor) * shiftValue);
+                vertices[index*7+4] = (Color.green(visColor) * shiftValue);
+                vertices[index*7+5] = (Color.blue(visColor) * shiftValue);
                 vertices[index*7+6] = 1.0f;
 
                 index++;

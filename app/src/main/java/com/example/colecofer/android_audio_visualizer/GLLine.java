@@ -45,7 +45,6 @@ public class GLLine {
         this.leftSide = xPosition;   // Current line's left side coord
         this.rightSide = leftSide + PIXEL;  // Current line's right side coord
 
-
         // Initialize the current line's base vertices
         createBaseLine();
 
@@ -64,7 +63,7 @@ public class GLLine {
         int vertexIndex = 0;
         float yAxis = -1.0f;
         float yOffset = (float) 2 / (SCREEN_VERTICAL_HEIGHT - 1);
-
+        float shiftValue = 0.001f;
         int visOneIndex = 0;
         int visColor = VisualizerModel.getInstance().getColor(visOneIndex);
         // Setting up right triangles
@@ -74,24 +73,18 @@ public class GLLine {
             this.vertices[vertexIndex] = this.leftSide;
             this.vertices[vertexIndex+1] = yAxis;
             this.vertices[vertexIndex+2] = 0.0f;
-//            this.vertices[vertexIndex+3] = 0.9f;
-//            this.vertices[vertexIndex+4] = 0.1f;
-//            this.vertices[vertexIndex+5] = 0.0f;
-            this.vertices[vertexIndex+3] = (float) (Color.red(visColor) * 0.01);
-            this.vertices[vertexIndex+4] = (float) (Color.green(visColor) * 0.01);
-            this.vertices[vertexIndex+5] = (float) (Color.blue(visColor) * 0.01);
+            this.vertices[vertexIndex+3] = (Color.red(visColor) * shiftValue);
+            this.vertices[vertexIndex+4] = (Color.green(visColor) * shiftValue);
+            this.vertices[vertexIndex+5] = (Color.blue(visColor) * shiftValue);
             this.vertices[vertexIndex+6] = 1.0f;
 
             // Right side
             this.vertices[vertexIndex+7] = this.rightSide;
             this.vertices[vertexIndex+8] = yAxis;
             this.vertices[vertexIndex+9] = 0.0f;
-//            this.vertices[vertexIndex+10] = 0.9f;
-//            this.vertices[vertexIndex+11] = 0.1f;
-//            this.vertices[vertexIndex+12] = 0.0f;
-            this.vertices[vertexIndex+10] = (float) (Color.red(visColor) * 0.01);
-            this.vertices[vertexIndex+11] = (float) (Color.green(visColor) * 0.01);
-            this.vertices[vertexIndex+12] = (float) (Color.blue(visColor) * 0.01);
+            this.vertices[vertexIndex+10] = (Color.red(visColor) * shiftValue);
+            this.vertices[vertexIndex+11] = (Color.green(visColor) * shiftValue);
+            this.vertices[vertexIndex+12] = (Color.blue(visColor) * shiftValue);
             this.vertices[vertexIndex+13] = 1.0f;
 
             // Next y coord
