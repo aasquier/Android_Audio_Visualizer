@@ -135,6 +135,9 @@ public class GLLine {
     public void draw(int positionHandle, int colorHandle, Long visOneStartTime) {
         while (decibelHistory.peekFirst() == null) { continue; }
 
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glBlendFuncSeparate(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA, GLES20.GL_ZERO, GLES20.GL_ONE);
+
         this.lineVerticesBuffer.position(POSITION_OFFSET);
         GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, this.lineVerticesBuffer);
         GLES20.glEnableVertexAttribArray(positionHandle);
