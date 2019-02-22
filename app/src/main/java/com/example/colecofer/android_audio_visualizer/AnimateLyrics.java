@@ -85,13 +85,12 @@ public class AnimateLyrics {
             List<String> lyricsToDisplay = new ArrayList<String>();
 
             //Check if there are more lyrics after this one
-            if(this.lyricIndex +1 < this.lyricAmt) {
+            if(this.lyricIndex +1 < (this.lyricAmt - 1)) {
                 //Add those lyrics into the next string to be displayed
                 for (String item : lyricList.get(this.lyricIndex).second) {
                     lyricsToDisplay.add(item);
                 }
                 this.lyricIndex += 1;
-                Log.d("test: ", "Length: " + (lyricList.get(this.lyricIndex + 1).first - lyricList.get(this.lyricIndex).first));
 
                 //Check if the lyrics are close enough so that we can display them at the same time
                 if (lyricList.get(this.lyricIndex + 1).first - lyricList.get(this.lyricIndex).first
@@ -113,15 +112,6 @@ public class AnimateLyrics {
      * the lyric animation TextView.
      * @param lyrics String array of lyrics (word by word)
      */
-//    private void displayLyrics(String[] lyrics) {
-//        int wordsAmt = lyrics.length;
-//        String lyricsToDisplay = "";
-//        for (int i = 0; i < wordsAmt; ++i) {
-//            lyricsToDisplay += lyrics[i] + " ";
-//        }
-//        this.lyricsTextView.setText(lyricsToDisplay);
-//    }
-
     private void displayLyrics(List<String> lyrics) {
         int wordsAmt = lyrics.size();
         String lyricsToDisplay = "";
@@ -132,7 +122,7 @@ public class AnimateLyrics {
         this.lyricsTextView.setText(lyricsToDisplay);
     }
 
-    //        //Setup the text and colors
+//        //Setup the text and colors
 //        Spannable word = new SpannableString("Hah, sika than your average\n");
 //
 //        //The first two value of the hex are opacity... So perhaps we could alter these to fade them in and out... ?
