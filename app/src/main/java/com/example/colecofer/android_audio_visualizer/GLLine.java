@@ -113,7 +113,7 @@ public class GLLine {
             // Will come back to it later
             //TODO: Figure out what is going on with this algorithm
 
-            float currentDecibel = (float) decibelArray[i] <= 0.66 ? 15.0f : (float) decibelArray[i] * 170.0f;
+            float currentDecibel = (float) decibelArray[i] <= 0.68 ? 15.0f : (float) decibelArray[i] * 170.0f;
 
             float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE + AMPLIFIER * currentDecibel));
             float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE + AMPLIFIER * currentDecibel));

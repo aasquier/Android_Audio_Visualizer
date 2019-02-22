@@ -92,7 +92,7 @@ final class Constants {
     static final int VIS1_ARRAY_SIZE        = VIS1_VERTEX_COUNT * 7;
     static final float PIXEL                = 0.0009f;
 //    static final float AMPLIFIER            = 0.0000075f;
-    static final float AMPLIFIER            = 0.00002f;
+    static final float AMPLIFIER            = 0.000025f;
     static final float DEFAULT_LINE_SIZE    = 0.0002f;
 
 
