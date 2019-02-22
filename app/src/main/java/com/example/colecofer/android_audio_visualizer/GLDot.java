@@ -8,6 +8,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.Random;
 
+import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_SHIFT_FACTOR;
 import static com.example.colecofer.android_audio_visualizer.Constants.DOT_COUNT;
 import static com.example.colecofer.android_audio_visualizer.Constants.DOT_HEIGHT;
 import static com.example.colecofer.android_audio_visualizer.Constants.DOT_WIDTH;
@@ -24,7 +25,6 @@ public class GLDot {
 
         int visTwoIndex = 1;
         int visColor = VisualizerModel.getInstance().getColor(visTwoIndex);
-        float shiftValue = 0.001f;
 
         for(int i = 0; i < DOT_HEIGHT; i++) {
             Log.d("VISCOLOR", "color: " + Integer.toString(visColor));
@@ -33,9 +33,9 @@ public class GLDot {
                 vertices[index*7+0] = -1.0f + 2.0f /(DOT_WIDTH + 1)*(1+i);
                 vertices[index*7+1] = -1.0f + 2.0f /(DOT_HEIGHT + 1)*(1+j);
                 vertices[index*7+2] = 0.0f;
-                vertices[index*7+3] = (Color.red(visColor) * shiftValue);
-                vertices[index*7+4] = (Color.green(visColor) * shiftValue);
-                vertices[index*7+5] = (Color.blue(visColor) * shiftValue);
+                vertices[index*7+3] = (Color.red(visColor) * COLOR_SHIFT_FACTOR);
+                vertices[index*7+4] = (Color.green(visColor) * COLOR_SHIFT_FACTOR);
+                vertices[index*7+5] = (Color.blue(visColor) * COLOR_SHIFT_FACTOR);
                 vertices[index*7+6] = 1.0f;
 
                 index++;

@@ -53,6 +53,7 @@ final class Constants {
     static final String GLSL_COLOR_HANDLE    = "a_Color";
     static final String GLSL_DB_LEVEL        = "a_DB_Level";
     static final String GLSL_TIME            = "time";
+    static final float COLOR_SHIFT_FACTOR    = 0.005f;
 
     /** Vis1 constants */
     static final int LINE_AMT              = 50;                  //Number of lines to display on the screen
