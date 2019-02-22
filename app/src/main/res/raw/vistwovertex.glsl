@@ -115,7 +115,7 @@ void main() {
 //    int distanceIndex = int(sqrt(a_Position.x * a_Position.x + a_Position.y * a_Position.y)*12.);
 //
 //    float db = a_DB_Level[distanceIndex];
-//
+////
 //    // Creating the wave itself
 //    vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
 //    float cLength = length(cPos);
