@@ -35,12 +35,13 @@ public class AnimateLyrics {
     static ViewGroup.MarginLayoutParams lyricsParams;
 
     private Typeface lyricsTypeface;
-    private ArrayList<Pair<Integer, String[]>> lyricList;
-    private int lyricSegments = 0;    //Amount of lyric segments to display to the screen
-    private Spannable lyrics[];
+    private ArrayList<Pair<Integer, String[]>> rawLyrics;         //Holds the lyrics as plain Strings with their timestamps to be displayed
+    private ArrayList<Pair<SpannableString, Long>> currLyrics;    //Lyrics that are actively being displayed with their curr opacity
+    private int lyricSegments = 0;                                //Total amount of lyric segments
+    private int lyricIndex = 0;
     private int screenWidth;
     private int screenHeight;
-    private int lyricIndex = 0;
+
 
 
     /**
@@ -62,8 +63,8 @@ public class AnimateLyrics {
         this.lyricsTextView.setLayoutParams(lyricsParams);
 
         //Lyric Containers
-        this.lyricList = (ArrayList<Pair<Integer, String[]>>) lyricList.clone();
-        this.lyricSegments = this.lyricList.size();
+        this.rawLyrics = (ArrayList<Pair<Integer, String[]>>) lyricList.clone();
+        this.lyricSegments = this.rawLyrics.size();
         this.lyricIndex = 0;
 
         //Screen dimensions
@@ -83,7 +84,7 @@ public class AnimateLyrics {
     public void update() {
 
         //Calc time to display the lyric
-        float lyricDisplayTime = lyricList.get(this.lyricIndex).first - LYRIC_DISPLAY_OFFSET;
+        float lyricDisplayTime = rawLyrics.get(this.lyricIndex).first - LYRIC_DISPLAY_OFFSET;
         float currTime = VisualizerActivity.mediaPlayer.getCurrentPosition();
 
         if (currTime >= lyricDisplayTime && this.lyricIndex < this.lyricSegments) {
@@ -94,7 +95,7 @@ public class AnimateLyrics {
             if(this.lyricIndex +1 < (this.lyricSegments - 1)) {
 
                 //Add the first line of lyrics into lyricsToDisplay list
-                for (String lyric : lyricList.get(this.lyricIndex).second) {
+                for (String lyric : rawLyrics.get(this.lyricIndex).second) {
                     //TODO: Convert String to Spannable String here...
                     //TODO: Another option might be to store them as spannable strings in the first place
                     SpannableString lyricSpan = new SpannableString(lyric);
@@ -104,11 +105,11 @@ public class AnimateLyrics {
                 this.lyricIndex += 1; //Index to the next lyric
 
                 //Check if the lyrics are close enough so that we can display them at the same time
-                if (lyricList.get(this.lyricIndex + 1).first - lyricList.get(this.lyricIndex).first
+                if (rawLyrics.get(this.lyricIndex + 1).first - rawLyrics.get(this.lyricIndex).first
                         < DISPLAY_MULTILINE_PROXIMITY) {
 
                     //Add the second line of lyrics into the to be displayed list
-                    for (String lyric : lyricList.get(this.lyricIndex).second) {
+                    for (String lyric : rawLyrics.get(this.lyricIndex).second) {
                         SpannableString lyricSpan = new SpannableString(lyric);
                         lyricsToDisplay.add(lyricSpan);
                     }
@@ -135,16 +136,17 @@ public class AnimateLyrics {
         this.lyricsTextView.setText(lyricsToDisplay);
     }
 
-//        //Setup the text and colors
-//        Spannable word = new SpannableString("Hah, sika than your average\n");
-//
-//        //The first two value of the hex are opacity... So perhaps we could alter these to fade them in and out... ?
-//        word.setSpan(new ForegroundColorSpan(0x50FFFFFF), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        lyricsTextView.setText(word);
-//
-//        Spannable word1 = new SpannableString("Poppa twist cabbage off instinct");
-//        word1.setSpan(new ForegroundColorSpan(Color.RED), 0, word1.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        lyricsTextView.append(word1);
 
+    //SpannableString example
+    //        //Setup the text and colors
+    //        Spannable word = new SpannableString("Hah, sika than your average\n");
+    //
+    //        //The first two value of the hex are opacity... So perhaps we could alter these to fade them in and out... ?
+    //        word.setSpan(new ForegroundColorSpan(0x50FFFFFF), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    //        lyricsTextView.setText(word);
+    //
+    //        Spannable word1 = new SpannableString("Poppa twist cabbage off instinct");
+    //        word1.setSpan(new ForegroundColorSpan(Color.RED), 0, word1.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    //        lyricsTextView.append(word1);
 
 }
