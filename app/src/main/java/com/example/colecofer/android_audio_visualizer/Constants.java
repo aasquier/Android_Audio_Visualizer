@@ -19,6 +19,7 @@ final class Constants {
     static final float LYRICS_TEXT_SIZE = 22f;
     static final float PERCENTAGE_FROM_TOP = 0.60f;         //Percentage of screen height to display lyrics at
     static final float DISPLAY_MULTILINE_PROXIMITY = 2000f; //If time between lyrics are smaller than this amount, then multiple lyrics will display on the screen at the same time
+    static final float LYRIC_DISPLAY_OFFSET = 300f;         //Offset of time to display lyrics before they are actually sung in the song
 
     /** MainActivity constants */
     //TODO: This is Spotify's test account because I don't want to hard code ours into a public repository...
