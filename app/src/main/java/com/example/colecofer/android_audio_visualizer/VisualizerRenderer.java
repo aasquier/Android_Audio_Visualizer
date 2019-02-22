@@ -1,5 +1,6 @@
 package com.example.colecofer.android_audio_visualizer;
 
+import android.opengl.GLES10;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
@@ -29,7 +30,11 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         int positionHandle;
         int colorHandle;
 
-        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        if(VisualizerModel.getInstance().currentVisualizer instanceof VisTwo) {
+            GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        } else {
+            GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        }
 
         /* Vertex Shader Error Handling */
         int vertexShaderHandle = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER);

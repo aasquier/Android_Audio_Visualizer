@@ -94,27 +94,37 @@ attribute vec4 a_Color;	        // Per-vertex color information we will pass in 
 uniform float  a_DB_Level[50];  // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
 varying vec4   v_Color;         // This will be passed into the fragment shader as the final color values
 uniform float time;
+precision mediump float;        // Set the default precision to high
+
 
 void main() {
-    float scaledTime = time / 700.0;
-    vec2 res = vec2(0.75, 0.75);
+    float scaledTime = time / 1500.0;
+    vec2 res = vec2(0.95, 0.95);
+
+//    float dis = worley5(a_Position.xy/0.2, scaledTime);
+////    vec3 b = mix(vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0), dis);
+////    vec3 b = a_Color.xyz + 0.5;
+//    vec3 black = vec3(0.0, 0.0, 0.0);
+//    vec3 c = mix(a_Color.xyz, black, dis);
+//    v_Color = vec4(c*c, 1.0);
 
     // Creating the noise field
-    vec2 uv = a_Position.xy * 4.0;
-    v_Color = vec4(vec3(fbm(uv, time) * 0.5) + a_Color.xyz,1.0);
+//    vec2 uv = a_Position.xy * 4.0;
+//    v_Color = vec4(vec3(fbm(uv, time) * 0.5) + a_Color.xyz,1.0);
 
-    int distanceIndex = int(sqrt(a_Position.x * a_Position.x + a_Position.y * a_Position.y)*12.);
-
-    float db = a_DB_Level[distanceIndex];
-
-    // Creating the wave itself
-    vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
-    float cLength = length(cPos);
-    vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin((db + a_DB_Level[0]) * cLength * 24.0 - scaledTime) * 0.02;
-    vec4 newPosition = vec4(uv2, a_Position.zw);
+//    int distanceIndex = int(sqrt(a_Position.x * a_Position.x + a_Position.y * a_Position.y)*12.);
+//
+//    float db = a_DB_Level[distanceIndex];
+//
+//    // Creating the wave itself
+//    vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
+//    float cLength = length(cPos);
+//    vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin((db + a_DB_Level[0]) * cLength * 24.0 - scaledTime) * 0.02;
+//    vec4 newPosition = vec4(uv2, a_Position.zw);
 //
 //    // Feeding the position to the fragment shader
-    gl_Position = newPosition;
-//    gl_Position = a_Position;
-    gl_PointSize = 1.0 + a_DB_Level[0];
+//    gl_Position = newPosition;
+    gl_PointSize = 30.0 * a_DB_Level[1];
+    v_Color = a_Color;
+    gl_Position = a_Position;
 }

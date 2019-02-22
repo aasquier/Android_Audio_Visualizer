@@ -29,8 +29,8 @@ public class GLDot {
             Log.d("VISCOLOR", "color: " + Integer.toString(visColor));
 
             for(int j = 0; j < DOT_WIDTH; j++) {
-                vertices[index*7+0] = (float)(-1.0 + 2.0 /(DOT_HEIGHT + 1)*(1+i));
-                vertices[index*7+1] = (float)(-1.0 + 2.0 /(DOT_WIDTH + 1)*(1+j));
+                vertices[index*7+0] = -1.0f + 2.0f /(DOT_WIDTH + 1)*(1+i);
+                vertices[index*7+1] = -1.0f + 2.0f /(DOT_HEIGHT + 1)*(1+j);
                 vertices[index*7+2] = 0.0f;
 //                vertices[index*7+3] = 1.0f; //(float) (Color.red(visColor) * 0.01);
 //                vertices[index*7+4] = 0.0f; //(float) (Color.green(visColor) * 0.01);
