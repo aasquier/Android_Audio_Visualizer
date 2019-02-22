@@ -9,18 +9,26 @@ import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Layout;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.util.Pair;
 
@@ -54,9 +62,19 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     private TextView songTitle;
     private TextView artistName;
 
+    private AnimateLyrics animateLyrics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Get screen dimensions and store in model
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screenWidth = displayMetrics.widthPixels;
+        int screenHeight = displayMetrics.heightPixels;
+
+        this.animateLyrics = new AnimateLyrics(this, screenWidth, screenHeight, VisualizerModel.getInstance().getLyrics());
 
         //Hide title bar
         getSupportActionBar().hide();
@@ -137,7 +155,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         }
 
         //Sets up the visualizer for local files
-        mediaPlayer = MediaPlayer.create(this, R.raw.jazz);
+        mediaPlayer = MediaPlayer.create(this, R.raw.heyya);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
 
@@ -196,6 +214,10 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
         songTitle.requestLayout();
         artistName.requestLayout();
+
+        //Setup lyric animation
+        addContentView(animateLyrics.lyricsTextView, animateLyrics.lyricsParams);
+        animateLyrics.lyricsTextView.requestLayout();
     }
 
     /**
@@ -238,7 +260,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
     @Override
     public void onFftDataCapture(Visualizer visualizer, byte[] fft, int samplingRate) {
-      
+
         /** Gives us the decibel level for the fft bucket we care about **/
         double currentDecibels = getDBs(fft[REAL_BUCKET_INDEX], fft[IMAGINARY_BUCKET_INDEX], this.fftArraySize);
         updateSongAndArtistName();
@@ -246,6 +268,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
          *  refresh the screen based on our 60 fps */
         Pair<Long, Boolean> isTimeToRefreshScreen = updateDecibelHistory(currentDecibels, this.previousUpdateTime);
 
+        animateLyrics.update(); //Check if it's time to display new lyrics
 
         /** Update the screen if the elapsed time has exceeded the threshold set */
         if(isTimeToRefreshScreen.second) {
