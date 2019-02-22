@@ -1,5 +1,6 @@
 package com.example.colecofer.android_audio_visualizer;
 
+import android.graphics.Color;
 import android.opengl.GLES20;
 import android.util.Log;
 
@@ -66,23 +67,27 @@ public class GLLineV3 {
         float xAxis = -1.0f;
         float xOffset = (float) 2 / (SCREEN_VERTICAL_HEIGHT_V3);
 
+        float shiftValue = 0.001f;
+        int visThreeIndex = 2;
+        int visColor = VisualizerModel.getInstance().getColor(visThreeIndex);
+
         for(int i = 0; i < VIS3_ARRAY_SIZE; i+=14){
             // Left side
             this.vertices[vertexIndex] = xAxis;
             this.vertices[vertexIndex+1] = this.leftSide;
             this.vertices[vertexIndex+2] = 0.0f;
-            this.vertices[vertexIndex+3] = 0.9f;
-            this.vertices[vertexIndex+4] = 0.1f;
-            this.vertices[vertexIndex+5] = 0.0f;
+            this.vertices[vertexIndex+3] = (Color.red(visColor) * shiftValue);;
+            this.vertices[vertexIndex+4] = (Color.green(visColor) * shiftValue);
+            this.vertices[vertexIndex+5] = (Color.blue(visColor) * shiftValue);
             this.vertices[vertexIndex+6] = 1.0f;
 
             // Right side
             this.vertices[vertexIndex+7] = xAxis;
             this.vertices[vertexIndex+8] = this.rightSide;
             this.vertices[vertexIndex+9] = 0.0f;
-            this.vertices[vertexIndex+10] = 0.9f;
-            this.vertices[vertexIndex+11] = 0.1f;
-            this.vertices[vertexIndex+12] = 0.0f;
+            this.vertices[vertexIndex+10] = (Color.red(visColor) * shiftValue);;
+            this.vertices[vertexIndex+11] = (Color.green(visColor) * shiftValue);
+            this.vertices[vertexIndex+12] = (Color.blue(visColor) * shiftValue);
             this.vertices[vertexIndex+13] = 1.0f;
 
             // Next y coord
