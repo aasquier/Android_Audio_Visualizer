@@ -258,6 +258,8 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
         songTitle.setText(VisualizerModel.getInstance().trackName);
         artistName.setText(VisualizerModel.getInstance().artistName);
+
+        artistName.setTextColor(VisualizerModel.getInstance().getColor(VisualizerModel.currentVisualizer.visNum - 1));
     }
 
 }
