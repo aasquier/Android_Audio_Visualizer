@@ -1,6 +1,7 @@
 package com.example.colecofer.android_audio_visualizer;
 
 import android.content.Context;
+import android.opengl.GLES10;
 import android.opengl.GLES20;
 import android.util.Log;
 
@@ -58,8 +59,8 @@ public class VisTwo extends VisualizerBase {
     public void draw() {
         FloatBuffer dotVertexData = dot.draw();
 
-        GLES20.glEnable(GLES20.GL_BLEND);
-        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+//        GLES20.glEnable(GLES20.GL_BLEND);
+//        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 
         /** Updates the position of individual dots for our screen rendering in the OpenGL pipeline */
         dotVertexData.position(POSITION_OFFSET);
@@ -72,18 +73,18 @@ public class VisTwo extends VisualizerBase {
         GLES20.glEnableVertexAttribArray(colorHandle);
 
         Float[] temp = decibelHistory.toArray(new Float[0]);
-        float[] dbs = new float[SCREEN_VERTICAL_HEIGHT];
-        for (int i = 0; i < SCREEN_VERTICAL_HEIGHT; ++i) {
+        float[] dbs = new float[temp.length];
+        for (int i = 0; i < temp.length; ++i) {
             dbs[i] = temp[i] == null ? 0.0f : temp[i];
         }
 
         /** Updates the size of the dots using the most current decibel level, i.e. the first element of the decibel history */
-        GLES20.glUniform1fv(currentDecibelLevelHandle, SCREEN_VERTICAL_HEIGHT, dbs, 0);
+        GLES20.glUniform1fv(currentDecibelLevelHandle, dbs.length, dbs, 0);
 
         GLES20.glUniform1f(timeHandle, (float)(System.currentTimeMillis() - visTwoStartTime));
 
         GLES20.glDrawArrays(GLES20.GL_POINTS, 0, DOT_COUNT);
 
-        GLES20.glDisable(GLES20.GL_BLEND);
+//        GLES20.glDisable(GLES20.GL_BLEND);
     }
 }

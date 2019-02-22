@@ -58,8 +58,8 @@ public class Utility {
             float newDbRatio = (float) newDecibelLevel / MAX_DB_LEVEL;
             newDbRatio = newDbRatio > MAX_DECIBEL_RATIO ? MAX_DECIBEL_RATIO : newDbRatio;
             /** Update the decibel history with the current decibel level */
-            decibelHistory.addFirst(newDbRatio);
             decibelHistory.removeLast();
+            decibelHistory.addFirst(newDbRatio);
         }
         return isTimeToUpdate;
     }

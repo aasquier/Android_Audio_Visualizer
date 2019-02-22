@@ -156,7 +156,7 @@ public class GLLine {
 
         Float[] temp = decibelHistory.toArray(new Float[SCREEN_VERTICAL_HEIGHT]);
 
-        float[] dbs = new float[SCREEN_VERTICAL_HEIGHT];
+        float[] dbs = new float[temp.length];
         for (int i = 0; i < SCREEN_VERTICAL_HEIGHT; ++i) {
             dbs[i] = temp[i] == null ? 0.0f : temp[i];
 
@@ -166,7 +166,7 @@ public class GLLine {
         }
 
         /** Updates the size of the dots using the most current decibel level, i.e. the first element of the decibel history */
-        GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, SCREEN_VERTICAL_HEIGHT, dbs, 0);
+        GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, dbs.length, dbs, 0);
 
 //        GLES20.glUniform1f(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, decibelHistory.peekFirst());
 

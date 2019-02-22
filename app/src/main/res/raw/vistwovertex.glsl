@@ -94,14 +94,19 @@ attribute vec4 a_Color;	        // Per-vertex color information we will pass in 
 uniform float  a_DB_Level[50];  // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
 varying vec4   v_Color;         // This will be passed into the fragment shader as the final color values
 uniform float time;
+precision mediump float;        // Set the default precision to high
+
 
 void main() {
-    float scaledTime = time / 700.0;
+    float scaledTime = time / 1500.0;
     vec2 res = vec2(0.95, 0.95);
 
-    float dis = worley5(a_Position.xy/12.0, scaledTime);
-    vec3 c = mix(vec3(1.0,0.95,0.5), vec3(0.7,0.0,0.0), dis);
-    v_Color = vec4(c*c, 1.0);
+//    float dis = worley5(a_Position.xy/0.2, scaledTime);
+////    vec3 b = mix(vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0), dis);
+////    vec3 b = a_Color.xyz + 0.5;
+//    vec3 black = vec3(0.0, 0.0, 0.0);
+//    vec3 c = mix(a_Color.xyz, black, dis);
+//    v_Color = vec4(c*c, 1.0);
 
     // Creating the noise field
 //    vec2 uv = a_Position.xy * 4.0;
@@ -119,6 +124,7 @@ void main() {
 //
 //    // Feeding the position to the fragment shader
 //    gl_Position = newPosition;
+    gl_PointSize = 30.0 * a_DB_Level[1];
+    v_Color = a_Color;
     gl_Position = a_Position;
-    gl_PointSize = 1.0 + a_DB_Level[0];
 }
