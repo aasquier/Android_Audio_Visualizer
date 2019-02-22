@@ -13,6 +13,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.AMPLIFIER
 import static com.example.colecofer.android_audio_visualizer.Constants.BYTES_PER_FLOAT;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
+import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_SHIFT_FACTOR;
 import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_LINE_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_LINE_SIZE_V3;
 import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_DRAW_BOUNDARY;
@@ -67,7 +68,6 @@ public class GLLineV3 {
         float xAxis = -1.0f;
         float xOffset = (float) 2 / (SCREEN_VERTICAL_HEIGHT_V3);
 
-        float shiftValue = 0.001f;
         int visThreeIndex = 2;
         int visColor = VisualizerModel.getInstance().getColor(visThreeIndex);
 
@@ -76,18 +76,18 @@ public class GLLineV3 {
             this.vertices[vertexIndex] = xAxis;
             this.vertices[vertexIndex+1] = this.leftSide;
             this.vertices[vertexIndex+2] = 0.0f;
-            this.vertices[vertexIndex+3] = (Color.red(visColor) * shiftValue);;
-            this.vertices[vertexIndex+4] = (Color.green(visColor) * shiftValue);
-            this.vertices[vertexIndex+5] = (Color.blue(visColor) * shiftValue);
+            this.vertices[vertexIndex+3] = (Color.red(visColor) * COLOR_SHIFT_FACTOR);;
+            this.vertices[vertexIndex+4] = (Color.green(visColor) * COLOR_SHIFT_FACTOR);
+            this.vertices[vertexIndex+5] = (Color.blue(visColor) * COLOR_SHIFT_FACTOR);
             this.vertices[vertexIndex+6] = 1.0f;
 
             // Right side
             this.vertices[vertexIndex+7] = xAxis;
             this.vertices[vertexIndex+8] = this.rightSide;
             this.vertices[vertexIndex+9] = 0.0f;
-            this.vertices[vertexIndex+10] = (Color.red(visColor) * shiftValue);;
-            this.vertices[vertexIndex+11] = (Color.green(visColor) * shiftValue);
-            this.vertices[vertexIndex+12] = (Color.blue(visColor) * shiftValue);
+            this.vertices[vertexIndex+10] = (Color.red(visColor) * COLOR_SHIFT_FACTOR);;
+            this.vertices[vertexIndex+11] = (Color.green(visColor) * COLOR_SHIFT_FACTOR);
+            this.vertices[vertexIndex+12] = (Color.blue(visColor) * COLOR_SHIFT_FACTOR);
             this.vertices[vertexIndex+13] = 1.0f;
 
             // Next y coord
