@@ -11,7 +11,7 @@ final class Constants {
     static final int BYTES_PER_FLOAT = 4;
 
     /** Visualizer Switching */
-    static final boolean SHOULD_SWITCH_VIS = false;                       //Set to false if you do not want to rotate visualizers
+    static final boolean SHOULD_SWITCH_VIS = true;                       //Set to false if you do not want to rotate visualizers
     static final boolean SHOULD_LOOP_VIS   = true;                       //Set to true if you want the final visualizer to loop back to the first
     static final int SWITCH_VIS_TIME       = 5000;                      //Number of milliseconds to wait before switching
 
@@ -79,7 +79,7 @@ final class Constants {
     static final int SCREEN_VERTICAL_HEIGHT_V3 = 50;
     static final int VIS3_VERTEX_COUNT         = (SCREEN_VERTICAL_HEIGHT_V3)*2;
     static final int VIS3_ARRAY_SIZE           = VIS3_VERTEX_COUNT * 7;
-    static final int LINE_AMT_V3               = 40;
+    static final int LINE_AMT_V3               = 20;
     static final float AMPLIFIER_V3            = 0.000025f;
     static final float DEFAULT_LINE_SIZE_V3    = 0.0000000002f;
 

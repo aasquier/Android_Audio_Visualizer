@@ -142,18 +142,14 @@ public class GLLineV3 {
         GLES20.glUniform1f(timeHandle, (float)(System.currentTimeMillis() - startTime));
 
         /** dbLevel Handle */
-        Float[] temp = decibelHistory.toArray(new Float[SCREEN_VERTICAL_HEIGHT]);
+        Float[] temp = decibelHistory.toArray(new Float[0]);
 
-        float[] dbs = new float[SCREEN_VERTICAL_HEIGHT];
-        for (int i = 0; i < SCREEN_VERTICAL_HEIGHT; ++i) {
+        float[] dbs = new float[temp.length];
+        for (int i = 0; i < temp.length; ++i) {
             dbs[i] = temp[i] == null ? 0.0f : temp[i];
-
-//            if (Math.random() > 0.5) {
-//                dbs[i] *= -1;
-//            }
         }
 
-        GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, SCREEN_VERTICAL_HEIGHT, dbs, 0);
+        GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, dbs.length, dbs, 0);
 
         /** finally draw buffer */
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, VIS3_VERTEX_COUNT);
