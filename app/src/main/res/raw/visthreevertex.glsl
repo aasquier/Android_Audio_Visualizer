@@ -61,15 +61,7 @@ void main() {           		    // The entry point for our vertex shader.
     newPosition.y += noise * a_DB_Level[0] * 0.06;
     if (newPosition.y > 1.0 || newPosition.y < -1.0) {
         v_Color = vec4(0.0, 0.0, 0.0, 0.0);
-    } //else if (newPosition.y < -1.0) {
-
-    //}
-
-    // -------- mirror effect (comment out temporary) --------------
-
-    //if (newPosition.y < 0.0) {
-    //    newPosition.y = -newPosition.y - 1.04;
-    //}
+    }
 
     // -------- apply final result --------------
 

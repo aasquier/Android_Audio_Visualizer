@@ -75,12 +75,11 @@ public class VisThree extends VisualizerBase {
     public void draw(float[] mvpMatrix) {
 
         // ---------- bottom left -----------
-        Matrix.setIdentityM(matrix,0);
-//        Matrix.setRotateM(matrix, 0, 45, 0, 0, -1.0f);
-        Matrix.translateM(matrix,0,-0.493f,-0.5f,0);
-        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);
+        Matrix.setIdentityM(matrix,0);                                   // clean matrix buffer
+        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
+        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);            // move vertex to location
 
-        Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);
+        Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);  // apply final effect
 
         GLES20.glUniformMatrix4fv(this.matrixHandle, 1, false, matrix, 0);
 
@@ -90,12 +89,12 @@ public class VisThree extends VisualizerBase {
         }
 
         // ---------- bottom right -----------
-        Matrix.setIdentityM(matrix,0);
-//        Matrix.setRotateM(matrix, 0, 45, 0, 0, -1.0f);
-        Matrix.translateM(matrix,0,0.493f,-0.5f,0);
-        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);
+        Matrix.setIdentityM(matrix,0);                                   // clean matrix buffer
+        Matrix.scaleM(matrix, 0, -1.0f, 1.0f, 1.0f);            // flip vertex
+        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
+        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);            // move vertex to location
 
-        Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);
+        Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);  // apply final effect
 
         GLES20.glUniformMatrix4fv(this.matrixHandle, 1, false, matrix, 0);
 
@@ -105,12 +104,12 @@ public class VisThree extends VisualizerBase {
         }
 
         // ---------- top left -----------
-        Matrix.setIdentityM(matrix,0);
-//        Matrix.setRotateM(matrix, 0, 45, 0, 0, -1.0f);
-        Matrix.translateM(matrix,0,-0.493f,0.5f,0);
-        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);
+        Matrix.setIdentityM(matrix,0);                                   // clean matrix buffer
+        Matrix.scaleM(matrix, 0, 1.0f, -1.0f, 1.0f);            // flip vertex
+        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
+        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);             // move vertex to location
 
-        Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);
+        Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);  // apply final effect
 
         GLES20.glUniformMatrix4fv(this.matrixHandle, 1, false, matrix, 0);
 
@@ -120,12 +119,12 @@ public class VisThree extends VisualizerBase {
         }
 
         // ---------- top right -----------
-        Matrix.setIdentityM(matrix,0);
-//        Matrix.setRotateM(matrix, 0, 45, 0, 0, -1.0f);
-        Matrix.translateM(matrix,0,0.493f,0.5f,0);
-        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);
+        Matrix.setIdentityM(matrix,0);                                   // clean matrix buffer
+        Matrix.scaleM(matrix, 0, -1.0f, -1.0f, 1.0f);           // flip vertex
+        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
+        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);            // move vertex to location
 
-        Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);
+        Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);  // apply final effect
 
         GLES20.glUniformMatrix4fv(this.matrixHandle, 1, false, matrix, 0);
 
