@@ -59,6 +59,11 @@ void main() {           		    // The entry point for our vertex shader.
 
     float noise = snoise(newPosition.xy);
     newPosition.y += noise * a_DB_Level[0] * 0.06;
+    if (newPosition.y > 1.0 || newPosition.y < -1.0) {
+        v_Color = vec4(0.0, 0.0, 0.0, 0.0);
+    } //else if (newPosition.y < -1.0) {
+
+    //}
 
     // -------- mirror effect (comment out temporary) --------------
 
@@ -68,5 +73,5 @@ void main() {           		    // The entry point for our vertex shader.
 
     // -------- apply final result --------------
 
-    gl_Position = newPosition; 	    // gl_Position is a special variable used to store the final position.
+    gl_Position = u_MVPMatrix * newPosition; 	    // gl_Position is a special variable used to store the final position.
 }

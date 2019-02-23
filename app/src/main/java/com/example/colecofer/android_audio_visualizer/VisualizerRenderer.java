@@ -2,6 +2,7 @@ package com.example.colecofer.android_audio_visualizer;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
 import android.util.Log;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -12,6 +13,10 @@ import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_POSI
 import static com.example.colecofer.android_audio_visualizer.Constants.SHOULD_SWITCH_VIS;
 
 public class VisualizerRenderer implements GLSurfaceView.Renderer {
+
+    private final float[] mvpMatrix = new float[16];
+    private final float[] projectionMatrix = new float[16];
+    private final float[] viewMatrix = new float[16];
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -115,6 +120,9 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         gl.glViewport(0, 0, width, height);
+
+        float ratio = (float) width / height;
+        Matrix.frustumM(projectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
     }
 
 
@@ -126,6 +134,13 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         }
 
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
-        VisualizerModel.getInstance().currentVisualizer.draw();
+
+        // Set the default camera position (View matrix)
+        Matrix.setLookAtM(viewMatrix, 0, 0, 0, -3, 0f, 0.0f, 0f, 0f, 1.0f, 0.0f);
+
+        // Calculate the default projection and view transformation
+        Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
+
+        VisualizerModel.getInstance().currentVisualizer.draw(mvpMatrix);
     }
 }

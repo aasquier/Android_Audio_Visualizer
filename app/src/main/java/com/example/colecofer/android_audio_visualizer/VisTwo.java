@@ -55,7 +55,7 @@ public class VisTwo extends VisualizerBase {
     }
 
     @Override
-    public void draw() {
+    public void draw(float[] mvpMatrix) {
         FloatBuffer dotVertexData = dot.draw();
 
         GLES20.glEnable(GLES20.GL_BLEND);

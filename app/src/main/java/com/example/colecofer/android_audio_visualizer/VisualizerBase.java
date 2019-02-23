@@ -16,6 +16,7 @@ abstract public class VisualizerBase {
     protected int currentDecibelLevelHandle;
     protected int currentFragmentDecibelLevelHandle;
     protected int timeHandle;
+    protected int matrixHandle;
     int visNum;  //A unique integer value to represent each visualizer
 
     protected int fftArraySize;
@@ -85,7 +86,7 @@ abstract public class VisualizerBase {
      * This method will be in charge of calling the individual draw() methods
      * of other items that need to be rendered.
      */
-    abstract public void draw();
+    abstract public void draw(float[] mvpMatrix);
 
 
 }

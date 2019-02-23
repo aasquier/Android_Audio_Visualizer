@@ -52,6 +52,7 @@ final class Constants {
     static final String GLSL_POSITION_HANDLE = "a_Position";
     static final String GLSL_COLOR_HANDLE    = "a_Color";
     static final String GLSL_DB_LEVEL        = "a_DB_Level";
+    static final String GLSL_MATRIX          = "u_MVPMatrix";
     static final String GLSL_TIME            = "time";
 
     /** Vis1 constants */
