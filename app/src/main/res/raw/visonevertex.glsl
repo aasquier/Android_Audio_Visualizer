@@ -205,7 +205,8 @@ uniform float a_DB_Level[50];       // Decibel level history, need to change the
 
 void main() {           		    // The entry point for our vertex shader.
     vec2 res = vec2(0.95, 0.95);
-    float scaledTime = time / 4500.0;
+//    float scaledTime = time / 4500.0;
+    float scaledTime = time / 10000.0;
 
 //    int positionIndex;
 //    if(a_Position.y >= 0.) {
