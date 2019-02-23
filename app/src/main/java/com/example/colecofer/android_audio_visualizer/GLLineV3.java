@@ -40,11 +40,11 @@ public class GLLineV3 {
 
     /**
      * Constructor
-     * @param xPosition: Current line's base position
+     * @param yPosition: Current line's base position
      */
-    public GLLineV3(float xPosition) {
+    public GLLineV3(float yPosition) {
 
-        this.leftSide = xPosition;   // Current line's left side coord
+        this.leftSide = yPosition;   // Current line's left side coord
 //        this.rightSide = leftSide + 0.005f;  // Current line's right side coord
         this.rightSide = leftSide + 0.004f;  // Current line's right side coord
 
@@ -66,7 +66,7 @@ public class GLLineV3 {
 
         int vertexIndex = 0;
         float xAxis = -1.0f;
-        float xOffset = (float) 2 / (SCREEN_VERTICAL_HEIGHT_V3);
+        float xOffset = (float) 2 / (SCREEN_VERTICAL_HEIGHT_V3 - 1);
 
         int visThreeIndex = 2;
         int visColor = VisualizerModel.getInstance().getColor(visThreeIndex);
@@ -149,7 +149,21 @@ public class GLLineV3 {
         GLES20.glEnableVertexAttribArray(colorHandle);
 
         /** Time Handle */
-        GLES20.glUniform1f(timeHandle, (float)(System.currentTimeMillis() - startTime));
+        GLES20.glUniform1f(VisualizerModel.getInstance().currentVisualizer.timeHandle, (float)(System.currentTimeMillis() - startTime));
+
+        Float[] temp = decibelHistory.toArray(new Float[SCREEN_VERTICAL_HEIGHT]);
+
+        float[] dbs = new float[temp.length];
+        for (int i = 0; i < SCREEN_VERTICAL_HEIGHT; ++i) {
+            dbs[i] = temp[i] == null ? 0.0f : temp[i];
+
+//            if (Math.random() > 0.5) {
+//                dbs[i] *= -1;
+//            }
+        }
+
+        /** Updates the size of the dots using the most current decibel level, i.e. the first element of the decibel history */
+        GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, dbs.length, dbs, 0);
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, VIS3_VERTEX_COUNT);
 
