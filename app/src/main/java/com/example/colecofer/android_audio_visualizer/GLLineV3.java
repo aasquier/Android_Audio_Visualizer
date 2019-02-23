@@ -103,11 +103,10 @@ public class GLLineV3 {
         // Change to object array to traverse
         Float[] decibelArray = decibelHistory.toArray(new Float[SCREEN_VERTICAL_HEIGHT]);
 
-        int leftOffset = 0;
-        int rightOffset = (SCREEN_VERTICAL_HEIGHT_V3-1) * 14;
+        int offset = 0;
 
         // Only loop for the size of the decibel array size
-        for(int i = 0; i < SCREEN_VERTICAL_HEIGHT_V3/2; i++) {
+        for(int i = 0; i < SCREEN_VERTICAL_HEIGHT_V3; i++) {
             // Calculate the coordinates after the amplification
             // Left side needs to move in negative direction
             // Right side needs to move in positive direction
@@ -119,14 +118,10 @@ public class GLLineV3 {
             float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE_V3 + (AMPLIFIER_V3 * currentDecibel)));
             float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE_V3 + (AMPLIFIER_V3 * currentDecibel)));
 
-            this.vertices[leftOffset+1] = ampDataLeft;
-            this.vertices[rightOffset+1] = ampDataLeft;
+            this.vertices[offset+1] = ampDataLeft;
+            this.vertices[offset+8] = ampDataRight;
 
-            this.vertices[leftOffset+8] = ampDataRight;
-            this.vertices[rightOffset+8] = ampDataRight;
-
-            leftOffset += 14;
-            rightOffset -= 14;
+            offset += 14;
         }
 
         FloatBuffer lineVerticesInput = ByteBuffer.allocateDirect(this.vertices.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
@@ -151,6 +146,17 @@ public class GLLineV3 {
         /** Time Handle */
         GLES20.glUniform1f(timeHandle, (float)(System.currentTimeMillis() - startTime));
 
+        /** dbLevel Handle */
+        Float[] temp = decibelHistory.toArray(new Float[0]);
+
+        float[] dbs = new float[temp.length];
+        for (int i = 0; i < temp.length; ++i) {
+            dbs[i] = temp[i] == null ? 0.0f : temp[i];
+        }
+
+        GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, dbs.length, dbs, 0);
+
+        /** finally draw buffer */
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, VIS3_VERTEX_COUNT);
 
 

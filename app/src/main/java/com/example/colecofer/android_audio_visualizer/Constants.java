@@ -56,6 +56,7 @@ final class Constants {
     static final String GLSL_POSITION_HANDLE = "a_Position";
     static final String GLSL_COLOR_HANDLE    = "a_Color";
     static final String GLSL_DB_LEVEL        = "a_DB_Level";
+    static final String GLSL_MATRIX          = "u_MVPMatrix";
     static final String GLSL_TIME            = "time";
     static final float COLOR_SHIFT_FACTOR    = 0.005f;
 
@@ -83,7 +84,7 @@ final class Constants {
     static final int SCREEN_VERTICAL_HEIGHT_V3 = 50;
     static final int VIS3_VERTEX_COUNT         = (SCREEN_VERTICAL_HEIGHT_V3)*2;
     static final int VIS3_ARRAY_SIZE           = VIS3_VERTEX_COUNT * 7;
-    static final int LINE_AMT_V3               = 40;
+    static final int LINE_AMT_V3               = 20;
     static final float AMPLIFIER_V3            = 0.000025f;
     static final float DEFAULT_LINE_SIZE_V3    = 0.0000000002f;
 

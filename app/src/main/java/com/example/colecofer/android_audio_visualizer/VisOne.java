@@ -66,7 +66,7 @@ public class VisOne extends VisualizerBase {
      * Calls line's draw call
      */
     @Override
-    public void draw() {
+    public void draw(float[] mvpMatrix) {
         //Go through each line and draw them
         for(int i = 0; i < LINE_AMT; ++i) {
             lines[i].draw(this.positionHandle, this.colorHandle, this.visOneStartTime);
