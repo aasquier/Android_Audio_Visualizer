@@ -31,6 +31,8 @@ import static com.example.colecofer.android_audio_visualizer.Constants.PERCENTAG
  * inside of a TextView.
  */
 public class AnimateLyrics {
+    private static final int OPACITY_UPDATE_INC = 10; //Amount of opacity to add each time update is called
+
     static TextView lyricsTextView;
     static ViewGroup.MarginLayoutParams lyricsParams;
 
@@ -42,6 +44,7 @@ public class AnimateLyrics {
     private int lyricIndex;
     private int screenWidth;
     private int screenHeight;
+    private int counter = 0;
 
 
     /**
@@ -91,12 +94,10 @@ public class AnimateLyrics {
         int numWordsInLyricSegment = this.rawLyrics.get(this.lyricSegmentIndex).second.length;
 
         if (currTime >= lyricDisplayTime && this.lyricSegmentIndex < this.lyricSegments) {
-            List<SpannableString> lyricsToDisplay = new ArrayList<SpannableString>();
+            this.currLyrics = new ArrayList<>();
 
             //Check if there are more lyrics after this one
             if(this.lyricSegmentIndex + 1 < (this.lyricSegments - 1)) {
-
-                this.lyricIndex += 1;
 
                 //Populate currLyrics with words in the current lyric segment
                 for (int i = 0; i < numWordsInLyricSegment; ++i) {
@@ -104,23 +105,9 @@ public class AnimateLyrics {
                     this.currLyrics.add(new Pair<>(word, 0x00FFFFFF));
                 }
 
-                //Display each word one at a time while incrementing the opacity
-                for (int i = 0; i < this.lyricIndex && i < numWordsInLyricSegment; ++i) {
-                    SpannableString word = new SpannableString(rawLyrics.get(this.lyricSegmentIndex).second[i]);
-                    word.setSpan(new ForegroundColorSpan(0xFFFFFFFF), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    Log.d("test", word.toString());
-                }
-
-                //Create one string to display the lyrics
-                for (Pair<SpannableString, Integer> lyric: this.currLyrics) {
-                    SpannableString word = lyric.first;
-                    lyricsToDisplay.add(word);
-                }
-
-
-
                 this.lyricSegmentIndex += 1; //Index to the next lyric
 
+                //Code to display second line
                 //                //Check if the lyrics are close enough so that we can display them at the same time
                 //                if (rawLyrics.get(this.lyricIndex + 1).first - rawLyrics.get(this.lyricIndex).first
                 //                        < DISPLAY_MULTILINE_PROXIMITY) {
@@ -133,18 +120,51 @@ public class AnimateLyrics {
                 //                    this.lyricIndex += 1;
                 //                }
             }
-            this.displayLyrics(lyricsToDisplay);
         }
 
-        //Update the opacity as long as we have lyrics to display
-        if (this.lyricSegmentIndex < this.lyricSegments) {
-            this.updateOpacity();
-        }
+        this.updateOpacity(numWordsInLyricSegment);
 
     }
 
+    /**
+     * Update the opacity of each word one at a time
+     * @param numWordsInLyricSegment
+     */
+    void updateOpacity(int numWordsInLyricSegment) {
+        List<SpannableString> lyricsToDisplay = new ArrayList<>();
 
-    private void updateOpacity() {
+        //Check that there are still lyrics to display
+        if (this.lyricSegmentIndex < this.lyricSegments) {
+
+            //Alter the opacity one word at a time
+            for (int i = 0; i < this.lyricIndex && i < numWordsInLyricSegment; ++i) {
+                SpannableString word = new SpannableString(rawLyrics.get(this.lyricSegmentIndex).second[i]);
+                int colorSpan = rawLyrics.get(this.lyricSegmentIndex).first;
+
+                if (counter % 100 == 0) {
+                    int opacity = Color.alpha(colorSpan) + OPACITY_UPDATE_INC;
+
+                    int updatedColor = opacity + Color.red(colorSpan) + Color.green(colorSpan) + Color.blue(colorSpan); // Not sure if this works as expected
+                    Log.d("test", updatedColor + ", opacity: " + opacity);
+                    word.setSpan(new ForegroundColorSpan(updatedColor), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    currLyrics.set(i, new Pair<>(word, colorSpan));
+                }
+                ++counter;
+
+//                int updatedColor = opacity + Color.red(colorSpan) + Color.green(colorSpan) + Color.blue(colorSpan); // Not sure if this works as expected
+//                word.setSpan(new ForegroundColorSpan(updatedColor), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+
+            //Create one string to display the lyrics
+            for (Pair<SpannableString, Integer> lyric: this.currLyrics) {
+                SpannableString word = lyric.first;
+                lyricsToDisplay.add(word);
+            }
+
+            //Increment to the next word
+            this.lyricIndex += 1;
+            this.displayLyrics(lyricsToDisplay);
+        }
 
     }
 
