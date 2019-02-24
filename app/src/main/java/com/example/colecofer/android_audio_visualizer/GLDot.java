@@ -20,7 +20,7 @@ public class GLDot {
     public GLDot() {
 
         float[] vertices = new float[DOT_COUNT * 7];
-        float COLOR_SHIFT_FACTOR_V2 = 0.005f;
+        float COLOR_SHIFT_FACTOR_V2 = 0.009f;
 
         int index = 0;
 
@@ -37,7 +37,7 @@ public class GLDot {
                 vertices[index*7+3] = (Color.red(visColor) * COLOR_SHIFT_FACTOR_V2);
                 vertices[index*7+4] = (Color.green(visColor) * COLOR_SHIFT_FACTOR_V2);
                 vertices[index*7+5] = (Color.blue(visColor) * COLOR_SHIFT_FACTOR_V2);
-                vertices[index*7+6] = 1.0f;
+                vertices[index*7+6] = 0.2f;
 
                 index++;
             }
