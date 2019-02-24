@@ -143,10 +143,12 @@ public class AnimateLyrics {
 
                 if (counter % 100 == 0) {
                     int opacity = Color.alpha(colorSpan) + OPACITY_UPDATE_INC;
-
-                    int updatedColor = opacity + Color.red(colorSpan) + Color.green(colorSpan) + Color.blue(colorSpan); // Not sure if this works as expected
+                    String updatedColor = String.format("%02xFFFFFF", opacity);
+                    Log.d("test", "colorint: " + Long.parseLong(updatedColor, 16));
                     Log.d("test", updatedColor + ", opacity: " + opacity);
-                    word.setSpan(new ForegroundColorSpan(updatedColor), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    int colorAsInt = (int) Integer.parseInt(updatedColor, 16);
+
+                    word.setSpan(new ForegroundColorSpan(colorAsInt), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     currLyrics.set(i, new Pair<>(word, colorSpan));
                 }
                 ++counter;
@@ -176,12 +178,13 @@ public class AnimateLyrics {
      */
     private void displayLyrics(List<SpannableString> lyrics) {
         int wordsAmt = lyrics.size();
-        String lyricsToDisplay = "";
+//        String lyricsToDisplay = "";
         for (int i = 0; i < wordsAmt; ++i) {
-            lyricsToDisplay += " " + lyrics.get(i);
+            this.lyricsTextView.append(lyrics.get(i));
+//            lyricsToDisplay += " " + lyrics.get(i);
         }
 //        Log.d("test", lyricsToDisplay);
-        this.lyricsTextView.setText(lyricsToDisplay);
+//        this.lyricsTextView.setText(lyricsToDisplay);
     }
 
 
