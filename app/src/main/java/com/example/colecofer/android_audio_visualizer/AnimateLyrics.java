@@ -36,12 +36,12 @@ public class AnimateLyrics {
 
     private Typeface lyricsTypeface;
     private ArrayList<Pair<Integer, String[]>> rawLyrics;         //Holds the lyrics as plain Strings with their timestamps to be displayed
-    private ArrayList<Pair<SpannableString, Long>> currLyrics;    //Lyrics that are actively being displayed with their curr opacity
+    private ArrayList<Pair<SpannableString, Integer>> currLyrics; //Lyrics that are actively being displayed with their curr opacity
     private int lyricSegments = 0;                                //Total amount of lyric segments
-    private int lyricIndex = 0;
+    private int lyricSegmentIndex = 0;
+    private int lyricIndex;
     private int screenWidth;
     private int screenHeight;
-
 
 
     /**
@@ -65,7 +65,9 @@ public class AnimateLyrics {
         //Lyric Containers
         this.rawLyrics = (ArrayList<Pair<Integer, String[]>>) lyricList.clone();
         this.lyricSegments = this.rawLyrics.size();
+        this.lyricSegmentIndex = 0;
         this.lyricIndex = 0;
+        this.currLyrics = new ArrayList<>();
 
         //Screen dimensions
         this.screenWidth = screenWidth;
@@ -84,40 +86,65 @@ public class AnimateLyrics {
     public void update() {
 
         //Calc time to display the lyric
-        float lyricDisplayTime = rawLyrics.get(this.lyricIndex).first - LYRIC_DISPLAY_OFFSET;
+        float lyricDisplayTime = rawLyrics.get(this.lyricSegmentIndex).first - LYRIC_DISPLAY_OFFSET;
         float currTime = VisualizerActivity.mediaPlayer.getCurrentPosition();
+        int numWordsInLyricSegment = this.rawLyrics.get(this.lyricSegmentIndex).second.length;
 
-        if (currTime >= lyricDisplayTime && this.lyricIndex < this.lyricSegments) {
+        if (currTime >= lyricDisplayTime && this.lyricSegmentIndex < this.lyricSegments) {
             List<SpannableString> lyricsToDisplay = new ArrayList<SpannableString>();
 
             //Check if there are more lyrics after this one
-            //TODO: Investigate subtracting one from lyric list. The last value might be null and could be a bug in adding lyrics.
-            if(this.lyricIndex +1 < (this.lyricSegments - 1)) {
+            if(this.lyricSegmentIndex + 1 < (this.lyricSegments - 1)) {
 
-                //Add the first line of lyrics into lyricsToDisplay list
-                for (String lyric : rawLyrics.get(this.lyricIndex).second) {
-                    //TODO: Convert String to Spannable String here...
-                    //TODO: Another option might be to store them as spannable strings in the first place
-                    SpannableString lyricSpan = new SpannableString(lyric);
-                    lyricsToDisplay.add(lyricSpan);
+                this.lyricIndex += 1;
+
+                //Populate currLyrics with words in the current lyric segment
+                for (int i = 0; i < numWordsInLyricSegment; ++i) {
+                    SpannableString word = new SpannableString(rawLyrics.get(this.lyricSegmentIndex).second[i]);
+                    this.currLyrics.add(new Pair<>(word, 0x00FFFFFF));
                 }
 
-                this.lyricIndex += 1; //Index to the next lyric
-
-                //Check if the lyrics are close enough so that we can display them at the same time
-                if (rawLyrics.get(this.lyricIndex + 1).first - rawLyrics.get(this.lyricIndex).first
-                        < DISPLAY_MULTILINE_PROXIMITY) {
-
-                    //Add the second line of lyrics into the to be displayed list
-                    for (String lyric : rawLyrics.get(this.lyricIndex).second) {
-                        SpannableString lyricSpan = new SpannableString(lyric);
-                        lyricsToDisplay.add(lyricSpan);
-                    }
-                    this.lyricIndex += 1;
+                //Display each word one at a time while incrementing the opacity
+                for (int i = 0; i < this.lyricIndex && i < numWordsInLyricSegment; ++i) {
+                    SpannableString word = new SpannableString(rawLyrics.get(this.lyricSegmentIndex).second[i]);
+                    word.setSpan(new ForegroundColorSpan(0xFFFFFFFF), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    Log.d("test", word.toString());
                 }
+
+                //Create one string to display the lyrics
+                for (Pair<SpannableString, Integer> lyric: this.currLyrics) {
+                    SpannableString word = lyric.first;
+                    lyricsToDisplay.add(word);
+                }
+
+
+
+                this.lyricSegmentIndex += 1; //Index to the next lyric
+
+                //                //Check if the lyrics are close enough so that we can display them at the same time
+                //                if (rawLyrics.get(this.lyricIndex + 1).first - rawLyrics.get(this.lyricIndex).first
+                //                        < DISPLAY_MULTILINE_PROXIMITY) {
+                //
+                //                    //Add the second line of lyrics into the to be displayed list
+                //                    for (String lyric : rawLyrics.get(this.lyricIndex).second) {
+                //                        SpannableString lyricSpan = new SpannableString(lyric);
+                //                        lyricsToDisplay.add(lyricSpan);
+                //                    }
+                //                    this.lyricIndex += 1;
+                //                }
             }
             this.displayLyrics(lyricsToDisplay);
         }
+
+        //Update the opacity as long as we have lyrics to display
+        if (this.lyricSegmentIndex < this.lyricSegments) {
+            this.updateOpacity();
+        }
+
+    }
+
+
+    private void updateOpacity() {
 
     }
 
@@ -133,6 +160,7 @@ public class AnimateLyrics {
         for (int i = 0; i < wordsAmt; ++i) {
             lyricsToDisplay += " " + lyrics.get(i);
         }
+//        Log.d("test", lyricsToDisplay);
         this.lyricsTextView.setText(lyricsToDisplay);
     }
 
