@@ -102,6 +102,9 @@ public class GLLine {
 
         int xOffset = 0;
 
+        float currentDecibel = 0.0f;
+        float db = 0.0f;
+
         // Only loop for the size of the decibel array size
         for(int i = 0; i < SCREEN_VERTICAL_HEIGHT; i++){
             // Calculate the coordinates after the amplification
@@ -113,7 +116,17 @@ public class GLLine {
             // Will come back to it later
             //TODO: Figure out what is going on with this algorithm
 
-            float currentDecibel = (float) decibelArray[i] <= 0.66 ? 15.0f : (float) decibelArray[i] * 170.0f;
+//            float currentDecibel = (float) decibelArray[i] <= 0.5f ? 15.0f : 170.0f;
+            db = (float) decibelArray[i];
+
+            if(db <= 0.4) {
+                currentDecibel = 1.0f;
+            } else if (db <= 0.66) {
+                currentDecibel = 30.0f;
+            } else {
+                currentDecibel = 160.0f;
+            }
+
 
             float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE + AMPLIFIER * currentDecibel));
             float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE + AMPLIFIER * currentDecibel));
