@@ -46,7 +46,7 @@ public class GLLineV3 {
 
         this.leftSide = xPosition;   // Current line's left side coord
 //        this.rightSide = leftSide + 0.005f;  // Current line's right side coord
-        this.rightSide = leftSide + 0.004f;  // Current line's right side coord
+        this.rightSide = leftSide;  // + 0.04f; Current line's right side coord
 
 
         // Initialize the current line's base vertices
@@ -66,7 +66,7 @@ public class GLLineV3 {
 
         int vertexIndex = 0;
         float xAxis = -1.0f;
-        float xOffset = (float) 2 / (SCREEN_VERTICAL_HEIGHT_V3);
+        float xOffset = (float) 2 / (SCREEN_VERTICAL_HEIGHT_V3) + 0.0032f;
 
         int visThreeIndex = 2;
         int visColor = VisualizerModel.getInstance().getColor(visThreeIndex);
@@ -101,7 +101,7 @@ public class GLLineV3 {
      */
     public void updateVertices() {
         // Change to object array to traverse
-        Float[] decibelArray = decibelHistory.toArray(new Float[SCREEN_VERTICAL_HEIGHT]);
+        Float[] decibelArray = decibelHistory.toArray(new Float[0]);
 
         int offset = 0;
 
@@ -112,7 +112,7 @@ public class GLLineV3 {
             // Right side needs to move in positive direction
             // Amplification should be half for both sides because Amplification = left + right
 
-            float currentDecibel = decibelArray[i] <= 0.66 ? 15.0f : decibelArray[i] * 170.0f;
+            float currentDecibel = decibelArray[i] <= 0.7 ? 15.0f : 170.0f;
 
             // V3 version
             float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE_V3 + (AMPLIFIER_V3 * currentDecibel)));

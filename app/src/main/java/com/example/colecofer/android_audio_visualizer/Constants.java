@@ -61,7 +61,7 @@ final class Constants {
     static final float COLOR_SHIFT_FACTOR    = 0.005f;
 
     /** Vis1 constants */
-    static final int LINE_AMT              = 50;                  //Number of lines to display on the screen
+    static final int LINE_AMT              = 100;                  //Number of lines to display on the screen
     static final float AMP_MULT            = 0.000005f;           //Alters the lines horizontal amplitude
     static final int VERTEX_AMOUNT         = 7;                   //x, y, z, r, g, b, a
     static final float LEFT_DRAW_BOUNDARY  = -0.99f;              //Where to start drawing on the left side of the screen
@@ -81,24 +81,24 @@ final class Constants {
     static final int DOT_COUNT  = DOT_WIDTH * DOT_HEIGHT;
 
     /** Vis3 constants */
-    static final int SCREEN_VERTICAL_HEIGHT_V3 = 50;
+    static final int SCREEN_VERTICAL_HEIGHT_V3 = 20;
     static final int VIS3_VERTEX_COUNT         = (SCREEN_VERTICAL_HEIGHT_V3)*2;
     static final int VIS3_ARRAY_SIZE           = VIS3_VERTEX_COUNT * 7;
     static final int LINE_AMT_V3               = 20;
     static final float AMPLIFIER_V3            = 0.000025f;
-    static final float DEFAULT_LINE_SIZE_V3    = 0.0000000002f;
+    static final float DEFAULT_LINE_SIZE_V3    = 0.002f;
 
     /** VisualizerActivity constants */
     static final int REQUEST_PERMISSION     = 101;
     static final int REAL_BUCKET_INDEX      = 3;
     static final int IMAGINARY_BUCKET_INDEX = 4;
     static final int MAX_FFT_ARRAY_SIZE     = 1024;
-    static final int SCREEN_VERTICAL_HEIGHT = 50;
+    static final int SCREEN_VERTICAL_HEIGHT = 20;
     static final int VIS1_VERTEX_COUNT      = SCREEN_VERTICAL_HEIGHT + SCREEN_VERTICAL_HEIGHT;
     static final int VIS1_ARRAY_SIZE        = VIS1_VERTEX_COUNT * 7;
     static final float PIXEL                = 0.0009f;
-    static final float AMPLIFIER            = 0.0000075f;
-    static final float DEFAULT_LINE_SIZE    = 0.0002f;
+    static final float AMPLIFIER            = 0.0000095f;
+    static final float DEFAULT_LINE_SIZE    = 0.00009f;
 
 
     /** VisualizerModel constants */

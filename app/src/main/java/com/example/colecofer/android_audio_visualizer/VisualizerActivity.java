@@ -155,7 +155,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         }
 
         //Sets up the visualizer for local files
-        mediaPlayer = MediaPlayer.create(this, R.raw.heyya);
+        mediaPlayer = MediaPlayer.create(this, R.raw.hypnotize);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
 
