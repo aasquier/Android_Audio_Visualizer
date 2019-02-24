@@ -82,6 +82,25 @@ public class Utility {
         return new Pair(previousUpdateTime, success);
     }
 
+//    /**
+//     * Checks if it has been our predefined interval since last dB record update
+//     *
+//     * @param previousUpdateTime
+//     * @return
+//     */
+//    static Boolean isTimeToUpdateOpacity(long previousUpdateTime) {
+//        Boolean success;
+//        Long currentTime = System.currentTimeMillis();
+//        if (previousUpdateTime + REFRESH_DECIBEL_TIME <= currentTime) {
+//            previousUpdateTime = currentTime;
+//            success = true;
+//        } else {
+//            success = false;
+//        }
+//        return success;
+//        //return new Pair(previousUpdateTime, success);
+//    }
+
     /**
      * Convert a glsl file into  a string for each visualizer
      *
