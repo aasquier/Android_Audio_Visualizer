@@ -81,7 +81,7 @@ final class Constants {
     static final int DOT_COUNT  = DOT_WIDTH * DOT_HEIGHT;
 
     /** Vis3 constants */
-    static final int SCREEN_VERTICAL_HEIGHT_V3 = 20;
+    static final int SCREEN_VERTICAL_HEIGHT_V3 = 25;
     static final int VIS3_VERTEX_COUNT         = (SCREEN_VERTICAL_HEIGHT_V3)*2;
     static final int VIS3_ARRAY_SIZE           = VIS3_VERTEX_COUNT * 7;
     static final int LINE_AMT_V3               = 20;
@@ -93,7 +93,7 @@ final class Constants {
     static final int REAL_BUCKET_INDEX      = 3;
     static final int IMAGINARY_BUCKET_INDEX = 4;
     static final int MAX_FFT_ARRAY_SIZE     = 1024;
-    static final int SCREEN_VERTICAL_HEIGHT = 20;
+    static final int SCREEN_VERTICAL_HEIGHT = 25;
     static final int VIS1_VERTEX_COUNT      = SCREEN_VERTICAL_HEIGHT + SCREEN_VERTICAL_HEIGHT;
     static final int VIS1_ARRAY_SIZE        = VIS1_VERTEX_COUNT * 7;
     static final float PIXEL                = 0.0009f;

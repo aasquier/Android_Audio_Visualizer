@@ -66,7 +66,7 @@ public class GLLineV3 {
 
         int vertexIndex = 0;
         float xAxis = -1.0f;
-        float xOffset = (float) 2 / (SCREEN_VERTICAL_HEIGHT_V3) + 0.0032f;
+        float xOffset = (float) 2 / (SCREEN_VERTICAL_HEIGHT_V3) + 0.0017f;
 
         int visThreeIndex = 2;
         int visColor = VisualizerModel.getInstance().getColor(visThreeIndex);
@@ -101,9 +101,11 @@ public class GLLineV3 {
      */
     public void updateVertices() {
         // Change to object array to traverse
-        Float[] decibelArray = decibelHistory.toArray(new Float[0]);
+        Float[] decibelFloatArray = decibelHistory.toArray(new Float[0]);
 
         int offset = 0;
+        float highlightingFactor;
+        float averageDecibels;
 
         // Only loop for the size of the decibel array size
         for(int i = 0; i < SCREEN_VERTICAL_HEIGHT_V3; i++) {
@@ -112,11 +114,29 @@ public class GLLineV3 {
             // Right side needs to move in positive direction
             // Amplification should be half for both sides because Amplification = left + right
 
-            float currentDecibel = decibelArray[i] <= 0.7 ? 15.0f : 170.0f;
+            switch(i) {
+                case 0:                          averageDecibels = decibelFloatArray[0] + decibelFloatArray[1] + decibelFloatArray[2] + decibelFloatArray[3] + decibelFloatArray[4]; break;
+                case 1:                          averageDecibels = decibelFloatArray[1] + decibelFloatArray[2] + decibelFloatArray[3] + decibelFloatArray[4] + decibelFloatArray[5]; break;
+                case SCREEN_VERTICAL_HEIGHT - 2: averageDecibels = decibelFloatArray[SCREEN_VERTICAL_HEIGHT - 6] + decibelFloatArray[SCREEN_VERTICAL_HEIGHT - 5] + + decibelFloatArray[SCREEN_VERTICAL_HEIGHT - 4] +decibelFloatArray[SCREEN_VERTICAL_HEIGHT - 3] +decibelFloatArray[SCREEN_VERTICAL_HEIGHT - 2]; break;
+                case SCREEN_VERTICAL_HEIGHT - 1: averageDecibels = decibelFloatArray[SCREEN_VERTICAL_HEIGHT - 5] + decibelFloatArray[SCREEN_VERTICAL_HEIGHT - 4] + + decibelFloatArray[SCREEN_VERTICAL_HEIGHT - 3] +decibelFloatArray[SCREEN_VERTICAL_HEIGHT - 2] +decibelFloatArray[SCREEN_VERTICAL_HEIGHT - 1]; break;
+                default:                         averageDecibels = decibelFloatArray[i-2] + decibelFloatArray[i-1] + decibelFloatArray[i] + decibelFloatArray[i+1] + decibelFloatArray[i+2]; break;
+            }
+
+            averageDecibels /= 5.0f;
+
+            if(averageDecibels <= 0.40) {
+                highlightingFactor = 1.0f;
+            } else if (averageDecibels <= 0.475) {
+                highlightingFactor = 30.0f;
+            } else if (averageDecibels <= 0.55){
+                highlightingFactor = 50.0f;
+            } else {
+                highlightingFactor = 140.0f;
+            }
 
             // V3 version
-            float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE_V3 + (AMPLIFIER_V3 * currentDecibel)));
-            float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE_V3 + (AMPLIFIER_V3 * currentDecibel)));
+            float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE_V3 + (AMPLIFIER_V3 * highlightingFactor)));
+            float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE_V3 + (AMPLIFIER_V3 * highlightingFactor)));
 
             this.vertices[offset+1] = ampDataLeft;
             this.vertices[offset+8] = ampDataRight;
@@ -149,12 +169,12 @@ public class GLLineV3 {
         /** dbLevel Handle */
         Float[] temp = decibelHistory.toArray(new Float[0]);
 
-        float[] dbs = new float[temp.length];
+        float[] decibelsFloatArray = new float[temp.length];
         for (int i = 0; i < temp.length; ++i) {
-            dbs[i] = temp[i] == null ? 0.0f : temp[i];
+            decibelsFloatArray[i] = temp[i] == null ? 0.0f : temp[i];
         }
 
-        GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, dbs.length, dbs, 0);
+        GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, decibelsFloatArray.length, decibelsFloatArray, 0);
 
         /** finally draw buffer */
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, VIS3_VERTEX_COUNT);
