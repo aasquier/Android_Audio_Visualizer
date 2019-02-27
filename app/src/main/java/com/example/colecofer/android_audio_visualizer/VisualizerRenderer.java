@@ -35,6 +35,7 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
         int positionHandle;
         int colorHandle;
 
+        // TODO this is here in case changing the background can help us in some way for vis2
         if(VisualizerModel.getInstance().currentVisualizer instanceof VisTwo) {
             GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         } else {

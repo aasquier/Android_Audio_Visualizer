@@ -14,12 +14,12 @@ abstract public class VisualizerBase {
     protected int positionHandle;
     protected int colorHandle;
     protected int currentDecibelLevelHandle;
-    protected int currentFragmentDecibelLevelHandle;
     protected int timeHandle;
     protected int matrixHandle;
-    int visNum;  //A unique integer value to represent each visualizer
+    protected int scalingLevelArrayHandle;
 
-    protected int fftArraySize;
+    int visNum;  // A unique integer value to represent each visualizer
+
     protected String vertexShader;
     protected String fragmentShader;
 
@@ -39,34 +39,6 @@ abstract public class VisualizerBase {
     }
 
     /**
-     * Set the position handle
-     * This is necessary so that the renderer can update the position handle by giving it a reference
-     * "handle": really just an index for OpenGL to use
-     * @param positionHandle
-     */
-    public void setPositionHandle(int positionHandle) { this.positionHandle = positionHandle; }
-
-    /**
-     * Set the color handle
-     * This is necessary so that the renderer can update the color handle by giving it a reference
-     * "handle": really just an index for OpenGL to use
-     * @param colorHandle
-     */
-    public void setColorHandle(int colorHandle) { this.colorHandle = colorHandle; }
-
-    /**
-     * Set the decibelLevel handle
-     * This is necessary so that the renderer can update the deicbelLevel handle by giving it a reference
-     * "handle": really just an index for OpenGL to use
-     * @param currentDecibelLevel
-     */
-    public void setCurrentDecibelLevelHandle(int currentDecibelLevel) { this.currentDecibelLevelHandle = currentDecibelLevel; }
-
-
-    public void setCurrentFragmentDecibelLevelHandle(int currentDecibelLevel) { this.currentFragmentDecibelLevelHandle = currentDecibelLevel; }
-
-
-    /**
      * Resets the position and color handle.
      * This is useful for when switching visualizers during track playback.
      */
@@ -74,8 +46,6 @@ abstract public class VisualizerBase {
         GLES20.glDisableVertexAttribArray(positionHandle);
         GLES20.glDisableVertexAttribArray(colorHandle);
     }
-
-    public void setTimeHandle(int timeHandle) { this.timeHandle = timeHandle; }
 
     /**
      * Called from the Renderer and should be used to update animations
