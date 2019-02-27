@@ -29,7 +29,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.PERCENTAG
  * inside of a TextView.
  */
 public class AnimateLyrics {
-    private static final int OPACITY_UPDATE_INC = 10; //Amount of opacity to add each time update is called
+    private static final int OPACITY_UPDATE_INC = 1; //Amount of opacity to add each time update is called
 
     static TextView lyricsTextView;
     static ViewGroup.MarginLayoutParams lyricsParams;
@@ -96,7 +96,7 @@ public class AnimateLyrics {
 
             //Check if there are more lyrics after this one
             //TODO: Check for null value in passed rawLyrics (shouldn't have to subtract one)
-            if(this.rawLyricsIndex + 1 < (this.sizeOfRawLyricsList - 1)) {
+            if(this.rawLyricsIndex < (this.sizeOfRawLyricsList - 1)) {
 
                 //Populate currentLyricsList with words in the current lyric segment
                 for (int i = 0; i < numWordsInLyricSegment; ++i) {
@@ -108,37 +108,41 @@ public class AnimateLyrics {
             }
             this.lyricIndex = 0;
         }
-        this.updateOpacity(numWordsInLyricSegment);
+        this.updateOpacity();
     }
 
     /**
      * Update the opacity of each word one at a time
-     * @param numWordsInLyricSegment
      */
-    void updateOpacity(int numWordsInLyricSegment) {
+    void updateOpacity() {
         List<SpannableString> lyricsToDisplay = new ArrayList<>();
+        int currentLyricListSize = currentLyricsList.size();
 
         //Check that there are still lyrics to display
 //        if (this.rawLyricsIndex < this.sizeOfRawLyricsList) {
-            if (this.lyricIndex < numWordsInLyricSegment) {
+            if (this.lyricIndex < currentLyricListSize) {
 
             //Alter the opacity one word at a time
-            for (int i = 0; i <= this.lyricIndex && i < numWordsInLyricSegment; ++i) {
-//                SpannableString word = new SpannableString(rawLyricsList.get(this.rawLyricsIndex).second[i]);
+            for (int i = 0; i <= this.lyricIndex && i < currentLyricListSize; ++i) {
+                Log.d("test", "lyricIndex i: " + i);
+                Log.d("test", "currentLyricSize: " + currentLyricListSize);
                 SpannableString word = new SpannableString(currentLyricsList.get(i).first);
-                int colorSpan = rawLyricsList.get(this.rawLyricsIndex).first;
+                int colorSpan = currentLyricsList.get(i).second;
 
-                if (counter % 100 == 0) {
-                    int opacity = Color.alpha(colorSpan) + OPACITY_UPDATE_INC;
-                    String updatedColor = String.format("%02xFFFFFF", opacity);
-                    Log.d("test", "colorint: " + Long.parseLong(updatedColor, 16));
-                    Log.d("test", updatedColor + ", opacity: " + opacity);
-                    int colorAsInt = (int) Integer.parseInt(updatedColor, 16);
+                //Counter is here just to slow down the opacity increments
+//                if (counter % 100 == 0) {
+                int opacity = Color.alpha(colorSpan) + OPACITY_UPDATE_INC;
+                String updatedColor = String.format("%02xFFFFFF", opacity);
+                int colorAsInt = (int) Integer.parseInt(updatedColor, 16);
 
-                    word.setSpan(new ForegroundColorSpan(colorAsInt), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    currentLyricsList.set(i, new Pair<>(word, colorSpan));
-                }
-                ++counter;
+                word.setSpan(new ForegroundColorSpan(colorAsInt), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                Log.d("test", updatedColor + ", opacity: " + opacity);
+
+                currentLyricsList.set(i, new Pair<>(word, colorAsInt));
+//                counter = 0;
+//                }
+//                ++counter;
 
 //                int updatedColor = opacity + Color.red(colorSpan) + Color.green(colorSpan) + Color.blue(colorSpan); // Not sure if this works as expected
 //                word.setSpan(new ForegroundColorSpan(updatedColor), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
