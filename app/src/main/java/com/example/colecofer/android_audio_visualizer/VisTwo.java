@@ -1,12 +1,9 @@
 package com.example.colecofer.android_audio_visualizer;
 
 import android.content.Context;
-import android.opengl.GLES10;
 import android.opengl.GLES20;
-import android.util.Log;
 
 import java.nio.FloatBuffer;
-import java.util.Iterator;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
@@ -15,7 +12,6 @@ import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_DB_L
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_TIME;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_OFFSET;
-import static com.example.colecofer.android_audio_visualizer.Constants.SCREEN_VERTICAL_HEIGHT;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS2_STRIDE_BYTES;
 import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
 

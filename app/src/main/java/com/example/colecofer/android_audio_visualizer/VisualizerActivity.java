@@ -9,26 +9,14 @@ import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Layout;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.util.Pair;
 
@@ -42,7 +30,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.IMAGINARY
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_FFT_ARRAY_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.REAL_BUCKET_INDEX;
 import static com.example.colecofer.android_audio_visualizer.Constants.REQUEST_PERMISSION;
-import static com.example.colecofer.android_audio_visualizer.Constants.SCREEN_VERTICAL_HEIGHT;
+import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Utility.getDBs;
 import static com.example.colecofer.android_audio_visualizer.Utility.updateDecibelHistory;
 import static com.loopj.android.http.AsyncHttpClient.log;
@@ -231,7 +219,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     /** Sets the decibel history to all 0.0 to begin with */
     private void initDecibelHistory() {
         this.decibelHistory = new ConcurrentLinkedDeque<>();
-        for(int i = 0; i < SCREEN_VERTICAL_HEIGHT; ++i) {
+        for(int i = 0; i < DECIBEL_HISTORY_SIZE; ++i) {
             this.decibelHistory.addFirst(0.0f);
         }
     }
