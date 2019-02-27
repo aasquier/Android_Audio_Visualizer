@@ -30,7 +30,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.PERCENTAG
  * inside of a TextView.
  */
 public class AnimateLyrics {
-    private static final int OPACITY_UPDATE_INC = 50; //Amount of opacity to add each time update is called
+    private static final int OPACITY_UPDATE_INC = 10; //Amount of opacity to add each time update is called
 
     static TextView lyricsTextView;
     static ViewGroup.MarginLayoutParams lyricsParams;
@@ -131,17 +131,17 @@ public class AnimateLyrics {
                 int opacity = Color.alpha(colorSpan) + OPACITY_UPDATE_INC;
                 if (opacity > 255) opacity = 255;
 
-                Log.d("test", "Opacity: " + opacity);
+                //Log.d("test", "Opacity: " + opacity);
                 String updatedColor = String.format("#%02xFFFFFF", opacity);
                 int colorAsInt = Color.parseColor(updatedColor);
-                Log.d("test", "Updated color: " + updatedColor);
+                //Log.d("test", "Updated color: " + updatedColor);
 
                 word.setSpan(new ForegroundColorSpan(colorAsInt), 0, word.length(), Spannable.SPAN_COMPOSING);
 
                 currentLyricsList.set(i, new Pair<>(word, colorAsInt));
             }
 
-            this.lyricsTextView.setText("");
+            this.lyricsTextView.setText(new SpannableString(""));
             //Create one string to display the lyrics
             for (Pair<SpannableString, Integer> lyric: this.currentLyricsList) {
                 this.lyricsTextView.append(lyric.first);
