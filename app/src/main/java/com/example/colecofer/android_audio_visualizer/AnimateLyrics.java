@@ -10,6 +10,7 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.util.Pair;
 import android.util.TypedValue;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -29,7 +30,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.PERCENTAG
  * inside of a TextView.
  */
 public class AnimateLyrics {
-    private static final int OPACITY_UPDATE_INC = 10; //Amount of opacity to add each time update is called
+    private static final int OPACITY_UPDATE_INC = 50; //Amount of opacity to add each time update is called
 
     static TextView lyricsTextView;
     static ViewGroup.MarginLayoutParams lyricsParams;
@@ -128,15 +129,16 @@ public class AnimateLyrics {
 
                 //Counter is here just to slow down the opacity increments
                 int opacity = Color.alpha(colorSpan) + OPACITY_UPDATE_INC;
-                Log.d("test", "Opacity: " + opacity);
-                String updatedColor = String.format("%02xFFFFFF", opacity);
-                Log.d("test", "Updated color: " + updatedColor);
-                int colorAsInt = (int) Integer.parseInt(updatedColor, 16);
+                if (opacity > 255) opacity = 255;
 
-                word.setSpan(new ForegroundColorSpan(colorAsInt), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                Log.d("test", "Opacity: " + opacity);
+                String updatedColor = String.format("#%02xFFFFFF", opacity);
+                int colorAsInt = Color.parseColor(updatedColor);
+                Log.d("test", "Updated color: " + updatedColor);
+
+                word.setSpan(new ForegroundColorSpan(colorAsInt), 0, word.length(), Spannable.SPAN_COMPOSING);
 
                 currentLyricsList.set(i, new Pair<>(word, colorAsInt));
-
             }
 
             this.lyricsTextView.setText("");
@@ -145,8 +147,10 @@ public class AnimateLyrics {
                 this.lyricsTextView.append(lyric.first);
             }
 
-            //Increment to the next word
-            this.lyricIndex += 1;
+            // Increment to the next word
+            if (this.lyricIndex < (currentLyricListSize - 1)) {
+                this.lyricIndex += 1;
+            }
         }
 
     }
