@@ -29,7 +29,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.PERCENTAG
  * inside of a TextView.
  */
 public class AnimateLyrics {
-    private static final int OPACITY_UPDATE_INC = 1; //Amount of opacity to add each time update is called
+    private static final int OPACITY_UPDATE_INC = 10; //Amount of opacity to add each time update is called
 
     static TextView lyricsTextView;
     static ViewGroup.MarginLayoutParams lyricsParams;
@@ -42,7 +42,6 @@ public class AnimateLyrics {
     private int lyricIndex;
     private int screenWidth;
     private int screenHeight;
-    private int counter = 0;
 
 
     /**
@@ -100,7 +99,7 @@ public class AnimateLyrics {
 
                 //Populate currentLyricsList with words in the current lyric segment
                 for (int i = 0; i < numWordsInLyricSegment; ++i) {
-                    SpannableString word = new SpannableString(rawLyricsList.get(this.rawLyricsIndex).second[i]);
+                    SpannableString word = new SpannableString(rawLyricsList.get(this.rawLyricsIndex).second[i] + " ");
                     this.currentLyricsList.add(new Pair<>(word, 0x00FFFFFF));
                 }
 
@@ -124,60 +123,47 @@ public class AnimateLyrics {
 
             //Alter the opacity one word at a time
             for (int i = 0; i <= this.lyricIndex && i < currentLyricListSize; ++i) {
-                Log.d("test", "lyricIndex i: " + i);
-                Log.d("test", "currentLyricSize: " + currentLyricListSize);
                 SpannableString word = new SpannableString(currentLyricsList.get(i).first);
                 int colorSpan = currentLyricsList.get(i).second;
 
                 //Counter is here just to slow down the opacity increments
-//                if (counter % 100 == 0) {
                 int opacity = Color.alpha(colorSpan) + OPACITY_UPDATE_INC;
+                Log.d("test", "Opacity: " + opacity);
                 String updatedColor = String.format("%02xFFFFFF", opacity);
+                Log.d("test", "Updated color: " + updatedColor);
                 int colorAsInt = (int) Integer.parseInt(updatedColor, 16);
 
                 word.setSpan(new ForegroundColorSpan(colorAsInt), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                Log.d("test", updatedColor + ", opacity: " + opacity);
-
                 currentLyricsList.set(i, new Pair<>(word, colorAsInt));
-//                counter = 0;
-//                }
-//                ++counter;
 
-//                int updatedColor = opacity + Color.red(colorSpan) + Color.green(colorSpan) + Color.blue(colorSpan); // Not sure if this works as expected
-//                word.setSpan(new ForegroundColorSpan(updatedColor), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
+            this.lyricsTextView.setText("");
             //Create one string to display the lyrics
             for (Pair<SpannableString, Integer> lyric: this.currentLyricsList) {
-                SpannableString word = lyric.first;
-                lyricsToDisplay.add(word);
+                this.lyricsTextView.append(lyric.first);
             }
 
             //Increment to the next word
             this.lyricIndex += 1;
-            this.displayLyrics(lyricsToDisplay);
         }
 
     }
 
 
-    /**
-     * Takes an array of lyrics and displays them to
-     * the lyric animation TextView.
-     * @param lyrics String array of lyrics (word by word)
-     */
-    private void displayLyrics(List<SpannableString> lyrics) {
-        int wordsAmt = lyrics.size();
-        //String lyricsToDisplay = "";
-        for (int i = 0; i < wordsAmt; ++i) {
-            this.lyricsTextView.setText(lyrics.get(i));
-            //this.lyricsTextView.append(lyrics.get(i));
-            //lyricsToDisplay += " " + lyrics.get(i);
-        }
-        //Log.d("test", lyricsToDisplay);
-        //this.lyricsTextView.setText(lyricsToDisplay);
-    }
+//    /**
+//     * Takes an array of lyrics and displays them to
+//     * the lyric animation TextView.
+//     * @param lyrics String array of lyrics (word by word)
+//     */
+//    private void displayLyrics(List<SpannableString> lyrics) {
+//        int wordsAmt = lyrics.size();
+//        this.lyricsTextView.setText("");  //Wipe out the lyrics in the textview
+//        for (int i = 0; i < wordsAmt; ++i) {
+//            this.lyricsTextView.append(lyrics.get(i) + " ");
+//        }
+//    }
 
 }
 
