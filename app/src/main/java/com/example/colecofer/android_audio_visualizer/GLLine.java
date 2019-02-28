@@ -28,6 +28,7 @@ public class GLLine {
     private FloatBuffer lineVerticesBuffer;
     private float[] vertices;
     private float[] scalingLevel;
+    private FloatBuffer scalingLevelBuffer;
     private float leftSide;
     private float rightSide;
 
@@ -41,7 +42,7 @@ public class GLLine {
         this.rightSide = leftSide + PIXEL;  // Current line's right side coord
 
         // TODO This is to possibly pass in to the shader
-        this.scalingLevel = new float[DECIBEL_HISTORY_SIZE];
+        this.scalingLevel = new float[DECIBEL_HISTORY_SIZE*2];
 
         // Initialize the current line's base vertices
         createBaseLine();
@@ -102,6 +103,7 @@ public class GLLine {
 
         float highlightingFactor;
         float averageDecibels;
+        int scalerIndex = 0;
 
         // Only loop for the size of the decibel array size
         for(int i = 0; i < DECIBEL_HISTORY_SIZE; i++){
@@ -120,18 +122,24 @@ public class GLLine {
             }
 
             // TODO placeholder
-            scalingLevel[i] = 0.0f;
-
             averageDecibels /= 5.0f;
 
             if(averageDecibels <= 0.40) {
                 highlightingFactor = 1.0f;
+                this.scalingLevel[scalerIndex] = 0.1f;
+                this.scalingLevel[scalerIndex+1] = 0.1f;
             } else if (averageDecibels <= 0.475) {
                 highlightingFactor = 30.0f;
+                this.scalingLevel[scalerIndex] = 0.1f;
+                this.scalingLevel[scalerIndex+1] = 0.1f;
             } else if (averageDecibels <= 0.55){
                 highlightingFactor = 50.0f;
+                this.scalingLevel[scalerIndex] = 0.1f;
+                this.scalingLevel[scalerIndex+1] = 0.1f;
             } else {
                 highlightingFactor = 140.0f;
+                this.scalingLevel[scalerIndex] = 1.2f;
+                this.scalingLevel[scalerIndex+1] = 1.2f;
             }
 
             float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE + AMPLIFIER * highlightingFactor));
@@ -140,12 +148,17 @@ public class GLLine {
             this.vertices[xOffset+7] = ampDataRight;
 
             xOffset += 14;
+            scalerIndex += 2;
         }
 
 
         FloatBuffer fftInput = ByteBuffer.allocateDirect(this.vertices.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         fftInput.put(this.vertices).position(0);
         this.lineVerticesBuffer = fftInput;
+
+        FloatBuffer scaleInput = ByteBuffer.allocateDirect(this.scalingLevel.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        scaleInput.put(this.scalingLevel).position(0);
+        this.scalingLevelBuffer = scaleInput;
     }
 
     /**
@@ -161,8 +174,6 @@ public class GLLine {
         this.lineVerticesBuffer.position(COLOR_OFFSET);
         GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, this.lineVerticesBuffer);
         GLES20.glEnableVertexAttribArray(colorHandle);
-
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, VIS1_VERTEX_COUNT);
 
         GLES20.glUniform1f(VisualizerModel.getInstance().currentVisualizer.timeHandle, (float) (System.currentTimeMillis() - visOneStartTime));
 
@@ -181,7 +192,10 @@ public class GLLine {
         /** Updates the size of the dots using the most current decibel level, i.e. the first element of the decibel history */
         GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, dbs.length, dbs, 0);
 
-        GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.scalingLevelArrayHandle, this.scalingLevel.length, this.scalingLevel, 0);
+//        GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.scalingLevelArrayHandle, this.scalingLevel.length, this.scalingLevel, 0);
+        GLES20.glVertexAttribPointer(VisualizerModel.getInstance().currentVisualizer.scalingLevelArrayHandle, 1, GLES20.GL_FLOAT, false, BYTES_PER_FLOAT, this.scalingLevelBuffer);
+        GLES20.glEnableVertexAttribArray(VisualizerModel.getInstance().currentVisualizer.scalingLevelArrayHandle);
 
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, VIS1_VERTEX_COUNT);
     }
 }

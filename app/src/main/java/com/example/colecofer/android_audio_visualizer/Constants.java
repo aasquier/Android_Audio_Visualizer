@@ -3,7 +3,7 @@ package com.example.colecofer.android_audio_visualizer;
 final class Constants {
 
     /** Visualizer Switching */
-    static final boolean SHOULD_SWITCH_VIS = true;                       //Set to false if you do not want to rotate visualizers
+    static final boolean SHOULD_SWITCH_VIS = false;                       //Set to false if you do not want to rotate visualizers
     static final boolean SHOULD_LOOP_VIS   = true;                       //Set to true if you want the final visualizer to loop back to the first
     static final int SWITCH_VIS_TIME       = 5000;                      //Number of milliseconds to wait before switching
 
@@ -14,8 +14,6 @@ final class Constants {
     static final int REAL_BUCKET_INDEX      = 3;
     static final int IMAGINARY_BUCKET_INDEX = 4;
     static final int MAX_FFT_ARRAY_SIZE     = 1024;
-    static final int VIS1_VERTEX_COUNT      = DECIBEL_HISTORY_SIZE + DECIBEL_HISTORY_SIZE;
-    static final int VIS1_ARRAY_SIZE        = VIS1_VERTEX_COUNT * 7;
     static final float PIXEL                = 0.0009f;
     static final float AMPLIFIER            = 0.0000095f;
     static final float DEFAULT_LINE_SIZE    = 0.00009f;
@@ -75,6 +73,8 @@ final class Constants {
 
     /** Vis1 constants */
     static final int LINE_AMT              = 100;                  //Number of lines to display on the screen
+    static final int VIS1_VERTEX_COUNT      = DECIBEL_HISTORY_SIZE + DECIBEL_HISTORY_SIZE;
+    static final int VIS1_ARRAY_SIZE        = VIS1_VERTEX_COUNT * 7;
     static final float AMP_MULT            = 0.000005f;           //Alters the lines horizontal amplitude
     static final int VERTEX_AMOUNT         = 7;                   //x, y, z, r, g, b, a
     static final float LEFT_DRAW_BOUNDARY  = -0.99f;              //Where to start drawing on the left side of the screen
