@@ -90,6 +90,14 @@ public class GLLine {
             yAxis += yOffset;
             vertexIndex+= (VERTEX_AMOUNT*2);
         }
+
+        for(int i = 0; i < this.scalingLevel.length; i++){
+            this.scalingLevel[i] = 0.0f;
+        }
+
+        FloatBuffer scaleInput = ByteBuffer.allocateDirect(this.scalingLevel.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        scaleInput.put(this.scalingLevel).position(0);
+        this.scalingLevelBuffer = scaleInput;
     }
 
     /**
@@ -171,6 +179,7 @@ public class GLLine {
      */
     public void draw(int positionHandle, int colorHandle, Long visOneStartTime) {
         while (decibelHistory.peekFirst() == null) { continue; }
+        while (scalingLevelBuffer == null) { continue; }
 
         this.lineVerticesBuffer.position(POSITION_OFFSET);
         GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, this.lineVerticesBuffer);
