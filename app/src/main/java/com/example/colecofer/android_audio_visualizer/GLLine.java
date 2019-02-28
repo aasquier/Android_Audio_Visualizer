@@ -42,6 +42,7 @@ public class GLLine {
         this.rightSide = leftSide + PIXEL;  // Current line's right side coord
 
         // TODO This is to possibly pass in to the shader
+        // The size need to match the vertex array size because it'll be an attribute variable
         this.scalingLevel = new float[DECIBEL_HISTORY_SIZE*2];
 
         // Initialize the current line's base vertices
@@ -124,6 +125,9 @@ public class GLLine {
             // TODO placeholder
             averageDecibels /= 5.0f;
 
+            // Adding scaler value depending on the decibel
+            // And it needs two because there are two points per y-axis
+            // The value that's being initialized needs to be played with to have a smoother or more better looking visualizer
             if(averageDecibels <= 0.40) {
                 highlightingFactor = 1.0f;
                 this.scalingLevel[scalerIndex] = 0.1f;
@@ -156,6 +160,7 @@ public class GLLine {
         fftInput.put(this.vertices).position(0);
         this.lineVerticesBuffer = fftInput;
 
+        // Setting FloatBuffer for the scaler
         FloatBuffer scaleInput = ByteBuffer.allocateDirect(this.scalingLevel.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         scaleInput.put(this.scalingLevel).position(0);
         this.scalingLevelBuffer = scaleInput;
@@ -192,6 +197,7 @@ public class GLLine {
         /** Updates the size of the dots using the most current decibel level, i.e. the first element of the decibel history */
         GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, dbs.length, dbs, 0);
 
+        // Pushing scaler buffer up to the GPU for Attribute variable
 //        GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.scalingLevelArrayHandle, this.scalingLevel.length, this.scalingLevel, 0);
         GLES20.glVertexAttribPointer(VisualizerModel.getInstance().currentVisualizer.scalingLevelArrayHandle, 1, GLES20.GL_FLOAT, false, BYTES_PER_FLOAT, this.scalingLevelBuffer);
         GLES20.glEnableVertexAttribArray(VisualizerModel.getInstance().currentVisualizer.scalingLevelArrayHandle);

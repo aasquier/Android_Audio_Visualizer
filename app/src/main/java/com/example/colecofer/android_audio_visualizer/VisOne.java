@@ -55,6 +55,7 @@ public class VisOne extends VisualizerBase {
         this.currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, GLSL_DB_LEVEL);
         this.timeHandle = GLES20.glGetUniformLocation(programHandle, GLSL_TIME);
 //        this.scalingLevelArrayHandle = GLES20.glGetUniformLocation(programHandle, GLSL_SCALING_LEVEL_ARRAY);
+        // Getting the scaler handle
         this.scalingLevelArrayHandle = GLES20.glGetAttribLocation(programHandle, GLSL_SCALING_LEVEL_ARRAY);
     }
 

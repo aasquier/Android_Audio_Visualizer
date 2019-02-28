@@ -95,6 +95,8 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
             // Bind position and color attributes
             GLES20.glBindAttribLocation(programHandle, 0, GLSL_POSITION_HANDLE);
             GLES20.glBindAttribLocation(programHandle, 1, GLSL_COLOR_HANDLE);
+
+            // Setting the scaler value into the program and it's done here because it's an attribute not an uniform
             GLES20.glBindAttribLocation(programHandle, 2, GLSL_SCALING_LEVEL_ARRAY);
 
             // Link the two shaders together into a program.
