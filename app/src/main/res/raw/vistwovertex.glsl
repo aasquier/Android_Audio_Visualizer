@@ -94,7 +94,7 @@ attribute vec4 a_Color;	        // Per-vertex color information we will pass in 
 uniform float  a_DB_Level[50];  // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
 varying vec4   v_Color;         // This will be passed into the fragment shader as the final color values
 uniform float time;
-precision highp float;        // Set the default precision to high
+precision highp float;          // Set the default precision to high
 
 
 void main() {
@@ -124,28 +124,5 @@ void main() {
 //    v_Color = a_Color;
 //    // Feeding the position to the fragment shader
 //    gl_Position = newPosition;
-    gl_Position = a_Position * u_MVPMatrix;
+    gl_Position = a_Position;
 }
-
-
-//    float scaledTime = time;
-//    vec2 res = vec2(0.85, 0.85);
-//
-//    // Creating the noise field
-//    vec2 uv = a_Position.xy * 11.0;
-//    v_Color = vec4(vec3(fbm(uv, time) * 0.5) + a_Color.xyz,1.0);
-//
-//    int distanceIndex = int(sqrt(a_Position.x * a_Position.x + a_Position.y * a_Position.y)*49.);
-//
-//    float db = a_DB_Level[distanceIndex];
-//
-//    // Creating the wave itself
-//    vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
-//    float cLength = length(cPos);
-//    vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(db * cLength * 12.0 - scaledTime * 4.0) * 0.02;
-//    vec4 newPosition = vec4(uv2, a_Position.zw);
-////
-////    // Feeding the position to the fragment shader
-//    gl_Position = newPosition;
-////    gl_Position = a_Position;
-//    gl_PointSize = 1.0 + a_DB_Level[0];
