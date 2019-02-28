@@ -101,9 +101,9 @@ void main() {
     float scaledTime = time;
     vec2 res = vec2(0.95, 0.95);
 
-    // Creating the noise field
-    vec2 uv = a_Position.xy * 4.0;
-    vec4 newColor = vec4(vec3(fbm(uv, time) * 0.5) + a_Color.xyz, a_Color.w);
+//    // Creating the noise field
+//    vec2 uv = a_Position.xy * 4.0;
+//    vec4 newColor = vec4(vec3(fbm(uv, time) * 0.5) + a_Color.xyz/2., 0.0);
 
 //    int distanceIndex = int(floor(sqrt(a_Position.x * a_Position.x + a_Position.y * a_Position.y)*5.));
 //
@@ -119,12 +119,12 @@ void main() {
 //        newColor.xyz = mix(newColor.xyz, vec3(0.0,0.0,0.0), 0.7);
 //    }
 
-    v_Color = newColor;
-//
+//    v_Color = newColor;
+    v_Color = a_Color;
 //    // Feeding the position to the fragment shader
 //    gl_Position = newPosition;
+    gl_PointSize = 0.00025 + 0.001 * a_DB_Level[0];
     gl_Position = a_Position;
-    gl_PointSize = 0.25 + a_DB_Level[0];
 }
 
 
