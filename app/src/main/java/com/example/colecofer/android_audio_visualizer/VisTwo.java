@@ -3,6 +3,7 @@ package com.example.colecofer.android_audio_visualizer;
 import android.content.Context;
 import android.opengl.GLES10;
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 import android.util.Log;
 
 import java.nio.FloatBuffer;
@@ -15,6 +16,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.DOT_COUNT
 import static com.example.colecofer.android_audio_visualizer.Constants.DOT_HEIGHT;
 import static com.example.colecofer.android_audio_visualizer.Constants.DOT_WIDTH;
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_DB_LEVEL;
+import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_MATRIX;
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_TIME;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_OFFSET;
@@ -28,6 +30,8 @@ public class VisTwo extends VisualizerBase {
     private GLDot dot;
     private Utility util;
     private long visTwoStartTime;
+    private final float[] transformationMatrix = new float[16];
+
 
     /**
      *
@@ -52,6 +56,7 @@ public class VisTwo extends VisualizerBase {
         this.colorHandle = colorHandle;
         this.currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, GLSL_DB_LEVEL);
         this.timeHandle = GLES20.glGetUniformLocation(programHandle, GLSL_TIME);
+        this.matrixHandle = GLES20.glGetUniformLocation(programHandle, GLSL_MATRIX);
     }
 
     @Override
@@ -72,6 +77,7 @@ public class VisTwo extends VisualizerBase {
         GLES20.glEnable(GLES20.GL_BLEND);
 //        GLES20.glBlendFunc(GLES20.GL_DST_COLOR, GLES20.GL_ONE_MINUS_SRC_COLOR);
 
+
         /** Updates the position of individual dots for our screen rendering in the OpenGL pipeline */
         dotVertexData.position(POSITION_OFFSET);
         GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, VIS2_STRIDE_BYTES, dotVertexData);
@@ -88,8 +94,14 @@ public class VisTwo extends VisualizerBase {
             dbs[i] = temp[i] == null ? 0.0f : temp[i];
         }
 
-        /** Updates the size of the dots using the most current decibel level, i.e. the first element of the decibel history */
+        /** Updates the size of the dots using the decibel history array */
         GLES20.glUniform1fv(currentDecibelLevelHandle, dbs.length, dbs, 0);
+
+        Matrix.setIdentityM(transformationMatrix,0);                                   // clean matrix buffer
+        Matrix.scaleM(transformationMatrix, 0, 1.0f, 1.0f, -dbs[0]);             // scale vertex
+//        Matrix.translateM(transformationMatrix,0,-0.96f,-1.0f,0);            // move vertex to location
+        Matrix.multiplyMM(mvpMatrix, 0, transformationMatrix, 0, transformationMatrix, 0);  // apply final effect
+        GLES20.glUniformMatrix4fv(this.matrixHandle, 1, false, transformationMatrix, 0);
 
         GLES20.glUniform1f(timeHandle, (float)(System.currentTimeMillis() - visTwoStartTime));
 

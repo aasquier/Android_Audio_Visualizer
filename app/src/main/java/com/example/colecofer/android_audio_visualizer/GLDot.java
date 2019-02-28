@@ -20,26 +20,24 @@ public class GLDot {
     public GLDot() {
 
         float[] vertices = new float[DOT_COUNT * 7];
-        float COLOR_SHIFT_FACTOR_V2 = 0.009f;
+        float COLOR_SHIFT_FACTOR_V2 = 0.005f;
 
-        int index = 0;
-
+        int index       = 0;
         int visTwoIndex = 1;
-        int visColor = VisualizerModel.getInstance().getColor(visTwoIndex);
+        int visColor    = VisualizerModel.getInstance().getColor(visTwoIndex);
 
         for(int i = 0; i < DOT_HEIGHT; i++) {
-            Log.d("VISCOLOR", "color: " + Integer.toString(visColor));
 
             for(int j = 0; j < DOT_WIDTH; j++) {
-                vertices[index*7+0] = -1.0f + 2.0f /(DOT_WIDTH + 1)*(1+i);
-                vertices[index*7+1] = -1.0f + 2.0f /(DOT_HEIGHT + 1)*(1+j);
-                vertices[index*7+2] = 0.0f;
-                vertices[index*7+3] = (Color.red(visColor) * COLOR_SHIFT_FACTOR_V2);
-                vertices[index*7+4] = (Color.green(visColor) * COLOR_SHIFT_FACTOR_V2);
-                vertices[index*7+5] = (Color.blue(visColor) * COLOR_SHIFT_FACTOR_V2);
-                vertices[index*7+6] = 0.2f;
+                vertices[index+0] = -1.0f + 2.0f /(DOT_WIDTH + 1)*(1+i);
+                vertices[index+1] = -1.0f + 2.0f /(DOT_HEIGHT + 1)*(1+j);
+                vertices[index+2] = 0.0f;
+                vertices[index+3] = (Color.red(visColor) * COLOR_SHIFT_FACTOR_V2);
+                vertices[index+4] = (Color.green(visColor) * COLOR_SHIFT_FACTOR_V2);
+                vertices[index+5] = (Color.blue(visColor) * COLOR_SHIFT_FACTOR_V2);
+                vertices[index+6] = 0.2f;
 
-                index++;
+                index += 7;
             }
         }
 
