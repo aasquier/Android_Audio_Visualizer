@@ -98,34 +98,30 @@ precision highp float;          // Set the default precision to high
 
 
 void main() {
-    float scaledTime = time/1500.0;
-    vec2 res = vec2(0.85, 0.85);
+    float scaledTime = time/500.0;
+    vec2 res = vec2(0.75, 0.75);
     vec3 black = vec3(0.0, 0.0, 0.0);
     vec3 white = vec3(1.0, 1.0, 1.0);
 
-    int distanceIndex = int(floor(sqrt(a_Position.x * a_Position.x + a_Position.y * a_Position.y)*10.));
+    int distanceIndex = int(sqrt(a_Position.x * a_Position.x + a_Position.y * a_Position.y)*49.);
 
     float db = a_DB_Level[distanceIndex];
 
     // Creating the wave itself
     vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
     float cLength = length(cPos);
-    vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(db * cLength * 12.0 - scaledTime * 4.0) * 0.2;
+    vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(db * cLength * 12.0 - scaledTime * 4.0) * 0.3;
     vec4 newPosition = vec4(uv2, a_Position.zw);
 
-    float dis = worley5(newPosition.xy*7., time/800.);
+    float dis = worley5(newPosition.xy/res*6., time/800.);
     vec3 b = mix(a_Color.xyz, black, dis);
 
-    float dis2 = fbm(newPosition.xy*7., time);
+    float dis2 = fbm(newPosition.xy/res*6., time);
     vec3 c = mix(a_Color.xyz, black, dis2);
 
     v_Color = vec4(b*c, 1.0);
 
-    //    if(newPosition.xy == a_Position.xy) {
-    //        newColor.xyz = mix(newColor.xyz, vec3(0.0,0.0,0.0), 0.7);
-    //    }
-
-//    gl_PointSize = 1.0; // + a_DB_Level[0];
+    gl_PointSize = 0.25 + a_DB_Level[0];
 
     gl_Position = newPosition;
 }
