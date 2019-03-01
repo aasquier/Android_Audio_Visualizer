@@ -132,15 +132,17 @@ public class AnimateLyrics {
 
                 int opacity = Color.alpha(colorSpan);
 
-                float timeToStartFadeAway = lyricDisplayTime - 600;
-                if (currentTime >= timeToStartFadeAway && currentTime < timeToStartFadeAway + 20) {
+                float timeToStartFadeAway = lyricDisplayTime - 800;
+                float timeToSetZero = lyricDisplayTime - 770;
+
+                if (currentTime >= timeToStartFadeAway && currentTime <= timeToSetZero) {
                     Log.d("test", "I got hit");
                     this.lyricIndex = 0;
                 } else {
                     Log.d("test", "\n");
                 }
 
-                if (currentTime >= lyricDisplayTime - 600) {
+                if (currentTime >= lyricDisplayTime - 800) {
                     opacity += this.opacityUpdateDec;
                 } else {
                     opacity += this.opacityUpdateInc;
