@@ -31,7 +31,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.PERCENTAG
  */
 public class AnimateLyrics {
     private int opacityUpdateInc = 20; //Amount of opacity to add each time update is called
-    private int opacityUpdateDec = -80; //Amount of opacity to add each time update is called
+    private int opacityUpdateDec = -20; //Amount of opacity to add each time update is called
 
     static TextView lyricsTextView;
     static ViewGroup.MarginLayoutParams lyricsParams;
@@ -132,8 +132,9 @@ public class AnimateLyrics {
 
                 int opacity = Color.alpha(colorSpan);
 
-                float timeToStartFadeAway = lyricDisplayTime - 800;
-                float timeToSetZero = lyricDisplayTime - 770;
+                float animationDuration = 800;
+                float timeToStartFadeAway = lyricDisplayTime - animationDuration;
+                float timeToSetZero = lyricDisplayTime - (animationDuration - 50);
 
                 if (currentTime >= timeToStartFadeAway && currentTime <= timeToSetZero) {
                     Log.d("test", "I got hit");
@@ -142,11 +143,13 @@ public class AnimateLyrics {
                     Log.d("test", "\n");
                 }
 
-                if (currentTime >= lyricDisplayTime - 800) {
+                if (currentTime >= lyricDisplayTime - animationDuration) {
                     opacity += this.opacityUpdateDec;
                 } else {
                     opacity += this.opacityUpdateInc;
                 }
+
+                opacity += this.opacityUpdateInc;
 
                 if (opacity <= 0) opacity = 0;
                 if (opacity > 255) opacity = 255;
