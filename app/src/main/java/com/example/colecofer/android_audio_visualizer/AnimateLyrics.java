@@ -30,7 +30,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.PERCENTAG
  * inside of a TextView.
  */
 public class AnimateLyrics {
-    private static final int OPACITY_UPDATE_INC = 10; //Amount of opacity to add each time update is called
+    private static final int OPACITY_UPDATE_INC = 20; //Amount of opacity to add each time update is called
 
     static TextView lyricsTextView;
     static ViewGroup.MarginLayoutParams lyricsParams;
@@ -118,8 +118,7 @@ public class AnimateLyrics {
         List<SpannableString> lyricsToDisplay = new ArrayList<>();
         int currentLyricListSize = currentLyricsList.size();
 
-        //Check that there are still lyrics to display
-//        if (this.rawLyricsIndex < this.sizeOfRawLyricsList) {
+            //Check that there are still lyrics to display
             if (this.lyricIndex < currentLyricListSize) {
 
             //Alter the opacity one word at a time
@@ -131,13 +130,12 @@ public class AnimateLyrics {
                 int opacity = Color.alpha(colorSpan) + OPACITY_UPDATE_INC;
                 if (opacity > 255) opacity = 255;
 
-                //Log.d("test", "Opacity: " + opacity);
+                //Construct the updated color into hex
                 String updatedColor = String.format("#%02xFFFFFF", opacity);
                 int colorAsInt = Color.parseColor(updatedColor);
-                //Log.d("test", "Updated color: " + updatedColor);
 
-                word.setSpan(new ForegroundColorSpan(colorAsInt), 0, word.length(), Spannable.SPAN_COMPOSING);
-
+                //Construct a new Span for the previous word (because ArrayLists are immutable)
+                word.setSpan(new ForegroundColorSpan(colorAsInt), 0, word.length(), Spannable.SPAN_COMPOSING); //Try some span flags out (SPAN_INCLUSIVE_EXCLUSIVE)
                 currentLyricsList.set(i, new Pair<>(word, colorAsInt));
             }
 
@@ -152,51 +150,6 @@ public class AnimateLyrics {
                 this.lyricIndex += 1;
             }
         }
-
     }
 
-
-//    /**
-//     * Takes an array of lyrics and displays them to
-//     * the lyric animation TextView.
-//     * @param lyrics String array of lyrics (word by word)
-//     */
-//    private void displayLyrics(List<SpannableString> lyrics) {
-//        int wordsAmt = lyrics.size();
-//        this.lyricsTextView.setText("");  //Wipe out the lyrics in the textview
-//        for (int i = 0; i < wordsAmt; ++i) {
-//            this.lyricsTextView.append(lyrics.get(i) + " ");
-//        }
-//    }
-
 }
-
-
-
-
-//SpannableString example
-//        //Setup the text and colors
-//        Spannable word = new SpannableString("Hah, sika than your average\n");
-//
-//        //The first two value of the hex are opacity... So perhaps we could alter these to fade them in and out... ?
-//        word.setSpan(new ForegroundColorSpan(0x50FFFFFF), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        lyricsTextView.setText(word);
-//
-//        Spannable word1 = new SpannableString("Poppa twist cabbage off instinct");
-//        word1.setSpan(new ForegroundColorSpan(Color.RED), 0, word1.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        lyricsTextView.append(word1);
-
-
-
-//Code to display second line
-//                //Check if the lyrics are close enough so that we can display them at the same time
-//                if (rawLyricsList.get(this.lyricIndex + 1).first - rawLyricsList.get(this.lyricIndex).first
-//                        < DISPLAY_MULTILINE_PROXIMITY) {
-//
-//                    //Add the second line of lyrics into the to be displayed list
-//                    for (String lyric : rawLyricsList.get(this.lyricIndex).second) {
-//                        SpannableString lyricSpan = new SpannableString(lyric);
-//                        lyricsToDisplay.add(lyricSpan);
-//                    }
-//                    this.lyricIndex += 1;
-//                }
