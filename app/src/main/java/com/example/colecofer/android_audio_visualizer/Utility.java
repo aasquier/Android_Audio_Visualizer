@@ -59,7 +59,16 @@ public class Utility {
             newDbRatio = newDbRatio > MAX_DECIBEL_RATIO ? MAX_DECIBEL_RATIO : newDbRatio;
             /** Update the decibel history with the current decibel level */
             decibelHistory.removeLast();
+            decibelHistory.removeLast();
+            decibelHistory.removeLast();
+//            decibelHistory.removeLast();
+//            decibelHistory.removeLast();
+
             decibelHistory.addFirst(newDbRatio);
+            decibelHistory.addFirst(newDbRatio);
+            decibelHistory.addFirst(newDbRatio);
+//            decibelHistory.addFirst(newDbRatio);
+//            decibelHistory.addFirst(newDbRatio);
         }
         return isTimeToUpdate;
     }

@@ -136,20 +136,20 @@ public class GLLine {
             // Adding scaler value depending on the decibel
             // And it needs two because there are two points per y-axis
             // The value that's being initialized needs to be played with to have a smoother or more better looking visualizer
-            if(averageDecibels <= 0.40) {
+            if(averageDecibels <= 0.25) {
                 highlightingFactor = 1.0f;
                 this.scalingLevel[scalerIndex] = 0.2f;
                 this.scalingLevel[scalerIndex+1] = 0.2f;
-            } else if (averageDecibels <= 0.475) {
+            } else if (averageDecibels <= 0.35) {
                 highlightingFactor = 30.0f;
                 this.scalingLevel[scalerIndex] = 0.35f;
                 this.scalingLevel[scalerIndex+1] = 0.35f;
-            } else if (averageDecibels <= 0.55){
+            } else if (averageDecibels <= 0.6){
                 highlightingFactor = 50.0f;
                 this.scalingLevel[scalerIndex] = 0.5f;
                 this.scalingLevel[scalerIndex+1] = 0.5f;
             } else {
-                highlightingFactor = 140.0f;
+                highlightingFactor = 120.0f;
                 this.scalingLevel[scalerIndex] = 0.8f;
                 this.scalingLevel[scalerIndex+1] = 0.8f;
             }

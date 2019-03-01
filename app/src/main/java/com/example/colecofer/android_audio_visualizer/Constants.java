@@ -8,7 +8,7 @@ final class Constants {
     static final int SWITCH_VIS_TIME       = 5000;                      //Number of milliseconds to wait before switching
 
     /** VisualizerActivity constants */
-    static final int DECIBEL_HISTORY_SIZE   = 20;
+    static final int DECIBEL_HISTORY_SIZE   = 50;
 
     static final int REQUEST_PERMISSION     = 101;
     static final int REAL_BUCKET_INDEX      = 3;
