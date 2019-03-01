@@ -166,7 +166,9 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
         this.previousUpdateTime = System.currentTimeMillis();
 
+
         setContentView(surfaceView);
+
     }
 
     /**

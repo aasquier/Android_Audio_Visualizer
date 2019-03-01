@@ -23,6 +23,7 @@ public class VisualizerSurfaceView extends GLSurfaceView {
         VisualizerModel.getInstance().initVisualizers(this.context);
         VisualizerModel.getInstance().currentVisualizer = VisualizerModel.getInstance().getNextVis();
 
+
         super.setRenderer(VisualizerModel.getInstance().renderer);
     }
 
