@@ -30,7 +30,8 @@ import static com.example.colecofer.android_audio_visualizer.Constants.PERCENTAG
  * inside of a TextView.
  */
 public class AnimateLyrics {
-    private static final int OPACITY_UPDATE_INC = 20; //Amount of opacity to add each time update is called
+    private int opacityUpdateInc = 20; //Amount of opacity to add each time update is called
+    private int opacityUpdateDec = -80; //Amount of opacity to add each time update is called
 
     static TextView lyricsTextView;
     static ViewGroup.MarginLayoutParams lyricsParams;
@@ -118,16 +119,34 @@ public class AnimateLyrics {
         List<SpannableString> lyricsToDisplay = new ArrayList<>();
         int currentLyricListSize = currentLyricsList.size();
 
-            //Check that there are still lyrics to display
-            if (this.lyricIndex < currentLyricListSize) {
+        //Check that there are still lyrics to display
+        if (this.lyricIndex < currentLyricListSize) {
 
             //Alter the opacity one word at a time
             for (int i = 0; i <= this.lyricIndex && i < currentLyricListSize; ++i) {
                 SpannableString word = new SpannableString(currentLyricsList.get(i).first);
                 int colorSpan = currentLyricsList.get(i).second;
 
-                //Counter is here just to slow down the opacity increments
-                int opacity = Color.alpha(colorSpan) + OPACITY_UPDATE_INC;
+                float currentTime = VisualizerActivity.mediaPlayer.getCurrentPosition();
+                float lyricDisplayTime = rawLyricsList.get(this.rawLyricsIndex).first - LYRIC_DISPLAY_OFFSET;
+
+                int opacity = Color.alpha(colorSpan);
+
+                float timeToStartFadeAway = lyricDisplayTime - 600;
+                if (currentTime >= timeToStartFadeAway && currentTime < timeToStartFadeAway + 20) {
+                    Log.d("test", "I got hit");
+                    this.lyricIndex = 0;
+                } else {
+                    Log.d("test", "\n");
+                }
+
+                if (currentTime >= lyricDisplayTime - 600) {
+                    opacity += this.opacityUpdateDec;
+                } else {
+                    opacity += this.opacityUpdateInc;
+                }
+
+                if (opacity <= 0) opacity = 0;
                 if (opacity > 255) opacity = 255;
 
                 //Construct the updated color into hex
