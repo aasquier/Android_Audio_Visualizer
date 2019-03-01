@@ -103,7 +103,7 @@ void main() {
     vec3 black = vec3(0.0, 0.0, 0.0);
     vec3 white = vec3(1.0, 1.0, 1.0);
 
-    int distanceIndex = int(sqrt(a_Position.x * a_Position.x + a_Position.y * a_Position.y)*49.);
+    int distanceIndex = int(sqrt(a_Position.x * a_Position.x + a_Position.y * a_Position.y)*5.);
 
     float db = a_DB_Level[distanceIndex];
 
@@ -113,10 +113,10 @@ void main() {
     vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(db * cLength * 12.0 - scaledTime * 4.0) * 0.3;
     vec4 newPosition = vec4(uv2, a_Position.zw);
 
-    float dis = worley5(newPosition.xy/res*6., time/800.);
+    float dis = worley5(newPosition.xy/res*5., time/800.);
     vec3 b = mix(a_Color.xyz, black, dis);
 
-    float dis2 = fbm(newPosition.xy/res*6., time);
+    float dis2 = fbm(newPosition.xy/res*5., time);
     vec3 c = mix(a_Color.xyz, black, dis2);
 
     v_Color = vec4(b*c, 1.0);
