@@ -18,9 +18,6 @@ final class Constants {
     static final float AMPLIFIER            = 0.0000095f;
     static final float DEFAULT_LINE_SIZE    = 0.00009f;
 
-    /** GLCircle constants */
-    static final int COUNT = 364;
-
     /** GLLine constants */
     static final int BYTES_PER_FLOAT = 4;
 
