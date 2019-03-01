@@ -2,31 +2,23 @@ package com.example.colecofer.android_audio_visualizer;
 
 import android.graphics.Color;
 import android.opengl.GLES20;
-import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import static com.example.colecofer.android_audio_visualizer.Constants.AMPLIFIER;
 import static com.example.colecofer.android_audio_visualizer.Constants.AMPLIFIER_V3;
 import static com.example.colecofer.android_audio_visualizer.Constants.BYTES_PER_FLOAT;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_SHIFT_FACTOR;
-import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_LINE_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_LINE_SIZE_V3;
-import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_DRAW_BOUNDARY;
-import static com.example.colecofer.android_audio_visualizer.Constants.PIXEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_OFFSET;
-import static com.example.colecofer.android_audio_visualizer.Constants.RIGHT_DRAW_BOUNDARY;
-import static com.example.colecofer.android_audio_visualizer.Constants.SCREEN_VERTICAL_HEIGHT;
-import static com.example.colecofer.android_audio_visualizer.Constants.SCREEN_VERTICAL_HEIGHT_V3;
+import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE;
+import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE_V3;
 import static com.example.colecofer.android_audio_visualizer.Constants.VERTEX_AMOUNT;
-import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_ARRAY_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_STRIDE_BYTES;
-import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_VERTEX_COUNT;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS3_ARRAY_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS3_VERTEX_COUNT;
 import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
@@ -46,7 +38,7 @@ public class GLLineV3 {
 
         this.leftSide = xPosition;   // Current line's left side coord
 //        this.rightSide = leftSide + 0.005f;  // Current line's right side coord
-        this.rightSide = leftSide + 0.004f;  // Current line's right side coord
+        this.rightSide = leftSide;  // + 0.04f; Current line's right side coord
 
 
         // Initialize the current line's base vertices
@@ -66,7 +58,7 @@ public class GLLineV3 {
 
         int vertexIndex = 0;
         float xAxis = -1.0f;
-        float xOffset = (float) 2 / (SCREEN_VERTICAL_HEIGHT_V3);
+        float xOffset = (float) 2 / (DECIBEL_HISTORY_SIZE_V3) + 0.0017f;
 
         int visThreeIndex = 2;
         int visColor = VisualizerModel.getInstance().getColor(visThreeIndex);
@@ -101,22 +93,42 @@ public class GLLineV3 {
      */
     public void updateVertices() {
         // Change to object array to traverse
-        Float[] decibelArray = decibelHistory.toArray(new Float[SCREEN_VERTICAL_HEIGHT]);
+        Float[] decibelFloatArray = decibelHistory.toArray(new Float[0]);
 
         int offset = 0;
+        float highlightingFactor;
+        float averageDecibels;
 
         // Only loop for the size of the decibel array size
-        for(int i = 0; i < SCREEN_VERTICAL_HEIGHT_V3; i++) {
+        for(int i = 0; i < DECIBEL_HISTORY_SIZE_V3; i++) {
             // Calculate the coordinates after the amplification
             // Left side needs to move in negative direction
             // Right side needs to move in positive direction
             // Amplification should be half for both sides because Amplification = left + right
 
-            float currentDecibel = decibelArray[i] <= 0.66 ? 15.0f : decibelArray[i] * 170.0f;
+            switch(i) {
+                case 0:                        averageDecibels = decibelFloatArray[0] + decibelFloatArray[1] + decibelFloatArray[2] + decibelFloatArray[3] + decibelFloatArray[4]; break;
+                case 1:                        averageDecibels = decibelFloatArray[1] + decibelFloatArray[2] + decibelFloatArray[3] + decibelFloatArray[4] + decibelFloatArray[5]; break;
+                case DECIBEL_HISTORY_SIZE - 2: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE - 6] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 5] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 4] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 2]; break;
+                case DECIBEL_HISTORY_SIZE - 1: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE - 5] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 4] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 2] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 1]; break;
+                default:                       averageDecibels = decibelFloatArray[i-2] + decibelFloatArray[i-1] + decibelFloatArray[i] + decibelFloatArray[i+1] + decibelFloatArray[i+2]; break;
+            }
+
+            averageDecibels /= 5.0f;
+
+            if(averageDecibels <= 0.40) {
+                highlightingFactor = 1.0f;
+            } else if (averageDecibels <= 0.475) {
+                highlightingFactor = 30.0f;
+            } else if (averageDecibels <= 0.55){
+                highlightingFactor = 50.0f;
+            } else {
+                highlightingFactor = 140.0f;
+            }
 
             // V3 version
-            float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE_V3 + (AMPLIFIER_V3 * currentDecibel)));
-            float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE_V3 + (AMPLIFIER_V3 * currentDecibel)));
+            float ampDataLeft  = (this.leftSide - (DEFAULT_LINE_SIZE_V3 + (AMPLIFIER_V3 * highlightingFactor)));
+            float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE_V3 + (AMPLIFIER_V3 * highlightingFactor)));
 
             this.vertices[offset+1] = ampDataLeft;
             this.vertices[offset+8] = ampDataRight;
@@ -149,12 +161,12 @@ public class GLLineV3 {
         /** dbLevel Handle */
         Float[] temp = decibelHistory.toArray(new Float[0]);
 
-        float[] dbs = new float[temp.length];
+        float[] decibelsFloatArray = new float[temp.length];
         for (int i = 0; i < temp.length; ++i) {
-            dbs[i] = temp[i] == null ? 0.0f : temp[i];
+            decibelsFloatArray[i] = temp[i] == null ? 0.0f : temp[i];
         }
 
-        GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, dbs.length, dbs, 0);
+        GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, decibelsFloatArray.length, decibelsFloatArray, 0);
 
         /** finally draw buffer */
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, VIS3_VERTEX_COUNT);

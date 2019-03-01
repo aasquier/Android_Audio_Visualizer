@@ -1,8 +1,24 @@
 package com.example.colecofer.android_audio_visualizer;
 
-import android.graphics.Typeface;
-
 final class Constants {
+
+    /** Visualizer Switching */
+    static final boolean SHOULD_SWITCH_VIS = true;                       //Set to false if you do not want to rotate visualizers
+    static final boolean SHOULD_LOOP_VIS   = true;                       //Set to true if you want the final visualizer to loop back to the first
+    static final int SWITCH_VIS_TIME       = 5000;                      //Number of milliseconds to wait before switching
+
+    /** VisualizerActivity constants */
+    static final int DECIBEL_HISTORY_SIZE   = 25;
+
+    static final int REQUEST_PERMISSION     = 101;
+    static final int REAL_BUCKET_INDEX      = 3;
+    static final int IMAGINARY_BUCKET_INDEX = 4;
+    static final int MAX_FFT_ARRAY_SIZE     = 1024;
+    static final int VIS1_VERTEX_COUNT      = DECIBEL_HISTORY_SIZE + DECIBEL_HISTORY_SIZE;
+    static final int VIS1_ARRAY_SIZE        = VIS1_VERTEX_COUNT * 7;
+    static final float PIXEL                = 0.0009f;
+    static final float AMPLIFIER            = 0.0000095f;
+    static final float DEFAULT_LINE_SIZE    = 0.00009f;
 
     /** GLCircle constants */
     static final int COUNT = 364;
@@ -11,7 +27,7 @@ final class Constants {
     static final int BYTES_PER_FLOAT = 4;
 
     /** Visualizer Switching */
-    static final boolean SHOULD_SWITCH_VIS = false;                       //Set to false if you do not want to rotate visualizers
+    static final boolean SHOULD_SWITCH_VIS = true;                       //Set to false if you do not want to rotate visualizers
     static final boolean SHOULD_LOOP_VIS   = true;                       //Set to true if you want the final visualizer to loop back to the first
     static final int SWITCH_VIS_TIME       = 5000;                      //Number of milliseconds to wait before switching
 
@@ -53,15 +69,16 @@ final class Constants {
     static final float MAX_DECIBEL_RATIO   = 1.0f;
 
     /** Shared Visualizer Constants **/
-    static final String GLSL_POSITION_HANDLE = "a_Position";
-    static final String GLSL_COLOR_HANDLE    = "a_Color";
-    static final String GLSL_DB_LEVEL        = "a_DB_Level";
-    static final String GLSL_MATRIX          = "u_MVPMatrix";
-    static final String GLSL_TIME            = "time";
-    static final float COLOR_SHIFT_FACTOR    = 0.005f;
+    static final String GLSL_POSITION_HANDLE     = "a_Position";
+    static final String GLSL_COLOR_HANDLE        = "a_Color";
+    static final String GLSL_DB_LEVEL            = "a_DB_Level";
+    static final String GLSL_MATRIX              = "u_MVPMatrix";
+    static final String GLSL_TIME                = "time";
+    static final String GLSL_SCALING_LEVEL_ARRAY = "scaling_Level";
+    static final float COLOR_SHIFT_FACTOR        = 0.005f;
 
     /** Vis1 constants */
-    static final int LINE_AMT              = 50;                  //Number of lines to display on the screen
+    static final int LINE_AMT              = 100;                  //Number of lines to display on the screen
     static final float AMP_MULT            = 0.000005f;           //Alters the lines horizontal amplitude
     static final int VERTEX_AMOUNT         = 7;                   //x, y, z, r, g, b, a
     static final float LEFT_DRAW_BOUNDARY  = -0.99f;              //Where to start drawing on the left side of the screen
@@ -81,25 +98,13 @@ final class Constants {
     static final int DOT_COUNT  = DOT_WIDTH * DOT_HEIGHT;
 
     /** Vis3 constants */
-    static final int SCREEN_VERTICAL_HEIGHT_V3 = 50;
-    static final int VIS3_VERTEX_COUNT         = (SCREEN_VERTICAL_HEIGHT_V3)*2;
+    static final int DECIBEL_HISTORY_SIZE_V3   = 25;
+
+    static final int VIS3_VERTEX_COUNT         = (DECIBEL_HISTORY_SIZE_V3)*2;
     static final int VIS3_ARRAY_SIZE           = VIS3_VERTEX_COUNT * 7;
     static final int LINE_AMT_V3               = 20;
     static final float AMPLIFIER_V3            = 0.000025f;
-    static final float DEFAULT_LINE_SIZE_V3    = 0.0000000002f;
-
-    /** VisualizerActivity constants */
-    static final int REQUEST_PERMISSION     = 101;
-    static final int REAL_BUCKET_INDEX      = 3;
-    static final int IMAGINARY_BUCKET_INDEX = 4;
-    static final int MAX_FFT_ARRAY_SIZE     = 1024;
-    static final int SCREEN_VERTICAL_HEIGHT = 50;
-    static final int VIS1_VERTEX_COUNT      = SCREEN_VERTICAL_HEIGHT + SCREEN_VERTICAL_HEIGHT;
-    static final int VIS1_ARRAY_SIZE        = VIS1_VERTEX_COUNT * 7;
-    static final float PIXEL                = 0.0009f;
-    static final float AMPLIFIER            = 0.0000075f;
-    static final float DEFAULT_LINE_SIZE    = 0.0002f;
-
+    static final float DEFAULT_LINE_SIZE_V3    = 0.002f;
 
     /** VisualizerModel constants */
     static final String MODEL_TAG = "MODEL_TAG";

@@ -7,6 +7,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_DB_L
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_MATRIX;
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_TIME;
 
+
 public class VisTwo extends VisualizerBase {
 
     private GLDot dot;

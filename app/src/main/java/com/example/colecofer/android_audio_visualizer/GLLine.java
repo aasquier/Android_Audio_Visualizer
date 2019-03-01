@@ -2,12 +2,10 @@ package com.example.colecofer.android_audio_visualizer;
 
 import android.graphics.Color;
 import android.opengl.GLES20;
-import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.util.Iterator;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.AMPLIFIER;
 import static com.example.colecofer.android_audio_visualizer.Constants.BYTES_PER_FLOAT;
@@ -15,25 +13,21 @@ import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DAT
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_SHIFT_FACTOR;
 import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_LINE_SIZE;
-import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_DRAW_BOUNDARY;
 import static com.example.colecofer.android_audio_visualizer.Constants.PIXEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_OFFSET;
-import static com.example.colecofer.android_audio_visualizer.Constants.RIGHT_DRAW_BOUNDARY;
-import static com.example.colecofer.android_audio_visualizer.Constants.SCREEN_VERTICAL_HEIGHT;
-import static com.example.colecofer.android_audio_visualizer.Constants.SCREEN_VERTICAL_HEIGHT_V3;
+import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.VERTEX_AMOUNT;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_ARRAY_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_STRIDE_BYTES;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_VERTEX_COUNT;
-import static com.example.colecofer.android_audio_visualizer.Constants.VIS3_ARRAY_SIZE;
-import static com.example.colecofer.android_audio_visualizer.Constants.VIS3_VERTEX_COUNT;
 import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
 
 public class GLLine {
 
     private FloatBuffer lineVerticesBuffer;
     private float[] vertices;
+    private float[] scalingLevel;
     private float leftSide;
     private float rightSide;
 
@@ -45,6 +39,9 @@ public class GLLine {
 
         this.leftSide = xPosition;   // Current line's left side coord
         this.rightSide = leftSide + PIXEL;  // Current line's right side coord
+
+        // TODO This is to possibly pass in to the shader
+        this.scalingLevel = new float[DECIBEL_HISTORY_SIZE];
 
         // Initialize the current line's base vertices
         createBaseLine();
@@ -63,7 +60,7 @@ public class GLLine {
 
         int vertexIndex = 0;
         float yAxis = -1.0f;
-        float yOffset = (float) 2 / (SCREEN_VERTICAL_HEIGHT - 1);
+        float yOffset = (float) 2 / (DECIBEL_HISTORY_SIZE - 1);
         int visOneIndex = 0;
         int visColor = VisualizerModel.getInstance().getColor(visOneIndex);
 
@@ -97,26 +94,48 @@ public class GLLine {
      * Update the base line with decibel value
      */
     public void updateVertices() {
+
         // Change to object array to traverse
-        Object[] decibelArray = decibelHistory.toArray();
+        Float[] decibelFloatArray = decibelHistory.toArray(new Float[DECIBEL_HISTORY_SIZE]);
 
         int xOffset = 0;
 
+        float highlightingFactor;
+        float averageDecibels;
+
         // Only loop for the size of the decibel array size
-        for(int i = 0; i < SCREEN_VERTICAL_HEIGHT; i++){
+        for(int i = 0; i < DECIBEL_HISTORY_SIZE; i++){
             // Calculate the coordinates after the amplification
             // Left side needs to move in negative direction
             // Right side needs to move in positive direction
             // Amplification should be half for both sides because Amplification = left + right
 
-            // Not sure about the full algorithm with if and else statement here
-            // Will come back to it later
-            //TODO: Figure out what is going on with this algorithm
+            // Takes the average of the five decibel levels surrounding the current y-position of the line in question
+            switch(i) {
+                case 0:                        averageDecibels = decibelFloatArray[0] + decibelFloatArray[1] + decibelFloatArray[2] + decibelFloatArray[3] + decibelFloatArray[4]; break;
+                case 1:                        averageDecibels = decibelFloatArray[1] + decibelFloatArray[2] + decibelFloatArray[3] + decibelFloatArray[4] + decibelFloatArray[5]; break;
+                case DECIBEL_HISTORY_SIZE - 2: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE - 6] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 5] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 4] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 2]; break;
+                case DECIBEL_HISTORY_SIZE - 1: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE - 5] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 4] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 2] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 1]; break;
+                default:                       averageDecibels = decibelFloatArray[i-2] + decibelFloatArray[i-1] + decibelFloatArray[i] + decibelFloatArray[i+1] + decibelFloatArray[i+2]; break;
+            }
 
-            float currentDecibel = (float) decibelArray[i] <= 0.66 ? 15.0f : (float) decibelArray[i] * 170.0f;
+            // TODO placeholder
+            scalingLevel[i] = 0.0f;
 
-            float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE + AMPLIFIER * currentDecibel));
-            float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE + AMPLIFIER * currentDecibel));
+            averageDecibels /= 5.0f;
+
+            if(averageDecibels <= 0.40) {
+                highlightingFactor = 1.0f;
+            } else if (averageDecibels <= 0.475) {
+                highlightingFactor = 30.0f;
+            } else if (averageDecibels <= 0.55){
+                highlightingFactor = 50.0f;
+            } else {
+                highlightingFactor = 140.0f;
+            }
+
+            float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE + AMPLIFIER * highlightingFactor));
+            float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE + AMPLIFIER * highlightingFactor));
             this.vertices[xOffset] = ampDataLeft;
             this.vertices[xOffset+7] = ampDataRight;
 
@@ -147,12 +166,13 @@ public class GLLine {
 
         GLES20.glUniform1f(VisualizerModel.getInstance().currentVisualizer.timeHandle, (float) (System.currentTimeMillis() - visOneStartTime));
 
-        Float[] temp = decibelHistory.toArray(new Float[SCREEN_VERTICAL_HEIGHT]);
+        Float[] temp = decibelHistory.toArray(new Float[DECIBEL_HISTORY_SIZE]);
 
         float[] dbs = new float[temp.length];
-        for (int i = 0; i < SCREEN_VERTICAL_HEIGHT; ++i) {
+        for (int i = 0; i < DECIBEL_HISTORY_SIZE; ++i) {
             dbs[i] = temp[i] == null ? 0.0f : temp[i];
 
+            // TODO this was to possibly send in a negative value randomly
 //            if (Math.random() > 0.5) {
 //                dbs[i] *= -1;
 //            }
@@ -161,7 +181,7 @@ public class GLLine {
         /** Updates the size of the dots using the most current decibel level, i.e. the first element of the decibel history */
         GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, dbs.length, dbs, 0);
 
-//        GLES20.glUniform1f(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, decibelHistory.peekFirst());
+        GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.scalingLevelArrayHandle, this.scalingLevel.length, this.scalingLevel, 0);
 
     }
 }
