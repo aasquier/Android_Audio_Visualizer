@@ -77,7 +77,7 @@ float fbm(vec2 uv, float time)
 {
     float value = 0.0;
     float factor = 1.1;
-    float scaledTime = time / 300.0;
+    float scaledTime = time / 200.0;
 
     for (int i = 0; i < 8; i++)
     {
@@ -98,14 +98,15 @@ precision highp float;          // Set the default precision to high
 
 
 void main() {
-    float dis = fbm(a_Position.xy*7., time);
     vec3 black = vec3(0.0, 0.0, 0.0);
     vec3 white = vec3(1.0, 1.0, 1.0);
 
-    float dis2 = worley5(a_Position.xy*6., time/1000.);
-    vec3 b = mix(a_Color.xyz, black, dis2);
+    float dis = worley5(a_Position.xy*7., time/800.);
+    vec3 b = mix(a_Color.xyz, black, dis);
 
-    vec3 c = mix(a_Color.xyz, black, dis);
+    float dis2 = fbm(a_Position.xy*7., time);
+    vec3 c = mix(a_Color.xyz, black, dis2);
+
     v_Color = vec4(b*c, 1.0);
     gl_Position = a_Position;
 }
