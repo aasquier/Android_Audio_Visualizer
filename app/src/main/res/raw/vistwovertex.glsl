@@ -98,43 +98,34 @@ precision highp float;          // Set the default precision to high
 
 
 void main() {
+    float scaledTime = time/1500.0;
+    vec2 res = vec2(0.85, 0.85);
     vec3 black = vec3(0.0, 0.0, 0.0);
     vec3 white = vec3(1.0, 1.0, 1.0);
 
-    float dis = worley5(a_Position.xy*7., time/800.);
+    int distanceIndex = int(floor(sqrt(a_Position.x * a_Position.x + a_Position.y * a_Position.y)*10.));
+
+    float db = a_DB_Level[distanceIndex];
+
+    // Creating the wave itself
+    vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
+    float cLength = length(cPos);
+    vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(db * cLength * 12.0 - scaledTime * 4.0) * 0.2;
+    vec4 newPosition = vec4(uv2, a_Position.zw);
+
+    float dis = worley5(newPosition.xy*7., time/800.);
     vec3 b = mix(a_Color.xyz, black, dis);
 
-    float dis2 = fbm(a_Position.xy*7., time);
+    float dis2 = fbm(newPosition.xy*7., time);
     vec3 c = mix(a_Color.xyz, black, dis2);
 
     v_Color = vec4(b*c, 1.0);
-    gl_Position = a_Position;
-}
 
-//    float scaledTime = time;
-//    vec2 res = vec2(0.95, 0.95);
-//
-//    // Creating the noise field
-//    vec2 uv = a_Position.xy * 4.0;
-//    vec4 newColor = vec4(vec3(fbm(uv, time) * 0.2) + a_Color.xyz/2., 0.0);
-//
-//    int distanceIndex = int(floor(sqrt(a_Position.x * a_Position.x + a_Position.y * a_Position.y)*5.));
-////
-////    float db = a_DB_Level[distanceIndex];
-////
-////    // Creating the wave itself
-////    vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
-////    float cLength = length(cPos);
-////    vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(db * cLength * 12.0 - scaledTime * 4.0) * 0.002;
-////    vec4 newPosition = vec4(uv2, a_Position.zw);
-//
-////    if(newPosition.xy == a_Position.xy) {
-////        newColor.xyz = mix(newColor.xyz, vec3(0.0,0.0,0.0), 0.7);
-////    }
+    //    if(newPosition.xy == a_Position.xy) {
+    //        newColor.xyz = mix(newColor.xyz, vec3(0.0,0.0,0.0), 0.7);
+    //    }
+
 //    gl_PointSize = 1.0; // + a_DB_Level[0];
-//
-//    v_Color = newColor;
-////    v_Color = a_Color;
-////    // Feeding the position to the fragment shader
-////    gl_Position = newPosition;
-//    gl_Position = a_Position;
+
+    gl_Position = newPosition;
+}
