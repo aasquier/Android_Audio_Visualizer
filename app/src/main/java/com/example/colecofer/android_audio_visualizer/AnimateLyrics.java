@@ -10,7 +10,6 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.util.Pair;
 import android.util.TypedValue;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -44,6 +43,7 @@ public class AnimateLyrics {
     private int lyricIndex;
     private int screenWidth;
     private int screenHeight;
+    private boolean timeToFadeAwayFlag;
 
 
     /**
@@ -70,6 +70,8 @@ public class AnimateLyrics {
         this.rawLyricsIndex = 0;
         this.lyricIndex = 0;
         this.currentLyricsList = new ArrayList<>();
+
+        this.timeToFadeAwayFlag = false;
 
         //Screen dimensions
         this.screenWidth = screenWidth;
@@ -106,6 +108,7 @@ public class AnimateLyrics {
                 }
 
                 this.rawLyricsIndex += 1; //Index to the next lyric
+                this.timeToFadeAwayFlag = false;
             }
             this.lyricIndex = 0;
         }
@@ -128,31 +131,40 @@ public class AnimateLyrics {
                 int colorSpan = currentLyricsList.get(i).second;
 
                 float currentTime = VisualizerActivity.mediaPlayer.getCurrentPosition();
-                float lyricDisplayTime = rawLyricsList.get(this.rawLyricsIndex).first - LYRIC_DISPLAY_OFFSET;
+                float lyricEndTime = rawLyricsList.get(this.rawLyricsIndex).first;// - LYRIC_DISPLAY_OFFSET;
 
                 int opacity = Color.alpha(colorSpan);
 
-                float animationDuration = 800;
-                float timeToStartFadeAway = lyricDisplayTime - animationDuration;
-                float timeToSetZero = lyricDisplayTime - (animationDuration - 50);
+                int word1opacity = Color.alpha(currentLyricsList.get(0).second);
+                Log.d("test", "Word 1 pacity: " + word1opacity);
 
-                if (currentTime >= timeToStartFadeAway && currentTime <= timeToSetZero) {
-                    Log.d("test", "I got hit");
-                    this.lyricIndex = 0;
-                } else {
-                    Log.d("test", "\n");
+                float lyricSegmentDisplayDuration = (255 / opacityUpdateInc) * 16;
+
+                if (this.rawLyricsIndex + 1 < rawLyricsList.size()) {
+                  lyricSegmentDisplayDuration = rawLyricsList.get(this.rawLyricsIndex + 1).first - rawLyricsList.get(this.rawLyricsIndex).first;
                 }
 
-                if (currentTime >= lyricDisplayTime - animationDuration) {
+                //Calculate when and for how long to display the fadeaway animation
+                float animationDuration = lyricSegmentDisplayDuration * 1/3;
+                float timeToStartFadeAway = lyricEndTime - animationDuration;
+
+                //Check if it's time to start the fadeaway animation
+                if (currentTime >= timeToStartFadeAway && this.timeToFadeAwayFlag == false) {
+                    Log.d("test", "timeToFadeAwayFlag switched to false");
+                    this.lyricIndex = 0;
+                    this.timeToFadeAwayFlag = true;
+                }
+
+                //Update the opacity accordingly if we are fading in or out
+                if (this.timeToFadeAwayFlag == true) {
                     opacity += this.opacityUpdateDec;
                 } else {
                     opacity += this.opacityUpdateInc;
                 }
 
-                opacity += this.opacityUpdateInc;
-
+                //Cap off the opacity
                 if (opacity <= 0) opacity = 0;
-                if (opacity > 255) opacity = 255;
+                if (opacity >= 255) opacity = 255;
 
                 //Construct the updated color into hex
                 String updatedColor = String.format("#%02xFFFFFF", opacity);
@@ -163,7 +175,9 @@ public class AnimateLyrics {
                 currentLyricsList.set(i, new Pair<>(word, colorAsInt));
             }
 
+            //Clear the string
             this.lyricsTextView.setText(new SpannableString(""));
+
             //Create one string to display the lyrics
             for (Pair<SpannableString, Integer> lyric: this.currentLyricsList) {
                 this.lyricsTextView.append(lyric.first);
