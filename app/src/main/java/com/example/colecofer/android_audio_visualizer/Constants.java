@@ -21,7 +21,6 @@ final class Constants {
     /** GLLine constants */
     static final int BYTES_PER_FLOAT = 4;
 
-
     /** Lyrics Animation */
     static final float LYRICS_TEXT_SIZE = 22f;
     static final float PERCENTAGE_FROM_TOP = 0.60f;         //Percentage of screen height to display lyrics at
@@ -86,8 +85,8 @@ final class Constants {
     static final int VIS2_STRIDE_BYTES = (POSITION_DATA_SIZE + COLOR_DATA_SIZE) * BYTES_PER_FLOAT;
 
     /** GLDot constants for Vis2 */
-    static final int DOT_HEIGHT = 60;
-    static final int DOT_WIDTH  = 60;
+    static final int DOT_HEIGHT = 1300;
+    static final int DOT_WIDTH  = 1300;
     static final int DOT_COUNT  = DOT_WIDTH * DOT_HEIGHT;
 
     /** Vis3 constants */
