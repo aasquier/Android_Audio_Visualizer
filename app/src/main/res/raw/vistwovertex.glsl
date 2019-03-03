@@ -64,7 +64,7 @@ float worley(vec2 c, float time) {
 float worley5(vec2 c, float time) {
     float w = 0.0;
     float a = 0.5;
-    for (int i = 0; i<5; i++) {
+    for (int i = 0; i<12; i++) {
         w += worley(c, time)*a;
         c*=2.0;
         time*=2.0;
@@ -75,6 +75,7 @@ float worley5(vec2 c, float time) {
 
 float fbm(vec2 uv, float time)
 {
+
     float value = 0.0;
     float factor = 1.1;
     float scaledTime = time / 200.0;
@@ -107,21 +108,55 @@ void main() {
 
     float db = a_DB_Level[distanceIndex];
 
+    if(a_DB_Level[distanceIndex] < .65)
+    {
     // Creating the wave itself
-    vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
-    float cLength = length(cPos);
-    vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(db * cLength * 12.0 - scaledTime * 4.0) * 0.3;
-    vec4 newPosition = vec4(uv2, a_Position.zw);
+        vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
+        float cLength = length(cPos);
+        vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(db * cLength * 12.0 - scaledTime * 4.0) * 0.5;
+        vec4 newPosition = vec4(uv2, a_Position.zw);
 
-    float dis = worley5(newPosition.xy/res*5., time/800.);
-    vec3 b = mix(a_Color.xyz, black, dis);
+        float dis = worley5(newPosition.xy/res*5., time/800.);
+        vec3 b = mix(a_Color.xyz, black, dis);
 
-    float dis2 = fbm(newPosition.xy/res*5., time);
-    vec3 c = mix(a_Color.xyz, black, dis2);
+        float dis2 = fbm(newPosition.xy/res*7.5*a_DB_Level[distanceIndex], time);
+        vec3 c = mix(a_Color.xyz, black, dis2);
 
-    v_Color = vec4(b*c, 1.0);
+        v_Color = vec4(b*c, .75);
 
-    gl_PointSize = 0.25 + a_DB_Level[0];
+    //    if(a_DB_Level[distanceIndex] > .25)
+    //            gl_PointSize = a_DB_Level[distanceIndex]*.75;
+    //    else if(a_DB_Level[distanceIndex] > .5)
+    //        gl_PointSize = a_DB_Level[distanceIndex]*.5;
+    //    else if(a_DB_Level[distanceIndex] > .75)
+        gl_PointSize = a_DB_Level[distanceIndex]*.5;
 
-    gl_Position = newPosition;
+
+        gl_Position = newPosition;
+    }
+//    else
+//    {
+//            vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
+//            float cLength = length(cPos);
+//            vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(db * cLength * 22.0 - scaledTime * 4.0) * 1.5;
+//            vec4 newPosition = vec4(uv2, a_Position.zw);
+//
+//            float dis = worley5(newPosition.xy/res*5., time/800.);
+//            vec3 b = mix(a_Color.xyz, black, dis);
+//
+//            float dis2 = fbm(newPosition.xy/res*5.*a_DB_Level[distanceIndex], time);
+//            vec3 c = mix(a_Color.xyz, black, dis2);
+//
+//            v_Color = vec4(b*c, 1);
+//
+//            if(a_DB_Level[distanceIndex] > .25)
+//                gl_PointSize = a_DB_Level[distanceIndex]*.25;
+//            else if(a_DB_Level[distanceIndex] > .35)
+//                gl_PointSize = a_DB_Level[distanceIndex]*.35;
+//            else if(a_DB_Level[distanceIndex] > .45)
+//            gl_PointSize = a_DB_Level[distanceIndex]*.45;
+//
+//
+//            gl_Position = newPosition;
+//    }
 }
