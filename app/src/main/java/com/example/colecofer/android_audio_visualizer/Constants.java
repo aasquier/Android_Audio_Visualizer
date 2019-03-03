@@ -26,6 +26,11 @@ final class Constants {
     /** GLLine constants */
     static final int BYTES_PER_FLOAT = 4;
 
+    /** Visualizer Switching */
+    static final boolean SHOULD_SWITCH_VIS = true;                       //Set to false if you do not want to rotate visualizers
+    static final boolean SHOULD_LOOP_VIS   = true;                       //Set to true if you want the final visualizer to loop back to the first
+    static final int SWITCH_VIS_TIME       = 5000;                      //Number of milliseconds to wait before switching
+
     /** Lyrics Animation */
     static final float LYRICS_TEXT_SIZE = 22f;
     static final float PERCENTAGE_FROM_TOP = 0.60f;         //Percentage of screen height to display lyrics at
