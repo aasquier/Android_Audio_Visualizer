@@ -63,8 +63,8 @@ public class VisOne extends VisualizerBase {
 
     @Override
     public void updateVertices() {
-//        lines[0].updateVertices(true);
-        for(int i = 0; i < LINE_AMT; ++i){
+        lines[0].updateVertices(true);
+        for(int i = 1; i < LINE_AMT; ++i){
             lines[i].updateVertices(false);
         }
     }
