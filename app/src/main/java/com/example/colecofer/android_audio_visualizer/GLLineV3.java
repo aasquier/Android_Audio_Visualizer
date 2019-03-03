@@ -58,7 +58,7 @@ public class GLLineV3 {
 
         int vertexIndex = 0;
         float xAxis = -1.0f;
-        float xOffset = (float) 2 / (DECIBEL_HISTORY_SIZE_V3);
+        float xOffset = (float) 2 / (DECIBEL_HISTORY_SIZE_V3) + 0.0018f;
 
         int visThreeIndex = 2;
         int visColor = VisualizerModel.getInstance().getColor(visThreeIndex);
