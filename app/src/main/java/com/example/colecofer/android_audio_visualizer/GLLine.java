@@ -126,7 +126,7 @@ public class GLLine {
                         highlightingHibernationOn = true;
                         highlightingHibernationCount = 15;
                         highlightingCurrently = false;
-                        Log.d("Highlight", "" + highlightingCurrently + " " + highlightingHibernationOn + "\n" + decibelHistory);
+//                        Log.d("Highlight", "" + highlightingCurrently + " " + highlightingHibernationOn + "\n" + decibelHistory);
                     }
 //                    Log.d("Highlight", "" + highlightingCurrently + " " + highlightingHibernationOn);
                 } else if (highlightingOnHigh) {
@@ -179,23 +179,25 @@ public class GLLine {
                 highlightingFactor = 10.0f;
             } else if (averageDecibels <= 0.6) {
                 highlightingFactor = 20.0f;
-            } else if (averageDecibels <= 0.65 && !highlightingHibernationOn){
-                if(!highlightingOnMedium && shouldUpdateHighlighting){
-                    highlightingCount = 24;
-                    highlightingOnMedium = true;
-                    highlightingCurrently = true;
-                }
+            } else if (averageDecibels <= 0.65) { // && !highlightingHibernationOn){
+//                if(!highlightingOnMedium && shouldUpdateHighlighting){
+//                    highlightingCount = 24;
+//                    highlightingOnMedium = true;
+//                    highlightingCurrently = true;
+//                }
                 highlightingFactor = 50.0f;
-            } else if (!highlightingHibernationOn){
-                if(!highlightingOnHigh && shouldUpdateHighlighting) {
-                    highlightingCount = 12;
-                    highlightingOnHigh = true;
-                    highlightingCurrently = true;
-                }
+            } //else if (!highlightingHibernationOn){
+            else {
+//                if(!highlightingOnHigh && shouldUpdateHighlighting) {
+//                    highlightingCount = 12;
+//                    highlightingOnHigh = true;
+//                    highlightingCurrently = true;
+//                }
                 highlightingFactor = 100.0f;
-            } else {
-                highlightingFactor = 15.0f;
             }
+//            else {
+//                highlightingFactor = 15.0f;
+//            }
 
             float ampDataLeft        = (this.leftSide - (DEFAULT_LINE_SIZE + AMPLIFIER * highlightingFactor));
             float ampDataRight       = (this.rightSide + (DEFAULT_LINE_SIZE + AMPLIFIER * highlightingFactor));
