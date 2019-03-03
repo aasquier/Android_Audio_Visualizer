@@ -22,11 +22,11 @@ public class VisOne extends VisualizerBase {
     private Utility util;
     private Long visOneStartTime;
 
-    static boolean highlightingOnHigh = false;
-    static boolean highlightingOnMedium = false;
+    static boolean highlightingOnHigh        = false;
+    static boolean highlightingOnMedium      = false;
     static boolean highlightingHibernationOn = false;
-    static int highlightingHibernationCount = 0;
-    static int highlightingCount = 0;
+    static int highlightingHibernationCount  = 0;
+    static int highlightingCount             = 0;
 
     /**
      * Constructor
@@ -63,12 +63,9 @@ public class VisOne extends VisualizerBase {
 
     @Override
     public void updateVertices() {
-        for(int i = 0; i < LINE_AMT; i++){
-            if(i == 0) {
-                lines[i].updateVertices(true);
-            } else {
-                lines[i].updateVertices(false);
-            }
+        lines[0].updateVertices(true);
+        for(int i = 1; i < LINE_AMT; i++){
+            lines[i].updateVertices(false);
         }
     }
 
