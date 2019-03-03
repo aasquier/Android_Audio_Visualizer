@@ -34,6 +34,7 @@ public class VisTwo extends VisualizerBase {
         this.fragmentShader = util.getStringFromGLSL(R.raw.vistwofragment);
 
         visTwoStartTime = System.currentTimeMillis();
+        util.highlightingCurrently = false;
     }
 
     /**

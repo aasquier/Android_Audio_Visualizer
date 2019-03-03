@@ -21,14 +21,18 @@ import static com.example.colecofer.android_audio_visualizer.Constants.VERTEX_AM
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_ARRAY_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_STRIDE_BYTES;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_VERTEX_COUNT;
+import static com.example.colecofer.android_audio_visualizer.Utility.highlightingCurrently;
+import static com.example.colecofer.android_audio_visualizer.VisOne.highlightingCount;
+import static com.example.colecofer.android_audio_visualizer.VisOne.highlightingHibernationCount;
+import static com.example.colecofer.android_audio_visualizer.VisOne.highlightingHibernationOn;
+import static com.example.colecofer.android_audio_visualizer.VisOne.highlightingOnHigh;
+import static com.example.colecofer.android_audio_visualizer.VisOne.highlightingOnMedium;
 import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
 
 public class GLLine {
 
     private FloatBuffer lineVerticesBuffer;
     private float[] vertices;
-    private float[] scalingLevel;
-    private FloatBuffer scalingLevelBuffer;
     private float leftSide;
     private float rightSide;
 
@@ -41,10 +45,6 @@ public class GLLine {
         this.leftSide = xPosition;   // Current line's left side coord
         this.rightSide = leftSide + PIXEL;  // Current line's right side coord
 
-        // TODO This is to possibly pass in to the shader
-        // The size need to match the vertex array size because it'll be an attribute variable
-        this.scalingLevel = new float[DECIBEL_HISTORY_SIZE*2];
-
         // Initialize the current line's base vertices
         createBaseLine();
 
@@ -52,6 +52,7 @@ public class GLLine {
         lineVerticesBuffer = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         lineVerticesBuffer.put(vertices).position(0);
     }
+
 
     /**
      * Creating the base line vertices
@@ -90,29 +91,62 @@ public class GLLine {
             yAxis += yOffset;
             vertexIndex+= (VERTEX_AMOUNT*2);
         }
-
-        for(int i = 0; i < this.scalingLevel.length; i++){
-            this.scalingLevel[i] = 0.0f;
-        }
-
-        FloatBuffer scaleInput = ByteBuffer.allocateDirect(this.scalingLevel.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        scaleInput.put(this.scalingLevel).position(0);
-        this.scalingLevelBuffer = scaleInput;
     }
 
     /**
      * Update the base line with decibel value
      */
-    public void updateVertices() {
+    public void updateVertices(boolean shouldUpdateHighlighting) {
 
         // Change to object array to traverse
         Float[] decibelFloatArray = decibelHistory.toArray(new Float[DECIBEL_HISTORY_SIZE]);
 
         int xOffset = 0;
-
-        float highlightingFactor = 1.0f;
+        float highlightingFactor;
         float averageDecibels;
-        int scalerIndex = 0;
+
+        if(shouldUpdateHighlighting) {
+            if (highlightingHibernationOn) {
+                highlightingHibernationCount -= 3;
+                if (highlightingHibernationCount <= 0) {
+                    highlightingHibernationOn = false;
+                }
+            }
+
+            if (highlightingOnMedium) {
+                decibelHistory.removeLast();
+                decibelHistory.removeLast();
+                decibelHistory.removeLast();
+
+                decibelHistory.addFirst(0.65f);
+                decibelHistory.addFirst(0.65f);
+                decibelHistory.addFirst(0.65f);
+
+                highlightingCount -= 3;
+                if (highlightingCount == 0) {
+                    highlightingOnMedium = false;
+                    highlightingHibernationOn = true;
+                    highlightingHibernationCount = 48;
+                    highlightingCurrently = false;
+                }
+            } else if (highlightingOnHigh) {
+                decibelHistory.removeLast();
+                decibelHistory.removeLast();
+                decibelHistory.removeLast();
+
+                decibelHistory.addFirst(0.75f);
+                decibelHistory.addFirst(0.75f);
+                decibelHistory.addFirst(0.75f);
+
+                highlightingCount -= 3;
+                if (highlightingCount == 0) {
+                    highlightingOnHigh = false;
+                    highlightingHibernationOn = true;
+                    highlightingHibernationCount = 48;
+                    highlightingCurrently = false;
+                }
+            }
+        }
 
         // Only loop for the size of the decibel array size
         for(int i = 0; i < DECIBEL_HISTORY_SIZE; i++){
@@ -130,59 +164,44 @@ public class GLLine {
                 default:                       averageDecibels = decibelFloatArray[i-2] + decibelFloatArray[i-1] + decibelFloatArray[i] + decibelFloatArray[i+1] + decibelFloatArray[i+2]; break;
             }
 
-            // TODO placeholder
             averageDecibels /= 5.0f;
+
 
             // Adding scaler value depending on the decibel
             // And it needs two because there are two points per y-axis
             // The value that's being initialized needs to be played with to have a smoother or more better looking visualizer
             if(averageDecibels <= 0.55) {
                 highlightingFactor = 10.0f;
-                this.scalingLevel[scalerIndex] = 0.015f;
-                this.scalingLevel[scalerIndex+1] = 0.015f;
-            } else if (averageDecibels <= 0.6) {
+            } else if (averageDecibels <= 0.6 || highlightingHibernationOn) {
+                highlightingFactor = 20.0f;
+            } else if (averageDecibels <= 0.65){
+                if(!highlightingOnMedium && shouldUpdateHighlighting){
+                    highlightingCount = 24;
+                    highlightingOnMedium = true;
+                    highlightingCurrently = true;
+                }
                 highlightingFactor = 50.0f;
-                this.scalingLevel[scalerIndex] = 0.02f;
-                this.scalingLevel[scalerIndex+1] = 0.02f;
-//            } else if (averageDecibels <= 0.6) {
-//                highlightingFactor = 55.0f;
-//                this.scalingLevel[scalerIndex] = 0.55f;
-//                this.scalingLevel[scalerIndex+1] = 0.55f;
-//            } else if (averageDecibels <= 0.6) {
-//                highlightingFactor = 55.0f;
-//                this.scalingLevel[scalerIndex] = 0.5f;
-//                this.scalingLevel[scalerIndex+1] = 0.5f;
-//            } else if (averageDecibels <= 0.65){
-//                highlightingFactor = 85.0f;
-//                this.scalingLevel[scalerIndex] = 0.65f;
-//                this.scalingLevel[scalerIndex+1] = 0.65f;
             } else {
+                if(!highlightingOnHigh && shouldUpdateHighlighting) {
+                    highlightingCount = 12;
+                    highlightingOnHigh = true;
+                    highlightingCurrently = true;
+                }
                 highlightingFactor = 100.0f;
-                this.scalingLevel[scalerIndex] = 0.03f;
-                this.scalingLevel[scalerIndex+1] = 0.03f;
             }
 
-            float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE + AMPLIFIER * highlightingFactor));
-            float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE + AMPLIFIER * highlightingFactor));
-            this.vertices[xOffset] = ampDataLeft;
-            this.vertices[xOffset+2] = scalingLevel[scalerIndex];
-
+            float ampDataLeft        = (this.leftSide - (DEFAULT_LINE_SIZE + AMPLIFIER * highlightingFactor));
+            float ampDataRight       = (this.rightSide + (DEFAULT_LINE_SIZE + AMPLIFIER * highlightingFactor));
+            this.vertices[xOffset]   = ampDataLeft;
             this.vertices[xOffset+7] = ampDataRight;
-            this.vertices[xOffset+9] = scalingLevel[scalerIndex+1];
 
             xOffset += 14;
-            scalerIndex += 2;
         }
 
 
         FloatBuffer fftInput = ByteBuffer.allocateDirect(this.vertices.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         fftInput.put(this.vertices).position(0);
         this.lineVerticesBuffer = fftInput;
-
-        // Setting FloatBuffer for the scaler
-        FloatBuffer scaleInput = ByteBuffer.allocateDirect(this.scalingLevel.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        scaleInput.put(this.scalingLevel).position(0);
-        this.scalingLevelBuffer = scaleInput;
     }
 
     /**
@@ -190,7 +209,6 @@ public class GLLine {
      */
     public void draw(int positionHandle, int colorHandle, Long visOneStartTime) {
         while (decibelHistory.peekFirst() == null) { continue; }
-        while (scalingLevelBuffer == null) { continue; }
 
         this.lineVerticesBuffer.position(POSITION_OFFSET);
         GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, this.lineVerticesBuffer);
@@ -207,20 +225,10 @@ public class GLLine {
         float[] dbs = new float[temp.length];
         for (int i = 0; i < DECIBEL_HISTORY_SIZE; ++i) {
             dbs[i] = temp[i] == null ? 0.0f : temp[i];
-
-            // TODO this was to possibly send in a negative value randomly
-//            if (Math.random() > 0.5) {
-//                dbs[i] *= -1;
-//            }
         }
 
         /** Updates the size of the dots using the most current decibel level, i.e. the first element of the decibel history */
         GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, dbs.length, dbs, 0);
-
-        // Pushing scaler buffer up to the GPU for Attribute variable
-//        GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.scalingLevelArrayHandle, this.scalingLevel.length, this.scalingLevel, 0);
-        GLES20.glVertexAttribPointer(VisualizerModel.getInstance().currentVisualizer.scalingLevelArrayHandle, 1, GLES20.GL_FLOAT, false, BYTES_PER_FLOAT, this.scalingLevelBuffer);
-        GLES20.glEnableVertexAttribArray(VisualizerModel.getInstance().currentVisualizer.scalingLevelArrayHandle);
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, VIS1_VERTEX_COUNT);
     }

@@ -18,6 +18,7 @@ import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.
 public class Utility {
 
     private Context context;
+    static boolean highlightingCurrently = false;
 
       /**
        * Pass context for connecting Resource
@@ -54,21 +55,17 @@ public class Utility {
         Pair<Long, Boolean> isTimeToUpdate = isTimeToUpdate(previousUpdateTime);
 
         /** A check to ensure that the current time has exceeded the desired refresh time */
-        if (isTimeToUpdate.second) {
+        if (isTimeToUpdate.second && !highlightingCurrently) {
             float newDbRatio = (float) newDecibelLevel / MAX_DB_LEVEL;
             newDbRatio = newDbRatio > MAX_DECIBEL_RATIO ? MAX_DECIBEL_RATIO : newDbRatio;
             /** Update the decibel history with the current decibel level */
             decibelHistory.removeLast();
             decibelHistory.removeLast();
             decibelHistory.removeLast();
-//            decibelHistory.removeLast();
-//            decibelHistory.removeLast();
 
             decibelHistory.addFirst(newDbRatio);
             decibelHistory.addFirst(newDbRatio);
             decibelHistory.addFirst(newDbRatio);
-//            decibelHistory.addFirst(newDbRatio);
-//            decibelHistory.addFirst(newDbRatio);
         }
         return isTimeToUpdate;
     }

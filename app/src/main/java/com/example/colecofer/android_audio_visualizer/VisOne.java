@@ -4,7 +4,6 @@ import android.content.Context;
 import android.opengl.GLES20;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_DB_LEVEL;
-import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_SCALING_LEVEL_ARRAY;
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_TIME;
 import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_DRAW_BOUNDARY;
 import static com.example.colecofer.android_audio_visualizer.Constants.LINE_AMT;
@@ -22,6 +21,12 @@ public class VisOne extends VisualizerBase {
     private float lineOffSet = (RIGHT_DRAW_BOUNDARY * 2) / (LINE_AMT - 1); //We want to display lines from -.99 to .99 (.99+.99=1.98)
     private Utility util;
     private Long visOneStartTime;
+
+    static boolean highlightingOnHigh = false;
+    static boolean highlightingOnMedium = false;
+    static boolean highlightingHibernationOn = false;
+    static int highlightingHibernationCount = 0;
+    static int highlightingCount = 0;
 
     /**
      * Constructor
@@ -54,15 +59,16 @@ public class VisOne extends VisualizerBase {
         this.colorHandle = colorHandle;
         this.currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, GLSL_DB_LEVEL);
         this.timeHandle = GLES20.glGetUniformLocation(programHandle, GLSL_TIME);
-//        this.scalingLevelArrayHandle = GLES20.glGetUniformLocation(programHandle, GLSL_SCALING_LEVEL_ARRAY);
-        // Getting the scaler handle
-        this.scalingLevelArrayHandle = GLES20.glGetAttribLocation(programHandle, GLSL_SCALING_LEVEL_ARRAY);
     }
 
     @Override
     public void updateVertices() {
         for(int i = 0; i < LINE_AMT; i++){
-            lines[i].updateVertices();
+            if(i == 0) {
+                lines[i].updateVertices(true);
+            } else {
+                lines[i].updateVertices(false);
+            }
         }
     }
 
