@@ -30,7 +30,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.PERCENTAG
  */
 public class AnimateLyrics {
     private int opacityUpdateInc = 20; //Amount of opacity to add each time update is called
-    private int opacityUpdateDec = -20; //Amount of opacity to add each time update is called
+    private int opacityUpdateDec = 0; //Amount of opacity to add each time update is called
 
     static TextView lyricsTextView;
     static ViewGroup.MarginLayoutParams lyricsParams;
@@ -44,6 +44,8 @@ public class AnimateLyrics {
     private int screenWidth;
     private int screenHeight;
     private boolean timeToFadeAwayFlag;
+    private float lyricEndTime;           //Amount of milliseconds that the current segment will be displayed for
+    private int numWordsInLyricSegment;       //Amount of words in the current lyric segment
 
 
     /**
@@ -90,15 +92,15 @@ public class AnimateLyrics {
     public void update() {
 
         //Calc time to display the lyric
-        float lyricDisplayTime = rawLyricsList.get(this.rawLyricsIndex).first - LYRIC_DISPLAY_OFFSET;
+        this.lyricEndTime = rawLyricsList.get(this.rawLyricsIndex).first /* - LYRIC_DISPLAY_OFFSET*/;
         float currentTime = VisualizerActivity.mediaPlayer.getCurrentPosition();
-        int numWordsInLyricSegment = this.rawLyricsList.get(this.rawLyricsIndex).second.length;
+        this.numWordsInLyricSegment = this.rawLyricsList.get(this.rawLyricsIndex).second.length;
 
-        if (currentTime >= lyricDisplayTime && this.rawLyricsIndex < this.sizeOfRawLyricsList) {
+        //This code will execute when it's time to display a new lyric segment
+        if (currentTime >= lyricEndTime && this.rawLyricsIndex < this.sizeOfRawLyricsList) {
             this.currentLyricsList = new ArrayList<>();
 
             //Check if there are more lyrics after this one
-            //TODO: Check for null value in passed rawLyrics (shouldn't have to subtract one)
             if(this.rawLyricsIndex < (this.sizeOfRawLyricsList - 1)) {
 
                 //Populate currentLyricsList with words in the current lyric segment
@@ -107,11 +109,16 @@ public class AnimateLyrics {
                     this.currentLyricsList.add(new Pair<>(word, 0x00FFFFFF));
                 }
 
-                this.rawLyricsIndex += 1; //Index to the next lyric
+                //Index to the next lyric
+                this.rawLyricsIndex += 1;
+
+                //Update variable to signal to stop the fade out animation
                 this.timeToFadeAwayFlag = false;
+
             }
             this.lyricIndex = 0;
         }
+
         this.updateOpacity();
     }
 
@@ -119,52 +126,44 @@ public class AnimateLyrics {
      * Update the opacity of each word one at a time
      */
     void updateOpacity() {
-        List<SpannableString> lyricsToDisplay = new ArrayList<>();
+        //List<SpannableString> lyricsToDisplay = new ArrayList<>();
         int currentLyricListSize = currentLyricsList.size();
 
         //Check that there are still lyrics to display
         if (this.lyricIndex < currentLyricListSize) {
 
+            //Calculate the duration that the current lyrics will be displayed
+            float lyricSegmentDisplayDuration = (255 / opacityUpdateInc) * 18;
+            if (this.rawLyricsIndex + 1 < rawLyricsList.size()) {
+                lyricSegmentDisplayDuration = rawLyricsList.get(this.rawLyricsIndex + 1).first - rawLyricsList.get(this.rawLyricsIndex).first;
+            }
+
+            this.lyricEndTime = rawLyricsList.get(this.rawLyricsIndex).first;  // - LYRIC_DISPLAY_OFFSET;
+            float animationDuration = lyricSegmentDisplayDuration * 1/2;
+            float currentTime = VisualizerActivity.mediaPlayer.getCurrentPosition();
+            float timeToStartFadeAway = lyricEndTime - animationDuration;
+
+            //Check if it's time to start the fadeaway animation
+            if (currentTime >= timeToStartFadeAway && this.timeToFadeAwayFlag == false) {
+                Log.d("test", "timeToFadeAwayFlag switched to true");
+                this.lyricIndex = 0;
+                this.timeToFadeAwayFlag = true;
+            }
+
             //Alter the opacity one word at a time
             for (int i = 0; i <= this.lyricIndex && i < currentLyricListSize; ++i) {
                 SpannableString word = new SpannableString(currentLyricsList.get(i).first);
                 int colorSpan = currentLyricsList.get(i).second;
-
-                float currentTime = VisualizerActivity.mediaPlayer.getCurrentPosition();
-                float lyricEndTime = rawLyricsList.get(this.rawLyricsIndex).first;// - LYRIC_DISPLAY_OFFSET;
-
                 int opacity = Color.alpha(colorSpan);
-
-                int word1opacity = Color.alpha(currentLyricsList.get(0).second);
-                Log.d("test", "Word 1 pacity: " + word1opacity);
-
-                float lyricSegmentDisplayDuration = (255 / opacityUpdateInc) * 16;
-
-                if (this.rawLyricsIndex + 1 < rawLyricsList.size()) {
-                  lyricSegmentDisplayDuration = rawLyricsList.get(this.rawLyricsIndex + 1).first - rawLyricsList.get(this.rawLyricsIndex).first;
-                }
-
-                //Calculate when and for how long to display the fadeaway animation
-                float animationDuration = lyricSegmentDisplayDuration * 1/3;
-                float timeToStartFadeAway = lyricEndTime - animationDuration;
-
-                //Check if it's time to start the fadeaway animation
-                if (currentTime >= timeToStartFadeAway && this.timeToFadeAwayFlag == false) {
-                    Log.d("test", "timeToFadeAwayFlag switched to false");
-                    this.lyricIndex = 0;
-                    this.timeToFadeAwayFlag = true;
-                }
 
                 //Update the opacity accordingly if we are fading in or out
                 if (this.timeToFadeAwayFlag == true) {
                     opacity += this.opacityUpdateDec;
+                    if (opacity <= 0) opacity = 0;
                 } else {
                     opacity += this.opacityUpdateInc;
+                    if (opacity >= 255) opacity = 255;
                 }
-
-                //Cap off the opacity
-                if (opacity <= 0) opacity = 0;
-                if (opacity >= 255) opacity = 255;
 
                 //Construct the updated color into hex
                 String updatedColor = String.format("#%02xFFFFFF", opacity);
@@ -178,7 +177,7 @@ public class AnimateLyrics {
             //Clear the string
             this.lyricsTextView.setText(new SpannableString(""));
 
-            //Create one string to display the lyrics
+            //Add them to the textview
             for (Pair<SpannableString, Integer> lyric: this.currentLyricsList) {
                 this.lyricsTextView.append(lyric.first);
             }
@@ -190,4 +189,120 @@ public class AnimateLyrics {
         }
     }
 
+
+//    /**
+//     * Update the opacity of each word one at a time
+//     */
+//    void fadeInAnimation() {
+//        int currentLyricListSize = currentLyricsList.size();
+//
+//        //Check that there are still lyrics to display
+//        if (this.lyricIndex < currentLyricListSize) {
+//
+//        //            float lyricSegmentDisplayDuration = (255 / opacityUpdateInc) * 18;
+//        //            if (this.rawLyricsIndex + 1 < rawLyricsList.size()) {
+//        //                lyricSegmentDisplayDuration = rawLyricsList.get(this.rawLyricsIndex + 1).first - rawLyricsList.get(this.rawLyricsIndex).first;
+//        //            }
+//        //            this.lyricEndTime = rawLyricsList.get(this.rawLyricsIndex).first;  // - LYRIC_DISPLAY_OFFSET;
+//        //            float animationDuration = lyricSegmentDisplayDuration * 1/3;
+//        //            float currentTime = VisualizerActivity.mediaPlayer.getCurrentPosition();
+//        //            float timeToStartFadeAway = lyricEndTime - animationDuration;
+//        //
+//        //            //Check if it's time to start the fadeaway animation
+//        //            if (currentTime >= timeToStartFadeAway && this.timeToFadeAwayFlag == false) {
+//        //                Log.d("test", "timeToFadeAwayFlag switched to true");
+//        //                this.lyricIndex = 0;
+//        //                this.timeToFadeAwayFlag = true;
+//        //            }
+//
+//            //Alter the opacity one word at a time
+//            for (int i = 0; i <= this.lyricIndex && i < currentLyricListSize; ++i) {
+//                SpannableString word = new SpannableString(currentLyricsList.get(i).first);
+//                int colorSpan = currentLyricsList.get(i).second;
+//                int opacity = Color.alpha(colorSpan);
+//
+//                opacity += this.opacityUpdateInc;
+//                if (opacity >= 255) opacity = 255;
+//
+//                //Construct the updated color into hex
+//                String updatedColor = String.format("#%02xFFFFFF", opacity);
+//                int colorAsInt = Color.parseColor(updatedColor);
+//
+//                //Construct a new Span for the previous word (because ArrayLists are immutable)
+//                word.setSpan(new ForegroundColorSpan(colorAsInt), 0, word.length(), Spannable.SPAN_COMPOSING); //Try some span flags out (SPAN_INCLUSIVE_EXCLUSIVE)
+//                currentLyricsList.set(i, new Pair<>(word, colorAsInt));
+//            }
+//
+//            //Clear the string
+//            this.lyricsTextView.setText(new SpannableString(""));
+//
+//            //Add them to the textview
+//            for (Pair<SpannableString, Integer> lyric: this.currentLyricsList) {
+//                this.lyricsTextView.append(lyric.first);
+//            }
+//
+//            // Increment to the next word
+//            if (this.lyricIndex < (currentLyricListSize - 1)) {
+//                this.lyricIndex += 1;
+//            }
+//        }
+//    }
+//
+//    /**
+//     * Update the opacity of each word one at a time
+//     */
+//    void fadeOutAnimation() {
+//        int currentLyricListSize = currentLyricsList.size();
+//
+//        //Check that there are still lyrics to display
+//        if (this.lyricIndex < currentLyricListSize) {
+//
+//            //Alter the opacity one word at a time
+//            for (int i = 0; i <= this.lyricIndex && i < currentLyricListSize; ++i) {
+//                SpannableString word = new SpannableString(currentLyricsList.get(i).first);
+//                int colorSpan = currentLyricsList.get(i).second;
+//                int opacity = Color.alpha(colorSpan);
+//
+//                opacity += this.opacityUpdateDec;
+//                if (opacity <= 0) opacity = 0;
+//
+//                //Construct the updated color into hex
+//                String updatedColor = String.format("#%02xFFFFFF", opacity);
+//                int colorAsInt = Color.parseColor(updatedColor);
+//
+//                //Construct a new Span for the previous word (because ArrayLists are immutable)
+//                word.setSpan(new ForegroundColorSpan(colorAsInt), 0, word.length(), Spannable.SPAN_COMPOSING); //Try some span flags out (SPAN_INCLUSIVE_EXCLUSIVE)
+//                currentLyricsList.set(i, new Pair<>(word, colorAsInt));
+//            }
+//
+//            //Clear the string
+//            this.lyricsTextView.setText(new SpannableString(""));
+//
+//            //Add them to the textview
+//            for (Pair<SpannableString, Integer> lyric: this.currentLyricsList) {
+//                this.lyricsTextView.append(lyric.first);
+//            }
+//
+//            // Increment to the next word
+//            if (this.lyricIndex < (currentLyricListSize - 1)) {
+//                this.lyricIndex += 1;
+//            }
+//        }
+//    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
