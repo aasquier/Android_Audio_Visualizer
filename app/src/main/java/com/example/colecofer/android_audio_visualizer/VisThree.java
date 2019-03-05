@@ -1,8 +1,11 @@
 package com.example.colecofer.android_audio_visualizer;
 
+import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.util.DisplayMetrics;
+import android.view.WindowManager;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_DB_LEVEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_MATRIX;
@@ -69,10 +72,11 @@ public class VisThree extends VisualizerBase {
 
     @Override
     public void updateVertices() {
+        updateFractalLineArray();
         for(int i = 0; i < LINE_AMT_V3; i++){
             lines[i].updateVertices();
         }
-        updateFractalLineArray();
+
     }
 
     /**
@@ -80,8 +84,8 @@ public class VisThree extends VisualizerBase {
      * This runs once per draw cycle
      */
     public void updateFractalLineArray(){
-        if(decibelHistory.peek() > .675f){
-            shouldDrawFractalOnLine[LINE_AMT_V3 - 1] = 3;
+        if(decibelHistory.peek() > .8f){
+            shouldDrawFractalOnLine[LINE_AMT_V3 - 1] = 4;
         } else {
             if (shouldDrawFractalOnLine[LINE_AMT_V3 - 1] != 0)
                 shouldDrawFractalOnLine[LINE_AMT_V3 - 1] -= 1;
@@ -102,10 +106,19 @@ public class VisThree extends VisualizerBase {
     @Override
     public void draw(float[] mvpMatrix) {
 
+        int width = 2392;
+        int height =1356;
+
         // ---------- bottom left -----------
+
+        GLES20.glViewport(0, 0, width/2, height/2);
+
         Matrix.setIdentityM(matrix,0);                                   // clean matrix buffer
-        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
-        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);            // move vertex to location
+
+//        Matrix.frustumM(matrix, 0, -1.0f, 1.0f, -1.0f, 1.0f, 1, 2);
+//        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
+//        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);            // move vertex to location
+
 
         Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);  // apply final effect
 
@@ -117,10 +130,14 @@ public class VisThree extends VisualizerBase {
         }
 
         // ---------- bottom right -----------
+        GLES20.glViewport(width/2, 0, width/2, height/2);
+
         Matrix.setIdentityM(matrix,0);                                   // clean matrix buffer
+
         Matrix.scaleM(matrix, 0, -1.0f, 1.0f, 1.0f);            // flip vertex
-        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
-        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);            // move vertex to location
+//        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
+//        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);            // move vertex to location
+
 
         Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);  // apply final effect
 
@@ -132,10 +149,12 @@ public class VisThree extends VisualizerBase {
         }
 
         // ---------- top left -----------
+        GLES20.glViewport(0, height/2, width/2, height/2);
+
         Matrix.setIdentityM(matrix,0);                                   // clean matrix buffer
         Matrix.scaleM(matrix, 0, 1.0f, -1.0f, 1.0f);            // flip vertex
-        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
-        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);             // move vertex to location
+//        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
+//        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);             // move vertex to location
 
         Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);  // apply final effect
 
@@ -147,10 +166,12 @@ public class VisThree extends VisualizerBase {
         }
 
         // ---------- top right -----------
+        GLES20.glViewport(width/2, height/2, width/2, height/2);
+
         Matrix.setIdentityM(matrix,0);                                   // clean matrix buffer
         Matrix.scaleM(matrix, 0, -1.0f, -1.0f, 1.0f);           // flip vertex
-        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
-        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);            // move vertex to location
+//        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
+//        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);            // move vertex to location
 
         Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);  // apply final effect
 

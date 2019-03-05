@@ -130,6 +130,7 @@ uniform float time;                 // Time since this visualizer began
 uniform float a_DB_Level[50];       // Decibel level history, need to change the 50 as the constant changes
 uniform int should_Morph_To_Fractal;// Represents a bool for whether the line in question should transform based on the fractal field
 
+
 void main() {           		    // The entry point for our vertex shader.
 
     vec2 res = vec2(.8, .8);
@@ -143,25 +144,47 @@ void main() {           		    // The entry point for our vertex shader.
         positionIndex = int(24. + floor(a_Position.y * 24.));
     }
 
-    vec4 newPosition;
+    float scaleTime = time / 2000.;
+
+    float noise = snoise(vec2(a_Position.xy/res.xy));
+
+    // ------------ sinus wave -------------------------------------
+
+    vec2 uv = a_Position.xy;
+
+    float freq = a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3]+a_DB_Level[4]+a_DB_Level[positionIndex]/6.0;
+
+    uv.x += freq * 0.03;
+
+    uv.y += sin(uv.x * 10.0 + scaleTime) * cos(uv.x * 2.0) * freq * 0.01;
 
     // ------------ wave effect ------------------------------------
 
-    float noise = snoise(vec2(a_Position.xy/res.xy));//, time/10000.));
     if(should_Morph_To_Fractal == 3) {
-        newPosition = vec4(a_Position.x, a_Position.y + (noise * ((a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3])+a_DB_Level[4]+a_DB_Level[positionIndex] / 6.0) * 0.05), a_Position.zw);
+        uv = vec2(uv.x, uv.y + (noise * ((a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3])+a_DB_Level[4]+a_DB_Level[positionIndex] / 6.0) * 0.05));
     } else if(should_Morph_To_Fractal == 2) {
-        newPosition = vec4(a_Position.x, a_Position.y + (noise * ((a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3])+a_DB_Level[4]+a_DB_Level[positionIndex] / 6.0) * 0.033), a_Position.zw);
+        uv = vec2(uv.x, uv.y + (noise * ((a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3])+a_DB_Level[4]+a_DB_Level[positionIndex] / 6.0) * 0.033));
     } else if(should_Morph_To_Fractal == 1){
-        newPosition = vec4(a_Position.x, a_Position.y + (noise * ((a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3])+a_DB_Level[4]+a_DB_Level[positionIndex] / 6.0) * 0.01625), a_Position.zw);
+        uv = vec2(uv.x, uv.y + (noise * ((a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3])+a_DB_Level[4]+a_DB_Level[positionIndex] / 6.0) * 0.01625));
     } else {
-        newPosition = a_Position;
+        uv.y += noise * freq * 0.01;
     }
 
-//    newPosition.y += noise * a_DB_Level[positionIndex] * 0.444;
-    if (newPosition.y > 1.0 || newPosition.y < -1.0) {
-        v_Color = vec4(0.0, 0.0, 0.0, 0.0);
-    }
+//    float noise = snoise(vec2(a_Position.xy/res.xy));//, time/10000.));
+//    if(should_Morph_To_Fractal == 3) {
+//        newPosition = vec4(a_Position.x, a_Position.y + (noise * ((a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3])+a_DB_Level[4]+a_DB_Level[positionIndex] / 6.0) * 0.05), a_Position.zw);
+//    } else if(should_Morph_To_Fractal == 2) {
+//        newPosition = vec4(a_Position.x, a_Position.y + (noise * ((a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3])+a_DB_Level[4]+a_DB_Level[positionIndex] / 6.0) * 0.033), a_Position.zw);
+//    } else if(should_Morph_To_Fractal == 1){
+//        newPosition = vec4(a_Position.x, a_Position.y + (noise * ((a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3])+a_DB_Level[4]+a_DB_Level[positionIndex] / 6.0) * 0.01625), a_Position.zw);
+//    } else {
+////        newPosition = vec4(a_Position.x, a_Position.y + noise * 0.05 * scaleTime, a_Position.zw);
+//        newPosition = a.Position;
+//    }
+
+    // -------- scale shader --------------
+
+    vec4 newPosition = vec4(uv/res.xy, a_Position.zw);
 
     // -------- apply final result --------------
 
