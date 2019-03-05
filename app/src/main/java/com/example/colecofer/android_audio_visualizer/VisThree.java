@@ -80,7 +80,7 @@ public class VisThree extends VisualizerBase {
      * This runs once per draw cycle
      */
     public void updateFractalLineArray(){
-        if(decibelHistory.peek() > .7f){
+        if(decibelHistory.peek() > .675f){
             shouldDrawFractalOnLine[LINE_AMT_V3 - 1] = 3;
         } else {
             if (shouldDrawFractalOnLine[LINE_AMT_V3 - 1] != 0)
