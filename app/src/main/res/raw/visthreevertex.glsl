@@ -128,10 +128,11 @@ attribute vec4 a_Color;	            // Per-vertex color information we will pass
 varying vec4   v_Color;             // This will be passed into the fragment shader.
 uniform float time;                 // Time since this visualizer began
 uniform float a_DB_Level[50];       // Decibel level history, need to change the 50 as the constant changes
+uniform int should_Morph_To_Fractal;// Represents a bool for whether the line in question should transform based on the fractal field
 
 void main() {           		    // The entry point for our vertex shader.
 
-    //vec2 res = vec2(1.2, 1.2);
+    vec2 res = vec2(.8, .8);
 
     v_Color = a_Color;              // just pass whatever input color to fragment shader, do nothing
 
@@ -142,12 +143,20 @@ void main() {           		    // The entry point for our vertex shader.
         positionIndex = int(24. + floor(a_Position.y * 24.));
     }
 
-//    vec4 newPosition = a_Position;
+    vec4 newPosition;
 
     // ------------ wave effect ------------------------------------
 
-    float noise = snoise(vec3(a_Position.xy, time/10000.));
-    vec4 newPosition = vec4(a_Position.x, a_Position.y + (noise * ((a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3])+a_DB_Level[4]+a_DB_Level[positionIndex] / 6.0) * 0.05), a_Position.zw);
+    float noise = snoise(vec2(a_Position.xy/res.xy));//, time/10000.));
+    if(should_Morph_To_Fractal == 3) {
+        newPosition = vec4(a_Position.x, a_Position.y + (noise * ((a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3])+a_DB_Level[4]+a_DB_Level[positionIndex] / 6.0) * 0.05), a_Position.zw);
+    } else if(should_Morph_To_Fractal == 2) {
+        newPosition = vec4(a_Position.x, a_Position.y + (noise * ((a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3])+a_DB_Level[4]+a_DB_Level[positionIndex] / 6.0) * 0.033), a_Position.zw);
+    } else if(should_Morph_To_Fractal == 1){
+        newPosition = vec4(a_Position.x, a_Position.y + (noise * ((a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3])+a_DB_Level[4]+a_DB_Level[positionIndex] / 6.0) * 0.01625), a_Position.zw);
+    } else {
+        newPosition = a_Position;
+    }
 
 //    newPosition.y += noise * a_DB_Level[positionIndex] * 0.444;
     if (newPosition.y > 1.0 || newPosition.y < -1.0) {
