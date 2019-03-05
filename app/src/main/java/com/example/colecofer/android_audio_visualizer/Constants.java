@@ -17,7 +17,12 @@ final class Constants {
 
     /** Lyrics Animation */
     static final float LYRICS_TEXT_SIZE = 22f;
-    static final float PERCENTAGE_FROM_TOP = 0.60f;         //Percentage of screen height to display lyrics at
+    static final float PERCENT_FROM_TOP = 0.65f;  //Percentage of screen height to display lyrics at
+    static final int MAX_HEIGHT_OFFSET = 35;     //Amount of pixels the textView is allowed to scroll until it stops
+    static final int SCROLL_LYRICS_SPEED = 1;    //How fast in pixels/update time (~once per 16millis)
+    static final int LEFT_PADDING = 100;         //LyricsTextView padding locations
+    static final int RIGHT_PADDING = 100;
+    static final int BOTTOM_PADDING = 100;
     static final float DISPLAY_MULTILINE_PROXIMITY = 2000f; //If time between lyrics are smaller than this amount, then multiple lyrics will display on the screen at the same time
     static final float LYRIC_DISPLAY_OFFSET = 300f;         //Offset of time to display lyrics before they are actually sung in the song
 

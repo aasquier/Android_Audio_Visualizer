@@ -7,18 +7,20 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.util.Pair;
 import android.util.TypedValue;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import static com.example.colecofer.android_audio_visualizer.Constants.BOTTOM_PADDING;
+import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_PADDING;
 import static com.example.colecofer.android_audio_visualizer.Constants.LYRICS_TEXT_SIZE;
-import static com.example.colecofer.android_audio_visualizer.Constants.LYRIC_DISPLAY_OFFSET;
-import static com.example.colecofer.android_audio_visualizer.Constants.PERCENTAGE_FROM_TOP;
+import static com.example.colecofer.android_audio_visualizer.Constants.MAX_HEIGHT_OFFSET;
+import static com.example.colecofer.android_audio_visualizer.Constants.PERCENT_FROM_TOP;
+import static com.example.colecofer.android_audio_visualizer.Constants.RIGHT_PADDING;
+import static com.example.colecofer.android_audio_visualizer.Constants.SCROLL_LYRICS_SPEED;
 
 
 /**
@@ -30,7 +32,6 @@ import static com.example.colecofer.android_audio_visualizer.Constants.PERCENTAG
  */
 public class AnimateLyrics {
     private int opacityUpdateInc = 20; //Amount of opacity to add each time update is called
-    private int opacityUpdateDec = 0; //Amount of opacity to add each time update is called
 
     static TextView lyricsTextView;
     static ViewGroup.MarginLayoutParams lyricsParams;
@@ -42,9 +43,12 @@ public class AnimateLyrics {
     private int rawLyricsIndex = 0;
     private int lyricIndex;
     private int screenHeight;
-    private float lyricEndTime;           //Amount of milliseconds that the current segment will be displayed for
+    private float lyricEndTime;               //Amount of milliseconds that the current segment will be displayed for
     private int numWordsInLyricSegment;       //Amount of words in the current lyric segment
 
+    //Scrolling variables
+    private int defaultHeightPadding;         //Default height that the lyricsTextView should be displayed at
+    private int maxHeightPadding;             //Max height that the lyricsTextView can scroll too
 
     /**
      * Animate Lyrics Constructor
@@ -74,15 +78,15 @@ public class AnimateLyrics {
         //Screen dimensions
         this.screenHeight = screenHeight;
 
-        //Set the height as a percentage of the screen height
-        int height = (int) (this.screenHeight * PERCENTAGE_FROM_TOP);
-        this.lyricsTextView.setPadding(100, height, 100, 100);
+        //Set the default height as a percentage of the screen height
+        this.defaultHeightPadding = (int) (this.screenHeight * PERCENT_FROM_TOP);
+        this.lyricsTextView.setPadding(LEFT_PADDING, this.defaultHeightPadding, RIGHT_PADDING, BOTTOM_PADDING);
+        this.maxHeightPadding = this.defaultHeightPadding - MAX_HEIGHT_OFFSET;
     }
 
 
     /**
      * Displays the next set of lyrics according to the timestamps
-     * TODO: Possibly take lyrics off screen if they sit around too long (like the end)
      */
     public void update() {
 
@@ -106,15 +110,48 @@ public class AnimateLyrics {
                 //Index to the next lyric
                 this.rawLyricsIndex += 1;
             }
+            this.lyricsTextView.setText(new SpannableString(""));
             this.lyricIndex = 0;
         }
-        this.updateOpacity();
+        this.scrollTextView();
+        this.fadeInLyrics();
     }
 
     /**
-     * Update the opacity of each word one at a time
+     * Animated the lyricsTextView in an upward scrolling motion.
+     * Once new lyrics appear the position gets reset to the start of the textview.
      */
-    void updateOpacity() {
+    void scrollTextView() {
+        int currentHeightPadding = this.lyricsTextView.getPaddingTop();
+
+        //Check if we have scrolled to the max height, and keep it there if so
+        if (currentHeightPadding <= this.maxHeightPadding) {
+            this.updateHeightPadding(this.maxHeightPadding);
+        } else {
+            //Decrement the lyrics padding to animate it scrolling upward
+            this.updateHeightPadding(currentHeightPadding - SCROLL_LYRICS_SPEED);
+        }
+
+        //Reset the height padding if we display a new lyric segment
+        if (this.lyricIndex == 0) {
+            this.updateHeightPadding(this.defaultHeightPadding);
+        }
+    }
+
+    /**
+     * A convient function to only update the height padding, while keeping the rest of the
+     * padding defined by constants.
+     * @param height the new height for the lyricsTextView to be displayed at.
+     */
+    void updateHeightPadding(int height) {
+        this.lyricsTextView.setPadding(LEFT_PADDING, height, RIGHT_PADDING, BOTTOM_PADDING);
+    }
+
+    /**
+     * Update the opacity of each word one at a time creating a fade in animation
+     * as new lyrics get displayed onto the screen.
+     */
+    void fadeInLyrics() {
         int currentLyricListSize = currentLyricsList.size();
 
         //Check that there are still lyrics to display

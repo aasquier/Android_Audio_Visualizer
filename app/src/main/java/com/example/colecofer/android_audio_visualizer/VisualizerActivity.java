@@ -276,7 +276,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         if(isTimeToRefreshScreen.second) {
             this.animateTitleOpacity();
             VisualizerModel.getInstance().currentVisualizer.updateVertices();
-            animateLyrics.update(); //Check if it's time to display new lyrics
+            animateLyrics.update();
         }
     }
 
