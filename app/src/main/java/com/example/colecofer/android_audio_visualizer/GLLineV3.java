@@ -144,7 +144,7 @@ public class GLLineV3 {
     /**
      * Returns a floatbuffer of values to be drawn. (with timeHandle)
      */
-    public void draw(int positionHandle, int colorHandle, int timeHandle, long startTime) {
+    public void draw(int positionHandle, int colorHandle, int timeHandle, long startTime, int shouldMorphHandle, int shouldMorphToFractal) {
         /** Position Handle */
         this.lineVerticesBuffer.position(POSITION_OFFSET);
         GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, this.lineVerticesBuffer);
@@ -167,6 +167,9 @@ public class GLLineV3 {
         }
 
         GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, decibelsFloatArray.length, decibelsFloatArray, 0);
+
+        /** shouldMorphToFractalHandle */
+        GLES20.glUniform1i(shouldMorphHandle, shouldMorphToFractal);
 
         /** finally draw buffer */
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, VIS3_VERTEX_COUNT);
