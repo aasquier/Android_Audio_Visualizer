@@ -36,6 +36,8 @@ public class GLLine {
     private float[] vertices;
     private float leftSide;
     private float rightSide;
+    private int HIGH = 15;
+    private int MEDIUM = DECIBEL_HISTORY_SIZE;
 
     /**
      * Constructor
@@ -111,44 +113,34 @@ public class GLLine {
                 }
             } else {
                 if (highlightingOnMedium) {
-                    decibelHistory.removeLast();
-                    decibelHistory.removeLast();
-                    decibelHistory.removeLast();
-
-                    decibelHistory.addFirst(-0.65f);
-                    decibelHistory.addFirst(-0.65f);
-                    decibelHistory.addFirst(-0.65f);
-
                     highlightingCount -= 3;
 
                     if (highlightingCount <= 0) {
                         highlightingOnMedium = false;
                         highlightingHibernationOn = true;
                         highlightingHibernationCount = 33;
-                        highlightingCurrently = false;
                     }
                 } else if (highlightingOnHigh) {
-                    decibelHistory.removeLast();
-                    decibelHistory.removeLast();
-                    decibelHistory.removeLast();
-
-                    decibelHistory.addFirst(-0.75f);
-                    decibelHistory.addFirst(-0.75f);
-                    decibelHistory.addFirst(-0.75f);
-
                     highlightingCount -= 3;
 
                     if (highlightingCount <= 0) {
                         highlightingOnHigh = false;
                         highlightingHibernationOn = true;
                         highlightingHibernationCount = 33;
-                        highlightingCurrently = false;
                     }
                 }
             }
         }
         // Change to object array to traverse
         Float[] decibelFloatArray = decibelHistory.toArray(new Float[DECIBEL_HISTORY_SIZE]);
+
+        if(highlightingOnMedium) {
+            for(int i = 0; i < )
+        } else if (highlightingOnHigh) {
+
+        } else if (highlightingHibernationOn) {
+
+        }
 
         // Only loop for the size of the decibel array size
         for(int i = 0; i < DECIBEL_HISTORY_SIZE; i++){
@@ -158,45 +150,40 @@ public class GLLine {
             // Amplification should be half for both sides because Amplification = left + right
 
             // Takes the average of the five decibel levels surrounding the current y-position of the line in question
-//            switch(i) {
-//                case 0:                        averageDecibels = decibelFloatArray[0] + decibelFloatArray[1] + decibelFloatArray[2] + decibelFloatArray[3] + decibelFloatArray[4]; break;
-//                case 1:                        averageDecibels = decibelFloatArray[1] + decibelFloatArray[2] + decibelFloatArray[3] + decibelFloatArray[4] + decibelFloatArray[5]; break;
-//                case DECIBEL_HISTORY_SIZE - 2: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE - 6] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 5] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 4] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 2]; break;
-//                case DECIBEL_HISTORY_SIZE - 1: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE - 5] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 4] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 2] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 1]; break;
-//                default:                       averageDecibels = decibelFloatArray[i-2] + decibelFloatArray[i-1] + decibelFloatArray[i] + decibelFloatArray[i+1] + decibelFloatArray[i+2]; break;
-//            }
+            switch(i) {
+                case 0:                        averageDecibels = decibelFloatArray[0] + decibelFloatArray[1] + decibelFloatArray[2] + decibelFloatArray[3] + decibelFloatArray[4]; break;
+                case 1:                        averageDecibels = decibelFloatArray[1] + decibelFloatArray[2] + decibelFloatArray[3] + decibelFloatArray[4] + decibelFloatArray[5]; break;
+                case DECIBEL_HISTORY_SIZE - 2: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE - 6] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 5] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 4] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 2]; break;
+                case DECIBEL_HISTORY_SIZE - 1: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE - 5] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 4] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 2] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 1]; break;
+                default:                       averageDecibels = decibelFloatArray[i-2] + decibelFloatArray[i-1] + decibelFloatArray[i] + decibelFloatArray[i+1] + decibelFloatArray[i+2]; break;
+            }
 
-//            averageDecibels /= 5.0f;
-            averageDecibels = decibelFloatArray[i];
+            averageDecibels /= 5.0f;
 
 
             // Adding scaler value depending on the decibel
             // And it needs two because there are two points per y-axis
             // The value that's being initialized needs to be played with to have a smoother or more better looking visualizer
-            if(averageDecibels <= 0.55f && averageDecibels >= 0.0f) {
-                highlightingFactor = 10.0f;
-            } else if (averageDecibels <= 0.6f && averageDecibels >= 0.0) {
-                highlightingFactor = 20.0f;
-            } else if (decibelFloatArray[i] == -0.65f) {
+            if (decibelFloatArray[i] == -0.65f) {
                 highlightingFactor = 50.0f;
             } else if (decibelFloatArray[i] == -0.75) {
                 highlightingFactor = 100.0f;
-            } else if (averageDecibels <= 0.65f && averageDecibels >= 0.0f && !highlightingHibernationOn && !highlightingOnHigh){
+            } else if(averageDecibels <= 0.55f && averageDecibels >= 0.0f) {
+                highlightingFactor = 10.0f;
+            } else if (averageDecibels <= 0.6f && averageDecibels >= 0.0) {
+                highlightingFactor = 20.0f;
+            } else if (averageDecibels <= 0.65f){
                 if(!highlightingOnMedium && shouldUpdateHighlighting){
-                    highlightingCount = 48;
+                    highlightingCount = 0;
                     highlightingOnMedium = true;
-                    highlightingCurrently = true;
                 }
                 highlightingFactor = 50.0f;
-            } else if (averageDecibels > 0.65f && averageDecibels >= 0.0f && !highlightingHibernationOn && !highlightingOnMedium){
+            } else if (averageDecibels > 0.65f){
                 if(!highlightingOnHigh && shouldUpdateHighlighting) {
-                    highlightingCount = 12;
+                    highlightingCount = 0;
                     highlightingOnHigh = true;
-                    highlightingCurrently = true;
                 }
                 highlightingFactor = 100.0f;
-            } else {
-                highlightingFactor = 15.0f;
             }
 
             float ampDataLeft        = (this.leftSide - (DEFAULT_LINE_SIZE + AMPLIFIER * highlightingFactor));
