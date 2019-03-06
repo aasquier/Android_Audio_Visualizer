@@ -37,8 +37,8 @@ public class GLLineV3 {
     public GLLineV3(float xPosition) {
 
         this.leftSide = xPosition;   // Current line's left side coord
-//        this.rightSide = leftSide + 0.005f;  // Current line's right side coord
-        this.rightSide = leftSide;  // + 0.04f; Current line's right side coord
+        this.rightSide = leftSide + 0.004f;  // Current line's right side coord
+//        this.rightSide = leftSide;  // + 0.04f; Current line's right side coord
 
 
         // Initialize the current line's base vertices

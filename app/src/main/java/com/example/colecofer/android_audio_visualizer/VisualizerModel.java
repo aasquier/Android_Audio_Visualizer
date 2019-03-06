@@ -77,9 +77,9 @@ public class VisualizerModel {
     public void initVisualizerQueue() {
         visQueue = new ConcurrentLinkedQueue<>();
 
-       visQueue.add(visOne);
+        visQueue.add(visOne);
         visQueue.add(visTwo);
-       visQueue.add(visThree);
+        visQueue.add(visThree);
 
         visCount = visQueue.size();
 

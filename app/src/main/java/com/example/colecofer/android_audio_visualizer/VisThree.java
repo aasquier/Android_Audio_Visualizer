@@ -29,8 +29,8 @@ public class VisThree extends VisualizerBase {
 
     private long visThreeStartTime;
 
-    private int[] shouldDrawFractalOnLine = new int[LINE_AMT_V3];
-    protected int shouldDrawFractalHandle;
+    private int[] lineFractalStrength = new int[LINE_AMT_V3];
+    protected int lineFractalStrengthHandle;
 
     /**
      * Constructor
@@ -64,15 +64,16 @@ public class VisThree extends VisualizerBase {
         this.currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, GLSL_DB_LEVEL);
         this.timeHandle = GLES20.glGetUniformLocation(programHandle, GLSL_TIME);
         this.matrixHandle = GLES20.glGetUniformLocation(programHandle, GLSL_MATRIX);
-        this.shouldDrawFractalHandle = GLES20.glGetUniformLocation(programHandle, "should_Morph_To_Fractal");
+        this.lineFractalStrengthHandle = GLES20.glGetUniformLocation(programHandle, "lineFractalStrength");
     }
 
     @Override
     public void updateVertices() {
+        updateFractalLineArray();
         for(int i = 0; i < LINE_AMT_V3; i++){
             lines[i].updateVertices();
         }
-        updateFractalLineArray();
+
     }
 
     /**
@@ -80,18 +81,18 @@ public class VisThree extends VisualizerBase {
      * This runs once per draw cycle
      */
     public void updateFractalLineArray(){
-        if(decibelHistory.peek() > .675f){
-            shouldDrawFractalOnLine[LINE_AMT_V3 - 1] = 3;
+        if(decibelHistory.peek() > .725f){
+            lineFractalStrength[LINE_AMT_V3 - 1] = 4;
         } else {
-            if (shouldDrawFractalOnLine[LINE_AMT_V3 - 1] != 0)
-                shouldDrawFractalOnLine[LINE_AMT_V3 - 1] -= 1;
+            if (lineFractalStrength[LINE_AMT_V3 - 1] != 0)
+                lineFractalStrength[LINE_AMT_V3 - 1] -= 1;
         }
 
         for(int i = 0; i < LINE_AMT_V3 - 1; i++){
-            if(shouldDrawFractalOnLine[i+1] == 0 && shouldDrawFractalOnLine[i] != 0) {
-                shouldDrawFractalOnLine[i] -= 1;
+            if(lineFractalStrength[i+1] == 0 && lineFractalStrength[i] != 0) {
+                lineFractalStrength[i] -= 1;
             } else {
-                shouldDrawFractalOnLine[i] = shouldDrawFractalOnLine[i + 1];
+                lineFractalStrength[i] = lineFractalStrength[i + 1];
             }
         }
     }
@@ -102,10 +103,19 @@ public class VisThree extends VisualizerBase {
     @Override
     public void draw(float[] mvpMatrix) {
 
+        int width = deviceWidth;
+        int height = deviceHeight;
+
         // ---------- bottom left -----------
+
+        GLES20.glViewport(0, 0, width/2, height/2);
+
         Matrix.setIdentityM(matrix,0);                                   // clean matrix buffer
-        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
-        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);            // move vertex to location
+
+//        Matrix.frustumM(matrix, 0, -1.0f, 1.0f, -1.0f, 1.0f, 1, 2);
+//        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
+//        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);            // move vertex to location
+
 
         Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);  // apply final effect
 
@@ -113,14 +123,18 @@ public class VisThree extends VisualizerBase {
 
         //Go through each line and draw them
         for(int i = 0; i < LINE_AMT_V3; ++i) {
-            lines[i].draw(this.positionHandle, this.colorHandle, this.timeHandle, this.visThreeStartTime, this.shouldDrawFractalHandle, this.shouldDrawFractalOnLine[i]);
+            lines[i].draw(this.positionHandle, this.colorHandle, this.timeHandle, this.visThreeStartTime, this.lineFractalStrengthHandle, this.lineFractalStrength[i]);
         }
 
         // ---------- bottom right -----------
+        GLES20.glViewport(width/2, 0, width/2, height/2);
+
         Matrix.setIdentityM(matrix,0);                                   // clean matrix buffer
+
         Matrix.scaleM(matrix, 0, -1.0f, 1.0f, 1.0f);            // flip vertex
-        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
-        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);            // move vertex to location
+//        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
+//        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);            // move vertex to location
+
 
         Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);  // apply final effect
 
@@ -128,14 +142,16 @@ public class VisThree extends VisualizerBase {
 
         //Go through each line and draw them
         for(int i = 0; i < LINE_AMT_V3; ++i) {
-            lines[i].draw(this.positionHandle, this.colorHandle, this.timeHandle, this.visThreeStartTime, this.shouldDrawFractalHandle, this.shouldDrawFractalOnLine[i]);
+            lines[i].draw(this.positionHandle, this.colorHandle, this.timeHandle, this.visThreeStartTime, this.lineFractalStrengthHandle, this.lineFractalStrength[i]);
         }
 
         // ---------- top left -----------
+        GLES20.glViewport(0, height/2, width/2, height/2);
+
         Matrix.setIdentityM(matrix,0);                                   // clean matrix buffer
         Matrix.scaleM(matrix, 0, 1.0f, -1.0f, 1.0f);            // flip vertex
-        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
-        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);             // move vertex to location
+//        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
+//        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);             // move vertex to location
 
         Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);  // apply final effect
 
@@ -143,14 +159,16 @@ public class VisThree extends VisualizerBase {
 
         //Go through each line and draw them
         for(int i = 0; i < LINE_AMT_V3; ++i) {
-            lines[i].draw(this.positionHandle, this.colorHandle, this.timeHandle, this.visThreeStartTime, this.shouldDrawFractalHandle, this.shouldDrawFractalOnLine[i]);
+            lines[i].draw(this.positionHandle, this.colorHandle, this.timeHandle, this.visThreeStartTime, this.lineFractalStrengthHandle, this.lineFractalStrength[i]);
         }
 
         // ---------- top right -----------
+        GLES20.glViewport(width/2, height/2, width/2, height/2);
+
         Matrix.setIdentityM(matrix,0);                                   // clean matrix buffer
         Matrix.scaleM(matrix, 0, -1.0f, -1.0f, 1.0f);           // flip vertex
-        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
-        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);            // move vertex to location
+//        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
+//        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);            // move vertex to location
 
         Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);  // apply final effect
 
@@ -158,7 +176,7 @@ public class VisThree extends VisualizerBase {
 
         //Go through each line and draw them
         for(int i = 0; i < LINE_AMT_V3; ++i) {
-            lines[i].draw(this.positionHandle, this.colorHandle, this.timeHandle, this.visThreeStartTime, this.shouldDrawFractalHandle, this.shouldDrawFractalOnLine[i]);
+            lines[i].draw(this.positionHandle, this.colorHandle, this.timeHandle, this.visThreeStartTime, this.lineFractalStrengthHandle, this.lineFractalStrength[i]);
         }
     }
 }
