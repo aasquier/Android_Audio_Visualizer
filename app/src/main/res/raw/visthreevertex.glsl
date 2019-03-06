@@ -128,7 +128,7 @@ attribute vec4 a_Color;	            // Per-vertex color information we will pass
 varying vec4   v_Color;             // This will be passed into the fragment shader.
 uniform float time;                 // Time since this visualizer began
 uniform float a_DB_Level[50];       // Decibel level history, need to change the 50 as the constant changes
-uniform int should_Morph_To_Fractal;// Represents a bool for whether the line in question should transform based on the fractal field
+uniform int lineFractalStrength;    // Represents how strongly the fractal effect should be applied
 
 
 void main() {           		    // The entry point for our vertex shader.
@@ -152,7 +152,7 @@ void main() {           		    // The entry point for our vertex shader.
 
     vec2 uv = a_Position.xy;
 
-    float freq = a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3]+a_DB_Level[4]+a_DB_Level[positionIndex]/6.0;
+    float freq = (a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3]+a_DB_Level[4]+a_DB_Level[positionIndex])/6.0;
 
     uv.x += freq * 0.03;
 
@@ -160,14 +160,16 @@ void main() {           		    // The entry point for our vertex shader.
 
     // ------------ wave effect ------------------------------------
 
-    if(should_Morph_To_Fractal == 3) {
-        uv = vec2(uv.x, uv.y + (noise * ((a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3])+a_DB_Level[4]+a_DB_Level[positionIndex] / 6.0) * 0.05));
-    } else if(should_Morph_To_Fractal == 2) {
-        uv = vec2(uv.x, uv.y + (noise * ((a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3])+a_DB_Level[4]+a_DB_Level[positionIndex] / 6.0) * 0.033));
-    } else if(should_Morph_To_Fractal == 1){
-        uv = vec2(uv.x, uv.y + (noise * ((a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3])+a_DB_Level[4]+a_DB_Level[positionIndex] / 6.0) * 0.01625));
+    if(lineFractalStrength == 4) {
+        uv = vec2(uv.x, uv.y + (noise * freq * 0.05));
+    } else if(lineFractalStrength == 3) {
+        uv = vec2(uv.x, uv.y + (noise * freq * 0.03));
+    } else if(lineFractalStrength == 2) {
+        uv = vec2(uv.x, uv.y + (noise * freq * 0.02));
+    } else if(lineFractalStrength == 1){
+        uv = vec2(uv.x, uv.y + (noise * freq * 0.01));
     } else {
-        uv.y += noise * freq * 0.01;
+        uv.y += noise * freq * 0.001;
     }
 
 //    float noise = snoise(vec2(a_Position.xy/res.xy));//, time/10000.));
