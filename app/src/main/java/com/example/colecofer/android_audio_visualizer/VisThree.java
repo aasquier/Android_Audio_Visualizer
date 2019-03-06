@@ -5,6 +5,7 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_DB_LEVEL;
@@ -106,8 +107,8 @@ public class VisThree extends VisualizerBase {
     @Override
     public void draw(float[] mvpMatrix) {
 
-        int width = 2392;
-        int height =1356;
+        int width = deviceWidth;
+        int height = deviceHeight;
 
         // ---------- bottom left -----------
 
