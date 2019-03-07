@@ -81,7 +81,7 @@ public class VisThree extends VisualizerBase {
      * This runs once per draw cycle
      */
     public void updateFractalLineArray(){
-        if(decibelHistory.peek() > .725f){
+        if(decibelHistory.peek() > .7f){
             lineFractalStrength[LINE_AMT_V3 - 1] = 4;
         } else {
             if (lineFractalStrength[LINE_AMT_V3 - 1] != 0)
@@ -123,7 +123,7 @@ public class VisThree extends VisualizerBase {
 
         //Go through each line and draw them
         for(int i = 0; i < LINE_AMT_V3; ++i) {
-            lines[i].draw(this.positionHandle, this.colorHandle, this.timeHandle, this.visThreeStartTime, this.lineFractalStrengthHandle, this.lineFractalStrength[i]);
+            lines[i].draw(this.positionHandle, this.colorHandle, this.timeHandle, this.visThreeStartTime, this.lineFractalStrengthHandle, (this.lineFractalStrength[i] == 0 ? 0 : (int)Math.pow(2, this.lineFractalStrength[i])));
         }
 
         // ---------- bottom right -----------
@@ -142,7 +142,7 @@ public class VisThree extends VisualizerBase {
 
         //Go through each line and draw them
         for(int i = 0; i < LINE_AMT_V3; ++i) {
-            lines[i].draw(this.positionHandle, this.colorHandle, this.timeHandle, this.visThreeStartTime, this.lineFractalStrengthHandle, this.lineFractalStrength[i]);
+            lines[i].draw(this.positionHandle, this.colorHandle, this.timeHandle, this.visThreeStartTime, this.lineFractalStrengthHandle, (this.lineFractalStrength[i] == 0 ? 0 : (int)Math.pow(2, this.lineFractalStrength[i])));
         }
 
         // ---------- top left -----------
@@ -159,7 +159,7 @@ public class VisThree extends VisualizerBase {
 
         //Go through each line and draw them
         for(int i = 0; i < LINE_AMT_V3; ++i) {
-            lines[i].draw(this.positionHandle, this.colorHandle, this.timeHandle, this.visThreeStartTime, this.lineFractalStrengthHandle, this.lineFractalStrength[i]);
+            lines[i].draw(this.positionHandle, this.colorHandle, this.timeHandle, this.visThreeStartTime, this.lineFractalStrengthHandle, (this.lineFractalStrength[i] == 0 ? 0 : (int)Math.pow(2, this.lineFractalStrength[i])));
         }
 
         // ---------- top right -----------
@@ -176,7 +176,7 @@ public class VisThree extends VisualizerBase {
 
         //Go through each line and draw them
         for(int i = 0; i < LINE_AMT_V3; ++i) {
-            lines[i].draw(this.positionHandle, this.colorHandle, this.timeHandle, this.visThreeStartTime, this.lineFractalStrengthHandle, this.lineFractalStrength[i]);
+            lines[i].draw(this.positionHandle, this.colorHandle, this.timeHandle, this.visThreeStartTime, this.lineFractalStrengthHandle, (this.lineFractalStrength[i] == 0 ? 0 : (int)Math.pow(2, this.lineFractalStrength[i])));
         }
     }
 }

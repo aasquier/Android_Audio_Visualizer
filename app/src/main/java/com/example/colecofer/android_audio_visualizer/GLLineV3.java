@@ -117,7 +117,7 @@ public class GLLineV3 {
             averageDecibels /= 5.0f;
 
             if(averageDecibels <= 0.40) {
-                highlightingFactor = 1.0f;
+                highlightingFactor = 0.5f;
             } else if (averageDecibels <= 0.475) {
                 highlightingFactor = 30.0f;
             } else if (averageDecibels <= 0.55){
@@ -169,7 +169,7 @@ public class GLLineV3 {
         GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, decibelsFloatArray.length, decibelsFloatArray, 0);
 
         /** shouldMorphToFractalHandle */
-        GLES20.glUniform1i(shouldMorphHandle, shouldMorphToFractal);
+        GLES20.glUniform1f(shouldMorphHandle, shouldMorphToFractal);
 
         /** finally draw buffer */
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, VIS3_VERTEX_COUNT);
