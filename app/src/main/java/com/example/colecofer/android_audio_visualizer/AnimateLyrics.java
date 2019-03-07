@@ -18,6 +18,7 @@ import java.util.List;
 import static com.example.colecofer.android_audio_visualizer.Constants.BOTTOM_PADDING;
 import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_PADDING;
 import static com.example.colecofer.android_audio_visualizer.Constants.LYRICS_TEXT_SIZE;
+import static com.example.colecofer.android_audio_visualizer.Constants.LYRIC_DISPLAY_OFFSET;
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_HEIGHT_OFFSET;
 import static com.example.colecofer.android_audio_visualizer.Constants.PERCENT_FROM_TOP;
 import static com.example.colecofer.android_audio_visualizer.Constants.RIGHT_PADDING;
@@ -32,7 +33,8 @@ import static com.example.colecofer.android_audio_visualizer.Constants.SCROLL_LY
  * inside of a TextView.
  */
 public class AnimateLyrics {
-    private float opacityUpdateInc = 0.1f; //Amount of opacity to add each time update is called
+    private float opacityUpdateInc = 0.1f;  //Amount of opacity to add each time update is called
+    private float opacityUpdateDec = -0.1f;
 
     static TextView lyricsTextView;
     static ViewGroup.MarginLayoutParams lyricsParams;
@@ -94,7 +96,7 @@ public class AnimateLyrics {
     public void update() {
 
         //Calc time to display the lyric
-        this.lyricEndTime = rawLyricsList.get(this.rawLyricsIndex).first /* - LYRIC_DISPLAY_OFFSET*/;
+        this.lyricEndTime = rawLyricsList.get(this.rawLyricsIndex).first - LYRIC_DISPLAY_OFFSET;
         float currentTime = VisualizerActivity.mediaPlayer.getCurrentPosition();
         this.numWordsInLyricSegment = this.rawLyricsList.get(this.rawLyricsIndex).second.length;
 
@@ -169,79 +171,24 @@ public class AnimateLyrics {
      */
     void updateOpacity() {
 
-        this.lyricTextViewOpacity += opacityUpdateInc;
-        this.lyricsTextView.setAlpha(this.lyricTextViewOpacity);
+        float currentTime = VisualizerActivity.mediaPlayer.getCurrentPosition();
 
-        if (this.lyricTextViewOpacity >= 1.0) {
-            this.lyricTextViewOpacity = 1.0f;
+        if (currentTime > this.lyricEndTime - 300) {
+            this.lyricTextViewOpacity += opacityUpdateDec;
+
+            if (this.lyricTextViewOpacity <= 0.0f) {
+                this.lyricTextViewOpacity = 0.0f;
+            }
+        } else {
+            this.lyricTextViewOpacity += opacityUpdateInc;
+
+            if (this.lyricTextViewOpacity >= 1.0f) {
+                this.lyricTextViewOpacity = 1.0f;
+            }
         }
-
-//        int currentLyricListSize = currentLyricsList.size();
-//
-//        //Check that there are still lyrics to display
-//        if (this.lyricIndex < currentLyricListSize) {
-//
-//            //Alter the opacity one word at a time
-//            for (int i = 0; i <= this.lyricIndex && i < currentLyricListSize; ++i) {
-//                SpannableString word = new SpannableString(currentLyricsList.get(i).first);
-//                int colorSpan = currentLyricsList.get(i).second;
-//                int opacity = Color.alpha(colorSpan);
-//
-//                //Update the opacity
-//                opacity += this.opacityUpdateInc;
-//                if (opacity >= 255) opacity = 255;
-//
-//                //Construct the updated color into hex
-//                String updatedColor = String.format("#%02xFFFFFF", opacity);
-//                int colorAsInt = Color.parseColor(updatedColor);
-//
-//                //Construct a new Span for the previous word (because ArrayLists are immutable)
-//                word.setSpan(new ForegroundColorSpan(colorAsInt), 0, word.length(), Spannable.SPAN_COMPOSING); //Try some span flags out (SPAN_INCLUSIVE_EXCLUSIVE)
-//                currentLyricsList.set(i, new Pair<>(word, colorAsInt));
-//            }
-//
-//            //Clear the textview with a SpannableString space (this can't be a regular string)
-//            this.lyricsTextView.setText(new SpannableString(""));
-//
-//            //Add them to the textview
-//            for (Pair<SpannableString, Integer> lyric: this.currentLyricsList) {
-//                this.lyricsTextView.append(lyric.first);
-//            }
-//
-//            // Increment to the next word
-//            if (this.lyricIndex < (currentLyricListSize - 1)) {
-//                this.lyricIndex += 1;
-//            }
-//        }
+        this.lyricsTextView.setAlpha(this.lyricTextViewOpacity);
     }
 }
-
-
-//Old code for fade out animation calculations
-//Calculate the duration that the current lyrics will be displayed
-//            float lyricSegmentDisplayDuration = (255 / opacityUpdateInc) * 18;
-//            if (this.rawLyricsIndex + 1 < rawLyricsList.size()) {
-//                lyricSegmentDisplayDuration = rawLyricsList.get(this.rawLyricsIndex + 1).first - rawLyricsList.get(this.rawLyricsIndex).first;
-//            }
-//
-//            this.lyricEndTime = rawLyricsList.get(this.rawLyricsIndex).first;  // - LYRIC_DISPLAY_OFFSET;
-//            float animationDuration = lyricSegmentDisplayDuration * 1/2;
-//            float currentTime = VisualizerActivity.mediaPlayer.getCurrentPosition();
-//            float timeToStartFadeAway = lyricEndTime - animationDuration;
-
-//Check if it's time to start the fadeaway animation
-//            if (currentTime >= timeToStartFadeAway && this.timeToFadeAwayFlag == false) {
-//                Log.d("test", "timeToFadeAwayFlag switched to true");
-//                this.lyricIndex = 0;
-//                this.timeToFadeAwayFlag = true;
-//            }
-
-//Update the opacity accordingly if we are fading in or out
-//                if (this.timeToFadeAwayFlag == true) {
-//                        opacity += this.opacityUpdateInc;
-//                        if (opacity >= 255) opacity = 255;
-//                        }
-
 
 
 
