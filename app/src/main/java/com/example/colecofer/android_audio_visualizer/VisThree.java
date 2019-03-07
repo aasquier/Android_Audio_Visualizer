@@ -81,7 +81,9 @@ public class VisThree extends VisualizerBase {
      * This runs once per draw cycle
      */
     public void updateFractalLineArray(){
-        if(decibelHistory.peek() > .7f){
+        Float[] decibelHistoryArray = decibelHistory.toArray(new Float[0]);
+        double averageDecibel = (decibelHistoryArray[0] + decibelHistoryArray[1] + decibelHistoryArray[2] + decibelHistoryArray[3] + decibelHistoryArray[4]) / 5.0;
+        if(averageDecibel > .6){
             lineFractalStrength[LINE_AMT_V3 - 1] = 4;
         } else {
             if (lineFractalStrength[LINE_AMT_V3 - 1] != 0)
