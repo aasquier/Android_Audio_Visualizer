@@ -129,8 +129,6 @@ public class VisualizerRenderer implements GLSurfaceView.Renderer {
 
         float ratio = (float) width / height;
         Matrix.frustumM(projectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
-
-        VisualizerModel.getInstance().currentVisualizer.setSize(width, height);
     }
 
 
