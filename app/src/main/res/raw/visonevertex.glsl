@@ -199,6 +199,7 @@ attribute vec4 a_Color;	            // Per-vertex color information we will pass
 varying vec4   v_Color;             // This will be passed into the fragment shader.
 uniform float time;                 // Time since this visualizer began
 uniform float a_DB_Level[25];       // Decibel level history, need to change the 50 as the constant changes
+attribute float scaling;
 
 void main() {           		    // The entry point for our vertex shader.
     vec2 res = vec2(0.95, 0.95);
