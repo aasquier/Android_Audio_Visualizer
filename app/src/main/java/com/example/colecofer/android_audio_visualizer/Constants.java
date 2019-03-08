@@ -32,7 +32,6 @@ final class Constants {
     static final String CLIENT_ID                             = "089d841ccc194c10a77afad9e1c11d54";
     static final int REQUEST_RECORD_PERMISSION                = 101;
     static final int REQUEST_READ_EXTERNAL_STORAGE_PERMISSION = 102;
-    static final int REQUEST_CODE                             = 1337;
     static final String REDIRECT_URI                          = "testschema://callback";
     static final String TRACK_BASE_URI                        = "spotify:track:";
     static final String[] SCOPES                              = new String[]{"user-read-private", "playlist-read", "playlist-read-private", "streaming"};

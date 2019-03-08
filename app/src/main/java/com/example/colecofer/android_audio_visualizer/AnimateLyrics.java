@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.BOTTOM_PADDING;
+import static com.example.colecofer.android_audio_visualizer.Constants.DISPLAY_MULTILINE_PROXIMITY;
 import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_PADDING;
 import static com.example.colecofer.android_audio_visualizer.Constants.LYRICS_TEXT_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.LYRIC_DISPLAY_OFFSET;
@@ -113,6 +114,18 @@ public class AnimateLyrics {
 
                 //Index to the next lyric
                 this.rawLyricsIndex += 1;
+
+                //////////
+                //Check if the lyrics are close enough so that we can display them at the same time
+                if (rawLyricsList.get(this.rawLyricsIndex + 1).first - rawLyricsList.get(this.rawLyricsIndex).first
+                        < DISPLAY_MULTILINE_PROXIMITY) {
+                    for (String item : rawLyricsList.get(this.rawLyricsIndex).second) {
+                        lyricsToDisplay.add(item);
+                    }
+                    this.rawLyricsIndex += 1;
+                }
+                //////////
+
             }
             this.displayLyrics(lyricsToDisplay);
         }
