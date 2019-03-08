@@ -16,7 +16,6 @@ abstract public class VisualizerBase {
     protected int currentDecibelLevelHandle;
     protected int timeHandle;
     protected int matrixHandle;
-
     protected int scalingLevelArrayHandle;
     protected int deviceWidth;
     protected int deviceHeight;

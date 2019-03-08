@@ -2,7 +2,6 @@ package com.example.colecofer.android_audio_visualizer;
 
 import android.graphics.Color;
 import android.opengl.GLES20;
-import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -14,8 +13,6 @@ import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DAT
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_SHIFT_FACTOR;
 import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_LINE_SIZE;
-import static com.example.colecofer.android_audio_visualizer.Constants.HIGH_HIGHLIGHTING_PULSE;
-import static com.example.colecofer.android_audio_visualizer.Constants.MEDIUM_HIGHLIGHTING_PULSE;
 import static com.example.colecofer.android_audio_visualizer.Constants.PIXEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_OFFSET;
@@ -24,17 +21,13 @@ import static com.example.colecofer.android_audio_visualizer.Constants.VERTEX_AM
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_ARRAY_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_STRIDE_BYTES;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_VERTEX_COUNT;
-import static com.example.colecofer.android_audio_visualizer.Utility.highlightingOnHigh;
-import static com.example.colecofer.android_audio_visualizer.Utility.highlightingOnMedium;
 import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
-import static com.example.colecofer.android_audio_visualizer.Utility.highlightingDuration;
-import static com.example.colecofer.android_audio_visualizer.Utility.highlightingHibernation;
-
 
 public class GLLine {
 
     private FloatBuffer lineVerticesBuffer;
     private float[] vertices;
+    private float[] scalingLevel;
     private float leftSide;
     private float rightSide;
 
@@ -47,6 +40,9 @@ public class GLLine {
         this.leftSide = xPosition;   // Current line's left side coord
         this.rightSide = leftSide + PIXEL;  // Current line's right side coord
 
+        // TODO This is to possibly pass in to the shader
+        this.scalingLevel = new float[DECIBEL_HISTORY_SIZE];
+
         // Initialize the current line's base vertices
         createBaseLine();
 
@@ -54,7 +50,6 @@ public class GLLine {
         lineVerticesBuffer = ByteBuffer.allocateDirect(vertices.length * BYTES_PER_FLOAT).order(ByteOrder.nativeOrder()).asFloatBuffer();
         lineVerticesBuffer.put(vertices).position(0);
     }
-
 
     /**
      * Creating the base line vertices
@@ -98,14 +93,15 @@ public class GLLine {
     /**
      * Update the base line with decibel value
      */
-    public void updateVertices(boolean shouldUpdateHighlighting) {
-
-        int xOffset = 0;
-        float highlightingFactor;
-        float averageDecibels;
+    public void updateVertices() {
 
         // Change to object array to traverse
         Float[] decibelFloatArray = decibelHistory.toArray(new Float[DECIBEL_HISTORY_SIZE]);
+
+        int xOffset = 0;
+
+        float highlightingFactor;
+        float averageDecibels;
 
         // Only loop for the size of the decibel array size
         for(int i = 0; i < DECIBEL_HISTORY_SIZE; i++){
@@ -114,40 +110,38 @@ public class GLLine {
             // Right side needs to move in positive direction
             // Amplification should be half for both sides because Amplification = left + right
 
-            // Takes the average of the three decibel levels surrounding the current y-position of the line in question
+            // Takes the average of the five decibel levels surrounding the current y-position of the line in question
             switch(i) {
-                case 0:                        averageDecibels = decibelFloatArray[0] + decibelFloatArray[1] + decibelFloatArray[2]; break;
-                case DECIBEL_HISTORY_SIZE - 1: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 2] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 1]; break;
-                default:                       averageDecibels = decibelFloatArray[i-1] + decibelFloatArray[i] + decibelFloatArray[i+1]; break;
+                case 0:                        averageDecibels = decibelFloatArray[0] + decibelFloatArray[1] + decibelFloatArray[2] + decibelFloatArray[3] + decibelFloatArray[4]; break;
+                case 1:                        averageDecibels = decibelFloatArray[1] + decibelFloatArray[2] + decibelFloatArray[3] + decibelFloatArray[4] + decibelFloatArray[5]; break;
+                case DECIBEL_HISTORY_SIZE - 2: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE - 6] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 5] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 4] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 2]; break;
+                case DECIBEL_HISTORY_SIZE - 1: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE - 5] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 4] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 2] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 1]; break;
+                default:                       averageDecibels = decibelFloatArray[i-2] + decibelFloatArray[i-1] + decibelFloatArray[i] + decibelFloatArray[i+1] + decibelFloatArray[i+2]; break;
             }
 
-            averageDecibels /= 3.0f;
+            // TODO placeholder
+            scalingLevel[i] = 0.0f;
 
-            if(averageDecibels <= 0.55f) {
-                highlightingFactor = 10.0f;
-            } else if (averageDecibels <= 0.6f) {
-                highlightingFactor = 20.0f;
-            } else if (averageDecibels <= 0.65f){
-                if(!highlightingOnMedium && !highlightingOnHigh && !highlightingHibernation && shouldUpdateHighlighting){
-                    highlightingOnMedium = true;
-                    highlightingDuration = MEDIUM_HIGHLIGHTING_PULSE;
-                }
+            averageDecibels /= 5.0f;
+
+            if(averageDecibels <= 0.40) {
+                highlightingFactor = 1.0f;
+            } else if (averageDecibels <= 0.475) {
+                highlightingFactor = 30.0f;
+            } else if (averageDecibels <= 0.55){
                 highlightingFactor = 50.0f;
             } else {
-                if(!highlightingOnHigh && !highlightingOnMedium && !highlightingHibernation && shouldUpdateHighlighting) {
-                    highlightingOnHigh = true;
-                    highlightingDuration = HIGH_HIGHLIGHTING_PULSE;
-                }
-                highlightingFactor = 100.0f;
+                highlightingFactor = 140.0f;
             }
 
-            float ampDataLeft        = (this.leftSide - (DEFAULT_LINE_SIZE + AMPLIFIER * highlightingFactor));
-            float ampDataRight       = (this.rightSide + (DEFAULT_LINE_SIZE + AMPLIFIER * highlightingFactor));
-            this.vertices[xOffset]   = ampDataLeft;
+            float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE + AMPLIFIER * highlightingFactor));
+            float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE + AMPLIFIER * highlightingFactor));
+            this.vertices[xOffset] = ampDataLeft;
             this.vertices[xOffset+7] = ampDataRight;
 
             xOffset += 14;
         }
+
 
         FloatBuffer fftInput = ByteBuffer.allocateDirect(this.vertices.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         fftInput.put(this.vertices).position(0);
@@ -168,6 +162,8 @@ public class GLLine {
         GLES20.glVertexAttribPointer(colorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, this.lineVerticesBuffer);
         GLES20.glEnableVertexAttribArray(colorHandle);
 
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, VIS1_VERTEX_COUNT);
+
         GLES20.glUniform1f(VisualizerModel.getInstance().currentVisualizer.timeHandle, (float) (System.currentTimeMillis() - visOneStartTime));
 
         Float[] temp = decibelHistory.toArray(new Float[DECIBEL_HISTORY_SIZE]);
@@ -175,11 +171,17 @@ public class GLLine {
         float[] dbs = new float[temp.length];
         for (int i = 0; i < DECIBEL_HISTORY_SIZE; ++i) {
             dbs[i] = temp[i] == null ? 0.0f : temp[i];
+
+            // TODO this was to possibly send in a negative value randomly
+//            if (Math.random() > 0.5) {
+//                dbs[i] *= -1;
+//            }
         }
 
         /** Updates the size of the dots using the most current decibel level, i.e. the first element of the decibel history */
         GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, dbs.length, dbs, 0);
 
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, VIS1_VERTEX_COUNT);
+        GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.scalingLevelArrayHandle, this.scalingLevel.length, this.scalingLevel, 0);
+
     }
 }
