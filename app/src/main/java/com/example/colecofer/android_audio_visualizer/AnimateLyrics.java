@@ -110,8 +110,17 @@ public class AnimateLyrics {
 
                 //Populate lyricsToDisplay with the words in the lyric segment
                 for (String item : rawLyricsList.get(this.rawLyricsIndex).second) {
-                    lyricsToDisplay.add(item);
+
+                    //Replace tab characters only if in demo mode
+                    if (DEMO_MODE == true) {
+                        item.replace("\t", "\n");
+                        lyricsToDisplay.add(item);
+                    } else {
+                        lyricsToDisplay.add(item);
+                    }
+
                 }
+
                 //Index to the next lyric
                 this.rawLyricsIndex += 1;
 
