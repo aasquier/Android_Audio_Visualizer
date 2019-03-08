@@ -64,7 +64,7 @@ float worley(vec2 c, float time) {
 float worley5(vec2 c, float time) {
     float w = 0.0;
     float a = 0.5;
-    for (int i = 0; i<5; i++) {
+    for (int i = 0; i<12; i++) {
         w += worley(c, time)*a;
         c*=2.0;
         time*=2.0;
@@ -75,9 +75,10 @@ float worley5(vec2 c, float time) {
 
 float fbm(vec2 uv, float time)
 {
+
     float value = 0.0;
     float factor = 1.1;
-    float scaledTime = time / 300.0;
+    float scaledTime = time / 200.0;
 
     for (int i = 0; i < 8; i++)
     {
@@ -94,38 +95,70 @@ attribute vec4 a_Color;	        // Per-vertex color information we will pass in 
 uniform float  a_DB_Level[50];  // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
 varying vec4   v_Color;         // This will be passed into the fragment shader as the final color values
 uniform float time;
+
 attribute float scaling_Level;
-precision mediump float;        // Set the default precision to high
+precision highp float;          // Set the default precision to high
 
 
 void main() {
-    float scaledTime = time / 1500.0;
-    vec2 res = vec2(0.95, 0.95);
+    float scaledTime = time/500.0;
+    vec2 res = vec2(0.75, 0.75);
+    vec3 black = vec3(0.0, 0.0, 0.0);
+    vec3 white = vec3(1.0, 1.0, 1.0);
 
-//    float dis = worley5(a_Position.xy/0.2, scaledTime);
-////    vec3 b = mix(vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0), dis);
-////    vec3 b = a_Color.xyz + 0.5;
-//    vec3 black = vec3(0.0, 0.0, 0.0);
-//    vec3 c = mix(a_Color.xyz, black, dis);
-//    v_Color = vec4(c*c, 1.0);
+    int distanceIndex = int(sqrt(a_Position.x * a_Position.x + a_Position.y * a_Position.y)*5.);
 
-    // Creating the noise field
-//    vec2 uv = a_Position.xy * 4.0;
-//    v_Color = vec4(vec3(fbm(uv, time) * 0.5) + a_Color.xyz,1.0);
+    float db = a_DB_Level[distanceIndex];
 
-//    int distanceIndex = int(sqrt(a_Position.x * a_Position.x + a_Position.y * a_Position.y)*12.);
+    if(a_DB_Level[distanceIndex] < .65)
+    {
+    // Creating the wave itself
+        vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
+        float cLength = length(cPos);
+        vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(db * cLength * 12.0 - scaledTime * 4.0) * 0.5;
+        vec4 newPosition = vec4(uv2, a_Position.zw);
+
+        float dis = worley5(newPosition.xy/res*5., time/800.);
+        vec3 b = mix(a_Color.xyz, black, dis);
+
+        float dis2 = fbm(newPosition.xy/res*7.5*a_DB_Level[distanceIndex], time);
+        vec3 c = mix(a_Color.xyz, black, dis2);
+
+        v_Color = vec4(b*c, .75);
+
+    //    if(a_DB_Level[distanceIndex] > .25)
+    //            gl_PointSize = a_DB_Level[distanceIndex]*.75;
+    //    else if(a_DB_Level[distanceIndex] > .5)
+    //        gl_PointSize = a_DB_Level[distanceIndex]*.5;
+    //    else if(a_DB_Level[distanceIndex] > .75)
+        gl_PointSize = a_DB_Level[distanceIndex]*.5;
+
+
+        gl_Position = newPosition;
+    }
+//    else
+//    {
+//            vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
+//            float cLength = length(cPos);
+//            vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(db * cLength * 22.0 - scaledTime * 4.0) * 1.5;
+//            vec4 newPosition = vec4(uv2, a_Position.zw);
 //
-//    float db = a_DB_Level[distanceIndex];
+//            float dis = worley5(newPosition.xy/res*5., time/800.);
+//            vec3 b = mix(a_Color.xyz, black, dis);
 //
-//    // Creating the wave itself
-//    vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
-//    float cLength = length(cPos);
-//    vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin((db + a_DB_Level[0]) * cLength * 24.0 - scaledTime) * 0.02;
-//    vec4 newPosition = vec4(uv2, a_Position.zw);
+//            float dis2 = fbm(newPosition.xy/res*5.*a_DB_Level[distanceIndex], time);
+//            vec3 c = mix(a_Color.xyz, black, dis2);
 //
-//    // Feeding the position to the fragment shader
-//    gl_Position = newPosition;
-    gl_PointSize = 30.0 * a_DB_Level[1];
-    v_Color = a_Color;
-    gl_Position = a_Position;
+//            v_Color = vec4(b*c, 1);
+//
+//            if(a_DB_Level[distanceIndex] > .25)
+//                gl_PointSize = a_DB_Level[distanceIndex]*.25;
+//            else if(a_DB_Level[distanceIndex] > .35)
+//                gl_PointSize = a_DB_Level[distanceIndex]*.35;
+//            else if(a_DB_Level[distanceIndex] > .45)
+//            gl_PointSize = a_DB_Level[distanceIndex]*.45;
+//
+//
+//            gl_Position = newPosition;
+//    }
 }

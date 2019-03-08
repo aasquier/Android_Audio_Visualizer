@@ -37,8 +37,8 @@ public class GLLineV3 {
     public GLLineV3(float xPosition) {
 
         this.leftSide = xPosition;   // Current line's left side coord
-//        this.rightSide = leftSide + 0.005f;  // Current line's right side coord
-        this.rightSide = leftSide;  // + 0.04f; Current line's right side coord
+        this.rightSide = leftSide + 0.004f;  // Current line's right side coord
+//        this.rightSide = leftSide;  // + 0.04f; Current line's right side coord
 
 
         // Initialize the current line's base vertices
@@ -117,7 +117,7 @@ public class GLLineV3 {
             averageDecibels /= 5.0f;
 
             if(averageDecibels <= 0.40) {
-                highlightingFactor = 1.0f;
+                highlightingFactor = 0.5f;
             } else if (averageDecibels <= 0.475) {
                 highlightingFactor = 30.0f;
             } else if (averageDecibels <= 0.55){
@@ -144,7 +144,7 @@ public class GLLineV3 {
     /**
      * Returns a floatbuffer of values to be drawn. (with timeHandle)
      */
-    public void draw(int positionHandle, int colorHandle, int timeHandle, long startTime) {
+    public void draw(int positionHandle, int colorHandle, int timeHandle, long startTime, int shouldMorphHandle, int shouldMorphToFractal) {
         /** Position Handle */
         this.lineVerticesBuffer.position(POSITION_OFFSET);
         GLES20.glVertexAttribPointer(positionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, VIS1_STRIDE_BYTES, this.lineVerticesBuffer);
@@ -167,6 +167,9 @@ public class GLLineV3 {
         }
 
         GLES20.glUniform1fv(VisualizerModel.getInstance().currentVisualizer.currentDecibelLevelHandle, decibelsFloatArray.length, decibelsFloatArray, 0);
+
+        /** shouldMorphToFractalHandle */
+        GLES20.glUniform1f(shouldMorphHandle, shouldMorphToFractal);
 
         /** finally draw buffer */
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, VIS3_VERTEX_COUNT);
