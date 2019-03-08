@@ -8,6 +8,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_TIME
 import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_DRAW_BOUNDARY;
 import static com.example.colecofer.android_audio_visualizer.Constants.LINE_AMT;
 import static com.example.colecofer.android_audio_visualizer.Constants.RIGHT_DRAW_BOUNDARY;
+import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_SCALING_LEVEL_ARRAY;
 
 /**
  * Class VisOne
@@ -53,6 +54,7 @@ public class VisOne extends VisualizerBase {
         this.colorHandle = colorHandle;
         this.currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, GLSL_DB_LEVEL);
         this.timeHandle = GLES20.glGetUniformLocation(programHandle, GLSL_TIME);
+        this.scalingLevelArrayHandle = GLES20.glGetAttribLocation(programHandle, GLSL_SCALING_LEVEL_ARRAY);
     }
 
     @Override
