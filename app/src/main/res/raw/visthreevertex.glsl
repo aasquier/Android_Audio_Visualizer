@@ -144,7 +144,7 @@ void main() {           		    // The entry point for our vertex shader.
         positionIndex = int(24. + floor(a_Position.y * 24.));
     }
 
-    float scaleTime = time / 2000.;
+    float scaleTime = time / 2500.;
 
     float noise = snoise(vec3(a_Position.xy/res.xy, scaleTime));
 
@@ -156,13 +156,15 @@ void main() {           		    // The entry point for our vertex shader.
 
     uv.x += freq * 0.03;
 
-    uv.y += sin(uv.x * 10.0 + scaleTime) * cos(uv.x * 2.0) * freq * 0.01;
+    uv.y += sin(uv.x * 10.0 + scaleTime) * cos(uv.x * 3.0) * freq * 0.05;
 
     // ------------ wave effect ------------------------------------
 
-    uv = vec2(uv.x, uv.y + (noise * freq * lineFractalStrength * 0.015));
+//    uv = vec2(uv.x, uv.y + (noise * freq * lineFractalStrength * 0.015));
 
-//    if(lineFractalStrength == 4) {
+    if(lineFractalStrength == 0.) {
+        uv.y += noise * 0.01;
+        //uv.y += noise * lineFractalStrength/.8 * 0.01;
 //        uv = vec2(uv.x, uv.y + (noise * freq * 0.05));
 //    } else if(lineFractalStrength == 3) {
 //        uv = vec2(uv.x, uv.y + (noise * freq * 0.03));
@@ -170,9 +172,9 @@ void main() {           		    // The entry point for our vertex shader.
 //        uv = vec2(uv.x, uv.y + (noise * freq * 0.02));
 //    } else if(lineFractalStrength == 1){
 //        uv = vec2(uv.x, uv.y + (noise * freq * 0.01));
-//    } else {
-//        uv.y += noise * freq * 0.001;
-//    }
+    } else {
+        uv = vec2(uv.x, uv.y + (noise * freq * lineFractalStrength * 0.015));
+    }
 
 //    float noise = snoise(vec2(a_Position.xy/res.xy));//, time/10000.));
 //    if(should_Morph_To_Fractal == 3) {

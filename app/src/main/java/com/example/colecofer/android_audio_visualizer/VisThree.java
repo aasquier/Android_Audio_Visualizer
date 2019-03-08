@@ -1,8 +1,11 @@
 package com.example.colecofer.android_audio_visualizer;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.support.annotation.Dimension;
+import android.util.DisplayMetrics;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_DB_LEVEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_MATRIX;
@@ -83,7 +86,7 @@ public class VisThree extends VisualizerBase {
     public void updateFractalLineArray(){
         Float[] decibelHistoryArray = decibelHistory.toArray(new Float[0]);
         double averageDecibel = (decibelHistoryArray[0] + decibelHistoryArray[1] + decibelHistoryArray[2] + decibelHistoryArray[3] + decibelHistoryArray[4]) / 5.0;
-        if(averageDecibel > .6){
+        if(averageDecibel > .665){
             lineFractalStrength[LINE_AMT_V3 - 1] = 4;
         } else {
             if (lineFractalStrength[LINE_AMT_V3 - 1] != 0)
@@ -105,8 +108,8 @@ public class VisThree extends VisualizerBase {
     @Override
     public void draw(float[] mvpMatrix) {
 
-        int width = deviceWidth;
-        int height = deviceHeight;
+        int height = Resources.getSystem().getDisplayMetrics().heightPixels;
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
 
         // ---------- bottom left -----------
 
@@ -180,5 +183,6 @@ public class VisThree extends VisualizerBase {
         for(int i = 0; i < LINE_AMT_V3; ++i) {
             lines[i].draw(this.positionHandle, this.colorHandle, this.timeHandle, this.visThreeStartTime, this.lineFractalStrengthHandle, (this.lineFractalStrength[i] == 0 ? 0 : (int)Math.pow(2, this.lineFractalStrength[i])));
         }
+        GLES20.glViewport(0, 0, width, height);
     }
 }

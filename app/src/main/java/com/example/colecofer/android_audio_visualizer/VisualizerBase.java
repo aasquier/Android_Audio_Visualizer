@@ -18,8 +18,6 @@ abstract public class VisualizerBase {
     protected int matrixHandle;
 
     protected int scalingLevelArrayHandle;
-    protected int deviceWidth;
-    protected int deviceHeight;
 
     int visNum;  // A unique integer value to represent each visualizer
 
@@ -32,8 +30,6 @@ abstract public class VisualizerBase {
     public VisualizerBase() {
 
     }
-
-    public void setSize(int width, int height) {this.deviceWidth = width; this.deviceHeight=height; }
 
     String getVertexShaderString() {
         return this.vertexShader;
