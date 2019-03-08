@@ -142,12 +142,13 @@ public class MusixmatchClient {
                     lyricList.add(currPair);
                 }
 //                } catch (JSONException e) {
-                Log.d("MusixMatch", "Error - Could not extract lyrics from response" + e.getMessage());
-                return null;
-            }
-
-                return lyricList;
+//                Log.d("MusixMatch", "Error - Could not extract lyrics from response" + e.getMessage());
+//                return null;
+//            }
+        return lyricList;
     }
+
+//    }
 
     //These are strictly for demo purposes only - since we don't have a musixmatch license.
     private static String BIGGIE_LYRICS =
