@@ -14,6 +14,8 @@ import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DAT
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_SHIFT_FACTOR;
 import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_LINE_SIZE;
+import static com.example.colecofer.android_audio_visualizer.Constants.HIGH_HIGHLIGHTING_PULSE;
+import static com.example.colecofer.android_audio_visualizer.Constants.MEDIUM_HIGHLIGHTING_PULSE;
 import static com.example.colecofer.android_audio_visualizer.Constants.PIXEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_OFFSET;
@@ -22,13 +24,12 @@ import static com.example.colecofer.android_audio_visualizer.Constants.VERTEX_AM
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_ARRAY_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_STRIDE_BYTES;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_VERTEX_COUNT;
-import static com.example.colecofer.android_audio_visualizer.Utility.highlightingCurrently;
-import static com.example.colecofer.android_audio_visualizer.VisOne.highlightingCount;
-import static com.example.colecofer.android_audio_visualizer.VisOne.highlightingHibernationCount;
-import static com.example.colecofer.android_audio_visualizer.VisOne.highlightingHibernationOn;
-import static com.example.colecofer.android_audio_visualizer.VisOne.highlightingOnHigh;
-import static com.example.colecofer.android_audio_visualizer.VisOne.highlightingOnMedium;
+import static com.example.colecofer.android_audio_visualizer.Utility.highlightingOnHigh;
+import static com.example.colecofer.android_audio_visualizer.Utility.highlightingOnMedium;
 import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
+import static com.example.colecofer.android_audio_visualizer.Utility.highlightingDuration;
+import static com.example.colecofer.android_audio_visualizer.Utility.highlightingHibernation;
+
 
 public class GLLine {
 
@@ -36,8 +37,6 @@ public class GLLine {
     private float[] vertices;
     private float leftSide;
     private float rightSide;
-    private int HIGH = 15;
-    private int MEDIUM = DECIBEL_HISTORY_SIZE;
 
     /**
      * Constructor
@@ -102,45 +101,11 @@ public class GLLine {
     public void updateVertices(boolean shouldUpdateHighlighting) {
 
         int xOffset = 0;
-        float highlightingFactor = 1.0f;
+        float highlightingFactor;
         float averageDecibels;
 
-        if(shouldUpdateHighlighting) {
-            if (highlightingHibernationOn) {
-                highlightingHibernationCount -= 1;
-                if (highlightingHibernationCount <= 0) {
-                    highlightingHibernationOn = false;
-                }
-            } else {
-                if (highlightingOnMedium) {
-                    highlightingCount -= 3;
-
-                    if (highlightingCount <= 0) {
-                        highlightingOnMedium = false;
-                        highlightingHibernationOn = true;
-                        highlightingHibernationCount = 33;
-                    }
-                } else if (highlightingOnHigh) {
-                    highlightingCount -= 3;
-
-                    if (highlightingCount <= 0) {
-                        highlightingOnHigh = false;
-                        highlightingHibernationOn = true;
-                        highlightingHibernationCount = 33;
-                    }
-                }
-            }
-        }
         // Change to object array to traverse
         Float[] decibelFloatArray = decibelHistory.toArray(new Float[DECIBEL_HISTORY_SIZE]);
-
-        if(highlightingOnMedium) {
-            for(int i = 0; i < )
-        } else if (highlightingOnHigh) {
-
-        } else if (highlightingHibernationOn) {
-
-        }
 
         // Only loop for the size of the decibel array size
         for(int i = 0; i < DECIBEL_HISTORY_SIZE; i++){
@@ -149,39 +114,29 @@ public class GLLine {
             // Right side needs to move in positive direction
             // Amplification should be half for both sides because Amplification = left + right
 
-            // Takes the average of the five decibel levels surrounding the current y-position of the line in question
+            // Takes the average of the three decibel levels surrounding the current y-position of the line in question
             switch(i) {
-                case 0:                        averageDecibels = decibelFloatArray[0] + decibelFloatArray[1] + decibelFloatArray[2] + decibelFloatArray[3] + decibelFloatArray[4]; break;
-                case 1:                        averageDecibels = decibelFloatArray[1] + decibelFloatArray[2] + decibelFloatArray[3] + decibelFloatArray[4] + decibelFloatArray[5]; break;
-                case DECIBEL_HISTORY_SIZE - 2: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE - 6] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 5] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 4] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 2]; break;
-                case DECIBEL_HISTORY_SIZE - 1: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE - 5] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 4] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 2] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 1]; break;
-                default:                       averageDecibels = decibelFloatArray[i-2] + decibelFloatArray[i-1] + decibelFloatArray[i] + decibelFloatArray[i+1] + decibelFloatArray[i+2]; break;
+                case 0:                        averageDecibels = decibelFloatArray[0] + decibelFloatArray[1] + decibelFloatArray[2]; break;
+                case DECIBEL_HISTORY_SIZE - 1: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 2] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 1]; break;
+                default:                       averageDecibels = decibelFloatArray[i-1] + decibelFloatArray[i] + decibelFloatArray[i+1]; break;
             }
 
-            averageDecibels /= 5.0f;
+            averageDecibels /= 3.0f;
 
-
-            // Adding scaler value depending on the decibel
-            // And it needs two because there are two points per y-axis
-            // The value that's being initialized needs to be played with to have a smoother or more better looking visualizer
-            if (decibelFloatArray[i] == -0.65f) {
-                highlightingFactor = 50.0f;
-            } else if (decibelFloatArray[i] == -0.75) {
-                highlightingFactor = 100.0f;
-            } else if(averageDecibels <= 0.55f && averageDecibels >= 0.0f) {
+            if(averageDecibels <= 0.55f) {
                 highlightingFactor = 10.0f;
-            } else if (averageDecibels <= 0.6f && averageDecibels >= 0.0) {
+            } else if (averageDecibels <= 0.6f) {
                 highlightingFactor = 20.0f;
             } else if (averageDecibels <= 0.65f){
-                if(!highlightingOnMedium && shouldUpdateHighlighting){
-                    highlightingCount = 0;
+                if(!highlightingOnMedium && !highlightingOnHigh && !highlightingHibernation && shouldUpdateHighlighting){
                     highlightingOnMedium = true;
+                    highlightingDuration = MEDIUM_HIGHLIGHTING_PULSE;
                 }
                 highlightingFactor = 50.0f;
-            } else if (averageDecibels > 0.65f){
-                if(!highlightingOnHigh && shouldUpdateHighlighting) {
-                    highlightingCount = 0;
+            } else {
+                if(!highlightingOnHigh && !highlightingOnMedium && !highlightingHibernation && shouldUpdateHighlighting) {
                     highlightingOnHigh = true;
+                    highlightingDuration = HIGH_HIGHLIGHTING_PULSE;
                 }
                 highlightingFactor = 100.0f;
             }
@@ -193,7 +148,6 @@ public class GLLine {
 
             xOffset += 14;
         }
-
 
         FloatBuffer fftInput = ByteBuffer.allocateDirect(this.vertices.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         fftInput.put(this.vertices).position(0);

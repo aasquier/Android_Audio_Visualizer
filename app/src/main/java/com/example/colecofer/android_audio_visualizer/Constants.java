@@ -55,9 +55,11 @@ final class Constants {
 
 
     /** Utility constants */
-    static final float MAX_DB_LEVEL        = 170.0f;
-    static final long REFRESH_DECIBEL_TIME = 16L;
-    static final float MAX_DECIBEL_RATIO   = 1.0f;
+    static final float MAX_DB_LEVEL          = 170.0f;
+    static final long REFRESH_DECIBEL_TIME   = 16L;
+    static final float MAX_DECIBEL_RATIO     = 1.0f;
+    static final int MEDIUM_HIBERNATION_TIME = 100;
+    static final int HIGH_HIBERNATION_TIME   = 50;
 
     /** Shared Visualizer Constants **/
     static final String GLSL_POSITION_HANDLE     = "a_Position";
@@ -67,6 +69,8 @@ final class Constants {
     static final String GLSL_TIME                = "time";
     static final String GLSL_SCALING_LEVEL_ARRAY = "scaling_Level";
     static final float COLOR_SHIFT_FACTOR        = 0.005f;
+    static final int HIGH_HIGHLIGHTING_PULSE     = 12;
+    static final int MEDIUM_HIGHLIGHTING_PULSE   = 50;
 
     /** Vis1 constants */
     static final int LINE_AMT              = 100;                  //Number of lines to display on the screen

@@ -22,12 +22,6 @@ public class VisOne extends VisualizerBase {
     private Utility util;
     private Long visOneStartTime;
 
-    static boolean highlightingOnHigh        = false;
-    static boolean highlightingOnMedium      = false;
-    static boolean highlightingHibernationOn = false;
-    static int highlightingHibernationCount  = 0;
-    static int highlightingCount             = 0;
-
     /**
      * Constructor
      */

@@ -34,7 +34,6 @@ public class VisTwo extends VisualizerBase {
         this.fragmentShader = util.getStringFromGLSL(R.raw.vistwofragment);
 
         visTwoStartTime = System.currentTimeMillis();
-        util.highlightingCurrently = false;
     }
 
     /**
@@ -55,9 +54,6 @@ public class VisTwo extends VisualizerBase {
     @Override
     public void draw(float[] mvpMatrix) {
         FloatBuffer dotVertexData = dot.draw();
-
-//        GLES20.glEnable(GLES20.GL_BLEND);
-//        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 
         /** Updates the position of individual dots for our screen rendering in the OpenGL pipeline */
         dotVertexData.position(POSITION_OFFSET);
@@ -81,7 +77,5 @@ public class VisTwo extends VisualizerBase {
         GLES20.glUniform1f(timeHandle, (float)(System.currentTimeMillis() - visTwoStartTime));
 
         GLES20.glDrawArrays(GLES20.GL_POINTS, 0, DOT_COUNT);
-
-//        GLES20.glDisable(GLES20.GL_BLEND);
     }
 }

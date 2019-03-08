@@ -10,14 +10,21 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static com.example.colecofer.android_audio_visualizer.Constants.HIGH_HIBERNATION_TIME;
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_DB_LEVEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_DECIBEL_RATIO;
+import static com.example.colecofer.android_audio_visualizer.Constants.MEDIUM_HIBERNATION_TIME;
 import static com.example.colecofer.android_audio_visualizer.Constants.REFRESH_DECIBEL_TIME;
 import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
 
 public class Utility {
 
     private Context context;
+    static boolean highlightingOnHigh               = false;
+    static boolean highlightingOnMedium             = false;
+    static boolean highlightingHibernation          = false;
+    static int highlightingDuration                 = 0;
+    private static int highlightingHibernationCount = 0;
 
       /**
        * Pass context for connecting Resource
@@ -53,19 +60,63 @@ public class Utility {
     static Pair<Long, Boolean> updateDecibelHistory(double newDecibelLevel, long previousUpdateTime) {
         Pair<Long, Boolean> isTimeToUpdate = isTimeToUpdate(previousUpdateTime);
 
+
         /** A check to ensure that the current time has exceeded the desired refresh time */
         if (isTimeToUpdate.second) {
             float newDbRatio = (float) newDecibelLevel / MAX_DB_LEVEL;
             newDbRatio = newDbRatio > MAX_DECIBEL_RATIO ? MAX_DECIBEL_RATIO : newDbRatio;
-            /** Update the decibel history with the current decibel level */
+            float elementToInsert = 0.0f;
+
             decibelHistory.removeLast();
             decibelHistory.removeLast();
             decibelHistory.removeLast();
 
-            decibelHistory.addFirst(newDbRatio);
-            decibelHistory.addFirst(newDbRatio);
-            decibelHistory.addFirst(newDbRatio);
+            /** Update the decibel history with the current decibel level */
+            if(highlightingOnMedium) {
+                if(highlightingDuration >= 0) {
+                    elementToInsert = 0.65f;
+                }
+            } else if(highlightingOnHigh) {
+                if(highlightingDuration >= 0) {
+                    elementToInsert = 0.7f;
+                }
+            } else if(highlightingHibernation){
+                if(newDbRatio > 0.65f) {
+                    elementToInsert = 0.6f;
+                } else if(newDbRatio > 0.6f) {
+                    elementToInsert = 0.55f;
+                } else {
+                    elementToInsert = newDbRatio;
+                }
+            } else {
+                elementToInsert = newDbRatio;
+            }
+
+            decibelHistory.addFirst(elementToInsert);
+            decibelHistory.addFirst(elementToInsert);
+            decibelHistory.addFirst(elementToInsert);
+
+            if(highlightingOnMedium || highlightingOnHigh) {
+                highlightingDuration -= 3;
+                if (highlightingDuration <= 0) {
+                    if(highlightingOnMedium) {
+                        highlightingOnMedium = false;
+                        highlightingHibernationCount = MEDIUM_HIBERNATION_TIME;
+                    } else {
+                        highlightingOnHigh = false;
+                        highlightingHibernationCount = HIGH_HIBERNATION_TIME;
+                    }
+                    highlightingHibernation = true;
+                }
+            }
+            if(highlightingHibernation) {
+                highlightingHibernationCount -= 3;
+                if(highlightingHibernationCount <= 0) {
+                    highlightingHibernation = false;
+                }
+            }
         }
+
         return isTimeToUpdate;
     }
 
