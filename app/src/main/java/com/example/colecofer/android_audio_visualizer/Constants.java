@@ -8,20 +8,15 @@ final class Constants {
     static final int SWITCH_VIS_TIME       = 5000;                      //Number of milliseconds to wait before switching
 
     /** VisualizerActivity constants */
-    static final int DECIBEL_HISTORY_SIZE   = 25;
+    static final int DECIBEL_HISTORY_SIZE   = 50;
 
     static final int REQUEST_PERMISSION     = 101;
     static final int REAL_BUCKET_INDEX      = 3;
     static final int IMAGINARY_BUCKET_INDEX = 4;
     static final int MAX_FFT_ARRAY_SIZE     = 1024;
-    static final int VIS1_VERTEX_COUNT      = DECIBEL_HISTORY_SIZE + DECIBEL_HISTORY_SIZE;
-    static final int VIS1_ARRAY_SIZE        = VIS1_VERTEX_COUNT * 7;
     static final float PIXEL                = 0.0009f;
     static final float AMPLIFIER            = 0.0000095f;
     static final float DEFAULT_LINE_SIZE    = 0.00009f;
-
-    /** GLCircle constants */
-    static final int COUNT = 364;
 
     /** GLLine constants */
     static final int BYTES_PER_FLOAT = 4;
@@ -59,9 +54,11 @@ final class Constants {
 
 
     /** Utility constants */
-    static final float MAX_DB_LEVEL        = 170.0f;
-    static final long REFRESH_DECIBEL_TIME = 16L;
-    static final float MAX_DECIBEL_RATIO   = 1.0f;
+    static final float MAX_DB_LEVEL          = 170.0f;
+    static final long REFRESH_DECIBEL_TIME   = 16L;
+    static final float MAX_DECIBEL_RATIO     = 1.0f;
+    static final int MEDIUM_HIBERNATION_TIME = 100;
+    static final int HIGH_HIBERNATION_TIME   = 50;
 
     /** Shared Visualizer Constants **/
     static final String GLSL_POSITION_HANDLE     = "a_Position";
@@ -71,9 +68,13 @@ final class Constants {
     static final String GLSL_TIME                = "time";
     static final String GLSL_SCALING_LEVEL_ARRAY = "scaling_Level";
     static final float COLOR_SHIFT_FACTOR        = 0.005f;
+    static final int HIGH_HIGHLIGHTING_PULSE     = 12;
+    static final int MEDIUM_HIGHLIGHTING_PULSE   = 50;
 
     /** Vis1 constants */
     static final int LINE_AMT              = 100;                  //Number of lines to display on the screen
+    static final int VIS1_VERTEX_COUNT     = DECIBEL_HISTORY_SIZE + DECIBEL_HISTORY_SIZE;
+    static final int VIS1_ARRAY_SIZE       = VIS1_VERTEX_COUNT * 7;
     static final float AMP_MULT            = 0.000005f;           //Alters the lines horizontal amplitude
     static final int VERTEX_AMOUNT         = 7;                   //x, y, z, r, g, b, a
     static final float LEFT_DRAW_BOUNDARY  = -0.99f;              //Where to start drawing on the left side of the screen
