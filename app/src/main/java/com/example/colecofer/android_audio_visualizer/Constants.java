@@ -73,8 +73,8 @@ final class Constants {
 
     /** Vis1 constants */
     static final int LINE_AMT              = 100;                  //Number of lines to display on the screen
-    static final int VIS1_VERTEX_COUNT      = DECIBEL_HISTORY_SIZE + DECIBEL_HISTORY_SIZE;
-    static final int VIS1_ARRAY_SIZE        = VIS1_VERTEX_COUNT * 7;
+    static final int VIS1_VERTEX_COUNT     = DECIBEL_HISTORY_SIZE + DECIBEL_HISTORY_SIZE;
+    static final int VIS1_ARRAY_SIZE       = VIS1_VERTEX_COUNT * 7;
     static final float AMP_MULT            = 0.000005f;           //Alters the lines horizontal amplitude
     static final int VERTEX_AMOUNT         = 7;                   //x, y, z, r, g, b, a
     static final float LEFT_DRAW_BOUNDARY  = -0.99f;              //Where to start drawing on the left side of the screen
