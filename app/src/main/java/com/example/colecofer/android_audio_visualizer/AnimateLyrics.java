@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.BOTTOM_PADDING;
+import static com.example.colecofer.android_audio_visualizer.Constants.DEMO_MODE;
 import static com.example.colecofer.android_audio_visualizer.Constants.DISPLAY_MULTILINE_PROXIMITY;
 import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_PADDING;
 import static com.example.colecofer.android_audio_visualizer.Constants.LYRICS_TEXT_SIZE;
@@ -42,7 +43,7 @@ public class AnimateLyrics {
 
     private Typeface lyricsTypeface;
     private ArrayList<Pair<Integer, String[]>> rawLyricsList;         //Holds the lyrics as plain Strings with their timestamps to be displayed
-    private int sizeOfRawLyricsList = 0;                                //Total amount of lyric segments
+    private int sizeOfRawLyricsList = 0;                              //Total amount of lyric segments
     private int rawLyricsIndex = 0;
     private int screenHeight;
     private float lyricEndTime;               //Amount of milliseconds that the current segment will be displayed for
@@ -111,23 +112,24 @@ public class AnimateLyrics {
                 for (String item : rawLyricsList.get(this.rawLyricsIndex).second) {
                     lyricsToDisplay.add(item);
                 }
-
                 //Index to the next lyric
                 this.rawLyricsIndex += 1;
 
-                //////////
-                //Check if the lyrics are close enough so that we can display them at the same time
-                if (rawLyricsList.get(this.rawLyricsIndex + 1).first - rawLyricsList.get(this.rawLyricsIndex).first
-                        < DISPLAY_MULTILINE_PROXIMITY) {
-                    for (String item : rawLyricsList.get(this.rawLyricsIndex).second) {
-                        lyricsToDisplay.add(item);
-                    }
-                    this.rawLyricsIndex += 1;
-                }
-                //////////
+                //Only look to display multiple lines if we are not in demo mode
+                if (DEMO_MODE == false) {
 
+                    //Check if the lyrics are close enough so that we can display them at the same time
+                    if (rawLyricsList.get(this.rawLyricsIndex + 1).first - rawLyricsList.get(this.rawLyricsIndex).first
+                            < DISPLAY_MULTILINE_PROXIMITY) {
+                        for (String item : rawLyricsList.get(this.rawLyricsIndex).second) {
+                            lyricsToDisplay.add(item);
+                        }
+                        this.rawLyricsIndex += 1;
+                    }
+                }
             }
             this.displayLyrics(lyricsToDisplay);
+
         }
 
         this.scrollTextView();

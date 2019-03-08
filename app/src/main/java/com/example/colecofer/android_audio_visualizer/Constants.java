@@ -22,6 +22,7 @@ final class Constants {
     static final int BYTES_PER_FLOAT = 4;
 
     /** Lyrics Animation */
+    static final boolean DEMO_MODE = true;       //Setting to true will display the biggie small lyrics in the same format as the demo0
     static final float LYRICS_TEXT_SIZE = 22f;
     static final float PERCENT_FROM_TOP = 0.65f;  //Percentage of screen height to display lyrics at
     static final int MAX_HEIGHT_OFFSET = 35;     //Amount of pixels the textView is allowed to scroll until it stops
