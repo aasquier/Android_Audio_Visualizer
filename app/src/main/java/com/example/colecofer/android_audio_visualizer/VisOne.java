@@ -4,6 +4,7 @@ import android.content.Context;
 import android.opengl.GLES20;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_DB_LEVEL;
+import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_SCALING_LEVEL_ARRAY;
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_TIME;
 import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_DRAW_BOUNDARY;
 import static com.example.colecofer.android_audio_visualizer.Constants.LINE_AMT;
@@ -53,13 +54,13 @@ public class VisOne extends VisualizerBase {
         this.colorHandle = colorHandle;
         this.currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, GLSL_DB_LEVEL);
         this.timeHandle = GLES20.glGetUniformLocation(programHandle, GLSL_TIME);
+        this.scalingLevelArrayHandle = GLES20.glGetUniformLocation(programHandle, GLSL_SCALING_LEVEL_ARRAY);
     }
 
     @Override
     public void updateVertices() {
-        lines[0].updateVertices(true);
-        for(int i = 1; i < LINE_AMT; ++i){
-            lines[i].updateVertices(false);
+        for(int i = 0; i < LINE_AMT; i++){
+            lines[i].updateVertices();
         }
     }
 
