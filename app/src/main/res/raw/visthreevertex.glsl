@@ -162,9 +162,9 @@ void main() {           		    // The entry point for our vertex shader.
 
 //    uv = vec2(uv.x, uv.y + (noise * freq * lineFractalStrength * 0.015));
 
-    if(lineFractalStrength > 1.) {
-
-        uv.y += noise * lineFractalStrength/.8 * 0.01;
+    if(lineFractalStrength == 0.) {
+        uv.y += noise * 0.01;
+        //uv.y += noise * lineFractalStrength/.8 * 0.01;
 //        uv = vec2(uv.x, uv.y + (noise * freq * 0.05));
 //    } else if(lineFractalStrength == 3) {
 //        uv = vec2(uv.x, uv.y + (noise * freq * 0.03));
@@ -173,8 +173,7 @@ void main() {           		    // The entry point for our vertex shader.
 //    } else if(lineFractalStrength == 1){
 //        uv = vec2(uv.x, uv.y + (noise * freq * 0.01));
     } else {
-
-        uv.y += noise * 0.01;
+        uv = vec2(uv.x, uv.y + (noise * freq * lineFractalStrength * 0.015));
     }
 
 //    float noise = snoise(vec2(a_Position.xy/res.xy));//, time/10000.));

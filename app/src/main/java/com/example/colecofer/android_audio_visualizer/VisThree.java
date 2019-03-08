@@ -110,8 +110,6 @@ public class VisThree extends VisualizerBase {
 
         int height = Resources.getSystem().getDisplayMetrics().heightPixels;
         int width = Resources.getSystem().getDisplayMetrics().widthPixels;
-//        int width = deviceWidth;
-//        int height = deviceHeight;
 
         // ---------- bottom left -----------
 
