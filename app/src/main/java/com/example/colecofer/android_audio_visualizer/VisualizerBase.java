@@ -16,6 +16,7 @@ abstract public class VisualizerBase {
     protected int currentDecibelLevelHandle;
     protected int timeHandle;
     protected int matrixHandle;
+
     protected int scalingLevelArrayHandle;
 
     int visNum;  // A unique integer value to represent each visualizer

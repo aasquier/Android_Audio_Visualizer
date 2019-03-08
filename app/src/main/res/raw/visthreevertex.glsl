@@ -128,8 +128,8 @@ attribute vec4 a_Color;	            // Per-vertex color information we will pass
 varying vec4   v_Color;             // This will be passed into the fragment shader.
 uniform float time;                 // Time since this visualizer began
 uniform float a_DB_Level[50];       // Decibel level history, need to change the 50 as the constant changes
-uniform float lineFractalStrength;    // Represents how strongly the fractal effect should be applied
 
+uniform float lineFractalStrength;    // Represents how strongly the fractal effect should be applied
 
 void main() {           		    // The entry point for our vertex shader.
 
