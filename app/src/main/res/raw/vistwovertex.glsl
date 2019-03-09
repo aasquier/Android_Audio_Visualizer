@@ -117,6 +117,7 @@ void main() {
 	 vec2 uv = a_Position.xy / res;
      vec3 black = vec3(0.0, 0.0, 0.0);
      vec3 white = vec3(1.0, 1.0, 1.0);
+     vec3 mid = vec3(0.5, 0.5, 0.5);
 	 vec4 newPosition = vec4(a_Position.xy/res, 0.0, 1.0);
 
      float d = sqrt(newPosition.x * newPosition.x + newPosition.y * newPosition.y);
@@ -127,13 +128,13 @@ void main() {
      vec3 b = mix(a_Color.xyz, black, dis);
 
      float dis2 = fbm(newPosition.xy/res*5., time);
-     vec3 c = mix(a_Color.xyz, black, dis2);
+     vec3 c = mix(a_Color.xyz, mid, dis2);
 
      vec4 newColor = vec4(b*c, 1.0);
 
-     vec4 newColor2 = newColor - a_DB_Level[distanceIndex];
+     vec4 newColor2 = newColor * a_DB_Level[distanceIndex];
 
-     v_Color = mix(newColor, newColor2, .5);
+     v_Color = mix(newColor, newColor2, .75);
 
 //     gl_PointSize = 1.0 + a_DB_Level[0];
      gl_PointSize = 2.0;
