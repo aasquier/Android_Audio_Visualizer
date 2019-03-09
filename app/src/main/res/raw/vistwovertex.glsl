@@ -112,35 +112,32 @@ precision highp float;          // Set the default precision to high
 
 
 void main() {
-     float scaledTime = time/500.0;
-     vec2 res = vec2(.95, .95);
-	 vec2 uv = a_Position.xy / res;
-     vec3 black = vec3(0.0, 0.0, 0.0);
-     vec3 white = vec3(1.0, 1.0, 1.0);
-     vec3 mid = vec3(0.5, 0.5, 0.5);
-	 vec4 newPosition = vec4(a_Position.xy/res, 0.0, 1.0);
+    float scaledTime = time/500.0;
+    vec2 res = vec2(.95, .95);
+	vec2 uv = a_Position.xy / res;
+    vec3 black = vec3(0.0, 0.0, 0.0);
+    vec3 white = vec3(1.0, 1.0, 1.0);
+    vec3 mid = vec3(0.5, 0.5, 0.5);
 
-     float d = sqrt(newPosition.x * newPosition.x + newPosition.y * newPosition.y);
-     d *= 0.65;
-     int distanceIndex = int(d * 150.);
+	vec4 newPosition = vec4(a_Position.xy/res, 0.0, 1.0);
+    float d = sqrt(newPosition.x * newPosition.x + newPosition.y * newPosition.y);
+    d *= 0.65;
 
-     float dis = worley5(newPosition.xy/res*5., time/800.);
-     vec3 b = mix(a_Color.xyz, black, dis);
+    int distanceIndex = int(d * 75.);
 
-     float dis2 = fbm(newPosition.xy/res*5., time);
-     vec3 c = mix(a_Color.xyz, mid, dis2);
+    float dis = worley5(newPosition.xy/res*5., time/800.);
+    vec3 b = mix(a_Color.xyz, black, dis);
 
-     vec4 newColor = vec4(b*c, 1.0);
+    float dis2 = fbm(newPosition.xy/res*5., time);
+    vec3 c = mix(a_Color.xyz, mid, dis2);
 
-     vec4 newColor2 = newColor * a_DB_Level[distanceIndex];
-
+    vec4 newColor = vec4(b*c, 1.0);
+    vec4 newColor2 = newColor * a_DB_Level[distanceIndex];
     vec4 newLighter = mix(newColor2, vec4(black, 1.0), 0.2);
 
-     v_Color = mix(newColor, newLighter, .75);
-
-//     gl_PointSize = 1.0 + a_DB_Level[0];
-     gl_PointSize = 2.0;
-
-     gl_Position = newPosition;
+    v_Color = mix(newColor, newLighter, .75);
+//    gl_PointSize = 1.0 + a_DB_Level[0];
+    gl_PointSize = 2.0;
+    gl_Position = newPosition;
 //    gl_position = a_Position;
 }

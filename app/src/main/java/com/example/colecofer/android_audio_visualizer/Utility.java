@@ -117,7 +117,21 @@ public class Utility {
                         highlightingHibernation = false;
                     }
                 }
+            } else if(VisualizerModel.getInstance().currentVisualizer instanceof VisTwo){
+                if(newDbRatio <= 0.35f) {
+                    newDbRatio = 0.5f;
+                } else if (newDbRatio <= 0.55f) {
+                    newDbRatio = 1.0f;
+                } else if (newDbRatio <= 0.75f){
+                    newDbRatio = 1.5f;
+                } else {
+                    newDbRatio = 4.5f;
+                }
+
+                decibelHistory.removeLast();
+                decibelHistory.addFirst(newDbRatio);
             } else {
+                // The decibel history should be more granular for vis3
                 decibelHistory.removeLast();
                 decibelHistory.addFirst(newDbRatio);
             }
