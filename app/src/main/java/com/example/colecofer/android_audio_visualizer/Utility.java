@@ -67,7 +67,7 @@ public class Utility {
             newDbRatio = newDbRatio > MAX_DECIBEL_RATIO ? MAX_DECIBEL_RATIO : newDbRatio;
             float elementToInsert = 0.0f;
 
-            if (!(VisualizerModel.getInstance().currentVisualizer instanceof VisTwo)) {
+            if (VisualizerModel.getInstance().currentVisualizer instanceof VisOne) {
 
                 decibelHistory.removeLast();
                 decibelHistory.removeLast();
