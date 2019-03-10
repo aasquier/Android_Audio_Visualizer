@@ -159,11 +159,11 @@ public class MusixmatchClient {
     //These are strictly for demo purposes only - since we don't have a musixmatch license.
 
     private static String BIGGIE_LYRICS =
-        "[00:01.50] Uhhh, uhhh, uh, c`mon\n" +
+        "[00:01.50] Uhhh, uhhh, uh, c'mon\n" +
         "[00:06.50] Hah,\t" +
         "sicka than your average\n" +
         "[00:08.00] Poppa twist cabbage off instinct\n" +
-        "[00:10.00] Niggaz don`t think shit stink\t" +
+        "[00:10.00] Niggaz don't think shit stink\t" +
         "pink gators,\n" +
         "[00:13.00] My Detroit players\n" +
         "[00:14.00] Timbs for my hooligans in Brooklyn\n" +
@@ -188,7 +188,7 @@ public class MusixmatchClient {
         "[00:36.90] Bang every MC\t" +
         "easily, busily\n" +
         "[00:39.70] Recently niggaz frontin\t" +
-        "ain`t sayin nuttin’\t" +
+        "ain't sayin nuttin’\t" +
         "so I just\n" +
         "[00:42.60] Speak my piece,\t" +
         "keep my peace\n" +
@@ -204,17 +204,17 @@ public class MusixmatchClient {
         "[01:18.50] All Philly hoes,\t" +
         "dough and Moschino\n" +
         "[01:20.80] Every cutie wit a booty bought a Coogi\n" +
-        "[01:23.00] Now who`s the real dookie,\t" +
-        "meanin’ who`s really the shit\n" +
+        "[01:23.00] Now who's the real dookie,\t" +
+        "meanin’ who's really the shit\n" +
         "[01:25.50] Them niggaz ride dicks,\t" +
         "Frank White push the sticks\n" +
         "[01:28.00] On the Lexus, LX,\t" +
         "four and a half\n" +
         "[01:30.50] Bulletproof glass\t" +
         "tints if I want some ass\n" +
-        "[01:33.00] Gon` blast squeeze first\t" +
+        "[01:33.00] Gon' blast squeeze first\t" +
         "ask questions last\n" +
-        "[01:35.80] That`s how most of these\t" +
+        "[01:35.80] That's how most of these\t" +
         "so-called gangsters pass\n" +
         "[01:38.70] At last,\t" +
         "a nigga rappin bout blunts and broads\n" +
@@ -226,10 +226,10 @@ public class MusixmatchClient {
         "no car payment\n" +
         "[01:48.80] At my arraignment,\t" +
         "note for the plantiff\n" +
-        "[01:51.50] Your daughter`s tied up\t" +
+        "[01:51.50] Your daughter's tied up\t" +
         "in a Brooklyn basement\n" +
         "[01:53.70] Face it, not guilty,\t" +
-        "that`s how I stay filthy\n" +
+        "that's how I stay filthy\n" +
         "[01:56.80] Richer than Richie,\t" +
         "till you niggaz come and get me\n" +
         "[01:60.80] \n" +
@@ -242,13 +242,13 @@ public class MusixmatchClient {
         "[02:30.00] I know you sick of this,\t" +
         "name brand nigga wit’\n" +
         "[02:32.50] Flows\t" +
-        "girls say he`s sweet like licorice\n" +
+        "girls say he's sweet like licorice\n" +
         "[02:35.10] So get with this nigga,\t" +
-        "it`s easy\n" +
-        "[02:37.20] Girlfriend here`s a pen,\t" +
+        "it's easy\n" +
+        "[02:37.20] Girlfriend here's a pen,\t" +
         "call me round ten\n" +
         "[02:40.00] Come through,\t" +
-        "have sex on rugs that`s Persian\n" +
+        "have sex on rugs that's Persian\n" +
         "[02:43.00] Come up to your job,\t" +
         "hit you while you workin\t" +
         "for certain,\n" +
@@ -258,10 +258,10 @@ public class MusixmatchClient {
         "like rapper demo\n" +
         "[02:50.00] Tell them hoe,\t" +
         "take they clothes off slowly\n" +
-        "[02:52.70] Hit `em wit the force like Obe,\t" +
+        "[02:52.70] Hit 'em wit the force like Obe,\t" +
         "dick black like Toby\n" +
         "[02:55.00] Watch me roam like Gobe,\t" +
-        "lucky they don`t owe me\n" +
+        "lucky they don't owe me\n" +
         "[02:57.80] Where the safe?\t" +
         "Show me, homie!";
 

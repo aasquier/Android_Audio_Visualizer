@@ -31,7 +31,7 @@ final class Constants {
     static final int RIGHT_PADDING = 100;
     static final int BOTTOM_PADDING = 100;
     static final float DISPLAY_MULTILINE_PROXIMITY = 2000f; //If time between lyrics are smaller than this amount, then multiple lyrics will display on the screen at the same time
-    static final float LYRIC_DISPLAY_OFFSET = 300f;         //Offset of time to display lyrics before they are actually sung in the song
+    static final float LYRIC_DISPLAY_OFFSET = 350f;         //Offset of time to display lyrics before they are actually sung in the song
 
 
     /** MainActivity constants */
