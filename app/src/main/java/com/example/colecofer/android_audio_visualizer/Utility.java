@@ -133,6 +133,8 @@ public class Utility {
             } else {
                 // The decibel history should be more granular for vis3
                 decibelHistory.removeLast();
+                decibelHistory.removeLast();
+                decibelHistory.addFirst(newDbRatio);
                 decibelHistory.addFirst(newDbRatio);
             }
         }
