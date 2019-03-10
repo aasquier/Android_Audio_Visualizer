@@ -4,9 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.content.res.ResourcesCompat;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Pair;
 import android.util.TypedValue;
 import android.view.ViewGroup;
@@ -35,8 +32,8 @@ import static com.example.colecofer.android_audio_visualizer.Constants.SCROLL_LY
  * inside of a TextView.
  */
 public class AnimateLyrics {
-    private float opacityUpdateInc = 0.1f;  //Amount of opacity to add each time update is called
-    private float opacityUpdateDec = -0.1f;
+    private float opacityUpdateInc = 0.2f;  //Amount of opacity to add each time update is called
+    private float opacityUpdateDec = -0.2f;
 
     static TextView lyricsTextView;
     static ViewGroup.MarginLayoutParams lyricsParams;
@@ -80,6 +77,13 @@ public class AnimateLyrics {
         this.rawLyricsIndex = 0;
         this.lyricTextViewOpacity = 0.0f;
 
+        //Dirty hack to reduce timestamp times for biggie smalls because the timestamps are all slightly delayed
+        for (int i = 0; i < this.rawLyricsList.size(); ++i) {
+            Integer reducedTimeStamp = this.rawLyricsList.get(i).first - 1500;
+            Pair<Integer, String[]> newPair = new Pair(reducedTimeStamp, this.rawLyricsList.get(i).second);
+            this.rawLyricsList.set(i, newPair);
+        }
+
         lyricsToDisplay = new ArrayList<>();
 
         //Screen dimensions
@@ -90,7 +94,6 @@ public class AnimateLyrics {
         updateHeightPadding(this.defaultHeightPadding);
         this.maxHeightPadding = this.defaultHeightPadding - MAX_HEIGHT_OFFSET;
     }
-
 
     /**
      * Displays the next set of lyrics according to the timestamps
@@ -113,7 +116,7 @@ public class AnimateLyrics {
 
                     //Replace tab characters only if in demo mode
                     if (DEMO_MODE == true) {
-                        item.replace("\t", "\n");
+                        item = item.replace("\t", "\n");
                         lyricsToDisplay.add(item);
                     } else {
                         lyricsToDisplay.add(item);
@@ -121,29 +124,28 @@ public class AnimateLyrics {
 
                 }
 
-                //Index to the next lyric
-                this.rawLyricsIndex += 1;
-
                 //Only look to display multiple lines if we are not in demo mode
                 if (DEMO_MODE == false) {
 
                     //Check if the lyrics are close enough so that we can display them at the same time
                     if (rawLyricsList.get(this.rawLyricsIndex + 1).first - rawLyricsList.get(this.rawLyricsIndex).first
                             < DISPLAY_MULTILINE_PROXIMITY) {
-                        for (String item : rawLyricsList.get(this.rawLyricsIndex).second) {
+                        for (String item : rawLyricsList.get(this.rawLyricsIndex + 1).second) {
                             lyricsToDisplay.add(item);
                         }
                         this.rawLyricsIndex += 1;
                     }
                 }
+                //Index to the next lyric
+                this.rawLyricsIndex += 1;
             }
             this.displayLyrics(lyricsToDisplay);
-
         }
 
         this.scrollTextView();
         this.updateOpacity();
     }
+
 
     /**
      * Takes an array of lyrics and displays them to
@@ -155,7 +157,7 @@ public class AnimateLyrics {
         String lyricsToDisplay = "";
         this.lyricsTextView.setAlpha(0);
         for (int i = 0; i < wordsAmt; ++i) {
-            lyricsToDisplay += " " + lyrics.get(i);
+            lyricsToDisplay += lyrics.get(i) + " ";
         }
         this.lyricsTextView.setText(lyricsToDisplay);
         this.lyricsToDisplay.clear();
