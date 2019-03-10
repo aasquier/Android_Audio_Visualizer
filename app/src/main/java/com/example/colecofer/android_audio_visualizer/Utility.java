@@ -132,6 +132,10 @@ public class Utility {
                 decibelHistory.addFirst(newDbRatio);
             } else {
                 // The decibel history should be more granular for vis3
+                while(decibelHistory.peek() > 2.0) {
+                    decibelHistory.removeFirst();
+                    decibelHistory.addFirst(newDbRatio);
+                }
                 decibelHistory.removeLast();
                 decibelHistory.removeLast();
                 /** Update the decibel history with the current decibel level */

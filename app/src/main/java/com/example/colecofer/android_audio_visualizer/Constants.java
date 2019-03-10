@@ -108,7 +108,7 @@ final class Constants {
     static final int VIS3_ARRAY_SIZE           = VIS3_VERTEX_COUNT * 7;
     static final int LINE_AMT_V3               = 20;
     static final float AMPLIFIER_V3            = 0.00003f;
-    static final float DEFAULT_LINE_SIZE_V3    = 0.0004f;
+    static final float DEFAULT_LINE_SIZE_V3    = 0.001f;
 
     /** VisualizerModel constants */
     static final String MODEL_TAG = "MODEL_TAG";
