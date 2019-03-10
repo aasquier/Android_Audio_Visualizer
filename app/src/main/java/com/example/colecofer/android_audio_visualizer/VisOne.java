@@ -57,6 +57,8 @@ public class VisOne extends VisualizerBase {
 
     @Override
     public void updateVertices() {
+        // The state of the lines should only be changed if it is the first line in question, the rest of the lines should just mirror
+        // this state
         lines[0].updateVertices(true);
         for(int i = 1; i < LINE_AMT; ++i){
             lines[i].updateVertices(false);
