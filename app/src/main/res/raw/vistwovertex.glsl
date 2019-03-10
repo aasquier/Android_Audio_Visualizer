@@ -95,6 +95,7 @@ attribute vec4 a_Color;	        // Per-vertex color information we will pass in 
 uniform float  a_DB_Level[50];  // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
 varying vec4   v_Color;         // This will be passed into the fragment shader as the final color values
 uniform float time;
+uniform float screen_ratio;
 
 attribute float scaling_Level;
 precision highp float;          // Set the default precision to high
@@ -117,6 +118,7 @@ void main() {
         float cLength = length(cPos);
         vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(db * cLength * 12.0 - scaledTime * 4.0) * 0.5;
         vec4 newPosition = vec4(uv2, a_Position.zw);
+        newPosition.y = newPosition.y / screen_ratio;
 
         float dis = worley5(newPosition.xy/res*5., time/800.);
         vec3 b = mix(a_Color.xyz, black, dis);

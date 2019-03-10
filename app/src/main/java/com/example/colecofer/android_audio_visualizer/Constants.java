@@ -67,6 +67,7 @@ final class Constants {
     static final String GLSL_MATRIX              = "u_MVPMatrix";
     static final String GLSL_TIME                = "time";
     static final String GLSL_SCALING_LEVEL_ARRAY = "scaling_Level";
+    static final String GLSL_SCREEN_RATIO        = "screen_ratio";
     static final float COLOR_SHIFT_FACTOR        = 0.005f;
     static final int HIGH_HIGHLIGHTING_PULSE     = 12;
     static final int MEDIUM_HIGHLIGHTING_PULSE   = 50;

@@ -1,10 +1,13 @@
 package com.example.colecofer.android_audio_visualizer;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.opengl.GLES20;
+import android.util.Log;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_DB_LEVEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_MATRIX;
+import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_SCREEN_RATIO;
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_TIME;
 
 
@@ -38,6 +41,7 @@ public class VisTwo extends VisualizerBase {
         this.currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, GLSL_DB_LEVEL);
         this.timeHandle = GLES20.glGetUniformLocation(programHandle, GLSL_TIME);
         this.matrixHandle = GLES20.glGetUniformLocation(programHandle, GLSL_MATRIX);
+        this.screenRatioHandle = GLES20.glGetUniformLocation(programHandle, GLSL_SCREEN_RATIO);
     }
 
     @Override
@@ -47,6 +51,12 @@ public class VisTwo extends VisualizerBase {
 
     @Override
     public void draw(float[] mvpMatrix) {
+        int height = Resources.getSystem().getDisplayMetrics().heightPixels;
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+
+        // Setting the screen ratio of device to keep v2 circle shape
+        GLES20.glUniform1f(screenRatioHandle, (float)height/width);
+
         this.dot.draw(this.positionHandle, this.colorHandle, this.timeHandle, this.currentDecibelLevelHandle, this.visTwoStartTime);
     }
 }
