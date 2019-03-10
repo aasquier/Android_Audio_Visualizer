@@ -5,10 +5,13 @@ import android.content.res.Resources;
 import android.opengl.GLES20;
 import android.util.Log;
 
+import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE;
+import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE_V2;
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_DB_LEVEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_MATRIX;
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_SCREEN_RATIO;
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_TIME;
+import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
 
 
 public class VisTwo extends VisualizerBase {
@@ -30,6 +33,7 @@ public class VisTwo extends VisualizerBase {
         this.fragmentShader = util.getStringFromGLSL(R.raw.vistwofragment);
 
         visTwoStartTime = System.currentTimeMillis();
+
     }
 
     /**

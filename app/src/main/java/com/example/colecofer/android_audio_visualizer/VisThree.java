@@ -7,6 +7,8 @@ import android.opengl.Matrix;
 import android.support.annotation.Dimension;
 import android.util.DisplayMetrics;
 
+import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE_V2;
+import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE_V3;
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_DB_LEVEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_MATRIX;
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_TIME;
