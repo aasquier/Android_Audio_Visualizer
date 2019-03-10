@@ -76,7 +76,10 @@ public class VisThree extends VisualizerBase {
     public void updateVertices() {
         updateFractalLineArray();
         for(int i = 0; i < LINE_AMT_V3; i++){
-            lines[i].updateVertices();
+            if(i == 0)
+                lines[i].updateVertices(true);
+            else
+                lines[i].updateVertices(false);
         }
 
     }

@@ -7,12 +7,16 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import static com.example.colecofer.android_audio_visualizer.Constants.AMPLIFIER;
 import static com.example.colecofer.android_audio_visualizer.Constants.AMPLIFIER_V3;
 import static com.example.colecofer.android_audio_visualizer.Constants.BYTES_PER_FLOAT;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_SHIFT_FACTOR;
+import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_LINE_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_LINE_SIZE_V3;
+import static com.example.colecofer.android_audio_visualizer.Constants.HIGH_HIGHLIGHTING_PULSE;
+import static com.example.colecofer.android_audio_visualizer.Constants.MEDIUM_HIGHLIGHTING_PULSE;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_OFFSET;
 import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE;
@@ -21,6 +25,10 @@ import static com.example.colecofer.android_audio_visualizer.Constants.VERTEX_AM
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_STRIDE_BYTES;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS3_ARRAY_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS3_VERTEX_COUNT;
+import static com.example.colecofer.android_audio_visualizer.Utility.highlightingDuration;
+import static com.example.colecofer.android_audio_visualizer.Utility.highlightingHibernation;
+import static com.example.colecofer.android_audio_visualizer.Utility.highlightingOnHigh;
+import static com.example.colecofer.android_audio_visualizer.Utility.highlightingOnMedium;
 import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
 
 public class GLLineV3 {
@@ -140,6 +148,64 @@ public class GLLineV3 {
         lineVerticesInput.put(this.vertices).position(0);
         this.lineVerticesBuffer = lineVerticesInput;
     }
+
+    public void updateVertices(boolean shouldUpdateHighlighting) {
+
+        int xOffset = 0;
+        float highlightingFactor;
+        float averageDecibels;
+
+        // Change to object array to traverse
+        Float[] decibelFloatArray = decibelHistory.toArray(new Float[DECIBEL_HISTORY_SIZE_V3]);
+
+        // Only loop for the size of the decibel array size
+        for(int i = 0; i < DECIBEL_HISTORY_SIZE_V3; i++){
+            // Calculate the coordinates after the amplification
+            // Left side needs to move in negative direction
+            // Right side needs to move in positive direction
+            // Amplification should be half for both sides because Amplification = left + right
+
+            // Takes the average of the three decibel levels surrounding the current y-position of the line in question
+            switch(i) {
+                case 0:                           averageDecibels = decibelFloatArray[0] + decibelFloatArray[1] + decibelFloatArray[2]; break;
+                case DECIBEL_HISTORY_SIZE_V3 - 1: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE_V3 - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE_V3 - 2] + decibelFloatArray[DECIBEL_HISTORY_SIZE_V3 - 1]; break;
+                default:                          averageDecibels = decibelFloatArray[i-1] + decibelFloatArray[i] + decibelFloatArray[i+1]; break;
+            }
+
+            averageDecibels /= 3.0f;
+
+            if(averageDecibels <= 0.40f) {
+                highlightingFactor = 0.5f;
+            } else if (averageDecibels <= 0.475f) {
+                highlightingFactor = 30.0f;
+            } else if (averageDecibels <= 0.55f){
+                if(!highlightingOnMedium && !highlightingOnHigh && !highlightingHibernation && shouldUpdateHighlighting){
+                    highlightingOnMedium = true;
+                    highlightingDuration = MEDIUM_HIGHLIGHTING_PULSE;
+                }
+                highlightingFactor = 50.0f;
+            } else {
+                if(!highlightingOnHigh && !highlightingOnMedium && !highlightingHibernation && shouldUpdateHighlighting) {
+                    highlightingOnHigh = true;
+                    highlightingDuration = HIGH_HIGHLIGHTING_PULSE;
+                }
+                highlightingFactor = 140.0f;
+            }
+
+            float ampDataLeft        = (this.leftSide - (DEFAULT_LINE_SIZE_V3 + AMPLIFIER_V3 * highlightingFactor));
+            float ampDataRight       = (this.rightSide + (DEFAULT_LINE_SIZE_V3 + AMPLIFIER_V3 * highlightingFactor));
+            this.vertices[xOffset+1] = ampDataLeft;
+            this.vertices[xOffset+8] = ampDataRight;
+
+            xOffset += 14;
+        }
+
+        FloatBuffer fftInput = ByteBuffer.allocateDirect(this.vertices.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        fftInput.put(this.vertices).position(0);
+        this.lineVerticesBuffer = fftInput;
+    }
+
+
 
     /**
      * Returns a floatbuffer of values to be drawn. (with timeHandle)
