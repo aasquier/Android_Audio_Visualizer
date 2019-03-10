@@ -106,6 +106,7 @@ attribute vec4 a_Color;	        // Per-vertex color information we will pass in 
 uniform float  a_DB_Level[150];  // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
 varying vec4   v_Color;         // This will be passed into the fragment shader as the final color values
 uniform float time;
+uniform float screen_ratio;
 
 attribute float scaling_Level;
 precision highp float;          // Set the default precision to high
@@ -114,12 +115,12 @@ precision highp float;          // Set the default precision to high
 void main() {
     float scaledTime = time/500.0;
     vec2 res = vec2(.95, .95);
-	vec2 uv = a_Position.xy / res;
+    vec2 uv = a_Position.xy / res;
     vec3 black = vec3(0.0, 0.0, 0.0);
     vec3 white = vec3(1.0, 1.0, 1.0);
     vec3 mid = vec3(0.5, 0.5, 0.5);
 
-	vec4 newPosition = vec4(a_Position.xy/res, 0.0, 1.0);
+    vec4 newPosition = vec4(a_Position.xy/res, 0.0, 1.0);
     float d = sqrt(newPosition.x * newPosition.x + newPosition.y * newPosition.y);
     d *= 0.65;
 
@@ -136,8 +137,15 @@ void main() {
     vec4 newLighter = mix(newColor2, vec4(black, 1.0), 0.2);
 
     v_Color = mix(newColor, newLighter, .75);
-//    gl_PointSize = 1.0 + a_DB_Level[0];
+    //    gl_PointSize = 1.0 + a_DB_Level[0];
     gl_PointSize = 2.0;
+
+    if(screen_ratio > 1.) {
+        newPosition.x = newPosition.x * screen_ratio;
+    } else {
+        newPosition.y = newPosition.y / screen_ratio;
+    }
+
     gl_Position = newPosition;
-//    gl_position = a_Position;
+    //    gl_position = a_Position;
 }
