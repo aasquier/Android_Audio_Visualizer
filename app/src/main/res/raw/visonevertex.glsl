@@ -198,12 +198,14 @@ attribute vec4 a_Position;	        // Per-vertex position information we will pa
 attribute vec4 a_Color;	            // Per-vertex color information we will pass in.
 varying vec4   v_Color;             // This will be passed into the fragment shader.
 uniform float time;                 // Time since this visualizer began
-uniform float a_DB_Level[25];       // Decibel level history, need to change the 50 as the constant changes
+uniform float a_DB_Level[50];       // Decibel level history, need to change the 50 as the constant changes
+precision highp float;
 
 void main() {           		    // The entry point for our vertex shader.
     vec2 res = vec2(0.95, 0.95);
     vec2 res2 = vec2(0.3, 0.3);
     float scaledTime = time / 1600.0;
+    vec4 newPosition = vec4(0.0,0.0,0.0,0.0);
 
 //    int positionIndex;
 //    if(a_Position.y >= 0.) {
@@ -220,7 +222,11 @@ void main() {           		    // The entry point for our vertex shader.
 
 //    gl_Position = vec4(a_Position.x + (noise * a_DB_Level[positionIndex] * 0.025), a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
 //    vec4 newPosition = vec4(a_Position.x + (noise * ((a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3])+a_DB_Level[4]+a_DB_Level[5] / 6.0) * 0.02), a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
-    vec4 newPosition = vec4(a_Position.x + (noise * magic * 0.025), a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
+    if(a_Position.z > 0.0) {
+        newPosition = vec4(a_Position.x + (noise * magic * 0.03), a_Position.y + (noise * magic * 0.08), 0.0, a_Position.w); 	    // gl_Position is a special variable used to store the final position.
+    } else {
+        newPosition = vec4(a_Position.x + (noise * magic * 0.01), a_Position.yzw); 	    // gl_Position is a special variable used to store the final position.
+    }
 
     gl_Position = vec4(newPosition.xy / res.xy, newPosition.zw);
 

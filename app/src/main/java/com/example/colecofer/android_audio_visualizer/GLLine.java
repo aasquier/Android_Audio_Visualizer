@@ -124,27 +124,35 @@ public class GLLine {
             averageDecibels /= 3.0f;
 
             if(averageDecibels <= 0.55f) {
-                highlightingFactor = 10.0f;
+                highlightingFactor = 5.0f;
+                this.vertices[xOffset+2] = 0.0f;
+                this.vertices[xOffset+9] = 0.0f;
             } else if (averageDecibels <= 0.6f) {
-                highlightingFactor = 20.0f;
+                highlightingFactor = 15.0f;
+                this.vertices[xOffset+2] = 0.0f;
+                this.vertices[xOffset+9] = 0.0f;
             } else if (averageDecibels <= 0.65f){
                 if(!highlightingOnMedium && !highlightingOnHigh && !highlightingHibernation && shouldUpdateHighlighting){
                     highlightingOnMedium = true;
                     highlightingDuration = MEDIUM_HIGHLIGHTING_PULSE;
                 }
-                highlightingFactor = 50.0f;
+                highlightingFactor = 45.0f;
+                this.vertices[xOffset+2] = 0.5f;
+                this.vertices[xOffset+9] = 0.5f;
             } else {
                 if(!highlightingOnHigh && !highlightingOnMedium && !highlightingHibernation && shouldUpdateHighlighting) {
                     highlightingOnHigh = true;
                     highlightingDuration = HIGH_HIGHLIGHTING_PULSE;
                 }
-                highlightingFactor = 100.0f;
+                highlightingFactor = 90.0f;
+                this.vertices[xOffset+2] = 0.5f;
+                this.vertices[xOffset+9] = 0.5f;
             }
 
-            float ampDataLeft        = (this.leftSide - (DEFAULT_LINE_SIZE + AMPLIFIER * highlightingFactor));
-            float ampDataRight       = (this.rightSide + (DEFAULT_LINE_SIZE + AMPLIFIER * highlightingFactor));
-            this.vertices[xOffset]   = ampDataLeft;
-            this.vertices[xOffset+7] = ampDataRight;
+            float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE + AMPLIFIER * highlightingFactor));
+            float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE + AMPLIFIER * highlightingFactor));
+            this.vertices[xOffset] = ampDataLeft;
+            this.vertices[xOffset + 7] = ampDataRight;
 
             xOffset += 14;
         }
