@@ -140,7 +140,12 @@ void main() {
     //    gl_PointSize = 1.0 + a_DB_Level[0];
     gl_PointSize = 2.0;
 
-    newPosition.y = newPosition.y / screen_ratio;
+    if(screen_ratio > 1.) {
+        newPosition.x = newPosition.x * screen_ratio;
+    } else {
+        newPosition.y = newPosition.y / screen_ratio;
+    }
+
     gl_Position = newPosition;
     //    gl_position = a_Position;
 }
