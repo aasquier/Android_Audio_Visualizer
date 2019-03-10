@@ -134,8 +134,48 @@ public class Utility {
                 // The decibel history should be more granular for vis3
                 decibelHistory.removeLast();
                 decibelHistory.removeLast();
+                /** Update the decibel history with the current decibel level */
+//                if (highlightingOnMedium) {
+//                    if (highlightingDuration >= 0) {
+//                        elementToInsert = 0.65f;
+//                    }
+//                } else if (highlightingOnHigh) {
+//                    if (highlightingDuration >= 0) {
+//                        elementToInsert = 0.7f;
+//                    }
+//                } else if (highlightingHibernation) {
+//                    if (newDbRatio > 0.65f) {
+//                        elementToInsert = 0.6f;
+//                    } else if (newDbRatio > 0.6f) {
+//                        elementToInsert = 0.55f;
+//                    } else {
+//                        elementToInsert = newDbRatio;
+//                    }
+//                } else {
+//                    elementToInsert = newDbRatio;
+//                }
                 decibelHistory.addFirst(newDbRatio);
                 decibelHistory.addFirst(newDbRatio);
+
+//                if (highlightingOnMedium || highlightingOnHigh) {
+//                    highlightingDuration -= 2;
+//                    if (highlightingDuration <= 0) {
+//                        if (highlightingOnMedium) {
+//                            highlightingOnMedium = false;
+//                            highlightingHibernationCount = MEDIUM_HIBERNATION_TIME / 2;
+//                        } else {
+//                            highlightingOnHigh = false;
+//                            highlightingHibernationCount = HIGH_HIBERNATION_TIME / 2;
+//                        }
+//                        highlightingHibernation = true;
+//                    }
+//                }
+//                if (highlightingHibernation) {
+//                    highlightingHibernationCount -= 2;
+//                    if (highlightingHibernationCount <= 0) {
+//                        highlightingHibernation = false;
+//                    }
+//                }
             }
         }
 

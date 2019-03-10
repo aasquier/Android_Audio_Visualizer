@@ -174,11 +174,11 @@ public class GLLineV3 {
 
             averageDecibels /= 3.0f;
 
-            if(averageDecibels <= 0.40f) {
+            if(averageDecibels <= 0.50f) {
                 highlightingFactor = 0.5f;
-            } else if (averageDecibels <= 0.475f) {
+            } else if (averageDecibels <= 0.60f) {
                 highlightingFactor = 30.0f;
-            } else if (averageDecibels <= 0.55f){
+            } else if (averageDecibels <= 0.70f){
                 if(!highlightingOnMedium && !highlightingOnHigh && !highlightingHibernation && shouldUpdateHighlighting){
                     highlightingOnMedium = true;
                     highlightingDuration = MEDIUM_HIGHLIGHTING_PULSE;

@@ -163,6 +163,7 @@ void main() {           		    // The entry point for our vertex shader.
 //    uv = vec2(uv.x, uv.y + (noise * freq * lineFractalStrength * 0.015));
 
     if(lineFractalStrength == 0.) {
+        uv.x += noise * 0.1;
         uv.y += noise * 0.01;
         //uv.y += noise * lineFractalStrength/.8 * 0.01;
 //        uv = vec2(uv.x, uv.y + (noise * freq * 0.05));
@@ -173,7 +174,7 @@ void main() {           		    // The entry point for our vertex shader.
 //    } else if(lineFractalStrength == 1){
 //        uv = vec2(uv.x, uv.y + (noise * freq * 0.01));
     } else {
-        uv = vec2(uv.x, uv.y + (noise * freq * lineFractalStrength * 0.015));
+        uv = vec2(uv.x + (noise * freq * lineFractalStrength * 0.018), uv.y - (noise * freq * lineFractalStrength * 0.015));
     }
 
 //    float noise = snoise(vec2(a_Position.xy/res.xy));//, time/10000.));
@@ -189,6 +190,10 @@ void main() {           		    // The entry point for our vertex shader.
 //    }
 
     // -------- scale shader --------------
+//
+//    float y_distortion = abs(uv.y - a_Position.y);
+//    if(y_distortion > 0.05)
+//            uv.x += .5 * y_distortion;
 
     vec4 newPosition = vec4(uv/res.xy, a_Position.zw);
 
