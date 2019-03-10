@@ -157,7 +157,11 @@ public class AnimateLyrics {
         String lyricsToDisplay = "";
         this.lyricsTextView.setAlpha(0);
         for (int i = 0; i < wordsAmt; ++i) {
-            lyricsToDisplay += lyrics.get(i) + " ";
+            if (DEMO_MODE == true) {
+                lyricsToDisplay += lyrics.get(i) + " ";
+            } else {
+                lyricsToDisplay += " " + lyrics.get(i);
+            }
         }
         this.lyricsTextView.setText(lyricsToDisplay);
         this.lyricsToDisplay.clear();

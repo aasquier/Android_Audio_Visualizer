@@ -26,6 +26,7 @@ import com.spotify.sdk.android.player.SpotifyPlayer;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
+import static com.example.colecofer.android_audio_visualizer.Constants.DEMO_MODE;
 import static com.example.colecofer.android_audio_visualizer.Constants.IMAGINARY_BUCKET_INDEX;
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_FFT_ARRAY_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.REAL_BUCKET_INDEX;
@@ -143,7 +144,11 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         }
 
         //Sets up the visualizer for local files
-        mediaPlayer = MediaPlayer.create(this, R.raw.hypnotize);
+        if (DEMO_MODE == true) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.hypnotize);
+        } else {
+            mediaPlayer = MediaPlayer.create(this, R.raw.heyya);
+        }
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
 
