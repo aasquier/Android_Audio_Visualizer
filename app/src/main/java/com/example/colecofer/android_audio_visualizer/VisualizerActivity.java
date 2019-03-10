@@ -70,7 +70,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         getSupportActionBar().hide();
 
         setContentView(R.layout.activity_visualizer);
-        //startTrackPlayback();  //Uncomment this line to start Spotify track playback
+        startTrackPlayback();  //Uncomment this line to start Spotify track playback
         ArrayList<Pair<Integer, String[]>> list = VisualizerModel.getInstance().getLyrics();
 
         Pair<Integer, String[]> pair = list.get(0);
@@ -151,9 +151,9 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
             mediaPlayer = MediaPlayer.create(this, R.raw.heyya);
         }
         mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+        //mediaPlayer.start();
 
-        visualizer = new Visualizer(mediaPlayer.getAudioSessionId());
+        visualizer = new Visualizer(0);
         visualizer.setCaptureSize(fftArraySize);
         visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);
         visualizer.setEnabled(true);
