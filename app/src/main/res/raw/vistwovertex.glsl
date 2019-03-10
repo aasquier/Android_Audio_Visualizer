@@ -89,10 +89,21 @@ float fbm(vec2 uv, float time)
     return value;
 }
 
+float radial(vec2 pos, float radius)
+{
+    float result = length(pos)-radius;
+    result = fract(result*1.0);
+    float result2 = 1.0 - result;
+    float fresult = result * result2;
+    fresult = pow((fresult*5.5),10.0);
+
+    return fresult;
+}
+
 uniform mat4   u_MVPMatrix;	    // A constant representing the combined model/view/projection matrix.
 attribute vec4 a_Position;	    // Per-vertex position information we will pass in  (a_Position.xyzw , w is always 1)
 attribute vec4 a_Color;	        // Per-vertex color information we will pass in  (a_Color.rgba -->  a_Color.xyzw)
-uniform float  a_DB_Level[50];  // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
+uniform float  a_DB_Level[150];  // The current decibel level to be used by the shader that is being passed in by each indivisual visualizer
 varying vec4   v_Color;         // This will be passed into the fragment shader as the final color values
 uniform float time;
 
@@ -102,63 +113,31 @@ precision highp float;          // Set the default precision to high
 
 void main() {
     float scaledTime = time/500.0;
-    vec2 res = vec2(0.75, 0.75);
+    vec2 res = vec2(.95, .95);
+	vec2 uv = a_Position.xy / res;
     vec3 black = vec3(0.0, 0.0, 0.0);
     vec3 white = vec3(1.0, 1.0, 1.0);
+    vec3 mid = vec3(0.5, 0.5, 0.5);
 
-    int distanceIndex = int(sqrt(a_Position.x * a_Position.x + a_Position.y * a_Position.y)*5.);
+	vec4 newPosition = vec4(a_Position.xy/res, 0.0, 1.0);
+    float d = sqrt(newPosition.x * newPosition.x + newPosition.y * newPosition.y);
+    d *= 0.65;
 
-    float db = a_DB_Level[distanceIndex];
+    int distanceIndex = int(d * 75.);
 
-    if(a_DB_Level[distanceIndex] < .65)
-    {
-    // Creating the wave itself
-        vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
-        float cLength = length(cPos);
-        vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(db * cLength * 12.0 - scaledTime * 4.0) * 0.5;
-        vec4 newPosition = vec4(uv2, a_Position.zw);
+    float dis = worley5(newPosition.xy/res*5., time/800.);
+    vec3 b = mix(a_Color.xyz, black, dis);
 
-        float dis = worley5(newPosition.xy/res*5., time/800.);
-        vec3 b = mix(a_Color.xyz, black, dis);
+    float dis2 = fbm(newPosition.xy/res*5., time);
+    vec3 c = mix(a_Color.xyz, mid, dis2);
 
-        float dis2 = fbm(newPosition.xy/res*7.5*a_DB_Level[distanceIndex], time);
-        vec3 c = mix(a_Color.xyz, black, dis2);
+    vec4 newColor = vec4(b*c, 1.0);
+    vec4 newColor2 = newColor * a_DB_Level[distanceIndex];
+    vec4 newLighter = mix(newColor2, vec4(black, 1.0), 0.2);
 
-        v_Color = vec4(b*c, .75);
-
-    //    if(a_DB_Level[distanceIndex] > .25)
-    //            gl_PointSize = a_DB_Level[distanceIndex]*.75;
-    //    else if(a_DB_Level[distanceIndex] > .5)
-    //        gl_PointSize = a_DB_Level[distanceIndex]*.5;
-    //    else if(a_DB_Level[distanceIndex] > .75)
-        gl_PointSize = a_DB_Level[distanceIndex]*.5;
-
-
-        gl_Position = newPosition;
-    }
-//    else
-//    {
-//            vec2 cPos = vec2(2.0 * (a_Position.xy / res.xy));
-//            float cLength = length(cPos);
-//            vec2 uv2 = (a_Position.xy / res.xy) + (cPos / cLength) * sin(db * cLength * 22.0 - scaledTime * 4.0) * 1.5;
-//            vec4 newPosition = vec4(uv2, a_Position.zw);
-//
-//            float dis = worley5(newPosition.xy/res*5., time/800.);
-//            vec3 b = mix(a_Color.xyz, black, dis);
-//
-//            float dis2 = fbm(newPosition.xy/res*5.*a_DB_Level[distanceIndex], time);
-//            vec3 c = mix(a_Color.xyz, black, dis2);
-//
-//            v_Color = vec4(b*c, 1);
-//
-//            if(a_DB_Level[distanceIndex] > .25)
-//                gl_PointSize = a_DB_Level[distanceIndex]*.25;
-//            else if(a_DB_Level[distanceIndex] > .35)
-//                gl_PointSize = a_DB_Level[distanceIndex]*.35;
-//            else if(a_DB_Level[distanceIndex] > .45)
-//            gl_PointSize = a_DB_Level[distanceIndex]*.45;
-//
-//
-//            gl_Position = newPosition;
-//    }
+    v_Color = mix(newColor, newLighter, .75);
+//    gl_PointSize = 1.0 + a_DB_Level[0];
+    gl_PointSize = 2.0;
+    gl_Position = newPosition;
+//    gl_position = a_Position;
 }

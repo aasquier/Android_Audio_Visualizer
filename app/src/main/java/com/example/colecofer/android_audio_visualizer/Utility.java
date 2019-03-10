@@ -67,53 +67,73 @@ public class Utility {
             newDbRatio = newDbRatio > MAX_DECIBEL_RATIO ? MAX_DECIBEL_RATIO : newDbRatio;
             float elementToInsert = 0.0f;
 
-            decibelHistory.removeLast();
-            decibelHistory.removeLast();
-            decibelHistory.removeLast();
+            if (VisualizerModel.getInstance().currentVisualizer instanceof VisOne) {
 
-            /** Update the decibel history with the current decibel level */
-            if(highlightingOnMedium) {
-                if(highlightingDuration >= 0) {
-                    elementToInsert = 0.65f;
-                }
-            } else if(highlightingOnHigh) {
-                if(highlightingDuration >= 0) {
-                    elementToInsert = 0.7f;
-                }
-            } else if(highlightingHibernation){
-                if(newDbRatio > 0.65f) {
-                    elementToInsert = 0.6f;
-                } else if(newDbRatio > 0.6f) {
-                    elementToInsert = 0.55f;
+                decibelHistory.removeLast();
+                decibelHistory.removeLast();
+                decibelHistory.removeLast();
+
+                /** Update the decibel history with the current decibel level */
+                if (highlightingOnMedium) {
+                    if (highlightingDuration >= 0) {
+                        elementToInsert = 0.65f;
+                    }
+                } else if (highlightingOnHigh) {
+                    if (highlightingDuration >= 0) {
+                        elementToInsert = 0.7f;
+                    }
+                } else if (highlightingHibernation) {
+                    if (newDbRatio > 0.65f) {
+                        elementToInsert = 0.6f;
+                    } else if (newDbRatio > 0.6f) {
+                        elementToInsert = 0.55f;
+                    } else {
+                        elementToInsert = newDbRatio;
+                    }
                 } else {
                     elementToInsert = newDbRatio;
                 }
-            } else {
-                elementToInsert = newDbRatio;
-            }
 
-            decibelHistory.addFirst(elementToInsert);
-            decibelHistory.addFirst(elementToInsert);
-            decibelHistory.addFirst(elementToInsert);
+                decibelHistory.addFirst(elementToInsert);
+                decibelHistory.addFirst(elementToInsert);
+                decibelHistory.addFirst(elementToInsert);
 
-            if(highlightingOnMedium || highlightingOnHigh) {
-                highlightingDuration -= 3;
-                if (highlightingDuration <= 0) {
-                    if(highlightingOnMedium) {
-                        highlightingOnMedium = false;
-                        highlightingHibernationCount = MEDIUM_HIBERNATION_TIME;
-                    } else {
-                        highlightingOnHigh = false;
-                        highlightingHibernationCount = HIGH_HIBERNATION_TIME;
+                if (highlightingOnMedium || highlightingOnHigh) {
+                    highlightingDuration -= 3;
+                    if (highlightingDuration <= 0) {
+                        if (highlightingOnMedium) {
+                            highlightingOnMedium = false;
+                            highlightingHibernationCount = MEDIUM_HIBERNATION_TIME;
+                        } else {
+                            highlightingOnHigh = false;
+                            highlightingHibernationCount = HIGH_HIBERNATION_TIME;
+                        }
+                        highlightingHibernation = true;
                     }
-                    highlightingHibernation = true;
                 }
-            }
-            if(highlightingHibernation) {
-                highlightingHibernationCount -= 3;
-                if(highlightingHibernationCount <= 0) {
-                    highlightingHibernation = false;
+                if (highlightingHibernation) {
+                    highlightingHibernationCount -= 3;
+                    if (highlightingHibernationCount <= 0) {
+                        highlightingHibernation = false;
+                    }
                 }
+            } else if(VisualizerModel.getInstance().currentVisualizer instanceof VisTwo){
+                if(newDbRatio <= 0.35f) {
+                    newDbRatio = 0.5f;
+                } else if (newDbRatio <= 0.55f) {
+                    newDbRatio = 1.0f;
+                } else if (newDbRatio <= 0.75f){
+                    newDbRatio = 1.5f;
+                } else {
+                    newDbRatio = 4.5f;
+                }
+
+                decibelHistory.removeLast();
+                decibelHistory.addFirst(newDbRatio);
+            } else {
+                // The decibel history should be more granular for vis3
+                decibelHistory.removeLast();
+                decibelHistory.addFirst(newDbRatio);
             }
         }
 
