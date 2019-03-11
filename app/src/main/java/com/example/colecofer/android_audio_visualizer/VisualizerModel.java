@@ -12,9 +12,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE_V3;
 import static com.example.colecofer.android_audio_visualizer.Constants.MODEL_TAG;
 import static com.example.colecofer.android_audio_visualizer.Constants.SHOULD_LOOP_VIS;
 import static com.example.colecofer.android_audio_visualizer.Constants.SWITCH_VIS_TIME;
+import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
+
 public class VisualizerModel {
 
     //Spotify data
@@ -134,6 +137,13 @@ public class VisualizerModel {
             lastSwitchTime = currentTimeMillis;
             currentVisualizer.disableVertexAttribArrays();
             currentVisualizer = getNextVis();
+
+            if(currentVisualizer instanceof VisThree) {
+                for(int i = 0; i < DECIBEL_HISTORY_SIZE_V3; ++i) {
+                    decibelHistory.removeLast();
+                    decibelHistory.addFirst((float)Math.random());
+                }
+            }
 
             VisualizerRenderer.initShaders();
         }
