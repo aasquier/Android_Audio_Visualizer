@@ -2,24 +2,23 @@ package com.example.colecofer.android_audio_visualizer;
 
 import android.graphics.Color;
 import android.opengl.GLES20;
-import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import static com.example.colecofer.android_audio_visualizer.Constants.AMPLIFIER;
+import static com.example.colecofer.android_audio_visualizer.Constants.AMPLIFIER_V1;
 import static com.example.colecofer.android_audio_visualizer.Constants.BYTES_PER_FLOAT;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_SHIFT_FACTOR;
-import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_LINE_SIZE;
+import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_LINE_SIZE_V1;
 import static com.example.colecofer.android_audio_visualizer.Constants.HIGH_HIGHLIGHTING_PULSE;
 import static com.example.colecofer.android_audio_visualizer.Constants.MEDIUM_HIGHLIGHTING_PULSE;
 import static com.example.colecofer.android_audio_visualizer.Constants.PIXEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_OFFSET;
-import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE;
+import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE_V1;
 import static com.example.colecofer.android_audio_visualizer.Constants.VERTEX_AMOUNT;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_ARRAY_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_STRIDE_BYTES;
@@ -65,7 +64,7 @@ public class GLLine {
 
         int vertexIndex = 0;
         float yAxis = -1.0f;
-        float yOffset = (float) 2 / (DECIBEL_HISTORY_SIZE - 1);
+        float yOffset = (float) 2 / (DECIBEL_HISTORY_SIZE_V1 - 1);
         int visOneIndex = 0;
         int visColor = VisualizerModel.getInstance().getColor(visOneIndex);
 
@@ -105,10 +104,10 @@ public class GLLine {
         float averageDecibels;
 
         // Change to object array to traverse
-        Float[] decibelFloatArray = decibelHistory.toArray(new Float[DECIBEL_HISTORY_SIZE]);
+        Float[] decibelFloatArray = decibelHistory.toArray(new Float[DECIBEL_HISTORY_SIZE_V1]);
 
         // Only loop for the size of the decibel array size
-        for(int i = 0; i < DECIBEL_HISTORY_SIZE; i++){
+        for(int i = 0; i < DECIBEL_HISTORY_SIZE_V1; i++){
             // Calculate the coordinates after the amplification
             // Left side needs to move in negative direction
             // Right side needs to move in positive direction
@@ -117,18 +116,18 @@ public class GLLine {
             // Takes the average of the three decibel levels surrounding the current y-position of the line in question
             switch(i) {
                 case 0:                        averageDecibels = decibelFloatArray[0] + decibelFloatArray[1] + decibelFloatArray[2]; break;
-                case DECIBEL_HISTORY_SIZE - 1: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 2] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 1]; break;
+                case DECIBEL_HISTORY_SIZE_V1 - 1: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 2] + decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 1]; break;
                 default:                       averageDecibels = decibelFloatArray[i-1] + decibelFloatArray[i] + decibelFloatArray[i+1]; break;
             }
 
             averageDecibels /= 3.0f;
 
             if(averageDecibels <= 0.55f) {
-                highlightingFactor = 5.0f;
+                highlightingFactor = 30.0f;
                 this.vertices[xOffset+2] = 0.0f;
                 this.vertices[xOffset+9] = 0.0f;
             } else if (averageDecibels <= 0.6f) {
-                highlightingFactor = 15.0f;
+                highlightingFactor = 40.0f;
                 this.vertices[xOffset+2] = 0.0f;
                 this.vertices[xOffset+9] = 0.0f;
             } else if (averageDecibels <= 0.65f){
@@ -137,20 +136,20 @@ public class GLLine {
                     highlightingDuration = MEDIUM_HIGHLIGHTING_PULSE;
                 }
                 highlightingFactor = 45.0f;
-                this.vertices[xOffset+2] = 0.5f;
-                this.vertices[xOffset+9] = 0.5f;
+                this.vertices[xOffset+2] = 0.25f;
+                this.vertices[xOffset+9] = 0.25f;
             } else {
                 if(!highlightingOnHigh && !highlightingOnMedium && !highlightingHibernation && shouldUpdateHighlighting) {
                     highlightingOnHigh = true;
                     highlightingDuration = HIGH_HIGHLIGHTING_PULSE;
                 }
-                highlightingFactor = 90.0f;
+                highlightingFactor = 75.0f;
                 this.vertices[xOffset+2] = 0.5f;
                 this.vertices[xOffset+9] = 0.5f;
             }
 
-            float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE + AMPLIFIER * highlightingFactor));
-            float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE + AMPLIFIER * highlightingFactor));
+            float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE_V1 + AMPLIFIER_V1 * highlightingFactor));
+            float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE_V1 + AMPLIFIER_V1 * highlightingFactor));
             this.vertices[xOffset] = ampDataLeft;
             this.vertices[xOffset + 7] = ampDataRight;
 
@@ -178,10 +177,10 @@ public class GLLine {
 
         GLES20.glUniform1f(VisualizerModel.getInstance().currentVisualizer.timeHandle, (float) (System.currentTimeMillis() - visOneStartTime));
 
-        Float[] temp = decibelHistory.toArray(new Float[DECIBEL_HISTORY_SIZE]);
+        Float[] temp = decibelHistory.toArray(new Float[DECIBEL_HISTORY_SIZE_V1]);
 
         float[] dbs = new float[temp.length];
-        for (int i = 0; i < DECIBEL_HISTORY_SIZE; ++i) {
+        for (int i = 0; i < DECIBEL_HISTORY_SIZE_V1; ++i) {
             dbs[i] = temp[i] == null ? 0.0f : temp[i];
         }
 

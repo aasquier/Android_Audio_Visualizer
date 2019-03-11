@@ -72,6 +72,9 @@ public class Utility {
                 decibelHistory.removeLast();
                 decibelHistory.removeLast();
                 decibelHistory.removeLast();
+                decibelHistory.removeLast();
+                decibelHistory.removeLast();
+                decibelHistory.removeLast();
 
                 /** Update the decibel history with the current decibel level */
                 if (highlightingOnMedium) {
@@ -90,10 +93,17 @@ public class Utility {
                     } else {
                         elementToInsert = newDbRatio;
                     }
+                } else if (highlightingDuration == 3) {
+                    if (newDbRatio > 0.6f) {
+                        elementToInsert = 0.55f;
+                    }
                 } else {
                     elementToInsert = newDbRatio;
                 }
 
+                decibelHistory.addFirst(elementToInsert);
+                decibelHistory.addFirst(elementToInsert);
+                decibelHistory.addFirst(elementToInsert);
                 decibelHistory.addFirst(elementToInsert);
                 decibelHistory.addFirst(elementToInsert);
                 decibelHistory.addFirst(elementToInsert);

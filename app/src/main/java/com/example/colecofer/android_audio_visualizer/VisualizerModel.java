@@ -12,9 +12,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE_V3;
 import static com.example.colecofer.android_audio_visualizer.Constants.MODEL_TAG;
 import static com.example.colecofer.android_audio_visualizer.Constants.SHOULD_LOOP_VIS;
 import static com.example.colecofer.android_audio_visualizer.Constants.SWITCH_VIS_TIME;
+import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
+
 public class VisualizerModel {
 
     //Spotify data
@@ -134,6 +137,14 @@ public class VisualizerModel {
             lastSwitchTime = currentTimeMillis;
             currentVisualizer.disableVertexAttribArrays();
             currentVisualizer = getNextVis();
+
+            if(currentVisualizer instanceof VisThree) {
+                for(int i = 0; i < DECIBEL_HISTORY_SIZE_V3; ++i) {
+                    decibelHistory.removeLast();
+                    decibelHistory.addFirst((float)Math.random());
+                }
+            }
+
             VisualizerRenderer.initShaders();
         }
     }
@@ -145,8 +156,6 @@ public class VisualizerModel {
     public void setDuration(int duration) {
         //TODO: This is temporarily being set to a constant defined in constants.java for debugging convenience
         durationInMilliseconds = duration;
-//        visualizerSwitchTimeOne = duration / visCount;
-//        visualizerSwitchTimeTwo = visualizerSwitchTimeOne * 2;
     }
 
     /**
@@ -154,7 +163,6 @@ public class VisualizerModel {
      * the number of visualizers in the original queue
      */
     private void calculateSwitchTime() {
-        //this.visualizerSwitchTime = durationInMilliseconds / visCount;
         this.visualizerSwitchTime = SWITCH_VIS_TIME;
         this.lastSwitchTime = 0;
     }
