@@ -98,8 +98,6 @@ uniform float line_Fractal_Strength;  // Represents how strongly the fractal eff
 void main() {           		      // The entry point for our vertex shader.
 
     vec2 vertex_Field_Resolution = vec2(.8, .8);
-    v_Color = a_Color;                // just pass whatever input color to fragment shader, do nothing
-
     int y_Position_Index;
 
     // This maps the vertical y position of a vertex to a corresponding entry in the decibel history
@@ -138,4 +136,16 @@ void main() {           		      // The entry point for our vertex shader.
 
     // -------- apply final result --------------
     gl_Position = u_MVPMatrix * new_Vertex_Position; 	    // gl_Position is a special variable used to store the final position.
+
+    /* The unused z position of a given vertex is being leveraged to pass in if it is "highlighted", the if adjusts both the x and y
+        positional values to create the uneven transitions from highlighted to unhighlighted lines */
+    if(new_Vertex_Position.z > 0.7) {
+        v_Color = a_Color / 1.1;
+    // The else picks up vertices that are not highlighted and minimally distorts there x position only by the noise field
+    } else if (new_Vertex_Position.z > 0.4) {
+        v_Color = a_Color / 1.3;
+    // The else picks up vertices that are not highlighted and minimally distorts there x position only by the noise field
+    } else {
+        v_Color = a_Color / 1.85;                // just pass whatever input color to fragment shader, do nothing
+    }
 }

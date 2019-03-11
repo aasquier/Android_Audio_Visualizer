@@ -70,7 +70,7 @@ final class Constants {
     static final String GLSL_SCREEN_RATIO        = "screen_ratio";
     static final float COLOR_SHIFT_FACTOR        = 0.005f;
     static final int HIGH_HIGHLIGHTING_PULSE     = 12;
-    static final int MEDIUM_HIGHLIGHTING_PULSE   = 50;
+    static final int MEDIUM_HIGHLIGHTING_PULSE   = 51;
 
     /** GLLine constants for Vis1*/
     static final int BYTES_PER_FLOAT = 4;

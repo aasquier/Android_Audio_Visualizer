@@ -113,13 +113,11 @@ void main() {           		                            // The entry point for our
         new_Vertex_Position = vec4(a_Position.x + (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.035), a_Position.y +
                                  (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.065), 0.0, a_Position.w);
         v_Color = a_Color / 1.2;
-
     // The else picks up vertices that are not highlighted and minimally distorts there x position only by the noise field
     } else if(a_Position.z > 0.2) {
         new_Vertex_Position = vec4(a_Position.x + (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.035), a_Position.y +
                                  (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.065), 0.0, a_Position.w);
         v_Color = a_Color / 1.4;
-
     // The else picks up vertices that are not highlighted and minimally distorts there x position only by the noise field
     } else {
         new_Vertex_Position = vec4(a_Position.x + (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.01), a_Position.yzw);

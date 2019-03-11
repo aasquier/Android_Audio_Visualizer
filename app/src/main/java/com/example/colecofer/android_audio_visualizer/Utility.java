@@ -93,6 +93,10 @@ public class Utility {
                     } else {
                         elementToInsert = newDbRatio;
                     }
+                } else if (highlightingDuration == 3) {
+                    if (newDbRatio > 0.6f) {
+                        elementToInsert = 0.55f;
+                    }
                 } else {
                     elementToInsert = newDbRatio;
                 }

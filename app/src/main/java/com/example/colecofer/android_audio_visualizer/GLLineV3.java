@@ -118,12 +118,20 @@ public class GLLineV3 {
 
             if(averageDecibels <= 0.40) {
                 highlightingFactor = 0.5f;
+                this.vertices[offset+2] = 0.0f;
+                this.vertices[offset+9] = 0.0f;
             } else if (averageDecibels <= 0.475) {
                 highlightingFactor = 30.0f;
+                this.vertices[offset+2] = 0.0f;
+                this.vertices[offset+9] = 0.0f;
             } else if (averageDecibels <= 0.55){
                 highlightingFactor = 50.0f;
+                this.vertices[offset+2] = 0.5f;
+                this.vertices[offset+9] = 0.5f;
             } else {
                 highlightingFactor = 140.0f;
+                this.vertices[offset+2] = 0.75f;
+                this.vertices[offset+9] = 0.75f;
             }
 
             // V3 version
