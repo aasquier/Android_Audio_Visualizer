@@ -125,10 +125,12 @@ void main() {           		      // The entry point for our vertex shader.
     // ------------ wave effect ------------------------------------
     // Distorts just the y position of non-highlighted lines
     if(line_Fractal_Strength == 0.) {
+        uv.x += perlin_Noise_Value * 0.1;
         uv.y += perlin_Noise_Value * 0.01;
     // Distorts both the y and x position for higlighted lines
     } else {
-        uv = vec2(uv.x, uv.y + (perlin_Noise_Value * frequency * line_Fractal_Strength * 0.015));
+        uv = vec2(uv.x + (perlin_Noise_Value * frequency * line_Fractal_Strength * 0.018), uv.y - 
+              (perlin_Noise_Value * frequency * line_Fractal_Strength * 0.015));
     }
 
     // -------- scale shader --------------
