@@ -15,7 +15,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_SHI
 import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_LINE_SIZE_V3;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.POSITION_OFFSET;
-import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE;
+import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE_V1;
 import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE_V3;
 import static com.example.colecofer.android_audio_visualizer.Constants.VERTEX_AMOUNT;
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_STRIDE_BYTES;
@@ -109,8 +109,8 @@ public class GLLineV3 {
             switch(i) {
                 case 0:                        averageDecibels = decibelFloatArray[0] + decibelFloatArray[1] + decibelFloatArray[2] + decibelFloatArray[3] + decibelFloatArray[4]; break;
                 case 1:                        averageDecibels = decibelFloatArray[1] + decibelFloatArray[2] + decibelFloatArray[3] + decibelFloatArray[4] + decibelFloatArray[5]; break;
-                case DECIBEL_HISTORY_SIZE - 2: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE - 6] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 5] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 4] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 2]; break;
-                case DECIBEL_HISTORY_SIZE - 1: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE - 5] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 4] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 2] + decibelFloatArray[DECIBEL_HISTORY_SIZE - 1]; break;
+                case DECIBEL_HISTORY_SIZE_V1 - 2: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 6] + decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 5] + decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 4] + decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 2]; break;
+                case DECIBEL_HISTORY_SIZE_V1 - 1: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 5] + decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 4] + decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 2] + decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 1]; break;
                 default:                       averageDecibels = decibelFloatArray[i-2] + decibelFloatArray[i-1] + decibelFloatArray[i] + decibelFloatArray[i+1] + decibelFloatArray[i+2]; break;
             }
 

@@ -72,6 +72,9 @@ public class Utility {
                 decibelHistory.removeLast();
                 decibelHistory.removeLast();
                 decibelHistory.removeLast();
+                decibelHistory.removeLast();
+                decibelHistory.removeLast();
+                decibelHistory.removeLast();
 
                 /** Update the decibel history with the current decibel level */
                 if (highlightingOnMedium) {
@@ -94,6 +97,9 @@ public class Utility {
                     elementToInsert = newDbRatio;
                 }
 
+                decibelHistory.addFirst(elementToInsert);
+                decibelHistory.addFirst(elementToInsert);
+                decibelHistory.addFirst(elementToInsert);
                 decibelHistory.addFirst(elementToInsert);
                 decibelHistory.addFirst(elementToInsert);
                 decibelHistory.addFirst(elementToInsert);

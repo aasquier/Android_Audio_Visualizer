@@ -76,9 +76,9 @@ public class VisualizerModel {
      */
     public void initVisualizerQueue() {
         visQueue = new ConcurrentLinkedQueue<>();
-        visQueue.add(visOne);
+//        visQueue.add(visOne);
 //        visQueue.add(visTwo);
-//        visQueue.add(visThree);
+        visQueue.add(visThree);
 
         visCount = visQueue.size();
 
@@ -134,6 +134,7 @@ public class VisualizerModel {
             lastSwitchTime = currentTimeMillis;
             currentVisualizer.disableVertexAttribArrays();
             currentVisualizer = getNextVis();
+
             VisualizerRenderer.initShaders();
         }
     }
@@ -145,8 +146,6 @@ public class VisualizerModel {
     public void setDuration(int duration) {
         //TODO: This is temporarily being set to a constant defined in constants.java for debugging convenience
         durationInMilliseconds = duration;
-//        visualizerSwitchTimeOne = duration / visCount;
-//        visualizerSwitchTimeTwo = visualizerSwitchTimeOne * 2;
     }
 
     /**
@@ -154,7 +153,6 @@ public class VisualizerModel {
      * the number of visualizers in the original queue
      */
     private void calculateSwitchTime() {
-        //this.visualizerSwitchTime = durationInMilliseconds / visCount;
         this.visualizerSwitchTime = SWITCH_VIS_TIME;
         this.lastSwitchTime = 0;
     }

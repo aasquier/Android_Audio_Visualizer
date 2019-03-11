@@ -3,46 +3,39 @@ package com.example.colecofer.android_audio_visualizer;
 final class Constants {
 
     /** Visualizer Switching */
-    static final boolean SHOULD_SWITCH_VIS = true;                       //Set to false if you do not want to rotate visualizers
-    static final boolean SHOULD_LOOP_VIS   = true;                       //Set to true if you want the final visualizer to loop back to the first
-    static final int SWITCH_VIS_TIME       = 5000;                      //Number of milliseconds to wait before switching
+    static final boolean SHOULD_SWITCH_VIS = true;          //Set to false if you do not want to rotate visualizers
+    static final boolean SHOULD_LOOP_VIS   = true;          //Set to true if you want the final visualizer to loop back to the first
+    static final int SWITCH_VIS_TIME       = 5000;          //Number of milliseconds to wait before switching
 
     /** VisualizerActivity constants */
-    static final int DECIBEL_HISTORY_SIZE   = 50;
-
     static final int REQUEST_PERMISSION     = 101;
     static final int REAL_BUCKET_INDEX      = 3;
     static final int IMAGINARY_BUCKET_INDEX = 4;
     static final int MAX_FFT_ARRAY_SIZE     = 1024;
     static final float PIXEL                = 0.0009f;
-    static final float AMPLIFIER            = 0.0000095f;
-    static final float DEFAULT_LINE_SIZE    = 0.00009f;
-
-    /** GLLine constants */
-    static final int BYTES_PER_FLOAT = 4;
 
     /** Lyrics Animation */
-    static final boolean DEMO_MODE = true;        //Setting to true will display the biggie small lyrics in the same format as the demo0
-    static final float LYRICS_TEXT_SIZE = 22f;
-    static final float PERCENT_FROM_TOP = 0.65f;  //Percentage of screen height to display lyrics at
-    static final int MAX_HEIGHT_OFFSET = 35;      //Amount of pixels the textView is allowed to scroll until it stops
-    static final int SCROLL_LYRICS_SPEED = 1;     //How fast in pixels/update time (~once per 16millis)
-    static final int LEFT_PADDING = 100;          //LyricsTextView padding locations
-    static final int RIGHT_PADDING = 100;
-    static final int BOTTOM_PADDING = 100;
-    static final float DISPLAY_MULTILINE_PROXIMITY = 2000f; //If time between lyrics are smaller than this amount, then multiple lyrics will display on the screen at the same time
-    static final float LYRIC_DISPLAY_OFFSET = 200f;         //Offset of time to display lyrics before they are actually sung in the song
+    static final boolean DEMO_MODE                 = true;  //Setting to true will display the biggie small lyrics in the same format as the demo0
+    static final int MAX_HEIGHT_OFFSET             = 35;    //Amount of pixels the textView is allowed to scroll until it stops
+    static final int SCROLL_LYRICS_SPEED           = 1;     //How fast in pixels/update time (~once per 16millis)
+    static final int LEFT_PADDING                  = 100;   //LyricsTextView padding locations
+    static final int RIGHT_PADDING                 = 100;
+    static final int BOTTOM_PADDING                = 100;
+    static final float LYRICS_TEXT_SIZE            = 22.0f;
+    static final float PERCENT_FROM_TOP            = 0.65f; //Percentage of screen height to display lyrics at
+    static final float DISPLAY_MULTILINE_PROXIMITY = 2000.0f; //If time between lyrics are smaller than this amount, then multiple lyrics will display on the screen at the same time
+    static final float LYRIC_DISPLAY_OFFSET        = 200.0f;  //Offset of time to display lyrics before they are actually sung in the song
 
     /** MainActivity constants */
     //TODO: This is Spotify's test account because I don't want to hard code ours into a public repository...
     //Used to verify that we've been redirected back from Spotify after authenticating in browser
     static final String CLIENT_ID                             = "089d841ccc194c10a77afad9e1c11d54";
-    static final int REQUEST_RECORD_PERMISSION                = 101;
-    static final int REQUEST_READ_EXTERNAL_STORAGE_PERMISSION = 102;
-    static final int REQUEST_CODE                             = 1337;
     static final String REDIRECT_URI                          = "testschema://callback";
     static final String TRACK_BASE_URI                        = "spotify:track:";
     static final String[] SCOPES                              = new String[]{"user-read-private", "playlist-read", "playlist-read-private", "streaming"};
+    static final int REQUEST_RECORD_PERMISSION                = 101;
+    static final int REQUEST_READ_EXTERNAL_STORAGE_PERMISSION = 102;
+    static final int REQUEST_CODE                             = 1337;
 
 
     /** SpotifyClient constants */
@@ -61,11 +54,11 @@ final class Constants {
 
 
     /** Utility constants */
-    static final float MAX_DB_LEVEL          = 170.0f;
-    static final long REFRESH_DECIBEL_TIME   = 16L;
-    static final float MAX_DECIBEL_RATIO     = 1.0f;
     static final int MEDIUM_HIBERNATION_TIME = 100;
     static final int HIGH_HIBERNATION_TIME   = 50;
+    static final float MAX_DB_LEVEL          = 170.0f;
+    static final float MAX_DECIBEL_RATIO     = 1.0f;
+    static final long REFRESH_DECIBEL_TIME   = 16L;
 
     /** Shared Visualizer Constants **/
     static final String GLSL_POSITION_HANDLE     = "a_Position";
@@ -79,36 +72,40 @@ final class Constants {
     static final int HIGH_HIGHLIGHTING_PULSE     = 12;
     static final int MEDIUM_HIGHLIGHTING_PULSE   = 50;
 
+    /** GLLine constants for Vis1*/
+    static final int BYTES_PER_FLOAT = 4;
     /** Vis1 constants */
-    static final int LINE_AMT              = 100;                  //Number of lines to display on the screen
-    static final int VIS1_VERTEX_COUNT     = DECIBEL_HISTORY_SIZE + DECIBEL_HISTORY_SIZE;
-    static final int VIS1_ARRAY_SIZE       = VIS1_VERTEX_COUNT * 7;
-    static final float AMP_MULT            = 0.000005f;           //Alters the lines horizontal amplitude
-    static final int VERTEX_AMOUNT         = 7;                   //x, y, z, r, g, b, a
-    static final float LEFT_DRAW_BOUNDARY  = -0.99f;              //Where to start drawing on the left side of the screen
-    static final float RIGHT_DRAW_BOUNDARY = 0.99f;               //Right side of the screen boundary
-    static final int POSITION_DATA_SIZE    = 3;
-    static final int VIS1_STRIDE_BYTES     = 7 * BYTES_PER_FLOAT;
-    static final int POSITION_OFFSET       = 0;
-    static final int COLOR_OFFSET          = 3;
-    static final int COLOR_DATA_SIZE       = 4;
+    static final int LINE_AMT                = 100;                 //Number of lines to display on the screen
+    static final int DECIBEL_HISTORY_SIZE_V1 = 100;
+    static final int VIS1_VERTEX_COUNT       = DECIBEL_HISTORY_SIZE_V1 * 2;
+    static final int VIS1_ARRAY_SIZE         = VIS1_VERTEX_COUNT * 7;
+    static final int VERTEX_AMOUNT           = 7;                   //x, y, z, r, g, b, a
+    static final int POSITION_DATA_SIZE      = 3;
+    static final int VIS1_STRIDE_BYTES       = 7 * BYTES_PER_FLOAT;
+    static final int POSITION_OFFSET         = 0;
+    static final int COLOR_OFFSET            = 3;
+    static final int COLOR_DATA_SIZE         = 4;
+    static final float LEFT_DRAW_BOUNDARY    = -0.99f;              //Where to start drawing on the left side of the screen
+    static final float RIGHT_DRAW_BOUNDARY   = 0.99f;               //Right side of the screen boundary
+    static final float AMPLIFIER_V1          = 0.0000095f;
+    static final float DEFAULT_LINE_SIZE_V1  = 0.00009f;
 
     /** Vis2 constants */
-    static final int VIS2_STRIDE_BYTES = (POSITION_DATA_SIZE + COLOR_DATA_SIZE) * BYTES_PER_FLOAT;
-    static final int DECIBEL_HISTORY_SIZE_V2 = DECIBEL_HISTORY_SIZE * 3;
-
+    static final int VIS2_STRIDE_BYTES       = (POSITION_DATA_SIZE + COLOR_DATA_SIZE) * BYTES_PER_FLOAT;
+    static final int DECIBEL_HISTORY_SIZE_V2 = DECIBEL_HISTORY_SIZE_V1 * 2;
     /** GLDot constants for Vis2 */
     static final int DOT_HEIGHT = 600;
     static final int DOT_WIDTH  = 600;
     static final int DOT_COUNT  = DOT_WIDTH * DOT_HEIGHT;
 
     /** Vis3 constants */
-    static final int DECIBEL_HISTORY_SIZE_V3   = 25;
-    static final int VIS3_VERTEX_COUNT         = (DECIBEL_HISTORY_SIZE_V3)*2;
-    static final int VIS3_ARRAY_SIZE           = VIS3_VERTEX_COUNT * 7;
-    static final int LINE_AMT_V3               = 20;
-    static final float AMPLIFIER_V3            = 0.00005f;
-    static final float DEFAULT_LINE_SIZE_V3    = 0.001f;
+    static final String GLSL_FRACTAL_STRENGTH = "line_Fractal_Strength";
+    static final int DECIBEL_HISTORY_SIZE_V3  = 25;
+    static final int VIS3_VERTEX_COUNT        = DECIBEL_HISTORY_SIZE_V3 * 2;
+    static final int VIS3_ARRAY_SIZE          = VIS3_VERTEX_COUNT * 7;
+    static final int LINE_AMT_V3              = 20;
+    static final float AMPLIFIER_V3           = 0.00005f;
+    static final float DEFAULT_LINE_SIZE_V3   = 0.0015f;
 
     /** VisualizerModel constants */
     static final String MODEL_TAG = "MODEL_TAG";

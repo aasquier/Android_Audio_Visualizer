@@ -10,6 +10,7 @@ import android.util.DisplayMetrics;
 import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE_V2;
 import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE_V3;
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_DB_LEVEL;
+import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_FRACTAL_STRENGTH;
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_MATRIX;
 import static com.example.colecofer.android_audio_visualizer.Constants.GLSL_TIME;
 import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_DRAW_BOUNDARY;
@@ -69,7 +70,7 @@ public class VisThree extends VisualizerBase {
         this.currentDecibelLevelHandle = GLES20.glGetUniformLocation(programHandle, GLSL_DB_LEVEL);
         this.timeHandle = GLES20.glGetUniformLocation(programHandle, GLSL_TIME);
         this.matrixHandle = GLES20.glGetUniformLocation(programHandle, GLSL_MATRIX);
-        this.lineFractalStrengthHandle = GLES20.glGetUniformLocation(programHandle, "lineFractalStrength");
+        this.lineFractalStrengthHandle = GLES20.glGetUniformLocation(programHandle, GLSL_FRACTAL_STRENGTH);
     }
 
     @Override
@@ -114,16 +115,9 @@ public class VisThree extends VisualizerBase {
         int width = Resources.getSystem().getDisplayMetrics().widthPixels;
 
         // ---------- bottom left -----------
-
         GLES20.glViewport(0, 0, width/2, height/2);
 
         Matrix.setIdentityM(matrix,0);                                   // clean matrix buffer
-
-//        Matrix.frustumM(matrix, 0, -1.0f, 1.0f, -1.0f, 1.0f, 1, 2);
-//        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
-//        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);            // move vertex to location
-
-
         Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);  // apply final effect
 
         GLES20.glUniformMatrix4fv(this.matrixHandle, 1, false, matrix, 0);
@@ -137,12 +131,7 @@ public class VisThree extends VisualizerBase {
         GLES20.glViewport(width/2, 0, width/2, height/2);
 
         Matrix.setIdentityM(matrix,0);                                   // clean matrix buffer
-
         Matrix.scaleM(matrix, 0, -1.0f, 1.0f, 1.0f);            // flip vertex
-//        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
-//        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);            // move vertex to location
-
-
         Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);  // apply final effect
 
         GLES20.glUniformMatrix4fv(this.matrixHandle, 1, false, matrix, 0);
@@ -157,9 +146,6 @@ public class VisThree extends VisualizerBase {
 
         Matrix.setIdentityM(matrix,0);                                   // clean matrix buffer
         Matrix.scaleM(matrix, 0, 1.0f, -1.0f, 1.0f);            // flip vertex
-//        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
-//        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);             // move vertex to location
-
         Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);  // apply final effect
 
         GLES20.glUniformMatrix4fv(this.matrixHandle, 1, false, matrix, 0);
@@ -174,9 +160,6 @@ public class VisThree extends VisualizerBase {
 
         Matrix.setIdentityM(matrix,0);                                   // clean matrix buffer
         Matrix.scaleM(matrix, 0, -1.0f, -1.0f, 1.0f);           // flip vertex
-//        Matrix.scaleM(matrix, 0, 0.5f, 0.5f, 1.0f);             // scale vertex
-//        Matrix.translateM(matrix,0,-0.96f,-1.0f,0);            // move vertex to location
-
         Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);  // apply final effect
 
         GLES20.glUniformMatrix4fv(this.matrixHandle, 1, false, matrix, 0);

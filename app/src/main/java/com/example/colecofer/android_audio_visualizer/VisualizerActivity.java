@@ -32,7 +32,6 @@ import static com.example.colecofer.android_audio_visualizer.Constants.IMAGINARY
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_FFT_ARRAY_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.REAL_BUCKET_INDEX;
 import static com.example.colecofer.android_audio_visualizer.Constants.REQUEST_PERMISSION;
-import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Utility.getDBs;
 import static com.example.colecofer.android_audio_visualizer.Utility.updateDecibelHistory;
 import static com.loopj.android.http.AsyncHttpClient.log;
