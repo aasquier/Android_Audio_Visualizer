@@ -86,12 +86,17 @@ public class Utility {
                         elementToInsert = 0.7f;
                     }
                 } else if (highlightingHibernation) {
-                    if (newDbRatio > 0.65f) {
-                        elementToInsert = 0.6f;
-                    } else if (newDbRatio > 0.6f) {
-                        elementToInsert = 0.55f;
-                    } else {
-                        elementToInsert = newDbRatio;
+                    if(decibelHistory.peek() > 0.6f){
+                        elementToInsert = (decibelHistory.peekLast() + 0.6f) / 2;
+                    }
+                    else {
+                        if (newDbRatio > 0.65f) {
+                            elementToInsert = 0.6f;
+                        } else if (newDbRatio > 0.6f) {
+                            elementToInsert = 0.55f;
+                        } else {
+                            elementToInsert = newDbRatio;
+                        }
                     }
                 } else if (highlightingDuration == 3) {
                     if (newDbRatio > 0.6f) {
