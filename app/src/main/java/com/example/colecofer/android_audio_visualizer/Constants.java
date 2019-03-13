@@ -68,6 +68,7 @@ final class Constants {
     static final String GLSL_TIME                = "time";
     static final String GLSL_SCALING_LEVEL_ARRAY = "scaling_Level";
     static final String GLSL_SCREEN_RATIO        = "screen_ratio";
+    static final String GLSL_CIRCLE_FRACTAL_STRENGTH = "circle_fractal_strength";
     static final float COLOR_SHIFT_FACTOR        = 0.005f;
     static final int HIGH_HIGHLIGHTING_PULSE     = 12;
     static final int MEDIUM_HIGHLIGHTING_PULSE   = 51;
@@ -97,6 +98,7 @@ final class Constants {
     static final int DOT_HEIGHT = 600;
     static final int DOT_WIDTH  = 600;
     static final int DOT_COUNT  = DOT_WIDTH * DOT_HEIGHT;
+    static final int CIRCLE_COUNT = 100;
 
     /** Vis3 constants */
     static final String GLSL_FRACTAL_STRENGTH = "line_Fractal_Strength";

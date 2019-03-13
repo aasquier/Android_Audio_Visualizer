@@ -107,6 +107,7 @@ uniform float  a_DB_Level[150];  // The current decibel level to be used by the 
 varying vec4   v_Color;         // This will be passed into the fragment shader as the final color values
 uniform float time;
 uniform float screen_ratio;
+uniform int circle_fractal_strength[100]; //An array designed to abstract the dots into circle groups and define the effect strength for each circle
 
 attribute float scaling_Level;
 precision highp float;          // Set the default precision to high
@@ -114,22 +115,32 @@ precision highp float;          // Set the default precision to high
 
 void main() {
     float scaledTime = time/500.0;
-    vec2 res = vec2(.95, .95);
+    vec2 res = vec2(1., 1.);
     vec2 uv = a_Position.xy / res;
     vec3 black = vec3(0.0, 0.0, 0.0);
     vec3 white = vec3(1.0, 1.0, 1.0);
     vec3 mid = vec3(0.5, 0.5, 0.5);
 
     vec4 newPosition = vec4(a_Position.xy/res, 0.0, 1.0);
+
+    //calculate distance from  center
     float d = sqrt(newPosition.x * newPosition.x + newPosition.y * newPosition.y);
-    d *= 0.65;
+
+    //divide by sqrt(2) to  normalize d from 0 to 1
+    d /= 1.41421;
+
+    //multiply by array size to find index
+    int circleIndex = int(floor(d * 100.));
+
+    //look up effect strength value, overall determined by distance from midpoint
+    int fractalStrength = circle_fractal_strength[circleIndex];
 
     int distanceIndex = int(d * 75.);
 
-    float dis = worley5(newPosition.xy/res*5., time/800.);
+    float dis =  float(fractalStrength) * worley5(newPosition.xy/res*5., time/800.);
     vec3 b = mix(a_Color.xyz, black, dis);
 
-    float dis2 = fbm(newPosition.xy/res*5., time);
+    float dis2 = float(fractalStrength) * fbm(newPosition.xy/res*5., time);
     vec3 c = mix(a_Color.xyz, mid, dis2);
 
     vec4 newColor = vec4(b*c, 1.0);
@@ -137,14 +148,17 @@ void main() {
     vec4 newLighter = mix(newColor2, vec4(black, 1.0), 0.2);
 
     v_Color = mix(newColor, newLighter, .75);
-    //    gl_PointSize = 1.0 + a_DB_Level[0];
-    gl_PointSize = 2.0;
+
+    //increase pointsize based on the effect strength value
+    gl_PointSize = 1.0 + (float(fractalStrength) / 4.);
 
     if(screen_ratio > 1.) {
         newPosition.x = newPosition.x * screen_ratio;
     } else {
         newPosition.y = newPosition.y / screen_ratio;
     }
+    //increase z based on effect strength value
+    newPosition.z = (float(fractalStrength) / 4.);
 
     gl_Position = newPosition;
     //    gl_position = a_Position;
