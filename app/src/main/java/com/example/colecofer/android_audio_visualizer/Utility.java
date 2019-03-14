@@ -23,6 +23,8 @@ public class Utility {
     static boolean highlightingOnHigh               = false;
     static boolean highlightingOnMedium             = false;
     static boolean highlightingHibernation          = false;
+    static boolean highlightingTransitionTop        = false;
+    static boolean highlightingTransitionBot        = false;
     static int highlightingDuration                 = 0;
     private static int highlightingHibernationCount = 0;
 
@@ -69,12 +71,12 @@ public class Utility {
 
             if (VisualizerModel.getInstance().currentVisualizer instanceof VisOne) {
 
-                decibelHistory.removeLast();
-                decibelHistory.removeLast();
-                decibelHistory.removeLast();
-                decibelHistory.removeLast();
-                decibelHistory.removeLast();
-                decibelHistory.removeLast();
+//                decibelHistory.removeLast();
+//                decibelHistory.removeLast();
+//                decibelHistory.removeLast();
+//                decibelHistory.removeLast();
+//                decibelHistory.removeLast();
+//                decibelHistory.removeLast();
 
                 /** Update the decibel history with the current decibel level */
                 if (highlightingOnMedium) {
@@ -82,12 +84,17 @@ public class Utility {
                         elementToInsert = 0.65f;
                     }
                 } else if (highlightingOnHigh) {
-                    if (highlightingDuration >= 0) {
-                        elementToInsert = 0.7f;
+                    if(decibelHistory.peekLast() < 0.5f){
+                        highlightingTransitionTop = true;
+                    }
+                    else {
+                        if (highlightingDuration >= 0) {
+                            elementToInsert = 0.7f;
+                        }
                     }
                 } else if (highlightingHibernation) {
                     if(decibelHistory.peek() > 0.6f){
-                        elementToInsert = (decibelHistory.peekLast() + 0.6f) / 2;
+                        highlightingTransitionBot = true;
                     }
                     else {
                         if (newDbRatio > 0.65f) {
@@ -106,12 +113,32 @@ public class Utility {
                     elementToInsert = newDbRatio;
                 }
 
+//                decibelHistory.addFirst(elementToInsert);
+//                decibelHistory.addFirst(elementToInsert);
+//                decibelHistory.addFirst(elementToInsert);
+//                decibelHistory.addFirst(elementToInsert);
+                if(highlightingTransitionTop){
+                    decibelHistory.removeLast();
+                    elementToInsert = 0.5f;
+                    decibelHistory.addFirst(elementToInsert);
+                }
+                else {
+                    decibelHistory.removeLast();
+                    decibelHistory.addFirst(elementToInsert);
+                }
+
+                decibelHistory.removeLast();
                 decibelHistory.addFirst(elementToInsert);
-                decibelHistory.addFirst(elementToInsert);
-                decibelHistory.addFirst(elementToInsert);
-                decibelHistory.addFirst(elementToInsert);
-                decibelHistory.addFirst(elementToInsert);
-                decibelHistory.addFirst(elementToInsert);
+
+                if(highlightingTransitionBot){
+                    decibelHistory.removeLast();
+                    elementToInsert = 0.5f;
+                    decibelHistory.addFirst(elementToInsert);
+                }
+                else {
+                    decibelHistory.removeLast();
+                    decibelHistory.addFirst(elementToInsert);
+                }
 
                 if (highlightingOnMedium || highlightingOnHigh) {
                     highlightingDuration -= 3;
@@ -132,6 +159,9 @@ public class Utility {
                         highlightingHibernation = false;
                     }
                 }
+                highlightingTransitionBot = false;
+                highlightingTransitionTop = false;
+
             } else if(VisualizerModel.getInstance().currentVisualizer instanceof VisTwo){
                 if(newDbRatio <= 0.35f) {
                     newDbRatio = 0.5f;
