@@ -23,7 +23,6 @@ import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_STRI
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_VERTEX_COUNT;
 import static com.example.colecofer.android_audio_visualizer.Utility.highlightingOnHigh;
 import static com.example.colecofer.android_audio_visualizer.Utility.highlightingOnMedium;
-import static com.example.colecofer.android_audio_visualizer.Utility.initialHighlighting;
 import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
 import static com.example.colecofer.android_audio_visualizer.Utility.highlightingDuration;
 import static com.example.colecofer.android_audio_visualizer.Utility.highlightingHibernation;
@@ -141,12 +140,7 @@ public class GLLine {
                 if(!highlightingOnMedium && !highlightingOnHigh && !highlightingHibernation && shouldUpdateHighlighting){
                     highlightingOnMedium = true;
                     highlightingDuration = MEDIUM_HIGHLIGHTING_PULSE;
-                    initialHighlighting  = true;
                     highlightingFactor   = 25.0f;
-                    this.vertices[xOffset+2] = 0.1f;
-                    this.vertices[xOffset+9] = 0.1f;
-                } else if (initialHighlighting && !highlightingOnHigh && !highlightingHibernation) {
-                    highlightingFactor = 25.0f;
                     this.vertices[xOffset+2] = 0.1f;
                     this.vertices[xOffset+9] = 0.1f;
                 } else {
@@ -160,11 +154,6 @@ public class GLLine {
                 if(!highlightingOnHigh && !highlightingOnMedium && !highlightingHibernation && shouldUpdateHighlighting) {
                     highlightingOnHigh = true;
                     highlightingDuration = HIGH_HIGHLIGHTING_PULSE;
-                    initialHighlighting  = true;
-                    highlightingFactor = 45.0f;
-                    this.vertices[xOffset+2] = 0.3f;
-                    this.vertices[xOffset+9] = 0.3f;
-                } else if (initialHighlighting && !highlightingOnMedium && !highlightingHibernation) {
                     highlightingFactor = 45.0f;
                     this.vertices[xOffset+2] = 0.3f;
                     this.vertices[xOffset+9] = 0.3f;
@@ -173,7 +162,6 @@ public class GLLine {
                     this.vertices[xOffset+2] = 0.4f;
                     this.vertices[xOffset+9] = 0.4f;
                 }
-
             }
 
             float ampDataLeft          = (this.leftSide - (this.defaultLineSize + this.lineAmplifier * highlightingFactor));

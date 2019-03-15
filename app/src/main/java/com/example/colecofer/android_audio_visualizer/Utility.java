@@ -16,7 +16,6 @@ import static com.example.colecofer.android_audio_visualizer.Constants.HIGH_HIGH
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_DB_LEVEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_DECIBEL_RATIO;
 import static com.example.colecofer.android_audio_visualizer.Constants.MEDIUM_HIBERNATION_TIME;
-import static com.example.colecofer.android_audio_visualizer.Constants.MEDIUM_HIGHLIGHTING_PULSE;
 import static com.example.colecofer.android_audio_visualizer.Constants.REFRESH_DECIBEL_TIME;
 import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
 
@@ -26,8 +25,6 @@ public class Utility {
     static boolean highlightingOnHigh               = false;
     static boolean highlightingOnMedium             = false;
     static boolean highlightingHibernation          = false;
-    static boolean initialHighlighting              = false;
-    static boolean finalHighlighting                = false;
     static int highlightingDuration                 = 0;
     private static int highlightingHibernationCount = 0;
 
@@ -81,28 +78,15 @@ public class Utility {
                 decibelHistory.removeLast();
                 decibelHistory.removeLast();
 
-                if(initialHighlighting) {
-                    if (highlightingOnHigh) {
-                        initialHighlighting = highlightingDuration <= HIGH_HIGHLIGHTING_PULSE - (DECIBEL_HISTORY_UPDATE_SIZE * 4) ? false : true;
-                    } else {
-                        initialHighlighting = highlightingDuration <= MEDIUM_HIGHLIGHTING_PULSE - (DECIBEL_HISTORY_UPDATE_SIZE * 4) ? false : true;
-                    }
-                }
-
                 /** Update the decibel history with the current decibel level */
                 if (highlightingOnMedium) {
-                    if(initialHighlighting) {
-
-                    } else if (highlightingDuration >= DECIBEL_HISTORY_UPDATE_SIZE * 5) {
+                    if (highlightingDuration >= DECIBEL_HISTORY_UPDATE_SIZE * 5) {
                             elementToInsert = 0.65f;
-                        } else {
+                    } else {
                             elementToInsert = 0.7f;
-                        }
                     }
                 } else if (highlightingOnHigh) {
-                    if(initialHighlighting) {
-
-                    } else if (highlightingDuration >= DECIBEL_HISTORY_UPDATE_SIZE * 2) {
+                    if (highlightingDuration >= DECIBEL_HISTORY_UPDATE_SIZE * 2) {
                         elementToInsert = 0.7f;
                     } else {
                         elementToInsert = 0.65f;
@@ -146,7 +130,6 @@ public class Utility {
                             highlightingHibernationCount = HIGH_HIBERNATION_TIME;
                         }
                         highlightingHibernation = true;
-                        initialHighlighting = false;
                     }
                 }
                 if (highlightingHibernation) {
