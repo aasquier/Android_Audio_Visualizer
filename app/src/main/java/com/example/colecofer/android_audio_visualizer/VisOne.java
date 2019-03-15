@@ -13,7 +13,6 @@ import static com.example.colecofer.android_audio_visualizer.Constants.LEFT_DRAW
 import static com.example.colecofer.android_audio_visualizer.Constants.LINE_AMT;
 import static com.example.colecofer.android_audio_visualizer.Constants.LINE_AMT_SKINNY;
 import static com.example.colecofer.android_audio_visualizer.Constants.RIGHT_DRAW_BOUNDARY;
-import static com.example.colecofer.android_audio_visualizer.Utility.initialHighlighting;
 
 /**
  * Class VisOne
