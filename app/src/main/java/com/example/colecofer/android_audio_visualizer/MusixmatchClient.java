@@ -167,7 +167,7 @@ public class MusixmatchClient {
                     "[00:06.50] Hah,\t" +
                     "sicka than your average\n" +
                     "[00:08.00] Poppa twist cabbage off instinct\n" +
-                    "[00:10.00] Niggaz don't think shit stink\t" +
+                    "[00:10.00] Ninjaz don't think skunks stink\t" +
                     "pink gators,\n" +
                     "[00:13.00] My Detroit players\n" +
                     "[00:14.00] Timbs for my hooligans in Brooklyn\n" +
@@ -181,8 +181,8 @@ public class MusixmatchClient {
                     "[00:24.00] Do something to us,\t" +
                     "talk go through us\n" +
                     "[00:27.00] Girls walk to us,\t" +
-                    "wanna do us,\t" +
-                    "screw us\n" +
+                    "wanna help us,\t" +
+                    "shop wit us\n" +
                     "[00:29.75] Who us?\t" +
                     "Yeah, Poppa and Puff\n" +
                     "[00:32.50] Close like Starsky and Hutch,\t" +
@@ -191,7 +191,7 @@ public class MusixmatchClient {
                     "at your cherry M-3\n" +
                     "[00:36.90] Bang every MC\t" +
                     "easily, busily\n" +
-                    "[00:39.70] Recently niggaz frontin\t" +
+                    "[00:39.70] Recently ninjaz frontin\t" +
                     "ain't sayin nuttin’\t" +
                     "so I just\n" +
                     "[00:42.60] Speak my piece,\t" +
@@ -199,71 +199,71 @@ public class MusixmatchClient {
                     "[00:45.25] Cubans with the Jesus piece,\t" +
                     "with my peeps\n" +
                     "[00:47.60] Packin, askin who want it,\t" +
-                    "you got it nigga flaunt it\n" +
-                    "[00:50.20] That Brooklyn bullshit,\t" +
+                    "you got it ninja flaunt it\n" +
+                    "[00:50.20] That Brooklyn bullpucky,\t" +
                     "we on it\n" +
                     "[00:54.00] \n" +
-                    "[01:13.00] I put hoes in NY onto DKNY\n" +
+                    "[01:13.00] I put hopes in NY onto DKNY\n" +
                     "[01:15.30] Miami, D.C. prefer Versace\n" +
-                    "[01:18.50] All Philly hoes,\t" +
+                    "[01:18.50] All Philly hopes,\t" +
                     "dough and Moschino\n" +
-                    "[01:20.80] Every cutie wit a booty bought a Coogi\n" +
+                    "[01:20.80] Every cutie wit a degree bought a Coogi\n" +
                     "[01:23.00] Now who's the real dookie,\t" +
-                    "meanin’ who's really the shit\n" +
-                    "[01:25.50] Them niggaz ride dicks,\t" +
+                    "meanin’ who's really the best\n" +
+                    "[01:25.50] Them ninjaz ride horses,\t" +
                     "Frank White push the sticks\n" +
                     "[01:28.00] On the Lexus, LX,\t" +
                     "four and a half\n" +
                     "[01:30.50] Bulletproof glass\t" +
-                    "tints if I want some ass\n" +
+                    "tints if I want some class\n" +
                     "[01:33.00] Gon' blast squeeze first\t" +
                     "ask questions last\n" +
                     "[01:35.80] That's how most of these\t" +
                     "so-called gangsters pass\n" +
                     "[01:38.70] At last,\t" +
-                    "a nigga rappin bout blunts and broads\n" +
-                    "[01:41.20] Tits and bras,\t" +
-                    "menage-a-trois,\t" +
-                    "sex in expensive cars\n" +
+                    "a ninja rappin bout blunts and broads\n" +
+                    "[01:41.20] Mountains and lakes,\t" +
+                    "french words,\t" +
+                    "ridin' in expensive cars\n" +
                     "[01:44.20] I still leave you on the pavement\n" +
                     "[01:46.30] Condo paid for,\t" +
                     "no car payment\n" +
                     "[01:48.80] At my arraignment,\t" +
                     "note for the plantiff\n" +
-                    "[01:51.50] Your daughter's tied up\t" +
+                    "[01:51.50] Your daughter's art studio is\t" +
                     "in a Brooklyn basement\n" +
                     "[01:53.70] Face it, not guilty,\t" +
                     "that's how I stay filthy\n" +
                     "[01:56.80] Richer than Richie,\t" +
-                    "till you niggaz come and get me\n" +
+                    "till you ninjaz come and get me\n" +
                     "[01:60.80] \n" +
-                    "[02:19.70] I can fill ya wit’ real millionaire shit\n" +
+                    "[02:19.70] I can fill ya wit’ real millionaire stuff\n" +
                     "[02:22.20] Escargot, my car go,\t" +
                     "one sixty, swiftly\n" +
                     "[02:25.50] Wreck it buy a new one\n" +
                     "[02:27.20] Your crew run run run,\t" +
                     "your crew run run\n" +
                     "[02:30.00] I know you sick of this,\t" +
-                    "name brand nigga wit’\n" +
+                    "name brand ninja wit’\n" +
                     "[02:32.50] Flows\t" +
                     "girls say he's sweet like licorice\n" +
-                    "[02:35.10] So get with this nigga,\t" +
+                    "[02:35.10] So get with this ninja,\t" +
                     "it's easy\n" +
                     "[02:37.20] Girlfriend here's a pen,\t" +
                     "call me round ten\n" +
                     "[02:40.00] Come through,\t" +
-                    "have sex on rugs that's Persian\n" +
+                    "have great conversation on rugs that's Persian\n" +
                     "[02:43.00] Come up to your job,\t" +
                     "hit you while you workin\t" +
                     "for certain,\n" +
                     "[02:45.30] Poppa freakin,\t" +
                     "not speakin’\n" +
-                    "[02:47.70] Leave that ass leakin,\t" +
+                    "[02:47.70] Leave that beverage leakin',\t" +
                     "like rapper demo\n" +
-                    "[02:50.00] Tell them hoe,\t" +
-                    "take they clothes off slowly\n" +
+                    "[02:50.00] Tell them ladies,\t" +
+                    "take they stickers off slowly\n" +
                     "[02:52.70] Hit 'em wit the force like Obe,\t" +
-                    "dick black like Toby\n" +
+                    "car black like Toby's\n" +
                     "[02:55.00] Watch me roam like Gobe,\t" +
                     "lucky they don't owe me\n" +
                     "[02:57.80] Where the safe?\t" +

@@ -123,6 +123,8 @@ public class GLLine {
 
             averageDecibels /= 3.0f;
 
+//            averageDecibels = decibelFloatArray[i];
+
             if(averageDecibels <= 0.55f) {
 
                 highlightingFactor       = 20.0f;
