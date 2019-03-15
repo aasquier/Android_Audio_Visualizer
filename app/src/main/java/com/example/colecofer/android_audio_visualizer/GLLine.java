@@ -142,11 +142,11 @@ public class GLLine {
                     highlightingOnMedium = true;
                     highlightingDuration = MEDIUM_HIGHLIGHTING_PULSE;
                     initialHighlighting  = true;
-                    highlightingFactor   = 35.0f;
+                    highlightingFactor   = 25.0f;
                     this.vertices[xOffset+2] = 0.1f;
                     this.vertices[xOffset+9] = 0.1f;
                 } else if (initialHighlighting && !highlightingOnHigh && !highlightingHibernation) {
-                    highlightingFactor = 35.0f;
+                    highlightingFactor = 25.0f;
                     this.vertices[xOffset+2] = 0.1f;
                     this.vertices[xOffset+9] = 0.1f;
                 } else {
