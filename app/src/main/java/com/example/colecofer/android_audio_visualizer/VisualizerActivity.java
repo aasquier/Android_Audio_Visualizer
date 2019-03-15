@@ -157,6 +157,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);
         visualizer.setEnabled(true);
 
+        // Initialize the "clock" time for the first time
         this.previousUpdateTime = System.currentTimeMillis();
 
         setContentView(surfaceView);

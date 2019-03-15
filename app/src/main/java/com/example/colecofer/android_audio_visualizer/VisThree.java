@@ -114,11 +114,11 @@ public class VisThree extends VisualizerBase {
     @Override
     public void draw(float[] mvpMatrix) {
 
-        int height = Resources.getSystem().getDisplayMetrics().heightPixels;
-        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+        this.screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+        this.screenWidth  = Resources.getSystem().getDisplayMetrics().widthPixels;
 
         // ---------- bottom left -----------
-        GLES20.glViewport(0, 0, width/2, height/2);
+        GLES20.glViewport(0, 0, this.screenWidth/2, this.screenHeight/2);
 
         Matrix.setIdentityM(matrix,0);                                   // clean matrix buffer
         Matrix.multiplyMM(mvpMatrix, 0, matrix, 0, matrix, 0);  // apply final effect
@@ -131,7 +131,7 @@ public class VisThree extends VisualizerBase {
         }
 
         // ---------- bottom right -----------
-        GLES20.glViewport(width/2, 0, width/2, height/2);
+        GLES20.glViewport(this.screenWidth/2, 0, this.screenWidth/2, this.screenHeight/2);
 
         Matrix.setIdentityM(matrix,0);                                   // clean matrix buffer
         Matrix.scaleM(matrix, 0, -1.0f, 1.0f, 1.0f);            // flip vertex
@@ -145,7 +145,7 @@ public class VisThree extends VisualizerBase {
         }
 
         // ---------- top left -----------
-        GLES20.glViewport(0, height/2, width/2, height/2);
+        GLES20.glViewport(0, this.screenHeight/2, this.screenWidth/2, this.screenHeight/2);
 
         Matrix.setIdentityM(matrix,0);                                   // clean matrix buffer
         Matrix.scaleM(matrix, 0, 1.0f, -1.0f, 1.0f);            // flip vertex
@@ -159,7 +159,7 @@ public class VisThree extends VisualizerBase {
         }
 
         // ---------- top right -----------
-        GLES20.glViewport(width/2, height/2, width/2, height/2);
+        GLES20.glViewport(this.screenWidth/2, this.screenHeight/2, this.screenWidth/2, this.screenHeight/2);
 
         Matrix.setIdentityM(matrix,0);                                   // clean matrix buffer
         Matrix.scaleM(matrix, 0, -1.0f, -1.0f, 1.0f);           // flip vertex
@@ -171,6 +171,6 @@ public class VisThree extends VisualizerBase {
         for(int i = 0; i < LINE_AMT_V3; ++i) {
             lines[i].draw(this.positionHandle, this.colorHandle, this.timeHandle, this.visThreeStartTime, this.lineFractalStrengthHandle, (this.lineFractalStrength[i] == 0 ? 0 : (int)Math.pow(2, this.lineFractalStrength[i])));
         }
-        GLES20.glViewport(0, 0, width, height);
+        GLES20.glViewport(0, 0, this.screenWidth, this.screenHeight);
     }
 }
