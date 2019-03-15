@@ -2,6 +2,7 @@ package com.example.colecofer.android_audio_visualizer;
 
 import android.graphics.Color;
 import android.opengl.GLES20;
+import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -103,6 +104,7 @@ public class GLLine {
         int xOffset = 0;
         float highlightingFactor;
         float averageDecibels;
+        float colorMult = 0.0f;
 
         // Change to object array to traverse
         Float[] decibelFloatArray = decibelHistory.toArray(new Float[DECIBEL_HISTORY_SIZE_V1]);
@@ -123,7 +125,27 @@ public class GLLine {
 
             averageDecibels /= 3.0f;
 
-//            averageDecibels = decibelFloatArray[i];
+            //averageDecibels = decibelFloatArray[i];
+            int visColor = VisualizerModel.getInstance().getColor(0);
+
+            colorMult = (float) Math.sqrt(decibelFloatArray[i]);
+
+            Log.d("test", "ColorMult: " + colorMult);
+            Log.d("test", "Dec      : " + decibelFloatArray[i]);
+
+            if (colorMult <= 0.3f) {
+                colorMult = 0.3f;
+            }
+
+            if (xOffset + 26 < this.vertices.length) {
+                this.vertices[xOffset + 3] = Color.red(visColor) * colorMult * COLOR_SHIFT_FACTOR;
+                this.vertices[xOffset + 4] = Color.green(visColor) * colorMult * COLOR_SHIFT_FACTOR;
+                this.vertices[xOffset + 5] = Color.blue(visColor) * colorMult * COLOR_SHIFT_FACTOR;
+
+                this.vertices[xOffset + 10] = Color.red(visColor) * colorMult * COLOR_SHIFT_FACTOR;
+                this.vertices[xOffset + 11] = Color.green(visColor) * colorMult * COLOR_SHIFT_FACTOR;
+                this.vertices[xOffset + 12] = Color.blue(visColor) * colorMult * COLOR_SHIFT_FACTOR;
+            }
 
             if(averageDecibels <= 0.55f) {
 

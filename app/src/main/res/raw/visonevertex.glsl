@@ -103,41 +103,48 @@ void main() {           		                            // The entry point for our
 
     // Calculates a vertices noise field interaction based on the x and y positional values and the current scaled time
     float perlin_Noise_Value = snoise(vec3(a_Position.xy / noise_Field_Resolution, scaled_Time));
-    float random = snoise(vec3(a_Position.z, a_DB_Level[0], (a_Position.x * a_Position.y)));
-    float reversed_db = 1.0 - a_DB_Level[0];
-    float black_scaling = reversed_db + random;
+
+    //Test code to gradient color
+//    float random = snoise(vec3(a_Position.z, a_DB_Level[0], (a_Position.x * a_Position.y)));
+//    float reversed_db = 1.5 - a_Position.z; //a_DB_Level[0];
+//    float black_scaling = reversed_db; // + random;
 
     // Calculates the average of the most recent six decibel levels temporaly
     float last_Six_Decibel_Readings_Average = (a_DB_Level[0] + a_DB_Level[6] + a_DB_Level[12]) / 3.0;
 
+
+
     /* The unused z position of a given vertex is being leveraged to pass in if it is "highlighted", the if adjusts both the x and y
         positional values to create the uneven transitions from highlighted to unhighlighted lines */
     /** HIGH */
+
     if(a_Position.z >= 0.39) {
         new_Vertex_Position = vec4(a_Position.x + (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.025), a_Position.y +
                                  (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.025), 0.0, a_Position.w);
-        v_Color = a_Color / 1.2;
+//        v_Color = a_Color / 1.2;
     /** MEDIUM HIGH */
     } else if(a_Position.z >= 0.29) {
         new_Vertex_Position = vec4(a_Position.x + (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.025), a_Position.y +
                                  (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.015), 0.0, a_Position.w);
-        v_Color = a_Color / 2.0;
+//        v_Color = a_Color / 2.0;
     /** MEDIUM */
     } else if(a_Position.z >= 0.19) {
         new_Vertex_Position = vec4(a_Position.x + (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.025), a_Position.y +
                                  (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.025), 0.0, a_Position.w);
-        v_Color = a_Color / 1.4;
+//        v_Color = a_Color / 1.4;
     /** MEDIUM LOW */
     } else if(a_Position.z >= 0.09) {
         new_Vertex_Position = vec4(a_Position.x + (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.025), a_Position.y +
                                  (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.015), 0.0, a_Position.w);
-        v_Color = a_Color / 2.0;
+//        v_Color = a_Color / 2.0;
     /** LOW */
     } else {
         new_Vertex_Position = vec4(a_Position.x + (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.007), a_Position.yzw);
         // Unhighlighted lines have there color value darkened towards black to help highlighted lines contrast better
-        v_Color = a_Color / 1.75;
+//        v_Color = a_Color / 1.75;
     }
+
+    v_Color = a_Color;// / black_scaling;
 
     gl_Position = vec4(new_Vertex_Position.xy / vertex_Field_Resolution, new_Vertex_Position.zw);
 }
