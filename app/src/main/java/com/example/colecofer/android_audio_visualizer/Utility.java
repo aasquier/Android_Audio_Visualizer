@@ -16,6 +16,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.HIGH_HIGH
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_DB_LEVEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_DECIBEL_RATIO;
 import static com.example.colecofer.android_audio_visualizer.Constants.MEDIUM_HIBERNATION_TIME;
+import static com.example.colecofer.android_audio_visualizer.Constants.MEDIUM_HIGHLIGHTING_PULSE;
 import static com.example.colecofer.android_audio_visualizer.Constants.REFRESH_DECIBEL_TIME;
 import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
 
@@ -81,13 +82,21 @@ public class Utility {
                 /** Update the decibel history with the current decibel level */
                 if (highlightingOnMedium) {
                     if (highlightingDuration >= DECIBEL_HISTORY_UPDATE_SIZE * 5) {
+                        if(highlightingDuration >= MEDIUM_HIGHLIGHTING_PULSE - 6) {
+                            elementToInsert = 0.6f;
+                        } else {
                             elementToInsert = 0.65f;
+                        }
                     } else {
-                            elementToInsert = 0.7f;
+                        elementToInsert = 0.7f;
                     }
                 } else if (highlightingOnHigh) {
                     if (highlightingDuration >= DECIBEL_HISTORY_UPDATE_SIZE * 2) {
-                        elementToInsert = 0.7f;
+                        if(highlightingDuration >= HIGH_HIGHLIGHTING_PULSE - 6) {
+                            elementToInsert = 0.65f;
+                        } else {
+                            elementToInsert = 0.7f;
+                        }
                     } else {
                         elementToInsert = 0.65f;
                     }
