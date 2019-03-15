@@ -10,10 +10,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_UPDATE_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.HIGH_HIBERNATION_TIME;
+import static com.example.colecofer.android_audio_visualizer.Constants.HIGH_HIGHLIGHTING_PULSE;
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_DB_LEVEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_DECIBEL_RATIO;
 import static com.example.colecofer.android_audio_visualizer.Constants.MEDIUM_HIBERNATION_TIME;
+import static com.example.colecofer.android_audio_visualizer.Constants.MEDIUM_HIGHLIGHTING_PULSE;
 import static com.example.colecofer.android_audio_visualizer.Constants.REFRESH_DECIBEL_TIME;
 import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
 
@@ -23,6 +26,8 @@ public class Utility {
     static boolean highlightingOnHigh               = false;
     static boolean highlightingOnMedium             = false;
     static boolean highlightingHibernation          = false;
+    static boolean initialHighlighting              = false;
+    static boolean finalHighlighting                = false;
     static int highlightingDuration                 = 0;
     private static int highlightingHibernationCount = 0;
 
@@ -93,7 +98,7 @@ public class Utility {
                     } else {
                         elementToInsert = newDbRatio;
                     }
-                } else if (highlightingDuration == 3) {
+                } else if (highlightingDuration == DECIBEL_HISTORY_UPDATE_SIZE) {
                     if (newDbRatio > 0.6f) {
                         elementToInsert = 0.55f;
                     }
@@ -109,7 +114,14 @@ public class Utility {
                 decibelHistory.addFirst(elementToInsert);
 
                 if (highlightingOnMedium || highlightingOnHigh) {
-                    highlightingDuration -= 3;
+                    highlightingDuration -= DECIBEL_HISTORY_UPDATE_SIZE;
+                    if(initialHighlighting) {
+                        if (highlightingOnHigh) {
+                            initialHighlighting = highlightingDuration <= HIGH_HIGHLIGHTING_PULSE - DECIBEL_HISTORY_UPDATE_SIZE * 3 ? false : true;
+                        } else {
+                            initialHighlighting = highlightingDuration <= MEDIUM_HIGHLIGHTING_PULSE - DECIBEL_HISTORY_UPDATE_SIZE * 3 ? false : true;
+                        }
+                    }
                     if (highlightingDuration <= 0) {
                         if (highlightingOnMedium) {
                             highlightingOnMedium = false;
@@ -122,7 +134,7 @@ public class Utility {
                     }
                 }
                 if (highlightingHibernation) {
-                    highlightingHibernationCount -= 3;
+                    highlightingHibernationCount -= DECIBEL_HISTORY_UPDATE_SIZE;
                     if (highlightingHibernationCount <= 0) {
                         highlightingHibernation = false;
                     }
@@ -145,47 +157,8 @@ public class Utility {
                 decibelHistory.removeLast();
                 decibelHistory.removeLast();
                 /** Update the decibel history with the current decibel level */
-//                if (highlightingOnMedium) {
-//                    if (highlightingDuration >= 0) {
-//                        elementToInsert = 0.65f;
-//                    }
-//                } else if (highlightingOnHigh) {
-//                    if (highlightingDuration >= 0) {
-//                        elementToInsert = 0.7f;
-//                    }
-//                } else if (highlightingHibernation) {
-//                    if (newDbRatio > 0.65f) {
-//                        elementToInsert = 0.6f;
-//                    } else if (newDbRatio > 0.6f) {
-//                        elementToInsert = 0.55f;
-//                    } else {
-//                        elementToInsert = newDbRatio;
-//                    }
-//                } else {
-//                    elementToInsert = newDbRatio;
-//                }
                 decibelHistory.addFirst(newDbRatio);
                 decibelHistory.addFirst(newDbRatio);
-
-//                if (highlightingOnMedium || highlightingOnHigh) {
-//                    highlightingDuration -= 2;
-//                    if (highlightingDuration <= 0) {
-//                        if (highlightingOnMedium) {
-//                            highlightingOnMedium = false;
-//                            highlightingHibernationCount = MEDIUM_HIBERNATION_TIME / 2;
-//                        } else {
-//                            highlightingOnHigh = false;
-//                            highlightingHibernationCount = HIGH_HIBERNATION_TIME / 2;
-//                        }
-//                        highlightingHibernation = true;
-//                    }
-//                }
-//                if (highlightingHibernation) {
-//                    highlightingHibernationCount -= 2;
-//                    if (highlightingHibernationCount <= 0) {
-//                        highlightingHibernation = false;
-//                    }
-//                }
             }
         }
 
