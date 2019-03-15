@@ -1,5 +1,6 @@
 package com.example.colecofer.android_audio_visualizer;
 
+import android.content.res.Resources;
 import android.opengl.GLES20;
 
 /**
@@ -18,7 +19,8 @@ abstract public class VisualizerBase {
     protected int matrixHandle;
     protected int screenRatioHandle;
 
-    protected int scalingLevelArrayHandle;
+    protected int screenHeight;
+    protected int screenWidth;
 
     int visNum;  // A unique integer value to represent each visualizer
 
@@ -29,7 +31,8 @@ abstract public class VisualizerBase {
      * Default Constructor
      */
     public VisualizerBase() {
-
+        this.screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+        this.screenWidth  = Resources.getSystem().getDisplayMetrics().widthPixels;
     }
 
     String getVertexShaderString() {

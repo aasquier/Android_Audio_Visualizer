@@ -51,11 +51,9 @@ public class VisTwo extends VisualizerBase {
 
     @Override
     public void draw(float[] mvpMatrix) {
-        int height = Resources.getSystem().getDisplayMetrics().heightPixels;
-        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
 
         // Setting the screen ratio of device to keep v2 circle shape
-        GLES20.glUniform1f(screenRatioHandle, (float)height/width);
+        GLES20.glUniform1f(screenRatioHandle, (float)this.screenHeight / this.screenWidth);
 
         this.dot.draw(this.positionHandle, this.colorHandle, this.timeHandle, this.currentDecibelLevelHandle, this.visTwoStartTime);
     }

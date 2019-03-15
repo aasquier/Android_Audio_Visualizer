@@ -7,12 +7,10 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import static com.example.colecofer.android_audio_visualizer.Constants.AMPLIFIER_V1;
 import static com.example.colecofer.android_audio_visualizer.Constants.BYTES_PER_FLOAT;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_SHIFT_FACTOR;
-import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_LINE_SIZE_V1;
 import static com.example.colecofer.android_audio_visualizer.Constants.HIGH_HIGHLIGHTING_PULSE;
 import static com.example.colecofer.android_audio_visualizer.Constants.MEDIUM_HIGHLIGHTING_PULSE;
 import static com.example.colecofer.android_audio_visualizer.Constants.PIXEL;
@@ -36,15 +34,19 @@ public class GLLine {
     private float[] vertices;
     private float leftSide;
     private float rightSide;
+    private float defaultLineSize;
+    private float lineAmplifier;
 
     /**
      * Constructor
      * @param xPosition: Current line's base position
      */
-    public GLLine(float xPosition) {
+    public GLLine(float xPosition, float lineSize, float amplifier) {
 
-        this.leftSide = xPosition;   // Current line's left side coord
-        this.rightSide = leftSide + PIXEL;  // Current line's right side coord
+        this.leftSide        = xPosition;   // Current line's left side coord
+        this.rightSide       = leftSide + PIXEL;  // Current line's right side coord
+        this.defaultLineSize = lineSize;
+        this.lineAmplifier   = amplifier;
 
         // Initialize the current line's base vertices
         createBaseLine();
@@ -60,18 +62,17 @@ public class GLLine {
      */
     public void createBaseLine(){
 
-        this.vertices = new float[VIS1_ARRAY_SIZE];
-
+        this.vertices   = new float[VIS1_ARRAY_SIZE];
         int vertexIndex = 0;
-        float yAxis = -1.0f;
-        float yOffset = (float) 2 / (DECIBEL_HISTORY_SIZE_V1 - 1);
+        float yAxis     = -1.0f;
+        float yOffset   = (float) 2 / (DECIBEL_HISTORY_SIZE_V1 - 1);
         int visOneIndex = 0;
-        int visColor = VisualizerModel.getInstance().getColor(visOneIndex);
+        int visColor    = VisualizerModel.getInstance().getColor(visOneIndex);
 
         // Setting up right triangles
         for(int i = 0; i < VIS1_ARRAY_SIZE; i+=14){
             // Left side
-            this.vertices[vertexIndex] = this.leftSide;
+            this.vertices[vertexIndex]   = this.leftSide;
             this.vertices[vertexIndex+1] = yAxis;
             this.vertices[vertexIndex+2] = 0.0f;
             this.vertices[vertexIndex+3] = (Color.red(visColor) * COLOR_SHIFT_FACTOR);
@@ -80,9 +81,9 @@ public class GLLine {
             this.vertices[vertexIndex+6] = 1.0f;
 
             // Right side
-            this.vertices[vertexIndex+7] = this.rightSide;
-            this.vertices[vertexIndex+8] = yAxis;
-            this.vertices[vertexIndex+9] = 0.0f;
+            this.vertices[vertexIndex+7]  = this.rightSide;
+            this.vertices[vertexIndex+8]  = yAxis;
+            this.vertices[vertexIndex+9]  = 0.0f;
             this.vertices[vertexIndex+10] = (Color.red(visColor) * COLOR_SHIFT_FACTOR);
             this.vertices[vertexIndex+11] = (Color.green(visColor) * COLOR_SHIFT_FACTOR);
             this.vertices[vertexIndex+12] = (Color.blue(visColor) * COLOR_SHIFT_FACTOR);
@@ -123,34 +124,44 @@ public class GLLine {
             averageDecibels /= 3.0f;
 
             if(averageDecibels <= 0.55f) {
-                highlightingFactor = 30.0f;
+
+                highlightingFactor       = 30.0f;
                 this.vertices[xOffset+2] = 0.0f;
                 this.vertices[xOffset+9] = 0.0f;
+
             } else if (averageDecibels <= 0.6f) {
-                highlightingFactor = 40.0f;
+
+                highlightingFactor       = 40.0f;
                 this.vertices[xOffset+2] = 0.0f;
                 this.vertices[xOffset+9] = 0.0f;
+
             } else if (averageDecibels <= 0.65f){
+
                 if(!highlightingOnMedium && !highlightingOnHigh && !highlightingHibernation && shouldUpdateHighlighting){
                     highlightingOnMedium = true;
                     highlightingDuration = MEDIUM_HIGHLIGHTING_PULSE;
                 }
+
                 highlightingFactor = 45.0f;
                 this.vertices[xOffset+2] = 0.25f;
                 this.vertices[xOffset+9] = 0.25f;
+
             } else {
+
                 if(!highlightingOnHigh && !highlightingOnMedium && !highlightingHibernation && shouldUpdateHighlighting) {
                     highlightingOnHigh = true;
                     highlightingDuration = HIGH_HIGHLIGHTING_PULSE;
                 }
+
                 highlightingFactor = 75.0f;
                 this.vertices[xOffset+2] = 0.5f;
                 this.vertices[xOffset+9] = 0.5f;
+
             }
 
-            float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE_V1 + AMPLIFIER_V1 * highlightingFactor));
-            float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE_V1 + AMPLIFIER_V1 * highlightingFactor));
-            this.vertices[xOffset] = ampDataLeft;
+            float ampDataLeft          = (this.leftSide - (this.defaultLineSize + this.lineAmplifier * highlightingFactor));
+            float ampDataRight         = (this.rightSide + (this.defaultLineSize + this.lineAmplifier * highlightingFactor));
+            this.vertices[xOffset]     = ampDataLeft;
             this.vertices[xOffset + 7] = ampDataRight;
 
             xOffset += 14;
