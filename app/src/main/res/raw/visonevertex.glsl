@@ -95,11 +95,11 @@ uniform float time;                 // Time since this visualizer began
 uniform float a_DB_Level[50];       // Decibel level history, need to change the 50 as the constant changes
 precision highp float;
 
-void main() {           		                            // The entry point for our vertex shader.
-    vec2 vertex_Field_Resolution = vec2(0.95, 0.95);        // Scales the vertex field so that the edges are not visible
-    vec2 noise_Field_Resolution  = vec2(0.3, 0.3);          // Scales the noise field to adjust the noise "cell" size
-    float scaled_Time            = time / 1600.0;           // Scales the system time down to control the noise evolution's speed
-    vec4 new_Vertex_Position     = vec4(0.0,0.0,0.0,0.0);   // Initializes each vertices adjusted positional vector
+void main() { // The entry point for our vertex shader.
+    vec2 vertex_Field_Resolution = vec2(0.95, 0.95);// Scales the vertex field so that the edges are not visible
+    vec2 noise_Field_Resolution  = vec2(0.3, 0.3);// Scales the noise field to adjust the noise "cell" size
+    float scaled_Time            = time / 1600.0;// Scales the system time down to control the noise evolution's speed
+    vec4 new_Vertex_Position     = vec4(0.0, 0.0, 0.0, 0.0);// Initializes each vertices adjusted positional vector
 
     // Calculates a vertices noise field interaction based on the x and y positional values and the current scaled time
     float perlin_Noise_Value = snoise(vec3(a_Position.xy / noise_Field_Resolution, scaled_Time));
@@ -107,9 +107,14 @@ void main() {           		                            // The entry point for our
     // Calculates the average of the most recent six decibel levels temporaly
     float last_Six_Decibel_Readings_Average = (a_DB_Level[0]+a_DB_Level[1]+a_DB_Level[2]+a_DB_Level[3]+a_DB_Level[4]+a_DB_Level[5]) / 6.0;
 
+    if(a_Position.z == 0.5){
+        new_Vertex_Position = vec4(a_Position.x + (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.02), a_Position.y +
+        (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.01), 0.0, a_Position.w);
+        v_Color = a_Color / 1.6;
+
     /* The unused z position of a given vertex is being leveraged to pass in if it is "highlighted", the if adjusts both the x and y
         positional values to create the uneven transitions from highlighted to unhighlighted lines */
-    if(a_Position.z > 0.4) {
+    } else if(a_Position.z > 0.4) {
 //        new_Vertex_Position = vec4(a_Position.x + (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.035), a_Position.y +
 //                                 (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.065), 0.0, a_Position.w);
         new_Vertex_Position = vec4(a_Position.x + (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.038), a_Position.y +

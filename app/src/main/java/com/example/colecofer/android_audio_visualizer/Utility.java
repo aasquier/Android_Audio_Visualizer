@@ -128,6 +128,12 @@ public class Utility {
                 }
 
                 decibelHistory.removeLast();
+                decibelHistory.removeLast();
+                decibelHistory.removeLast();
+                decibelHistory.removeLast();
+                decibelHistory.addFirst(elementToInsert);
+                decibelHistory.addFirst(elementToInsert);
+                decibelHistory.addFirst(elementToInsert);
                 decibelHistory.addFirst(elementToInsert);
 
                 if(highlightingTransitionBot){

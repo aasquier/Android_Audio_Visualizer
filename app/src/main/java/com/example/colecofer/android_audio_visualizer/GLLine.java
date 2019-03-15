@@ -113,39 +113,61 @@ public class GLLine {
             // Right side needs to move in positive direction
             // Amplification should be half for both sides because Amplification = left + right
 
-            // Takes the average of the three decibel levels surrounding the current y-position of the line in question
-            switch(i) {
-                case 0:                        averageDecibels = decibelFloatArray[0] + decibelFloatArray[1] + decibelFloatArray[2]; break;
-                case DECIBEL_HISTORY_SIZE_V1 - 1: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 2] + decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 1]; break;
-                default:                       averageDecibels = decibelFloatArray[i-1] + decibelFloatArray[i] + decibelFloatArray[i+1]; break;
+            if(decibelFloatArray[i] == 0.5f){
+                highlightingFactor = 10.0f;
+                this.vertices[xOffset+2] = 0.35f;
+                this.vertices[xOffset+9] = 0.35f;
             }
 
-            averageDecibels /= 3.0f;
+            else {
+                // Takes the average of the three decibel levels surrounding the current y-position of the line in question
+                switch (i) {
+                    case 0:
+                        averageDecibels = decibelFloatArray[0] + decibelFloatArray[1] + decibelFloatArray[2];
+                        break;
+                    case DECIBEL_HISTORY_SIZE_V1 - 1:
+                        averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 2] + decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 1];
+                        break;
+                    default:
+                        averageDecibels = decibelFloatArray[i - 1] + decibelFloatArray[i] + decibelFloatArray[i + 1];
+                        break;
+                }
 
-            if(averageDecibels <= 0.55f) {
-                highlightingFactor = 30.0f;
-                this.vertices[xOffset+2] = 0.0f;
-                this.vertices[xOffset+9] = 0.0f;
-            } else if (averageDecibels <= 0.6f) {
-                highlightingFactor = 40.0f;
-                this.vertices[xOffset+2] = 0.0f;
-                this.vertices[xOffset+9] = 0.0f;
-            } else if (averageDecibels <= 0.65f){
-                if(!highlightingOnMedium && !highlightingOnHigh && !highlightingHibernation && shouldUpdateHighlighting){
-                    highlightingOnMedium = true;
-                    highlightingDuration = MEDIUM_HIGHLIGHTING_PULSE;
+                averageDecibels /= 3.0f;
+
+                if (averageDecibels <= 0.55f) {
+                    highlightingFactor = 30.0f;
+                    this.vertices[xOffset + 2] = 0.0f;
+                    this.vertices[xOffset + 9] = 0.0f;
+                } else if (averageDecibels <= 0.6f) {
+                    highlightingFactor = 40.0f;
+                    this.vertices[xOffset + 2] = 0.0f;
+                    this.vertices[xOffset + 9] = 0.0f;
+//            } else if (averageDecibels <= 0.65f){
+//                if(!highlightingOnMedium && !highlightingOnHigh && !highlightingHibernation && shouldUpdateHighlighting){
+//                    highlightingOnMedium = true;
+//                    highlightingDuration = MEDIUM_HIGHLIGHTING_PULSE;
+//                }
+//                highlightingFactor = 45.0f;
+//                this.vertices[xOffset+2] = 0.25f;
+//                this.vertices[xOffset+9] = 0.25f;
+                } else if (averageDecibels <= 0.65f) {
+                    if (!highlightingOnMedium && !highlightingOnHigh && !highlightingHibernation && shouldUpdateHighlighting) {
+                        highlightingOnMedium = true;
+                        highlightingDuration = MEDIUM_HIGHLIGHTING_PULSE;
+                    }
+                    highlightingFactor = 45.0f;
+                    this.vertices[xOffset + 2] = 0.25f;
+                    this.vertices[xOffset + 9] = 0.25f;
+                } else {
+                    if (!highlightingOnHigh && !highlightingOnMedium && !highlightingHibernation && shouldUpdateHighlighting) {
+                        highlightingOnHigh = true;
+                        highlightingDuration = HIGH_HIGHLIGHTING_PULSE;
+                    }
+                    highlightingFactor = 75.0f;
+                    this.vertices[xOffset + 2] = 0.5f;
+                    this.vertices[xOffset + 9] = 0.5f;
                 }
-                highlightingFactor = 45.0f;
-                this.vertices[xOffset+2] = 0.25f;
-                this.vertices[xOffset+9] = 0.25f;
-            } else {
-                if(!highlightingOnHigh && !highlightingOnMedium && !highlightingHibernation && shouldUpdateHighlighting) {
-                    highlightingOnHigh = true;
-                    highlightingDuration = HIGH_HIGHLIGHTING_PULSE;
-                }
-                highlightingFactor = 75.0f;
-                this.vertices[xOffset+2] = 0.5f;
-                this.vertices[xOffset+9] = 0.5f;
             }
 
             float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE_V1 + AMPLIFIER_V1 * highlightingFactor));
