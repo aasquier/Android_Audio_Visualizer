@@ -109,14 +109,24 @@ void main() {           		                            // The entry point for our
 
     /* The unused z position of a given vertex is being leveraged to pass in if it is "highlighted", the if adjusts both the x and y
         positional values to create the uneven transitions from highlighted to unhighlighted lines */
-    if(a_Position.z > 0.4) {
+    if(a_Position.z >= 0.39) {
         new_Vertex_Position = vec4(a_Position.x + (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.025), a_Position.y +
                                  (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.025), 0.0, a_Position.w);
         v_Color = a_Color / 1.2;
     // The else picks up vertices that are not highlighted and minimally distorts there x position only by the noise field
-    } else if(a_Position.z > 0.2) {
+    } else if(a_Position.z >= 0.29) {
+        new_Vertex_Position = vec4(a_Position.x + (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.025), a_Position.y +
+                                 (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.015), 0.0, a_Position.w);
+        v_Color = a_Color / 1.4;
+    // The else picks up vertices that are not highlighted and minimally distorts there x position only by the noise field
+    } else if(a_Position.z >= 0.19) {
         new_Vertex_Position = vec4(a_Position.x + (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.025), a_Position.y +
                                  (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.025), 0.0, a_Position.w);
+        v_Color = a_Color / 1.4;
+    // The else picks up vertices that are not highlighted and minimally distorts there x position only by the noise field
+    } else if(a_Position.z >= 0.09) {
+        new_Vertex_Position = vec4(a_Position.x + (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.025), a_Position.y +
+                                 (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.015), 0.0, a_Position.w);
         v_Color = a_Color / 1.4;
     // The else picks up vertices that are not highlighted and minimally distorts there x position only by the noise field
     } else {

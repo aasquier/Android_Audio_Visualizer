@@ -23,6 +23,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_STRI
 import static com.example.colecofer.android_audio_visualizer.Constants.VIS1_VERTEX_COUNT;
 import static com.example.colecofer.android_audio_visualizer.Utility.highlightingOnHigh;
 import static com.example.colecofer.android_audio_visualizer.Utility.highlightingOnMedium;
+import static com.example.colecofer.android_audio_visualizer.Utility.initialHighlighting;
 import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
 import static com.example.colecofer.android_audio_visualizer.Utility.highlightingDuration;
 import static com.example.colecofer.android_audio_visualizer.Utility.highlightingHibernation;
@@ -125,13 +126,13 @@ public class GLLine {
 
             if(averageDecibels <= 0.55f) {
 
-                highlightingFactor       = 30.0f;
+                highlightingFactor       = 20.0f;
                 this.vertices[xOffset+2] = 0.0f;
                 this.vertices[xOffset+9] = 0.0f;
 
             } else if (averageDecibels <= 0.6f) {
 
-                highlightingFactor       = 40.0f;
+                highlightingFactor       = 30.0f;
                 this.vertices[xOffset+2] = 0.0f;
                 this.vertices[xOffset+9] = 0.0f;
 
@@ -140,22 +141,38 @@ public class GLLine {
                 if(!highlightingOnMedium && !highlightingOnHigh && !highlightingHibernation && shouldUpdateHighlighting){
                     highlightingOnMedium = true;
                     highlightingDuration = MEDIUM_HIGHLIGHTING_PULSE;
+                    initialHighlighting  = true;
+                    highlightingFactor   = 35.0f;
+                    this.vertices[xOffset+2] = 0.1f;
+                    this.vertices[xOffset+9] = 0.1f;
+                } else if (initialHighlighting && !highlightingOnHigh && !highlightingHibernation) {
+                    highlightingFactor = 35.0f;
+                    this.vertices[xOffset+2] = 0.1f;
+                    this.vertices[xOffset+9] = 0.1f;
+                } else {
+                    highlightingFactor = 45.0f;
+                    this.vertices[xOffset+2] = 0.2f;
+                    this.vertices[xOffset+9] = 0.2f;
                 }
-
-                highlightingFactor = 45.0f;
-                this.vertices[xOffset+2] = 0.25f;
-                this.vertices[xOffset+9] = 0.25f;
 
             } else {
 
                 if(!highlightingOnHigh && !highlightingOnMedium && !highlightingHibernation && shouldUpdateHighlighting) {
                     highlightingOnHigh = true;
                     highlightingDuration = HIGH_HIGHLIGHTING_PULSE;
+                    initialHighlighting  = true;
+                    highlightingFactor = 45.0f;
+                    this.vertices[xOffset+2] = 0.3f;
+                    this.vertices[xOffset+9] = 0.3f;
+                } else if (initialHighlighting && !highlightingOnMedium && !highlightingHibernation) {
+                    highlightingFactor = 45.0f;
+                    this.vertices[xOffset+2] = 0.3f;
+                    this.vertices[xOffset+9] = 0.3f;
+                } else {
+                    highlightingFactor = 75.0f;
+                    this.vertices[xOffset+2] = 0.4f;
+                    this.vertices[xOffset+9] = 0.4f;
                 }
-
-                highlightingFactor = 75.0f;
-                this.vertices[xOffset+2] = 0.5f;
-                this.vertices[xOffset+9] = 0.5f;
 
             }
 
