@@ -152,11 +152,11 @@ public class GLLine {
                     }
 
                     highlightingDuration = MEDIUM_HIGHLIGHTING_PULSE + randOff;
-                    highlightingFactor   = 25.0f + (float)(Math.random()*10.0);
+                    highlightingFactor   = 25.0f - (float)(Math.random()*10.0);
                     this.vertices[xOffset+2] = 0.1f;
                     this.vertices[xOffset+9] = 0.1f;
                 } else {
-                    highlightingFactor = 45.0f + (float)(Math.random()*10.0);
+                    highlightingFactor = 45.0f - (float)(Math.random()*10.0);
                     this.vertices[xOffset+2] = 0.2f;
                     this.vertices[xOffset+9] = 0.2f;
                 }
@@ -175,11 +175,11 @@ public class GLLine {
 
                     highlightingOnHigh = true;
                     highlightingDuration = HIGH_HIGHLIGHTING_PULSE + randOff;
-                    highlightingFactor = 45.0f + (float)(Math.random()*10.0);
+                    highlightingFactor = 45.0f - (float)(Math.random()*10.0);
                     this.vertices[xOffset+2] = 0.3f;
                     this.vertices[xOffset+9] = 0.3f;
                 } else {
-                    highlightingFactor = 75.0f + (float)(Math.random()*10.0);
+                    highlightingFactor = 75.0f - (float)(Math.random()*10.0);
                     this.vertices[xOffset+2] = 0.4f;
                     this.vertices[xOffset+9] = 0.4f;
                 }
