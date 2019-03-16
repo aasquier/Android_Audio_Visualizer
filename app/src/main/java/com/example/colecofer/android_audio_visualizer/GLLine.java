@@ -7,6 +7,7 @@ import android.util.Log;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.Collections;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.BYTES_PER_FLOAT;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
@@ -109,8 +110,24 @@ public class GLLine {
         // Change to object array to traverse
         Float[] decibelFloatArray = decibelHistory.toArray(new Float[DECIBEL_HISTORY_SIZE_V1]);
 
+        //Calculate the max and min of the decibel history values to normalize the data
+        float min = 1.2f;
+        float max = -0.1f;
+        for (float decibel : decibelFloatArray) {
+            if (decibel > max) max = decibel;
+            if (decibel < min) min = decibel;
+        }
+        if (min < 0.0f) min = 0.0f;
+        if (max > 1.0f) max = 1.0f;
+
+        int visColor = VisualizerModel.getInstance().getColor(0);
+        Log.d("test", "Red: " + Color.red(visColor));
+        Log.d("test", "min: " + min);
+        Log.d("test", "max: " + max);
+        Log.d("test", "----------------------------");
+
         // Only loop for the size of the decibel array size
-        for(int i = 0; i < DECIBEL_HISTORY_SIZE_V1; i++){
+        for(int i = 0; i < DECIBEL_HISTORY_SIZE_V1; i++) {
             // Calculate the coordinates after the amplification
             // Left side needs to move in negative direction
             // Right side needs to move in positive direction
@@ -126,25 +143,25 @@ public class GLLine {
             averageDecibels /= 3.0f;
 
             //averageDecibels = decibelFloatArray[i];
-            int visColor = VisualizerModel.getInstance().getColor(0);
+            //int visColor = VisualizerModel.getInstance().getColor(0);
 
-            colorMult = (float) Math.sqrt(decibelFloatArray[i]);
+            //colorMult = (float) Math.sqrt(decibelFloatArray[i]);
 
-            Log.d("test", "ColorMult: " + colorMult);
-            Log.d("test", "Dec      : " + decibelFloatArray[i]);
+            colorMult = (decibelFloatArray[i] - min) / (max - min);
+            colorMult *= COLOR_SHIFT_FACTOR;
 
-            if (colorMult <= 0.3f) {
-                colorMult = 0.3f;
-            }
+            Log.d("test", "\nColorMult red: " + colorMult * Color.red(visColor));
+            Log.d("test", "Dec      : " + decibelFloatArray[i] + "\n");
+
 
             if (xOffset + 26 < this.vertices.length) {
-                this.vertices[xOffset + 3] = Color.red(visColor) * colorMult * COLOR_SHIFT_FACTOR;
-                this.vertices[xOffset + 4] = Color.green(visColor) * colorMult * COLOR_SHIFT_FACTOR;
-                this.vertices[xOffset + 5] = Color.blue(visColor) * colorMult * COLOR_SHIFT_FACTOR;
+                this.vertices[xOffset + 3] = Color.red(visColor) * colorMult;
+                this.vertices[xOffset + 4] = Color.green(visColor) * colorMult;
+                this.vertices[xOffset + 5] = Color.blue(visColor) * colorMult;
 
-                this.vertices[xOffset + 10] = Color.red(visColor) * colorMult * COLOR_SHIFT_FACTOR;
-                this.vertices[xOffset + 11] = Color.green(visColor) * colorMult * COLOR_SHIFT_FACTOR;
-                this.vertices[xOffset + 12] = Color.blue(visColor) * colorMult * COLOR_SHIFT_FACTOR;
+                this.vertices[xOffset + 10] = Color.red(visColor) * colorMult;
+                this.vertices[xOffset + 11] = Color.green(visColor) * colorMult;
+                this.vertices[xOffset + 12] = Color.blue(visColor) * colorMult;
             }
 
             if(averageDecibels <= 0.55f) {
