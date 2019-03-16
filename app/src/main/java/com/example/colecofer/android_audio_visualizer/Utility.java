@@ -83,21 +83,30 @@ public class Utility {
 
                 /** Update the decibel history with the current decibel level */
                 if (highlightingOnMedium) {
-                    if (highlightingDuration >= DECIBEL_HISTORY_UPDATE_SIZE * 15) {
-                        if(highlightingDuration >= MEDIUM_HIGHLIGHTING_PULSE - 8) {
+                    if (highlightingDuration >= DECIBEL_HISTORY_UPDATE_SIZE * 9) {
+                        if(highlightingDuration >= MEDIUM_HIGHLIGHTING_PULSE - 4) {
                             elementToInsert = 0.6f - 0.049f * rand;
                         } else {
-                            elementToInsert = 0.65f - 0.049f * rand;;
+                            if(rand > 0.5f) {
+                                elementToInsert = 0.65f - 0.049f * rand;
+                            } else {
+                                elementToInsert = 0.60f + 0.34f * rand;
+                            }
                         }
                     } else {
                         elementToInsert = 0.67f + 0.33f * rand;
                     }
                 } else if (highlightingOnHigh) {
-                    if (highlightingDuration >= DECIBEL_HISTORY_UPDATE_SIZE * 2) {
+                    if (highlightingDuration >= DECIBEL_HISTORY_UPDATE_SIZE * 4) {
                         if(highlightingDuration >= HIGH_HIGHLIGHTING_PULSE - 3) {
                             elementToInsert = 0.65f - 0.049f * rand;
                         } else {
-                            elementToInsert = 0.7f + 0.33f * rand;
+                            //elementToInsert = 0.7f + 0.33f * rand;
+                            if(rand > 0.5f) {
+                                elementToInsert = 0.65f - 0.049f * rand;
+                            } else {
+                                elementToInsert = 0.7f + 0.33f * rand;
+                            }
                         }
                     } else {
                         elementToInsert = 0.65f - 0.049f * rand;
