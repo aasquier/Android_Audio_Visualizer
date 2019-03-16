@@ -71,12 +71,12 @@ public class Utility {
             float elementToInsert = 0.0f;
 
             if (VisualizerModel.getInstance().currentVisualizer instanceof VisOne) {
-
-                decibelHistory.removeLast();
-                decibelHistory.removeLast();
-                decibelHistory.removeLast();
-                decibelHistory.removeLast();
-                decibelHistory.removeLast();
+//
+//                decibelHistory.removeLast();
+//                decibelHistory.removeLast();
+//                decibelHistory.removeLast();
+//                decibelHistory.removeLast();
+//                decibelHistory.removeLast();
                 decibelHistory.removeLast();
 
                 /** Update the decibel history with the current decibel level */
@@ -121,11 +121,11 @@ public class Utility {
                     }
                 }
 
-                decibelHistory.addFirst(elementToInsert);
-                decibelHistory.addFirst(elementToInsert);
-                decibelHistory.addFirst(elementToInsert);
-                decibelHistory.addFirst(elementToInsert);
-                decibelHistory.addFirst(elementToInsert);
+//                decibelHistory.addFirst(elementToInsert);
+//                decibelHistory.addFirst(elementToInsert);
+//                decibelHistory.addFirst(elementToInsert);
+//                decibelHistory.addFirst(elementToInsert);
+//                decibelHistory.addFirst(elementToInsert);
                 decibelHistory.addFirst(elementToInsert);
 
                 if (highlightingOnMedium || highlightingOnHigh) {

@@ -121,10 +121,10 @@ public class GLLine {
         if (max > 1.0f) max = 1.0f;
 
         int visColor = VisualizerModel.getInstance().getColor(0);
-        Log.d("test", "Red: " + Color.red(visColor));
-        Log.d("test", "min: " + min);
-        Log.d("test", "max: " + max);
-        Log.d("test", "----------------------------");
+//        Log.d("test", "Red: " + Color.red(visColor));
+//        Log.d("test", "min: " + min);
+//        Log.d("test", "max: " + max);
+//        Log.d("test", "----------------------------");
 
         // Only loop for the size of the decibel array size
         for(int i = 0; i < DECIBEL_HISTORY_SIZE_V1; i++) {
@@ -150,8 +150,8 @@ public class GLLine {
             colorMult = (decibelFloatArray[i] - min) / (max - min);
             colorMult *= COLOR_SHIFT_FACTOR;
 
-            Log.d("test", "\nColorMult red: " + colorMult * Color.red(visColor));
-            Log.d("test", "Dec      : " + decibelFloatArray[i] + "\n");
+//            Log.d("test", "\nColorMult red: " + colorMult * Color.red(visColor));
+//            Log.d("test", "Dec      : " + decibelFloatArray[i] + "\n");
 
 
             if (xOffset + 26 < this.vertices.length) {

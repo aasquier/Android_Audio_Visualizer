@@ -125,7 +125,7 @@ void main() {           		                            // The entry point for our
     /** MEDIUM HIGH */
     } else if(a_Position.z >= 0.29) {
         new_Vertex_Position = vec4(a_Position.x + (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.025), a_Position.y +
-                                 (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.015), 0.0, a_Position.w);
+                                 (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.025), 0.0, a_Position.w);
 //        v_Color = a_Color / 2.0;
     /** MEDIUM */
     } else if(a_Position.z >= 0.19) {
@@ -135,11 +135,12 @@ void main() {           		                            // The entry point for our
     /** MEDIUM LOW */
     } else if(a_Position.z >= 0.09) {
         new_Vertex_Position = vec4(a_Position.x + (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.025), a_Position.y +
-                                 (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.015), 0.0, a_Position.w);
+                                 (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.025), 0.0, a_Position.w);
 //        v_Color = a_Color / 2.0;
     /** LOW */
     } else {
-        new_Vertex_Position = vec4(a_Position.x + (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.007), a_Position.yzw);
+        new_Vertex_Position = vec4(a_Position.x + (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.007), a_Position.y +
+                                 (perlin_Noise_Value * last_Six_Decibel_Readings_Average * 0.025), 0.0, a_Position.w);
         // Unhighlighted lines have there color value darkened towards black to help highlighted lines contrast better
 //        v_Color = a_Color / 1.75;
     }

@@ -88,7 +88,7 @@ final class Constants {
     static final float RIGHT_DRAW_BOUNDARY       = 0.99f;               //Right side of the screen boundary
     static final float AMPLIFIER_V1              = 0.0000095f;
     static final float DEFAULT_LINE_SIZE_V1      = 0.00009f;
-    static final int DECIBEL_HISTORY_UPDATE_SIZE = 3;
+    static final int DECIBEL_HISTORY_UPDATE_SIZE = 1;
     /** Vis1 small screen constants */
     static final float AMPLIFIER_V1_SKINNY         = 0.0000095f;
     static final float DEFAULT_LINE_SIZE_V1_SKINNY = 0.00009f;
