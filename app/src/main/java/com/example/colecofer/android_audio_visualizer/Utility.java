@@ -81,7 +81,7 @@ public class Utility {
 
                 /** Update the decibel history with the current decibel level */
                 if (highlightingOnMedium) {
-                    if (highlightingDuration >= DECIBEL_HISTORY_UPDATE_SIZE * 5) {
+                    if (highlightingDuration >= DECIBEL_HISTORY_UPDATE_SIZE * 15) {
                         if(highlightingDuration >= MEDIUM_HIGHLIGHTING_PULSE - 6) {
                             elementToInsert = 0.6f;
                         } else {

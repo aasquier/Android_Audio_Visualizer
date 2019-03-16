@@ -163,13 +163,13 @@ public class GLLine {
 
             if(averageDecibels <= 0.55f) {
 
-                highlightingFactor       = 20.0f;
+                highlightingFactor       = 10.0f;
                 this.vertices[xOffset+2] = 0.0f;
                 this.vertices[xOffset+9] = 0.0f;
 
             } else if (averageDecibels <= 0.6f) {
 
-                highlightingFactor       = 30.0f;
+                highlightingFactor       = 20.0f;
                 this.vertices[xOffset+2] = 0.0f;
                 this.vertices[xOffset+9] = 0.0f;
 
@@ -178,7 +178,7 @@ public class GLLine {
                 if(!highlightingOnMedium && !highlightingOnHigh && !highlightingHibernation && shouldUpdateHighlighting){
                     highlightingOnMedium = true;
                     highlightingDuration = MEDIUM_HIGHLIGHTING_PULSE;
-                    highlightingFactor   = 25.0f;
+                    highlightingFactor   = 30.0f;
                     this.vertices[xOffset+2] = 0.1f;
                     this.vertices[xOffset+9] = 0.1f;
                 } else {

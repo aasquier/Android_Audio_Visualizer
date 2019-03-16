@@ -274,23 +274,19 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         Pair<Long, Boolean> isTimeToRefreshScreen;
 
         updateSongAndArtistName();
-        this.animateTitleOpacity();
         animateLyrics.update(); //Check if it's time to display new lyrics
-        this.animateTitleOpacity();
-
 
         if(VisualizerModel.getInstance().currentVisualizer instanceof VisOne) {
-            Double[] dbs = new Double[6];
+            Double[] dbs = new Double[7];
             int j = 1;
-            for(int i = 0; i < 6; ++i) {
+            for(int i = 0; i < 7; ++i) {
                 dbs[i] = getDBs(fft[j], fft[j+1], this.fftArraySize);
-                j += 1;
-            }
-            for(int i = 0; i < 6; i++) {
                 updateDecibelHistory(dbs[i], this.previousUpdateTime);
+                j += 1;
             }
 
             VisualizerModel.getInstance().currentVisualizer.updateVertices();
+            this.animateTitleOpacity();
 
         } else {
             /** Gives us the decibel level for the fft bucket we care about **/
