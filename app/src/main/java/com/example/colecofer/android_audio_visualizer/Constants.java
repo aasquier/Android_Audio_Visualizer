@@ -57,7 +57,7 @@ final class Constants {
     static final int HIGH_HIBERNATION_TIME   = 50;
     static final float MAX_DB_LEVEL          = 170.0f;
     static final float MAX_DECIBEL_RATIO     = 1.0f;
-    static final long REFRESH_DECIBEL_TIME   = 16L;
+    static final long REFRESH_DECIBEL_TIME   = 1L;
 
     /** Shared Visualizer Constants **/
     static final String GLSL_POSITION_HANDLE     = "a_Position";
