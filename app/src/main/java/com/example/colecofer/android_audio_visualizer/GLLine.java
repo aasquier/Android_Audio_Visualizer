@@ -107,6 +107,10 @@ public class GLLine {
         float averageDecibels;
         float colorMult = 0.0f;
 
+        //These numbers set the min and max that colorMult will scale between
+        float colorMultMin = 0.6f;
+        float colorMultMax = 1.0f;
+
         // Change to object array to traverse
         Float[] decibelFloatArray = decibelHistory.toArray(new Float[DECIBEL_HISTORY_SIZE_V1]);
 
@@ -142,17 +146,10 @@ public class GLLine {
 
             averageDecibels /= 3.0f;
 
-            //averageDecibels = decibelFloatArray[i];
-            //int visColor = VisualizerModel.getInstance().getColor(0);
-
-            //colorMult = (float) Math.sqrt(decibelFloatArray[i]);
-
-            colorMult = (decibelFloatArray[i] - min) / (max - min);
+            //Scale colorMult between colorMultMin and colorMultMax and use that as a multiplier
+            //to calculate the new color for the current vertex
+            colorMult = (((decibelFloatArray[i] - min) / (max - min)) * (colorMultMax - colorMultMin)) + colorMultMin;
             colorMult *= COLOR_SHIFT_FACTOR;
-
-//            Log.d("test", "\nColorMult red: " + colorMult * Color.red(visColor));
-//            Log.d("test", "Dec      : " + decibelFloatArray[i] + "\n");
-
 
             if (xOffset + 26 < this.vertices.length) {
                 this.vertices[xOffset + 3] = Color.red(visColor) * colorMult;
