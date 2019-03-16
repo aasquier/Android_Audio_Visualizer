@@ -274,19 +274,15 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         Pair<Long, Boolean> isTimeToRefreshScreen;
 
         updateSongAndArtistName();
-        animateLyrics.update(); //Check if it's time to display new lyrics
 
         if(VisualizerModel.getInstance().currentVisualizer instanceof VisOne) {
-            Double[] dbs = new Double[7];
-            int j = 1;
-            for(int i = 0; i < 7; ++i) {
-                dbs[i] = getDBs(fft[j], fft[j+1], this.fftArraySize);
-                updateDecibelHistory(dbs[i], this.previousUpdateTime);
-                j += 1;
+            for(int i = 1; i < 5; ++i) {
+                updateDecibelHistory(getDBs(fft[i], fft[i+1], this.fftArraySize), this.previousUpdateTime);
             }
 
             VisualizerModel.getInstance().currentVisualizer.updateVertices();
             this.animateTitleOpacity();
+            animateLyrics.update(); //Check if it's time to display new lyrics
 
         } else {
             /** Gives us the decibel level for the fft bucket we care about **/
@@ -295,6 +291,8 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
             /** Check and see if it is time to update the decibel history with the current decibel level, and check if it is time to
              *  refresh the screen based on our 60 fps */
             isTimeToRefreshScreen = updateDecibelHistory(currentDecibels, this.previousUpdateTime);
+
+            animateLyrics.update(); //Check if it's time to display new lyrics
 
             /** Update the screen if the elapsed time has exceeded the threshold set */
             if(isTimeToRefreshScreen.second) {

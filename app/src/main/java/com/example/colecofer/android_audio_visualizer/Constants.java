@@ -68,14 +68,14 @@ final class Constants {
     static final String GLSL_SCALING_LEVEL_ARRAY = "scaling_Level";
     static final String GLSL_SCREEN_RATIO        = "screen_ratio";
     static final float COLOR_SHIFT_FACTOR        = 0.005f;
-    static final int HIGH_HIGHLIGHTING_PULSE     = 30;
-    static final int MEDIUM_HIGHLIGHTING_PULSE   = 78;
+    static final int HIGH_HIGHLIGHTING_PULSE     = 24;
+    static final int MEDIUM_HIGHLIGHTING_PULSE   = 69;
 
     /** GLLine constants for Vis1 */
     static final int BYTES_PER_FLOAT = 4;
     /** Vis1 constants */
     static final int LINE_AMT                    = 90;                 //Number of lines to display on the screen
-    static final int DECIBEL_HISTORY_SIZE_V1     = 100;
+    static final int DECIBEL_HISTORY_SIZE_V1     = 70;
     static final int VIS1_VERTEX_COUNT           = DECIBEL_HISTORY_SIZE_V1 * 2;
     static final int VIS1_ARRAY_SIZE             = VIS1_VERTEX_COUNT * 7;
     static final int VERTEX_AMOUNT               = 7;                   //x, y, z, r, g, b, a
@@ -87,7 +87,7 @@ final class Constants {
     static final float LEFT_DRAW_BOUNDARY        = -0.99f;              //Where to start drawing on the left side of the screen
     static final float RIGHT_DRAW_BOUNDARY       = 0.99f;               //Right side of the screen boundary
     static final float AMPLIFIER_V1              = 0.0000095f;
-    static final float DEFAULT_LINE_SIZE_V1      = 0.00009f;
+    static final float DEFAULT_LINE_SIZE_V1      = 0.000009f;
     static final int DECIBEL_HISTORY_UPDATE_SIZE = 1;
     /** Vis1 small screen constants */
     static final float AMPLIFIER_V1_SKINNY         = 0.0000095f;

@@ -139,9 +139,9 @@ public class GLLine {
 
             // Takes the average of the three decibel levels surrounding the current y-position of the line in question
             switch(i) {
-                case 0:                        averageDecibels = decibelFloatArray[0] + decibelFloatArray[1] + decibelFloatArray[2]; break;
+                case 0:                           averageDecibels = decibelFloatArray[0] + decibelFloatArray[1] + decibelFloatArray[2]; break;
                 case DECIBEL_HISTORY_SIZE_V1 - 1: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 2] + decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 1]; break;
-                default:                       averageDecibels = decibelFloatArray[i-1] + decibelFloatArray[i] + decibelFloatArray[i+1]; break;
+                default:                          averageDecibels = decibelFloatArray[i-1] + decibelFloatArray[i] + decibelFloatArray[i+1]; break;
             }
 
             averageDecibels /= 3.0f;
@@ -169,7 +169,7 @@ public class GLLine {
 
             } else if (averageDecibels <= 0.6f) {
 
-                highlightingFactor       = 20.0f;
+                highlightingFactor       = 15.0f;
                 this.vertices[xOffset+2] = 0.0f;
                 this.vertices[xOffset+9] = 0.0f;
 
@@ -178,11 +178,11 @@ public class GLLine {
                 if(!highlightingOnMedium && !highlightingOnHigh && !highlightingHibernation && shouldUpdateHighlighting){
                     highlightingOnMedium = true;
                     highlightingDuration = MEDIUM_HIGHLIGHTING_PULSE;
-                    highlightingFactor   = 30.0f;
+                    highlightingFactor   = 20.0f;
                     this.vertices[xOffset+2] = 0.1f;
                     this.vertices[xOffset+9] = 0.1f;
                 } else {
-                    highlightingFactor = 45.0f;
+                    highlightingFactor = 35.0f;
                     this.vertices[xOffset+2] = 0.2f;
                     this.vertices[xOffset+9] = 0.2f;
                 }
