@@ -32,6 +32,7 @@ import static com.example.colecofer.android_audio_visualizer.Constants.IMAGINARY
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_FFT_ARRAY_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.REAL_BUCKET_INDEX;
 import static com.example.colecofer.android_audio_visualizer.Constants.REQUEST_PERMISSION;
+import static com.example.colecofer.android_audio_visualizer.Constants.USE_SPOTIFY;
 import static com.example.colecofer.android_audio_visualizer.Utility.getDBs;
 import static com.example.colecofer.android_audio_visualizer.Utility.updateDecibelHistory;
 import static com.loopj.android.http.AsyncHttpClient.log;
@@ -53,6 +54,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
     private AnimateLyrics animateLyrics;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +71,12 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         getSupportActionBar().hide();
 
         setContentView(R.layout.activity_visualizer);
-        //startTrackPlayback();  //Uncomment this line to start Spotify track playback
+
+        if (USE_SPOTIFY) {
+            startTrackPlayback();
+            VisualizerModel.getInstance().spotifyStartTime = (int) System.currentTimeMillis();
+        }
+
         ArrayList<Pair<Integer, String[]>> list = VisualizerModel.getInstance().getLyrics();
 
         Pair<Integer, String[]> pair = list.get(0);
@@ -149,10 +156,17 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         } else {
             mediaPlayer = MediaPlayer.create(this, R.raw.heyya);
         }
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
 
-        visualizer = new Visualizer(mediaPlayer.getAudioSessionId());
+        mediaPlayer.setLooping(true);
+
+        VisualizerModel.getInstance().spotifyStartTime = (int) System.currentTimeMillis();
+        if (USE_SPOTIFY == false) {
+            mediaPlayer.start();
+            visualizer = new Visualizer(mediaPlayer.getAudioSessionId());
+        } else {
+            visualizer = new Visualizer(0);
+        }
+
         visualizer.setCaptureSize(fftArraySize);
         visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);
         visualizer.setEnabled(true);
