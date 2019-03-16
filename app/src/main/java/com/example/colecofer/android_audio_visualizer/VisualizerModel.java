@@ -133,7 +133,6 @@ public class VisualizerModel {
      */
     //TODO: This will only work with local files since it's based off the media player
     public void checkToSwitchVisualizer() {
-        //int currentTimeMillis = VisualizerActivity.mediaPlayer.getCurrentPosition();
         int currentTimeMillis = (int) System.currentTimeMillis() - this.spotifyStartTime;
 
         if (currentTimeMillis > lastSwitchTime + visualizerSwitchTime) {
