@@ -33,6 +33,7 @@ public class VisualizerModel {
     private int lastSwitchTime;
     private ArrayList<Pair<Integer, String[]>> lyricList;
     public ArrayList<Integer> colorMatrix;
+    int spotifyStartTime;
 
 
     //Visualizer / OpenGL instances
@@ -57,6 +58,7 @@ public class VisualizerModel {
         artistName = "Not defined";
         albumName = "Not defined";
         colorMatrix = new ArrayList(3);
+        spotifyStartTime = 0;
     }
 
 
@@ -131,7 +133,7 @@ public class VisualizerModel {
      */
     //TODO: This will only work with local files since it's based off the media player
     public void checkToSwitchVisualizer() {
-        int currentTimeMillis = VisualizerActivity.mediaPlayer.getCurrentPosition();
+        int currentTimeMillis = (int) System.currentTimeMillis() - this.spotifyStartTime;
 
         if (currentTimeMillis > lastSwitchTime + visualizerSwitchTime) {
             lastSwitchTime = currentTimeMillis;

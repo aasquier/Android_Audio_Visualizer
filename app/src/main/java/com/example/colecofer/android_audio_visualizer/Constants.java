@@ -8,6 +8,7 @@ final class Constants {
     static final int SWITCH_VIS_TIME       = 10000;          //Number of milliseconds to wait before switching
 
     /** VisualizerActivity constants */
+    static final boolean USE_SPOTIFY        = false;        //Set to true to use spotify, and false to use media player (local files)
     static final int REQUEST_PERMISSION     = 101;
     static final int REAL_BUCKET_INDEX      = 3;
     static final int IMAGINARY_BUCKET_INDEX = 4;
