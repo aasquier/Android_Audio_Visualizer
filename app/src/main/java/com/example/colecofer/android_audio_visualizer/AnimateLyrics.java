@@ -102,7 +102,6 @@ public class AnimateLyrics {
 
         //Calc time to display the lyric
         this.lyricEndTime = rawLyricsList.get(this.rawLyricsIndex).first - LYRIC_DISPLAY_OFFSET;
-//        float currentTime = VisualizerActivity.mediaPlayer.getCurrentPosition();
         int currentTime = (int) System.currentTimeMillis() - VisualizerModel.getInstance().spotifyStartTime;
         this.numWordsInLyricSegment = this.rawLyricsList.get(this.rawLyricsIndex).second.length;
 
