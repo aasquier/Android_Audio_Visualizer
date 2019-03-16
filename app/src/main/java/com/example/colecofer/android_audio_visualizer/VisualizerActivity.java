@@ -24,6 +24,7 @@ import android.util.Pair;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE_V2;
@@ -276,8 +277,17 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         updateSongAndArtistName();
 
         if(VisualizerModel.getInstance().currentVisualizer instanceof VisOne) {
-            for(int i = 1; i < 5; ++i) {
-                updateDecibelHistory(getDBs(fft[i], fft[i+1], this.fftArraySize), this.previousUpdateTime);
+            double[] dbs = new double[6];
+            int j = 1;
+            for(int i = 0; i < 6; ++i) {
+                dbs[i] = getDBs(fft[j], fft[j+1], this.fftArraySize);
+                j += 2;
+            }
+
+            Arrays.sort(dbs);
+
+            for(int i = 0; i < 6; ++i) {
+                updateDecibelHistory(dbs[i], this.previousUpdateTime);
             }
 
             VisualizerModel.getInstance().currentVisualizer.updateVertices();

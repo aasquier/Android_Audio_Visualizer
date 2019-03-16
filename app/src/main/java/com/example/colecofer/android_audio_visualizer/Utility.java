@@ -79,42 +79,44 @@ public class Utility {
 //                decibelHistory.removeLast();
                 decibelHistory.removeLast();
 
+                float rand = (float)Math.random();
+
                 /** Update the decibel history with the current decibel level */
                 if (highlightingOnMedium) {
                     if (highlightingDuration >= DECIBEL_HISTORY_UPDATE_SIZE * 15) {
-                        if(highlightingDuration >= MEDIUM_HIGHLIGHTING_PULSE - 6) {
-                            elementToInsert = 0.6f;
+                        if(highlightingDuration >= MEDIUM_HIGHLIGHTING_PULSE - 8) {
+                            elementToInsert = 0.6f - 0.049f * rand;
                         } else {
-                            elementToInsert = 0.65f;
+                            elementToInsert = 0.65f - 0.049f * rand;;
                         }
                     } else {
-                        elementToInsert = 0.7f;
+                        elementToInsert = 0.67f + 0.33f * rand;
                     }
                 } else if (highlightingOnHigh) {
                     if (highlightingDuration >= DECIBEL_HISTORY_UPDATE_SIZE * 2) {
-                        if(highlightingDuration >= HIGH_HIGHLIGHTING_PULSE - 6) {
-                            elementToInsert = 0.65f;
+                        if(highlightingDuration >= HIGH_HIGHLIGHTING_PULSE - 3) {
+                            elementToInsert = 0.65f - 0.049f * rand;
                         } else {
-                            elementToInsert = 0.7f;
+                            elementToInsert = 0.7f + 0.33f * rand;
                         }
                     } else {
-                        elementToInsert = 0.65f;
+                        elementToInsert = 0.65f - 0.049f * rand;
                     }
                 } else if (highlightingHibernation) {
                     if (newDbRatio > 0.65f) {
-                        elementToInsert = 0.6f;
+                        elementToInsert = 0.6f - 0.049f * rand;
                     } else if (newDbRatio > 0.6f) {
-                        elementToInsert = 0.55f;
+                        elementToInsert = 0.55f - 0.55f * rand;
                     } else {
                         elementToInsert = newDbRatio;
                     }
                 } else {
                     // This is if high highlighting is first being seen
                     if(elementToInsert > 0.65f) {
-                        elementToInsert = 0.65f;
+                        elementToInsert = 0.65f - 0.049f * rand;
                     // This is if medium highlighting is first being seen
                     } else if(elementToInsert > 0.6f) {
-                        elementToInsert = 0.6f;
+                        elementToInsert = 0.6f - 0.049f * rand;
                     // Not highlighted at all
                     } else {
                         elementToInsert = newDbRatio;

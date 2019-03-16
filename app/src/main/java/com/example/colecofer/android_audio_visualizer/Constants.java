@@ -54,7 +54,7 @@ final class Constants {
 
     /** Utility constants */
     static final int MEDIUM_HIBERNATION_TIME = 100;
-    static final int HIGH_HIBERNATION_TIME   = 50;
+    static final int HIGH_HIBERNATION_TIME   = 75;
     static final float MAX_DB_LEVEL          = 170.0f;
     static final float MAX_DECIBEL_RATIO     = 1.0f;
     static final long REFRESH_DECIBEL_TIME   = 1L;
@@ -75,7 +75,7 @@ final class Constants {
     static final int BYTES_PER_FLOAT = 4;
     /** Vis1 constants */
     static final int LINE_AMT                    = 90;                 //Number of lines to display on the screen
-    static final int DECIBEL_HISTORY_SIZE_V1     = 70;
+    static final int DECIBEL_HISTORY_SIZE_V1     = 100;
     static final int VIS1_VERTEX_COUNT           = DECIBEL_HISTORY_SIZE_V1 * 2;
     static final int VIS1_ARRAY_SIZE             = VIS1_VERTEX_COUNT * 7;
     static final int VERTEX_AMOUNT               = 7;                   //x, y, z, r, g, b, a
@@ -91,8 +91,8 @@ final class Constants {
     static final int DECIBEL_HISTORY_UPDATE_SIZE = 1;
     /** Vis1 small screen constants */
     static final float AMPLIFIER_V1_SKINNY         = 0.0000095f;
-    static final float DEFAULT_LINE_SIZE_V1_SKINNY = 0.00009f;
-    static final int LINE_AMT_SKINNY               = 30;                 //Number of lines to display on the screen
+    static final float DEFAULT_LINE_SIZE_V1_SKINNY = 0.0009f;
+    static final int LINE_AMT_SKINNY               = 50;                 //Number of lines to display on the screen
 
     /** Vis2 constants */
     static final int VIS2_STRIDE_BYTES       = (POSITION_DATA_SIZE + COLOR_DATA_SIZE) * BYTES_PER_FLOAT;
