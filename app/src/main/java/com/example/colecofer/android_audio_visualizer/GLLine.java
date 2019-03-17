@@ -38,6 +38,9 @@ public class GLLine {
     private float rightSide;
     private float defaultLineSize;
     private float lineAmplifier;
+//    private float previousColorMultMin = 0.0f;
+//    private float previousColorMultMax = 0.0f;
+    private float previousColorMult = 0.0f;
 
     /**
      * Constructor
@@ -107,9 +110,9 @@ public class GLLine {
         float averageDecibels;
         float colorMult = 0.0f;
 
-        //These numbers set the min and max that colorMult will scale between
-        float colorMultMin = 0.6f;
-        float colorMultMax = 1.0f;
+//        //These numbers set the min and max that colorMult will scale between
+        float colorMultMin;
+        float colorMultMax;
 
         // Change to object array to traverse
         Float[] decibelFloatArray = decibelHistory.toArray(new Float[DECIBEL_HISTORY_SIZE_V1]);
@@ -121,14 +124,38 @@ public class GLLine {
             if (decibel > max) max = decibel;
             if (decibel < min) min = decibel;
         }
-        if (min < 0.0f) min = 0.0f;
-        if (max > 1.0f) max = 1.0f;
+//        if (min < colorMultMin) min = colorMultMin;
+//        if (max > colorMultMax) max = colorMultMax;
+
+//        if (min < 0.0f) min = 0.0f;
+//        if (max > 1.0f) max = 1.0f;
 
         int visColor = VisualizerModel.getInstance().getColor(0);
-//        Log.d("test", "Red: " + Color.red(visColor));
-//        Log.d("test", "min: " + min);
-//        Log.d("test", "max: " + max);
-//        Log.d("test", "----------------------------");
+
+        //Normalize the decibel history and use that instead
+        int timesToNormalize = 1;
+        for (int j = 0; j < timesToNormalize; ++j) {
+            for (int i = 0; i < decibelFloatArray.length; ++i) {
+                float neighborAvg = 0.0f;
+                if (i > 0 && i < decibelFloatArray.length) {
+                    neighborAvg += decibelFloatArray[--i];
+                    neighborAvg += decibelFloatArray[i];
+                    neighborAvg += decibelFloatArray[++i];
+                    neighborAvg /= 3;
+                    decibelFloatArray[i] = neighborAvg;
+                } else if (i > 0) {
+                    neighborAvg += decibelFloatArray[--i];
+                    neighborAvg += decibelFloatArray[i];
+                    neighborAvg /= 2;
+                    decibelFloatArray[i] = neighborAvg;
+                } else if (i < decibelFloatArray.length) {
+                    neighborAvg += decibelFloatArray[i];
+                    neighborAvg += decibelFloatArray[++i];
+                    neighborAvg /= 2;
+                    decibelFloatArray[i] = neighborAvg;
+                }
+            }
+        }
 
         // Only loop for the size of the decibel array size
         for(int i = 0; i < DECIBEL_HISTORY_SIZE_V1; i++) {
@@ -146,9 +173,59 @@ public class GLLine {
 
             averageDecibels /= 3.0f;
 
+
+            float currentDecibel = decibelFloatArray[i];
+
+            //Take the average of the previous, current, and next decibel level to smooth out the data
+//            float neighborAvg = 0.0f;
+//            if (i > 0 && i < decibelFloatArray.length) {
+//                neighborAvg += decibelFloatArray[--i];
+//                neighborAvg += decibelFloatArray[i];
+//                neighborAvg += decibelFloatArray[++i];
+//                neighborAvg /= 3;
+//                currentDecibel = neighborAvg;
+//            }
+//
+//            int neighboorhoodRadius = 5;
+//            for (int n = i; n < neighboorhoodRadius; ++i) {
+//                if (--n > )
+//            }
+
+            if (currentDecibel >= 75) {
+                //Ultra High highlighting
+                colorMultMin = 0.4f;
+                colorMultMax = 1.8f;
+            } else if (currentDecibel >= 0.60) {
+                //High highlighting
+                colorMultMin = 0.4f;
+                colorMultMax = 1.6f;
+            } /* else if (currentDecibel >= 0.55) {
+                //Medium High highlighting
+                colorMultMin = 0.4f;
+                colorMultMax = 1.4f;
+            } */else /* if (currentDecibel >= 0.19) */{
+                //Medium highlighting
+                colorMultMin = 0.4f;
+                colorMultMax = 1.0f;
+            }
+//           else if (currentDecibel >= 0.9){
+//                //Medium Low highlighting
+//                colorMultMin = 0.4f;
+//                colorMultMax = 1.0f;
+//            } else {
+//                //Low highlighting
+//                colorMultMin = 0.3f;
+//                colorMultMax = 0.8f;
+//            }
+
             //Scale colorMult between colorMultMin and colorMultMax and use that as a multiplier
             //to calculate the new color for the current vertex
             colorMult = (((decibelFloatArray[i] - min) / (max - min)) * (colorMultMax - colorMultMin)) + colorMultMin;
+
+            //Use the average of the current colorMult with the previous
+            if (i > 0) { colorMult = (previousColorMult + colorMult) / 2; }
+            previousColorMult = colorMult;
+
             colorMult *= COLOR_SHIFT_FACTOR;
 
             if (xOffset + 26 < this.vertices.length) {

@@ -111,7 +111,7 @@ void main() {           		                            // The entry point for our
     // Calculates a vertices noise field interaction based on the x and y positional values and the current scaled time
     float perlin_Noise_Value = snoise(vec3(a_Position.xy / noise_Field_Resolution, scaled_Time));
     float random = random(a_Position.xy * random_Time);
-    float black_scaling = abs(random) * 0.4;
+    float black_scaling = abs(random) * 0.6;
 
     // Calculates the average of the most recent six decibel levels temporaly
     float last_Six_Decibel_Readings_Average = (a_DB_Level[0] + a_DB_Level[1] + a_DB_Level[2] + a_DB_Level[3] + a_DB_Level[4] + a_DB_Level[5]) / 6.0;
