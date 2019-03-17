@@ -38,8 +38,6 @@ public class GLLine {
     private float rightSide;
     private float defaultLineSize;
     private float lineAmplifier;
-//    private float previousColorMultMin = 0.0f;
-//    private float previousColorMultMax = 0.0f;
     private float previousColorMult = 0.0f;
 
     /**
@@ -172,18 +170,18 @@ public class GLLine {
 
             averageDecibels /= 3.0f;
 
-
             float currentDecibel = decibelFloatArray[i];
-
+            //Alter the amount of highlighting depending on decibel amount
             if (currentDecibel >= 0.65) {
-                //Ultra High highlighting
+                //High highlighting
                 colorMultMin = 0.4f;
                 colorMultMax = 1.6f;
-            } else if (currentDecibel >= 0.60) {
-                //High highlighting
+            } else if (currentDecibel >= 0.56) {
+                //Medium Hight highlighting
                 colorMultMin = 0.4f;
                 colorMultMax = 1.5f;
             } else {
+                //Normal
                 colorMultMin = 0.4f;
                 colorMultMax = 1.0f;
             }
