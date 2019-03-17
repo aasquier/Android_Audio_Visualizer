@@ -124,15 +124,14 @@ public class GLLine {
             if (decibel > max) max = decibel;
             if (decibel < min) min = decibel;
         }
-//        if (min < colorMultMin) min = colorMultMin;
-//        if (max > colorMultMax) max = colorMultMax;
 
-//        if (min < 0.0f) min = 0.0f;
-//        if (max > 1.0f) max = 1.0f;
+        if (min < 0.0f) min = 0.0f;
 
+        //Get the current primary color of the visualizer
         int visColor = VisualizerModel.getInstance().getColor(0);
 
         //Normalize the decibel history to smooth out the color highlighting
+        //Set timesToNormalize to a large number to smooth the highlighting more
         int timesToNormalize = 1;
         for (int j = 0; j < timesToNormalize; ++j) {
             for (int i = 0; i < decibelFloatArray.length; ++i) {
@@ -176,38 +175,15 @@ public class GLLine {
 
             float currentDecibel = decibelFloatArray[i];
 
-            //Take the average of the previous, current, and next decibel level to smooth out the data
-//            float neighborAvg = 0.0f;
-//            if (i > 0 && i < decibelFloatArray.length) {
-//                neighborAvg += decibelFloatArray[--i];
-//                neighborAvg += decibelFloatArray[i];
-//                neighborAvg += decibelFloatArray[++i];
-//                neighborAvg /= 3;
-//                currentDecibel = neighborAvg;
-//            }
-//
-//            int neighboorhoodRadius = 5;
-//            for (int n = i; n < neighboorhoodRadius; ++i) {
-//                if (--n > )
-//            }
-
-            if (currentDecibel >= .65) {
+            if (currentDecibel >= 0.65) {
                 //Ultra High highlighting
                 colorMultMin = 0.4f;
-                colorMultMax = 1.7f;
+                colorMultMax = 1.6f;
             } else if (currentDecibel >= 0.60) {
                 //High highlighting
                 colorMultMin = 0.4f;
-                colorMultMax = 1.6f;
-            }  /*else if (currentDecibel >= 0.55) {
-                //Medium High highlighting
-                colorMultMin = 0.5f;
-                colorMultMax = 1.4f;
-            } *//*else if (currentDecibel >= 0.50) {
-                //Medium highlighting
-                colorMultMin = 0.4f;
                 colorMultMax = 1.5f;
-            } */else {
+            } else {
                 colorMultMin = 0.4f;
                 colorMultMax = 1.0f;
             }
@@ -216,7 +192,7 @@ public class GLLine {
             //to calculate the new color for the current vertex
             colorMult = (((decibelFloatArray[i] - min) / (max - min)) * (colorMultMax - colorMultMin)) + colorMultMin;
 
-            //Use the average of the current colorMult with the previous
+            //Use the average of the current colorMult and previous colorMult
             if (i > 0) { colorMult = (previousColorMult + colorMult) / 2; }
             previousColorMult = colorMult;
 
