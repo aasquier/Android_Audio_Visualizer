@@ -174,7 +174,7 @@ public class GLLine {
             } else if (averageDecibels <= 0.65f){
                 if(!highlightingOnMedium && !highlightingOnHigh && !highlightingHibernation && shouldUpdateHighlighting){
                     highlightingOnMedium = true;
-                    highlightingDuration = MEDIUM_HIGHLIGHTING_PULSE;
+                    highlightingDuration = MEDIUM_HIGHLIGHTING_PULSE + (int)(Math.random() * 20);
                     highlightingFactor   = 25.0f;
                     this.vertices[xOffset+2] = 0.1f;
                     this.vertices[xOffset+9] = 0.1f;
@@ -186,12 +186,12 @@ public class GLLine {
             } else {
                 if(!highlightingOnHigh && !highlightingOnMedium && !highlightingHibernation && shouldUpdateHighlighting) {
                     highlightingOnHigh = true;
-                    highlightingDuration = HIGH_HIGHLIGHTING_PULSE;
+                    highlightingDuration = HIGH_HIGHLIGHTING_PULSE + (int)(Math.random() * 7);
                     highlightingFactor = 45.0f;
                     this.vertices[xOffset+2] = 0.3f;
                     this.vertices[xOffset+9] = 0.3f;
                 } else {
-                    highlightingFactor = 75.0f;
+                    highlightingFactor = 65.0f;
                     this.vertices[xOffset+2] = 0.4f;
                     this.vertices[xOffset+9] = 0.4f;
                 }

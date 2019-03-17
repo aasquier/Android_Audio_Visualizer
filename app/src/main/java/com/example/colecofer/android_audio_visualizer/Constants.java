@@ -57,7 +57,7 @@ final class Constants {
     static final int HIGH_HIBERNATION_TIME   = 75;
     static final float MAX_DB_LEVEL          = 170.0f;
     static final float MAX_DECIBEL_RATIO     = 1.0f;
-    static final long REFRESH_DECIBEL_TIME   = 1L;
+    static final long REFRESH_DECIBEL_TIME   = 16L;
 
     /** Shared Visualizer Constants **/
     static final String GLSL_POSITION_HANDLE     = "a_Position";
@@ -69,7 +69,7 @@ final class Constants {
     static final String GLSL_SCREEN_RATIO        = "screen_ratio";
     static final float COLOR_SHIFT_FACTOR        = 0.005f;
     static final int HIGH_HIGHLIGHTING_PULSE     = 24;
-    static final int MEDIUM_HIGHLIGHTING_PULSE   = 69;
+    static final int MEDIUM_HIGHLIGHTING_PULSE   = 90;
 
     /** GLLine constants for Vis1 */
     static final int BYTES_PER_FLOAT = 4;
@@ -87,7 +87,7 @@ final class Constants {
     static final float LEFT_DRAW_BOUNDARY        = -0.99f;              //Where to start drawing on the left side of the screen
     static final float RIGHT_DRAW_BOUNDARY       = 0.99f;               //Right side of the screen boundary
     static final float AMPLIFIER_V1              = 0.0000095f;
-    static final float DEFAULT_LINE_SIZE_V1      = 0.000009f;
+    static final float DEFAULT_LINE_SIZE_V1      = 0.00009f;
     static final int DECIBEL_HISTORY_UPDATE_SIZE = 1;
     /** Vis1 small screen constants */
     static final float AMPLIFIER_V1_SKINNY         = 0.0000095f;

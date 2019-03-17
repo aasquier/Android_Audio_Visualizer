@@ -87,25 +87,24 @@ public class Utility {
                         if(highlightingDuration >= MEDIUM_HIGHLIGHTING_PULSE - 4) {
                             elementToInsert = 0.6f - 0.049f * rand;
                         } else {
-                            if(rand > 0.5f) {
+                            if(rand > 0.33f) {
                                 elementToInsert = 0.65f - 0.049f * rand;
                             } else {
-                                elementToInsert = 0.60f + 0.34f * rand;
+                                elementToInsert = 0.6f + 0.34f * rand;
                             }
                         }
                     } else {
-                        elementToInsert = 0.67f + 0.33f * rand;
+                        elementToInsert = 0.66f + 0.33f * rand;
                     }
                 } else if (highlightingOnHigh) {
                     if (highlightingDuration >= DECIBEL_HISTORY_UPDATE_SIZE * 4) {
                         if(highlightingDuration >= HIGH_HIGHLIGHTING_PULSE - 3) {
                             elementToInsert = 0.65f - 0.049f * rand;
                         } else {
-                            //elementToInsert = 0.7f + 0.33f * rand;
                             if(rand > 0.5f) {
                                 elementToInsert = 0.65f - 0.049f * rand;
                             } else {
-                                elementToInsert = 0.7f + 0.33f * rand;
+                                elementToInsert = 0.66f + 0.33f * rand;
                             }
                         }
                     } else {
