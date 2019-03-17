@@ -132,7 +132,7 @@ public class GLLine {
 
         int visColor = VisualizerModel.getInstance().getColor(0);
 
-        //Normalize the decibel history and use that instead
+        //Normalize the decibel history to smooth out the color highlighting
         int timesToNormalize = 1;
         for (int j = 0; j < timesToNormalize; ++j) {
             for (int i = 0; i < decibelFloatArray.length; ++i) {
@@ -191,32 +191,26 @@ public class GLLine {
 //                if (--n > )
 //            }
 
-            if (currentDecibel >= 75) {
+            if (currentDecibel >= .65) {
                 //Ultra High highlighting
                 colorMultMin = 0.4f;
-                colorMultMax = 1.8f;
+                colorMultMax = 1.7f;
             } else if (currentDecibel >= 0.60) {
                 //High highlighting
                 colorMultMin = 0.4f;
                 colorMultMax = 1.6f;
-            } /* else if (currentDecibel >= 0.55) {
+            }  /*else if (currentDecibel >= 0.55) {
                 //Medium High highlighting
-                colorMultMin = 0.4f;
+                colorMultMin = 0.5f;
                 colorMultMax = 1.4f;
-            } */else /* if (currentDecibel >= 0.19) */{
+            } *//*else if (currentDecibel >= 0.50) {
                 //Medium highlighting
+                colorMultMin = 0.4f;
+                colorMultMax = 1.5f;
+            } */else {
                 colorMultMin = 0.4f;
                 colorMultMax = 1.0f;
             }
-//           else if (currentDecibel >= 0.9){
-//                //Medium Low highlighting
-//                colorMultMin = 0.4f;
-//                colorMultMax = 1.0f;
-//            } else {
-//                //Low highlighting
-//                colorMultMin = 0.3f;
-//                colorMultMax = 0.8f;
-//            }
 
             //Scale colorMult between colorMultMin and colorMultMax and use that as a multiplier
             //to calculate the new color for the current vertex
