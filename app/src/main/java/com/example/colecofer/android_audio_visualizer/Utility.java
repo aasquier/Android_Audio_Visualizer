@@ -10,10 +10,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_UPDATE_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.HIGH_HIBERNATION_TIME;
+import static com.example.colecofer.android_audio_visualizer.Constants.HIGH_HIGHLIGHTING_PULSE;
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_DB_LEVEL;
 import static com.example.colecofer.android_audio_visualizer.Constants.MAX_DECIBEL_RATIO;
 import static com.example.colecofer.android_audio_visualizer.Constants.MEDIUM_HIBERNATION_TIME;
+import static com.example.colecofer.android_audio_visualizer.Constants.MEDIUM_HIGHLIGHTING_PULSE;
 import static com.example.colecofer.android_audio_visualizer.Constants.REFRESH_DECIBEL_TIME;
 import static com.example.colecofer.android_audio_visualizer.VisualizerActivity.decibelHistory;
 
@@ -68,48 +71,75 @@ public class Utility {
             float elementToInsert = 0.0f;
 
             if (VisualizerModel.getInstance().currentVisualizer instanceof VisOne) {
+//
+//                decibelHistory.removeLast();
+//                decibelHistory.removeLast();
+//                decibelHistory.removeLast();
+//                decibelHistory.removeLast();
+//                decibelHistory.removeLast();
+                decibelHistory.removeLast();
 
-                decibelHistory.removeLast();
-                decibelHistory.removeLast();
-                decibelHistory.removeLast();
-                decibelHistory.removeLast();
-                decibelHistory.removeLast();
-                decibelHistory.removeLast();
+                float rand = (float)Math.random();
 
                 /** Update the decibel history with the current decibel level */
                 if (highlightingOnMedium) {
-                    if (highlightingDuration >= 0) {
-                        elementToInsert = 0.65f;
+                    if (highlightingDuration >= DECIBEL_HISTORY_UPDATE_SIZE * 9) {
+                        if(highlightingDuration >= MEDIUM_HIGHLIGHTING_PULSE - 4) {
+                            elementToInsert = 0.6f - 0.049f * rand;
+                        } else {
+                            if(rand > 0.33f) {
+                                elementToInsert = 0.65f - 0.049f * rand;
+                            } else {
+                                elementToInsert = 0.6f + 0.34f * rand;
+                            }
+                        }
+                    } else {
+                        elementToInsert = 0.66f + 0.33f * rand;
                     }
                 } else if (highlightingOnHigh) {
-                    if (highlightingDuration >= 0) {
-                        elementToInsert = 0.7f;
+                    if (highlightingDuration >= DECIBEL_HISTORY_UPDATE_SIZE * 4) {
+                        if(highlightingDuration >= HIGH_HIGHLIGHTING_PULSE - 3) {
+                            elementToInsert = 0.65f - 0.049f * rand;
+                        } else {
+                            if(rand > 0.5f) {
+                                elementToInsert = 0.65f - 0.049f * rand;
+                            } else {
+                                elementToInsert = 0.66f + 0.33f * rand;
+                            }
+                        }
+                    } else {
+                        elementToInsert = 0.65f - 0.049f * rand;
                     }
                 } else if (highlightingHibernation) {
                     if (newDbRatio > 0.65f) {
-                        elementToInsert = 0.6f;
+                        elementToInsert = 0.6f - 0.049f * rand;
                     } else if (newDbRatio > 0.6f) {
-                        elementToInsert = 0.55f;
+                        elementToInsert = 0.55f - 0.55f * rand;
                     } else {
                         elementToInsert = newDbRatio;
                     }
-                } else if (highlightingDuration == 3) {
-                    if (newDbRatio > 0.6f) {
-                        elementToInsert = 0.55f;
-                    }
                 } else {
-                    elementToInsert = newDbRatio;
+                    // This is if high highlighting is first being seen
+                    if(elementToInsert > 0.65f) {
+                        elementToInsert = 0.65f - 0.049f * rand;
+                    // This is if medium highlighting is first being seen
+                    } else if(elementToInsert > 0.6f) {
+                        elementToInsert = 0.6f - 0.049f * rand;
+                    // Not highlighted at all
+                    } else {
+                        elementToInsert = newDbRatio;
+                    }
                 }
 
-                decibelHistory.addFirst(elementToInsert);
-                decibelHistory.addFirst(elementToInsert);
-                decibelHistory.addFirst(elementToInsert);
-                decibelHistory.addFirst(elementToInsert);
-                decibelHistory.addFirst(elementToInsert);
+//                decibelHistory.addFirst(elementToInsert);
+//                decibelHistory.addFirst(elementToInsert);
+//                decibelHistory.addFirst(elementToInsert);
+//                decibelHistory.addFirst(elementToInsert);
+//                decibelHistory.addFirst(elementToInsert);
                 decibelHistory.addFirst(elementToInsert);
 
                 if (highlightingOnMedium || highlightingOnHigh) {
-                    highlightingDuration -= 3;
+                    highlightingDuration -= DECIBEL_HISTORY_UPDATE_SIZE;
                     if (highlightingDuration <= 0) {
                         if (highlightingOnMedium) {
                             highlightingOnMedium = false;
@@ -122,7 +152,7 @@ public class Utility {
                     }
                 }
                 if (highlightingHibernation) {
-                    highlightingHibernationCount -= 3;
+                    highlightingHibernationCount -= DECIBEL_HISTORY_UPDATE_SIZE;
                     if (highlightingHibernationCount <= 0) {
                         highlightingHibernation = false;
                     }
@@ -145,47 +175,8 @@ public class Utility {
                 decibelHistory.removeLast();
                 decibelHistory.removeLast();
                 /** Update the decibel history with the current decibel level */
-//                if (highlightingOnMedium) {
-//                    if (highlightingDuration >= 0) {
-//                        elementToInsert = 0.65f;
-//                    }
-//                } else if (highlightingOnHigh) {
-//                    if (highlightingDuration >= 0) {
-//                        elementToInsert = 0.7f;
-//                    }
-//                } else if (highlightingHibernation) {
-//                    if (newDbRatio > 0.65f) {
-//                        elementToInsert = 0.6f;
-//                    } else if (newDbRatio > 0.6f) {
-//                        elementToInsert = 0.55f;
-//                    } else {
-//                        elementToInsert = newDbRatio;
-//                    }
-//                } else {
-//                    elementToInsert = newDbRatio;
-//                }
                 decibelHistory.addFirst(newDbRatio);
                 decibelHistory.addFirst(newDbRatio);
-
-//                if (highlightingOnMedium || highlightingOnHigh) {
-//                    highlightingDuration -= 2;
-//                    if (highlightingDuration <= 0) {
-//                        if (highlightingOnMedium) {
-//                            highlightingOnMedium = false;
-//                            highlightingHibernationCount = MEDIUM_HIBERNATION_TIME / 2;
-//                        } else {
-//                            highlightingOnHigh = false;
-//                            highlightingHibernationCount = HIGH_HIBERNATION_TIME / 2;
-//                        }
-//                        highlightingHibernation = true;
-//                    }
-//                }
-//                if (highlightingHibernation) {
-//                    highlightingHibernationCount -= 2;
-//                    if (highlightingHibernationCount <= 0) {
-//                        highlightingHibernation = false;
-//                    }
-//                }
             }
         }
 

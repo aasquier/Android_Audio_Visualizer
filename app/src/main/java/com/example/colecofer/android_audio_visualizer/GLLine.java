@@ -2,17 +2,17 @@ package com.example.colecofer.android_audio_visualizer;
 
 import android.graphics.Color;
 import android.opengl.GLES20;
+import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.Collections;
 
-import static com.example.colecofer.android_audio_visualizer.Constants.AMPLIFIER_V1;
 import static com.example.colecofer.android_audio_visualizer.Constants.BYTES_PER_FLOAT;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_DATA_SIZE;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_OFFSET;
 import static com.example.colecofer.android_audio_visualizer.Constants.COLOR_SHIFT_FACTOR;
-import static com.example.colecofer.android_audio_visualizer.Constants.DEFAULT_LINE_SIZE_V1;
 import static com.example.colecofer.android_audio_visualizer.Constants.HIGH_HIGHLIGHTING_PULSE;
 import static com.example.colecofer.android_audio_visualizer.Constants.MEDIUM_HIGHLIGHTING_PULSE;
 import static com.example.colecofer.android_audio_visualizer.Constants.PIXEL;
@@ -36,15 +36,20 @@ public class GLLine {
     private float[] vertices;
     private float leftSide;
     private float rightSide;
+    private float defaultLineSize;
+    private float lineAmplifier;
+    private float previousColorMult = 0.0f;
 
     /**
      * Constructor
      * @param xPosition: Current line's base position
      */
-    public GLLine(float xPosition) {
+    public GLLine(float xPosition, float lineSize, float amplifier) {
 
-        this.leftSide = xPosition;   // Current line's left side coord
-        this.rightSide = leftSide + PIXEL;  // Current line's right side coord
+        this.leftSide        = xPosition;   // Current line's left side coord
+        this.rightSide       = leftSide + PIXEL;  // Current line's right side coord
+        this.defaultLineSize = lineSize;
+        this.lineAmplifier   = amplifier;
 
         // Initialize the current line's base vertices
         createBaseLine();
@@ -60,18 +65,17 @@ public class GLLine {
      */
     public void createBaseLine(){
 
-        this.vertices = new float[VIS1_ARRAY_SIZE];
-
+        this.vertices   = new float[VIS1_ARRAY_SIZE];
         int vertexIndex = 0;
-        float yAxis = -1.0f;
-        float yOffset = (float) 2 / (DECIBEL_HISTORY_SIZE_V1 - 1);
+        float yAxis     = -1.0f;
+        float yOffset   = (float) 2 / (DECIBEL_HISTORY_SIZE_V1 - 1);
         int visOneIndex = 0;
-        int visColor = VisualizerModel.getInstance().getColor(visOneIndex);
+        int visColor    = VisualizerModel.getInstance().getColor(visOneIndex);
 
         // Setting up right triangles
         for(int i = 0; i < VIS1_ARRAY_SIZE; i+=14){
             // Left side
-            this.vertices[vertexIndex] = this.leftSide;
+            this.vertices[vertexIndex]   = this.leftSide;
             this.vertices[vertexIndex+1] = yAxis;
             this.vertices[vertexIndex+2] = 0.0f;
             this.vertices[vertexIndex+3] = (Color.red(visColor) * COLOR_SHIFT_FACTOR);
@@ -80,9 +84,9 @@ public class GLLine {
             this.vertices[vertexIndex+6] = 1.0f;
 
             // Right side
-            this.vertices[vertexIndex+7] = this.rightSide;
-            this.vertices[vertexIndex+8] = yAxis;
-            this.vertices[vertexIndex+9] = 0.0f;
+            this.vertices[vertexIndex+7]  = this.rightSide;
+            this.vertices[vertexIndex+8]  = yAxis;
+            this.vertices[vertexIndex+9]  = 0.0f;
             this.vertices[vertexIndex+10] = (Color.red(visColor) * COLOR_SHIFT_FACTOR);
             this.vertices[vertexIndex+11] = (Color.green(visColor) * COLOR_SHIFT_FACTOR);
             this.vertices[vertexIndex+12] = (Color.blue(visColor) * COLOR_SHIFT_FACTOR);
@@ -102,12 +106,56 @@ public class GLLine {
         int xOffset = 0;
         float highlightingFactor;
         float averageDecibels;
+        float colorMult = 0.0f;
+
+//        //These numbers set the min and max that colorMult will scale between
+        float colorMultMin;
+        float colorMultMax;
 
         // Change to object array to traverse
         Float[] decibelFloatArray = decibelHistory.toArray(new Float[DECIBEL_HISTORY_SIZE_V1]);
 
+        //Calculate the max and min of the decibel history values to normalize the data
+        float min = 1.2f;
+        float max = -0.1f;
+        for (float decibel : decibelFloatArray) {
+            if (decibel > max) max = decibel;
+            if (decibel < min) min = decibel;
+        }
+
+        if (min < 0.0f) min = 0.0f;
+
+        //Get the current primary color of the visualizer
+        int visColor = VisualizerModel.getInstance().getColor(0);
+
+        //Normalize the decibel history to smooth out the color highlighting
+        //Set timesToNormalize to a large number to smooth the highlighting more
+        int timesToNormalize = 1;
+        for (int j = 0; j < timesToNormalize; ++j) {
+            for (int i = 0; i < decibelFloatArray.length; ++i) {
+                float neighborAvg = 0.0f;
+                if (i > 0 && i < decibelFloatArray.length) {
+                    neighborAvg += decibelFloatArray[--i];
+                    neighborAvg += decibelFloatArray[i];
+                    neighborAvg += decibelFloatArray[++i];
+                    neighborAvg /= 3;
+                    decibelFloatArray[i] = neighborAvg;
+                } else if (i > 0) {
+                    neighborAvg += decibelFloatArray[--i];
+                    neighborAvg += decibelFloatArray[i];
+                    neighborAvg /= 2;
+                    decibelFloatArray[i] = neighborAvg;
+                } else if (i < decibelFloatArray.length) {
+                    neighborAvg += decibelFloatArray[i];
+                    neighborAvg += decibelFloatArray[++i];
+                    neighborAvg /= 2;
+                    decibelFloatArray[i] = neighborAvg;
+                }
+            }
+        }
+
         // Only loop for the size of the decibel array size
-        for(int i = 0; i < DECIBEL_HISTORY_SIZE_V1; i++){
+        for(int i = 0; i < DECIBEL_HISTORY_SIZE_V1; i++) {
             // Calculate the coordinates after the amplification
             // Left side needs to move in negative direction
             // Right side needs to move in positive direction
@@ -115,42 +163,88 @@ public class GLLine {
 
             // Takes the average of the three decibel levels surrounding the current y-position of the line in question
             switch(i) {
-                case 0:                        averageDecibels = decibelFloatArray[0] + decibelFloatArray[1] + decibelFloatArray[2]; break;
+                case 0:                           averageDecibels = decibelFloatArray[0] + decibelFloatArray[1] + decibelFloatArray[2]; break;
                 case DECIBEL_HISTORY_SIZE_V1 - 1: averageDecibels = decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 3] + decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 2] + decibelFloatArray[DECIBEL_HISTORY_SIZE_V1 - 1]; break;
-                default:                       averageDecibels = decibelFloatArray[i-1] + decibelFloatArray[i] + decibelFloatArray[i+1]; break;
+                default:                          averageDecibels = decibelFloatArray[i-1] + decibelFloatArray[i] + decibelFloatArray[i+1]; break;
             }
 
             averageDecibels /= 3.0f;
 
+            float currentDecibel = decibelFloatArray[i];
+            //Alter the amount of highlighting depending on decibel amount
+            if (currentDecibel >= 0.65) {
+                //High highlighting
+                colorMultMin = 0.4f;
+                colorMultMax = 1.6f;
+            } else if (currentDecibel >= 0.56) {
+                //Medium Hight highlighting
+                colorMultMin = 0.4f;
+                colorMultMax = 1.5f;
+            } else {
+                //Normal
+                colorMultMin = 0.4f;
+                colorMultMax = 1.0f;
+            }
+
+            //Scale colorMult between colorMultMin and colorMultMax and use that as a multiplier
+            //to calculate the new color for the current vertex
+            colorMult = (((decibelFloatArray[i] - min) / (max - min)) * (colorMultMax - colorMultMin)) + colorMultMin;
+
+            //Use the average of the current colorMult and previous colorMult
+            if (i > 0) { colorMult = (previousColorMult + colorMult) / 2; }
+            previousColorMult = colorMult;
+
+            colorMult *= COLOR_SHIFT_FACTOR;
+
+            if (xOffset + 26 < this.vertices.length) {
+                this.vertices[xOffset + 3] = Color.red(visColor) * colorMult;
+                this.vertices[xOffset + 4] = Color.green(visColor) * colorMult;
+                this.vertices[xOffset + 5] = Color.blue(visColor) * colorMult;
+
+                this.vertices[xOffset + 10] = Color.red(visColor) * colorMult;
+                this.vertices[xOffset + 11] = Color.green(visColor) * colorMult;
+                this.vertices[xOffset + 12] = Color.blue(visColor) * colorMult;
+            }
+
             if(averageDecibels <= 0.55f) {
-                highlightingFactor = 30.0f;
+                highlightingFactor       = 10.0f;
                 this.vertices[xOffset+2] = 0.0f;
                 this.vertices[xOffset+9] = 0.0f;
+
             } else if (averageDecibels <= 0.6f) {
-                highlightingFactor = 40.0f;
+                highlightingFactor       = 15.0f;
                 this.vertices[xOffset+2] = 0.0f;
                 this.vertices[xOffset+9] = 0.0f;
+
             } else if (averageDecibels <= 0.65f){
                 if(!highlightingOnMedium && !highlightingOnHigh && !highlightingHibernation && shouldUpdateHighlighting){
                     highlightingOnMedium = true;
-                    highlightingDuration = MEDIUM_HIGHLIGHTING_PULSE;
+                    highlightingDuration = MEDIUM_HIGHLIGHTING_PULSE + (int)(Math.random() * 20);
+                    highlightingFactor   = 25.0f;
+                    this.vertices[xOffset+2] = 0.1f;
+                    this.vertices[xOffset+9] = 0.1f;
+                } else {
+                    highlightingFactor = 35.0f;
+                    this.vertices[xOffset+2] = 0.2f;
+                    this.vertices[xOffset+9] = 0.2f;
                 }
-                highlightingFactor = 45.0f;
-                this.vertices[xOffset+2] = 0.25f;
-                this.vertices[xOffset+9] = 0.25f;
             } else {
                 if(!highlightingOnHigh && !highlightingOnMedium && !highlightingHibernation && shouldUpdateHighlighting) {
                     highlightingOnHigh = true;
-                    highlightingDuration = HIGH_HIGHLIGHTING_PULSE;
+                    highlightingDuration = HIGH_HIGHLIGHTING_PULSE + (int)(Math.random() * 7);
+                    highlightingFactor = 45.0f;
+                    this.vertices[xOffset+2] = 0.3f;
+                    this.vertices[xOffset+9] = 0.3f;
+                } else {
+                    highlightingFactor = 65.0f;
+                    this.vertices[xOffset+2] = 0.4f;
+                    this.vertices[xOffset+9] = 0.4f;
                 }
-                highlightingFactor = 75.0f;
-                this.vertices[xOffset+2] = 0.5f;
-                this.vertices[xOffset+9] = 0.5f;
             }
 
-            float ampDataLeft = (this.leftSide - (DEFAULT_LINE_SIZE_V1 + AMPLIFIER_V1 * highlightingFactor));
-            float ampDataRight = (this.rightSide + (DEFAULT_LINE_SIZE_V1 + AMPLIFIER_V1 * highlightingFactor));
-            this.vertices[xOffset] = ampDataLeft;
+            float ampDataLeft          = (this.leftSide - (this.defaultLineSize + this.lineAmplifier * highlightingFactor));
+            float ampDataRight         = (this.rightSide + (this.defaultLineSize + this.lineAmplifier * highlightingFactor));
+            this.vertices[xOffset]     = ampDataLeft;
             this.vertices[xOffset + 7] = ampDataRight;
 
             xOffset += 14;

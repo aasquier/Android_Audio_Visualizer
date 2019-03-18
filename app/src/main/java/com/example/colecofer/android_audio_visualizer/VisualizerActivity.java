@@ -24,6 +24,7 @@ import android.util.Pair;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static com.example.colecofer.android_audio_visualizer.Constants.DECIBEL_HISTORY_SIZE_V2;
@@ -48,6 +49,8 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
     private VisualizerSurfaceView surfaceView;
     private VisualizerRenderer visualizerRenderer;
     private Visualizer.OnDataCaptureListener captureListener;
+
+    private boolean vis1Update = false;
 
     private TextView songTitle;
     private TextView artistName;
@@ -171,6 +174,7 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
         visualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), true, true);
         visualizer.setEnabled(true);
 
+        // Initialize the "clock" time for the first time
         this.previousUpdateTime = System.currentTimeMillis();
 
         setContentView(surfaceView);
@@ -267,21 +271,46 @@ public class VisualizerActivity extends AppCompatActivity implements Visualizer.
 
     @Override
     public void onFftDataCapture(Visualizer visualizer, byte[] fft, int samplingRate) {
+        double currentDecibels;
+        Pair<Long, Boolean> isTimeToRefreshScreen;
 
-        /** Gives us the decibel level for the fft bucket we care about **/
-        double currentDecibels = getDBs(fft[REAL_BUCKET_INDEX], fft[IMAGINARY_BUCKET_INDEX], this.fftArraySize);
         updateSongAndArtistName();
-        /** Check and see if it is time to update the decibel history with the current decibel level, and check if it is time to
-         *  refresh the screen based on our 60 fps */
-        Pair<Long, Boolean> isTimeToRefreshScreen = updateDecibelHistory(currentDecibels, this.previousUpdateTime);
 
-        animateLyrics.update(); //Check if it's time to display new lyrics
+        if(VisualizerModel.getInstance().currentVisualizer instanceof VisOne) {
+            double[] dbs = new double[6];
+            int j = 1;
+            for(int i = 0; i < 6; ++i) {
+                dbs[i] = getDBs(fft[j], fft[j+1], this.fftArraySize);
+                j += 2;
+            }
 
-        /** Update the screen if the elapsed time has exceeded the threshold set */
-        if(isTimeToRefreshScreen.second) {
-            this.animateTitleOpacity();
+            Arrays.sort(dbs);
+
+            for(int i = 0; i < 6; ++i) {
+                updateDecibelHistory(dbs[i], this.previousUpdateTime);
+            }
+
             VisualizerModel.getInstance().currentVisualizer.updateVertices();
+            this.animateTitleOpacity();
+            animateLyrics.update(); //Check if it's time to display new lyrics
+
+        } else {
+            /** Gives us the decibel level for the fft bucket we care about **/
+            currentDecibels = getDBs(fft[REAL_BUCKET_INDEX], fft[IMAGINARY_BUCKET_INDEX], this.fftArraySize);
+
+            /** Check and see if it is time to update the decibel history with the current decibel level, and check if it is time to
+             *  refresh the screen based on our 60 fps */
+            isTimeToRefreshScreen = updateDecibelHistory(currentDecibels, this.previousUpdateTime);
+
+            animateLyrics.update(); //Check if it's time to display new lyrics
+
+            /** Update the screen if the elapsed time has exceeded the threshold set */
+            if(isTimeToRefreshScreen.second) {
+                this.animateTitleOpacity();
+                VisualizerModel.getInstance().currentVisualizer.updateVertices();
+            }
         }
+
     }
 
     private void updateSongAndArtistName() {

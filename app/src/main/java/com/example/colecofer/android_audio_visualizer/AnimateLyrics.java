@@ -77,11 +77,13 @@ public class AnimateLyrics {
         this.rawLyricsIndex = 0;
         this.lyricTextViewOpacity = 0.0f;
 
-        //Dirty hack to reduce timestamp times for biggie smalls because the timestamps are all slightly delayed
-        for (int i = 0; i < this.rawLyricsList.size(); ++i) {
-            Integer reducedTimeStamp = this.rawLyricsList.get(i).first - 1500;
-            Pair<Integer, String[]> newPair = new Pair(reducedTimeStamp, this.rawLyricsList.get(i).second);
-            this.rawLyricsList.set(i, newPair);
+        if (DEMO_MODE == true) {
+            //Dirty hack to reduce timestamp times for biggie smalls because the timestamps are all slightly delayed
+            for (int i = 0; i < this.rawLyricsList.size(); ++i) {
+                Integer reducedTimeStamp = this.rawLyricsList.get(i).first - 1500;
+                Pair<Integer, String[]> newPair = new Pair(reducedTimeStamp, this.rawLyricsList.get(i).second);
+                this.rawLyricsList.set(i, newPair);
+            }
         }
 
         lyricsToDisplay = new ArrayList<>();
@@ -102,7 +104,14 @@ public class AnimateLyrics {
 
         //Calc time to display the lyric
         this.lyricEndTime = rawLyricsList.get(this.rawLyricsIndex).first - LYRIC_DISPLAY_OFFSET;
-        int currentTime = (int) System.currentTimeMillis() - VisualizerModel.getInstance().spotifyStartTime;
+
+        int currentTime;
+        if (DEMO_MODE == true) {
+            currentTime = (int) System.currentTimeMillis() - VisualizerModel.getInstance().spotifyStartTime;
+        } else {
+            currentTime = VisualizerActivity.mediaPlayer.getCurrentPosition();
+        }
+
         this.numWordsInLyricSegment = this.rawLyricsList.get(this.rawLyricsIndex).second.length;
 
         //This code will execute when it's time to display a new lyric segment
@@ -161,6 +170,7 @@ public class AnimateLyrics {
                 lyricsToDisplay += lyrics.get(i) + " ";
             } else {
                 lyricsToDisplay += " " + lyrics.get(i);
+                lyricsToDisplay.trim();
             }
         }
         this.lyricsTextView.setText(lyricsToDisplay);
@@ -200,7 +210,12 @@ public class AnimateLyrics {
      * as new lyrics get displayed onto the screen.
      */
     void updateOpacity() {
-        int currentTime = (int) System.currentTimeMillis() - VisualizerModel.getInstance().spotifyStartTime;
+        int currentTime;
+        if (DEMO_MODE == true) {
+            currentTime = (int) System.currentTimeMillis() - VisualizerModel.getInstance().spotifyStartTime;
+        } else {
+            currentTime = VisualizerActivity.mediaPlayer.getCurrentPosition();
+        }
 
         if (currentTime > this.lyricEndTime - 300) {
             this.lyricTextViewOpacity += opacityUpdateDec;

@@ -38,7 +38,6 @@ final class Constants {
     static final int REQUEST_READ_EXTERNAL_STORAGE_PERMISSION = 102;
     static final int REQUEST_CODE                             = 1337;
 
-
     /** SpotifyClient constants */
     //TODO: Change these to our personal information (this is a public repo...)
     static final String BASE_URL             = "https://api.spotify.com/v1";
@@ -53,10 +52,9 @@ final class Constants {
     static final int DEFAULT_SECONDARY_COLOR = 0xFF0FADB6;
     static final int DEFAULT_TERTIARY_COLOR  = 0xFFDEDD64;
 
-
     /** Utility constants */
     static final int MEDIUM_HIBERNATION_TIME = 100;
-    static final int HIGH_HIBERNATION_TIME   = 50;
+    static final int HIGH_HIBERNATION_TIME   = 75;
     static final float MAX_DB_LEVEL          = 170.0f;
     static final float MAX_DECIBEL_RATIO     = 1.0f;
     static final long REFRESH_DECIBEL_TIME   = 16L;
@@ -70,26 +68,31 @@ final class Constants {
     static final String GLSL_SCALING_LEVEL_ARRAY = "scaling_Level";
     static final String GLSL_SCREEN_RATIO        = "screen_ratio";
     static final float COLOR_SHIFT_FACTOR        = 0.005f;
-    static final int HIGH_HIGHLIGHTING_PULSE     = 12;
-    static final int MEDIUM_HIGHLIGHTING_PULSE   = 51;
+    static final int HIGH_HIGHLIGHTING_PULSE     = 24;
+    static final int MEDIUM_HIGHLIGHTING_PULSE   = 90;
 
-    /** GLLine constants for Vis1*/
+    /** GLLine constants for Vis1 */
     static final int BYTES_PER_FLOAT = 4;
     /** Vis1 constants */
-    static final int LINE_AMT                = 100;                 //Number of lines to display on the screen
-    static final int DECIBEL_HISTORY_SIZE_V1 = 100;
-    static final int VIS1_VERTEX_COUNT       = DECIBEL_HISTORY_SIZE_V1 * 2;
-    static final int VIS1_ARRAY_SIZE         = VIS1_VERTEX_COUNT * 7;
-    static final int VERTEX_AMOUNT           = 7;                   //x, y, z, r, g, b, a
-    static final int POSITION_DATA_SIZE      = 3;
-    static final int VIS1_STRIDE_BYTES       = 7 * BYTES_PER_FLOAT;
-    static final int POSITION_OFFSET         = 0;
-    static final int COLOR_OFFSET            = 3;
-    static final int COLOR_DATA_SIZE         = 4;
-    static final float LEFT_DRAW_BOUNDARY    = -0.99f;              //Where to start drawing on the left side of the screen
-    static final float RIGHT_DRAW_BOUNDARY   = 0.99f;               //Right side of the screen boundary
-    static final float AMPLIFIER_V1          = 0.0000095f;
-    static final float DEFAULT_LINE_SIZE_V1  = 0.00009f;
+    static final int LINE_AMT                    = 90;                 //Number of lines to display on the screen
+    static final int DECIBEL_HISTORY_SIZE_V1     = 100;
+    static final int VIS1_VERTEX_COUNT           = DECIBEL_HISTORY_SIZE_V1 * 2;
+    static final int VIS1_ARRAY_SIZE             = VIS1_VERTEX_COUNT * 7;
+    static final int VERTEX_AMOUNT               = 7;                   //x, y, z, r, g, b, a
+    static final int POSITION_DATA_SIZE          = 3;
+    static final int VIS1_STRIDE_BYTES           = 7 * BYTES_PER_FLOAT;
+    static final int POSITION_OFFSET             = 0;
+    static final int COLOR_OFFSET                = 3;
+    static final int COLOR_DATA_SIZE             = 4;
+    static final float LEFT_DRAW_BOUNDARY        = -0.99f;              //Where to start drawing on the left side of the screen
+    static final float RIGHT_DRAW_BOUNDARY       = 0.99f;               //Right side of the screen boundary
+    static final float AMPLIFIER_V1              = 0.0000095f;
+    static final float DEFAULT_LINE_SIZE_V1      = 0.00009f;
+    static final int DECIBEL_HISTORY_UPDATE_SIZE = 1;
+    /** Vis1 small screen constants */
+    static final float AMPLIFIER_V1_SKINNY         = 0.0000095f;
+    static final float DEFAULT_LINE_SIZE_V1_SKINNY = 0.0009f;
+    static final int LINE_AMT_SKINNY               = 50;                 //Number of lines to display on the screen
 
     /** Vis2 constants */
     static final int VIS2_STRIDE_BYTES       = (POSITION_DATA_SIZE + COLOR_DATA_SIZE) * BYTES_PER_FLOAT;
