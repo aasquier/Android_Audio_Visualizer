@@ -4,3 +4,6 @@ This project streams Spotify tracks using Spotify's android-streaming-sdk, and d
 
 Portland State University
 Capstone 2018/2019 Fall/Winter project
+
+Team Lead: Aaron Squier
+Developers: Cole Cofer, Elias Bermudez, et al. 
